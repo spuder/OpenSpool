@@ -1,0 +1,22 @@
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO2
+      mode: INPUT_PULLUP
+      inverted: true
+    id: my_button
+    on_press:
+      then:
+        - switch.toggle: virtual_switch  # Toggle the virtual switch on button press
+
+switch:
+  - platform: template
+    name: "Virtual Button"
+    id: virtual_switch
+    optimistic: true  # Allows immediate state change in Home Assistant
+    turn_on_action:
+      - logger.log: "Virtual Button turned ON"
+      # Add actions for when the switch is turned ON, e.g., turning on an output
+    turn_off_action:
+      - logger.log: "Virtual Button turned OFF"
+      # Add actions for when the switch is turned OFF, e.g., turning off an output

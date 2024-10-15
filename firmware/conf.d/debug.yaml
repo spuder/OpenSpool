@@ -1,0 +1,11 @@
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+debug:
+  update_interval: 5s
+
+# https://esphome.io/components/logger.html
+logger:
+  # level: debug
+  level: VERY_VERBOSE #TODO: drop to debug

@@ -1,0 +1,52 @@
+substitutions:
+  name: rainbow-reel
+  friendly_name: Rainbow Reel
+
+esphome:
+  name: ${name} #Don't use underscore '_' in name https://esphome.io/guides/faq.html#why-shouldn-t-i-use-underscores-in-my-device-name
+  friendly_name: ${friendly_name} #TODO: only used by home assistant, probably should remove
+  name_add_mac_suffix: true
+  # platformio_options:
+  #   build_flags: 
+  #     -D CONFIG_MQTT_TRANSPORT_SSL=0
+  on_boot:
+    then:
+      - logger.log: "Booting ${friendly_name}"
+  # on_shutdown:
+  # on_loop:
+
+
+esp32:
+  board: lolin_s2_mini
+  variant: esp32s2
+  framework:
+    type: esp-idf
+    # version: dev # dev, latest, recommended #TODO: pin to stable version
+    # version: latest
+    # version: recommended
+    # type: arduino
+    # version: 2.0.17
+
+logger:
+# MQTT and api are not compatible: https://esphome.io/components/mqtt.html
+# api:
+#   reboot_timeout: 0s
+# ota:
+
+packages:
+  #uptime: !include conf.d/uptime.yaml
+  wifi: !include conf.d/wifi.yaml
+  web_server: !include conf.d/web_server.yaml
+  debug: !include conf.d/debug.yaml
+  #test: !include conf.d/test.yaml
+  #time: !include conf.d/time.yaml
+  status_led: !include conf.d/status_led.yaml
+  mqtt_bambu_lan: !include conf.d/mqtt_bambu_lan.yaml
+  # mqtt_emqx_1883: !include conf.d/mqtt_emqx_1883.yaml
+  # mqtt_test_8883: !include conf.d/mqtt_test_8883.yaml
+  #mqtt_hivemq_8883: !include conf.d/mqtt_hivemq_8883.yaml #working
+  # mqtt_a1mini1: !include conf.d/mqtt_a1mini1.yaml
+  #mqtt_localhost_8883: !include conf.d/mqtt_localhost_8883.yaml
+  # mqtt_localhost_9993: !include conf.d/mqtt_localhost_9993.yaml
+  button: !include conf.d/button.yaml
+  #pubsub_eqmx: !include conf.d/pubsub_eqmx.yaml

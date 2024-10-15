@@ -1,0 +1,3 @@
+/.esphome/
+/secrets.yaml
+esphome_env/*

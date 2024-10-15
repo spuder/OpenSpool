@@ -1,0 +1,13 @@
+# Button is pin on the side of the ESP32s2
+# Connected to pin 8
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: 0
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "Button"
+    state_topic: # Don't post update to MQTT #TODO: silence this once finished testing
+    on_press:
+      then:
+        - logger.log: "Button 0 pressed"

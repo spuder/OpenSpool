@@ -1,0 +1,4 @@
+sensor:
+  - platform: uptime
+    name: Uptime
+    state_topic:

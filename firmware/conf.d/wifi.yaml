@@ -1,0 +1,26 @@
+wifi:
+  output_power: 10 # https://github.com/esphome/issues/issues/3988#issuecomment-1449954758
+  ap:
+    ssid: "Rainbow Reel"
+  reboot_timeout: 0s
+  power_save_mode: none
+
+# sensor:
+#   - platform: wifi_signal
+#     name: "WiFi Signal Sensor"
+#     update_interval: 60s
+#     state_topic: # Don't post update to MQTT
+
+# text_sensor:
+#   # state_topic: # Don't post update to MQTT
+#   # Get the WiFi details
+#   - platform: wifi_info
+#     ip_address:
+#       name: ${name} IP Address
+#       state_topic:
+#     ssid:
+#       name: ${name} SSID
+#       state_topic:
+#     mac_address:
+#       name: ${name} Mac Address
+#       state_topic:

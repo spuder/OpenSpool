@@ -1,0 +1,78 @@
+substitutions:
+  bambu_serial_number: !secret bambu_serial_number
+
+mqtt:
+  broker: !secret bambu_ip
+  port: 8883
+  username: bblp
+  password: !secret bambu_access_code
+  client_id: ${name}
+  discover_ip: false
+  discovery: false
+  discovery_retain: false
+  discovery_prefix:
+  use_abbreviations: false
+  topic_prefix:
+  log_topic:
+  birth_message:
+    topic: # Dont post update to MQTT
+    payload: # Dont post update to MQTT
+  will_message:
+    topic: # Dont post update to MQTT
+    payload: # Dont post update to MQTT
+  # keepalive: 15s
+  # idf_send_async: true
+  skip_cert_cn_check: true
+  certificate_authority: |
+    -----BEGIN CERTIFICATE-----
+    MIIDZTCCAk2gAwIBAgIUV1FckwXElyek1onFnQ9kL7Bk4N8wDQYJKoZIhvcNAQEL
+    BQAwQjELMAkGA1UEBhMCQ04xIjAgBgNVBAoMGUJCTCBUZWNobm9sb2dpZXMgQ28u
+    LCBMdGQxDzANBgNVBAMMBkJCTCBDQTAeFw0yMjA0MDQwMzQyMTFaFw0zMjA0MDEw
+    MzQyMTFaMEIxCzAJBgNVBAYTAkNOMSIwIAYDVQQKDBlCQkwgVGVjaG5vbG9naWVz
+    IENvLiwgTHRkMQ8wDQYDVQQDDAZCQkwgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IB
+    DwAwggEKAoIBAQDL3pnDdxGOk5Z6vugiT4dpM0ju+3Xatxz09UY7mbj4tkIdby4H
+    oeEdiYSZjc5LJngJuCHwtEbBJt1BriRdSVrF6M9D2UaBDyamEo0dxwSaVxZiDVWC
+    eeCPdELpFZdEhSNTaT4O7zgvcnFsfHMa/0vMAkvE7i0qp3mjEzYLfz60axcDoJLk
+    p7n6xKXI+cJbA4IlToFjpSldPmC+ynOo7YAOsXt7AYKY6Glz0BwUVzSJxU+/+VFy
+    /QrmYGNwlrQtdREHeRi0SNK32x1+bOndfJP0sojuIrDjKsdCLye5CSZIvqnbowwW
+    1jRwZgTBR29Zp2nzCoxJYcU9TSQp/4KZuWNVAgMBAAGjUzBRMB0GA1UdDgQWBBSP
+    NEJo3GdOj8QinsV8SeWr3US+HjAfBgNVHSMEGDAWgBSPNEJo3GdOj8QinsV8SeWr
+    3US+HjAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQABlBIT5ZeG
+    fgcK1LOh1CN9sTzxMCLbtTPFF1NGGA13mApu6j1h5YELbSKcUqfXzMnVeAb06Htu
+    3CoCoe+wj7LONTFO++vBm2/if6Jt/DUw1CAEcNyqeh6ES0NX8LJRVSe0qdTxPJuA
+    BdOoo96iX89rRPoxeed1cpq5hZwbeka3+CJGV76itWp35Up5rmmUqrlyQOr/Wax6
+    itosIzG0MfhgUzU51A2P/hSnD3NDMXv+wUY/AvqgIL7u7fbDKnku1GzEKIkfH8hm
+    Rs6d8SCU89xyrwzQ0PR853irHas3WrHVqab3P+qNwR0YirL0Qk7Xt/q3O1griNg2
+    Blbjg3obpHo9
+    -----END CERTIFICATE-----
+  # clean_session: true
+
+text_sensor:
+  - platform: mqtt_subscribe
+    name: "Bambu Printer Status"
+    id: bambu_printer_status
+    topic: device/${bambu_serial_number}/report
+    state_topic:
+    on_value:
+      then:
+        - logger.log:
+            format: "Received status: %s"
+            args: ["x.c_str()"]
+            level: INFO
+
+# logger:
+#   level: VERY_VERBOSE
+#   logs:
+#     mqtt.component: VERY_VERBOSE
+#     mqtt.client: VERY_VERBOSE
+
+# sensor:
+#   - platform: mqtt_subscribe
+#     name: "Data from topic"
+#     id: mysensor
+#     topic: testtopic/1234
+#     state_topic: # Don't post update to MQTT
+
+# binary_sensor:
+#   - platform: status
+#     state_topic: # Don't post update to MQTT
