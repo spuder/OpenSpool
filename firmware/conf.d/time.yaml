@@ -4,7 +4,7 @@ time:
     servers:
       - "time.nist.gov"
       - "pool.ntp.org"
-    timezone: "America/New_York"  # Change this to your timezone
+    timezone: "America/Denver"  # Change this to your timezone
     on_time:
       - seconds: /10
         then:
@@ -23,20 +23,20 @@ text_sensor:
       sprintf(str, "%02d:%02d:%02d", time.hour, time.minute, time.second);
       return {str};
 
-# Sensors for individual time components
-sensor:
-  - platform: template
-    name: "Hour"
-    lambda: 'return id(ntp_time).now().hour;'
-    update_interval: 60s
-    icon: "mdi:clock-time-three-outline"
-  - platform: template
-    name: "Minute"
-    lambda: 'return id(ntp_time).now().minute;'
-    update_interval: 60s
-    icon: "mdi:clock-time-three-outline"
-  - platform: template
-    name: "Second"
-    lambda: 'return id(ntp_time).now().second;'
-    update_interval: 1s
-    icon: "mdi:clock-time-three-outline"
+# # Sensors for individual time components
+# sensor:
+#   - platform: template
+#     name: "Hour"
+#     lambda: 'return id(ntp_time).now().hour;'
+#     update_interval: 60s
+#     icon: "mdi:clock-time-three-outline"
+#   - platform: template
+#     name: "Minute"
+#     lambda: 'return id(ntp_time).now().minute;'
+#     update_interval: 60s
+#     icon: "mdi:clock-time-three-outline"
+#   - platform: template
+#     name: "Second"
+#     lambda: 'return id(ntp_time).now().second;'
+#     update_interval: 1s
+#     icon: "mdi:clock-time-three-outline"

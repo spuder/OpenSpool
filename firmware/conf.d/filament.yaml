@@ -1,0 +1,97 @@
+# external_components:
+#   - source: components
+#     # components: [ filament ]
+#     components: [ empty_component ]
+#     # components: [ filament, empty_component ]
+# filament:
+#   id: external_spool
+#   color: blue
+#   type: PLA
+
+# empty_component:
+#   id: empty_component_1
+#   my_attribute: 42
+
+# text_sensor:
+#   - platform: custom
+#     lambda: |-
+#       auto my_empty_component = new empty_component::EmptyComponent();
+#       App.register_component(my_empty_component);
+      
+#       return {new CustomTextSensor([my_empty_component]() -> optional<std::string> {
+#         return my_empty_component->get_color();
+#       })};
+#     text_sensors:
+#       - name: "Empty Component Color"
+#         id: empty_component_color
+
+
+text_sensor:
+  - platform: template
+    name: "Filament Color"
+    id: filament_color
+    state_topic: # Don't post update to MQTT
+    on_value:
+      then:
+        - text_sensor.template.publish:
+            id: filament_color_hex
+            state: !lambda |-
+              if (id(filament_color).state == "white") {
+                return "FFFFFFFF";
+              } else if (id(filament_color).state == "yellow") {
+                return "FFF144FF";
+              } else if (id(filament_color).state == "grass_green") {
+                return "DCF478FF";
+              } else if (id(filament_color).state == "bambu_green") {
+                return "0ACC38FF";
+              } else if (id(filament_color).state == "missletoe_green") {
+                return "057748FF";
+              } else if (id(filament_color).state == "dark_blue") {
+                return "0D6284FF";
+              } else if (id(filament_color).state == "glow_green") {
+                return "0EE2A0FF";
+              } else if (id(filament_color).state == "ice_blue") {
+                return "76D9F4FF";
+              } else if (id(filament_color).state == "cyan") {
+                return "46A8F9FF";
+              } else if (id(filament_color).state == "blue") {
+                return "2850E0FF";
+              } else if (id(filament_color).state == "iris_purple") {
+                return "443089FF";
+              } else if (id(filament_color).state == "purple") {
+                return "A03CF7FF";
+              } else if (id(filament_color).state == "magenta") {
+                return "F330F9FF";
+              } else if (id(filament_color).state == "sakura_pink") {
+                return "D4B1DDFF";
+              } else if (id(filament_color).state == "pink") {
+                return "F95D73FF";
+              } else if (id(filament_color).state == "red") {
+                return "F72323FF";
+              } else if (id(filament_color).state == "dark_brown") {
+                return "7C4B00FF";
+              } else if (id(filament_color).state == "orange") {
+                return "F98C36FF";
+              } else if (id(filament_color).state == "beige") {
+                return "FCECD6FF";
+              } else if (id(filament_color).state == "desert_tan") {
+                return  "D3C5A3FF";
+              } else if (id(filament_color).state == "brown") {
+                return "AF7933FF";
+              } else if (id(filament_color).state == "ash_grey") {
+                return "898989FF";
+              } else if (id(filament_color).state == "grey") {
+                return "BCBCBCFF";
+              } else if (id(filament_color).state == "black") {
+                return "161616FF";
+              } else {
+                return "Unknown";
+              }
+  - platform: template
+    name: "Filament Type"
+    id: filament_type
+    state_topic: # Don't post update to MQTT
+  - platform: template
+    name: "Filament Color Hex"
+    id: filament_color_hex
+    state_topic: # Don't post update to MQTT

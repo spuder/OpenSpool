@@ -1,11 +1,13 @@
 substitutions:
   bambu_serial_number: !secret bambu_serial_number
+  bambu_ip: !secret bambu_ip
+  bambu_access_code: !secret bambu_access_code
 
 mqtt:
-  broker: !secret bambu_ip
+  broker: ${bambu_ip}
   port: 8883
   username: bblp
-  password: !secret bambu_access_code
+  password: $bambu_access_code
   client_id: ${name}
   discover_ip: false
   discovery: false
@@ -59,6 +61,23 @@ text_sensor:
             format: "Received status: %s"
             args: ["x.c_str()"]
             level: INFO
+
+binary_sensor:
+  - platform: status
+    name: "MQTT Connection"
+    id: mqtt_connected
+    state_topic: # Don't post update to MQTT
+    internal: true
+    on_state:
+      then:
+        if:
+          condition:
+            mqtt.connected:
+          then:
+            - output.turn_on: onboard_led
+          else:
+            - output.turn_off: onboard_led
+
 
 # logger:
 #   level: VERY_VERBOSE
