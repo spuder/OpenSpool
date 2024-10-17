@@ -1,0 +1,11 @@
+select:
+  - platform: template
+    name: Printer Model
+    id: bambu_model
+    options:
+    - "A1Mini"
+    - "A1"
+    - "P1P/P1S"
+    - "X1C/X1E"
+    optimistic: true
+    state_topic:

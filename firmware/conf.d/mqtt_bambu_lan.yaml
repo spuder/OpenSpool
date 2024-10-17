@@ -120,6 +120,7 @@ text_sensor:
     id: bambu_printer_status
     topic: device/${bambu_serial_number}/report
     state_topic:
+    internal: true
     on_value:
       then:
         - logger.log:

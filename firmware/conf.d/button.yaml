@@ -20,6 +20,7 @@ binary_sensor:
               id(filament_color).publish_state("bambu_green");
               ESP_LOGD("main", "Filament color hex %s", id(filament_color_hex).state.c_str());   
         
+              id(filament_type).publish_state("PLA");
               char payload[512];
               snprintf(payload, sizeof(payload),
                 "{\n"
