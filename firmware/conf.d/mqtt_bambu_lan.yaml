@@ -116,19 +116,19 @@ mqtt:
     -----END CERTIFICATE-----
   # clean_session: true
 
-text_sensor:
-  - platform: mqtt_subscribe
-    name: "Bambu Printer Status"
-    id: bambu_printer_status
-    topic: device/${bambu_serial_number}/report
-    state_topic:
-    internal: true
-    on_value:
-      then:
-        - logger.log:
-            format: "Received status: %s"
-            args: ["x.c_str()"]
-            level: INFO
+# text_sensor:
+#   - platform: mqtt_subscribe
+#     name: "Bambu Printer Status"
+#     id: bambu_printer_status
+#     topic: device/${bambu_serial_number}/report
+#     state_topic:
+#     internal: true
+#     on_value:
+#       then:
+#         - logger.log:
+#             format: "Received status: %s"
+#             args: ["x.c_str()"]
+#             level: INFO
 
 binary_sensor:
   - platform: status
@@ -136,6 +136,7 @@ binary_sensor:
     id: mqtt_connected
     state_topic: # Don't post update to MQTT
     #internal: true
+    icon: mdi:lan-connect
     on_state:
       then:
         if:

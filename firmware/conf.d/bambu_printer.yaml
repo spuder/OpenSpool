@@ -9,7 +9,7 @@ select:
       - "X1C/X1E"
     optimistic: true
     state_topic:
-    icon: mdi:3d-printer
+    icon: mdi:printer-3d
 
 text:
   #TODO: mqtt not able to pull dynamically yet

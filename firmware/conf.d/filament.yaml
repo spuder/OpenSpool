@@ -98,4 +98,4 @@ text_sensor:
     name: "Filament Color Hex"
     id: filament_color_hex
     state_topic:
-    icon: mdi:palette-outline
+    icon: mdi:hexagon-outline

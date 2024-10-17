@@ -10,6 +10,7 @@ sensor:
     name: "WiFi Signal Sensor"
     update_interval: 60s
     state_topic: # Don't post update to MQTT
+    icon: mdi:wifi
 
 # text_sensor:
 #   # state_topic: # Don't post update to MQTT

@@ -32,7 +32,7 @@ packages:
   web_server: !include conf.d/web_server.yaml
   debug: !include conf.d/debug.yaml
   # test: !include conf.d/test.yaml
-  time: !include conf.d/time.yaml
+  # time: !include conf.d/time.yaml
   status_led: !include conf.d/status_led.yaml
   mqtt_bambu_lan: !include conf.d/mqtt_bambu_lan.yaml
   button: !include conf.d/button.yaml
