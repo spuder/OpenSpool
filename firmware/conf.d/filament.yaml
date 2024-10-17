@@ -30,7 +30,7 @@ text_sensor:
   - platform: template
     name: "Filament Color"
     id: filament_color
-    state_topic: # Don't post update to MQTT
+    state_topic:
     on_value:
       then:
         - text_sensor.template.publish:
@@ -90,8 +90,8 @@ text_sensor:
   - platform: template
     name: "Filament Type"
     id: filament_type
-    state_topic: # Don't post update to MQTT
+    state_topic:
   - platform: template
     name: "Filament Color Hex"
     id: filament_color_hex
-    state_topic: # Don't post update to MQTT
+    state_topic:

@@ -1,3 +1,68 @@
+globals:
+  - id: color_lookup
+    type: std::map<std::string, std::string>
+    initial_value: |
+      {
+        {"black", "161616FF"},
+        {"yellow", "FFF144FF"}, 
+        {"bambu_green", "0ACC38FF"},
+        {"blue", "2850E0FF"},
+        {"purple", "A03CF7FF"}
+      }
+  - id: filament_lookup
+    type: std::map<std::string, std::map<std::string, std::string>>
+    initial_value: |
+      {
+        {"PLA", {
+          {"PolyLite PLA", "GFL00"},
+          {"PolyTerra PLA", "GFL01"},
+          {"Bambu PLA Basic", "GFA00"},
+          {"Bambu PLA Matte", "GFA01"},
+          {"Generic PLA", "GFL99"},
+          {"Bambu PLA Impact", "GFA03"},
+          {"Bambu PLA Metal", "GFA02"},
+          {"Generic PLACF", "GFL98"}
+        }},
+        {"ABS", {
+          {"Bambu ABS", "GFB00"},
+          {"Generic ABS", "GFB99"}
+        }},
+        {"PA-CF", {
+          {"Bambu PACF", "GFN03"},
+          {"Generic PACF", "GFN98"}
+        }},
+        {"PC", {
+          {"Bambu PC", "GFC00"},
+          {"Generic PC", "GFC99"}
+        }},
+        {"PETG", {
+          {"Generic PETG", "GFG99"}
+        }},
+        {"PVA", {
+          {"Generic PVA", "GFS99"}
+        }},
+        {"TPU", {
+          {"TPU 95A", "GFU01"},
+          {"Generic TPU", "GFU99"}
+        }},
+        {"Support", {
+          {"Support G", "GFS01"},
+          {"Support W", "GFS00"}
+        }}
+      }
+  - id: tray_color
+    type: std::string
+    initial_value: '"yellow"'
+  - id: tray_type
+    type: std::string
+    initial_value: '"PETG"'
+  - id: nozzle_temp_min
+    type: int
+    initial_value: '180'
+  - id: nozzle_temp_max
+    type: int
+    initial_value: '250'
+
 substitutions:
   bambu_serial_number: !secret bambu_serial_number
   bambu_ip: !secret bambu_ip
@@ -90,8 +155,4 @@ binary_sensor:
 #     name: "Data from topic"
 #     id: mysensor
 #     topic: testtopic/1234
-#     state_topic: # Don't post update to MQTT
-
-# binary_sensor:
-#   - platform: status
 #     state_topic: # Don't post update to MQTT

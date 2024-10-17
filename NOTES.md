@@ -5,7 +5,7 @@ https://github.com/Doridian/OpenBambuAPI/blob/main/mqtt.md
 # MQTT connection
 
 [](/images/mqttx.png)
-[](/images/Change_fillament.png)
+[](/images/Change_filament.png)
 
 
 I used applciation MQTTX. I couldn't get MQTT Explorer to work since I coudln't find a way to downgrade to version 3.1.1
@@ -15,7 +15,7 @@ I used applciation MQTTX. I couldn't get MQTT Explorer to work since I coudln't 
 - Subscribe to topic `device/$serialNumber/report`
 
 
-## Change fillament
+## Change filament
 
 Send `request` to topic `device/$serialNumber/request`
 ```
