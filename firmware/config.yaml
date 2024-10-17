@@ -38,3 +38,4 @@ packages:
   button: !include conf.d/button.yaml
   filament: !include conf.d/filament.yaml
   bambu_printer: !include conf.d/bambu_printer.yaml
+  rc522_rfid: !include conf.d/rc522_rfid.yaml

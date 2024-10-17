@@ -1,0 +1,31 @@
+spi:
+  clk_pin: GPIO35
+  mosi_pin: GPIO33
+  miso_pin: GPIO18
+
+rc522_spi:
+  # cs_pin = SS/SDA/Rx
+  cs_pin: GPIO16
+  on_tag:
+    then:
+      - lambda: |-
+          if (x == "A2-DD-FE-5A") {
+            id(filament_color).publish_state("bambu_green");
+            id(filament_type).publish_state("TPU");
+          } else if (x == "22-0E-04-5B") {
+            id(filament_color).publish_state("red");
+            id(filament_type).publish_state("PETG");
+          } else {
+            ESP_LOGI("rfid", "Unknown tag scanned");
+          }
+
+# binary_sensor:
+#   - platform: rc522
+#     uid: A2-DD-FE-5A
+#     name: "RC522 RFID Tag 1"
+#     state_topic:
+
+#   - platform: rc522
+#     uid: 22-0E-04-5B
+#     name: "RC522 RFID Tag 2"
+#     state_topic:
