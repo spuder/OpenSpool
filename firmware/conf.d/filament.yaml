@@ -31,6 +31,7 @@ text_sensor:
     name: "Filament Color"
     id: filament_color
     state_topic:
+    icon: mdi:palette-outline
     on_value:
       then:
         - text_sensor.template.publish:
@@ -91,7 +92,10 @@ text_sensor:
     name: "Filament Type"
     id: filament_type
     state_topic:
+    icon: mdi:movie-roll
+  
   - platform: template
     name: "Filament Color Hex"
     id: filament_color_hex
     state_topic:
+    icon: mdi:palette-outline

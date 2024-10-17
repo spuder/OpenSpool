@@ -8,7 +8,7 @@ binary_sensor:
       inverted: true
     name: "Button"
     state_topic: # Don't post update to MQTT #TODO: silence this once finished testing
-    on_press:
+    on_release:
       then:
         - logger.log: "Button 0 pressed"
         - mqtt.publish:

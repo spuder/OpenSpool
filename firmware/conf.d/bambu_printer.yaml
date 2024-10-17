@@ -3,9 +3,38 @@ select:
     name: Printer Model
     id: bambu_model
     options:
-    - "A1Mini"
-    - "A1"
-    - "P1P/P1S"
-    - "X1C/X1E"
+      - "A1Mini"
+      - "A1"
+      - "P1P/P1S"
+      - "X1C/X1E"
     optimistic: true
     state_topic:
+
+text:
+  #TODO: mqtt not able to pull dynamically yet
+  - platform: template
+    id: bambu_serial_number
+    state_topic:
+    name: Printer Serial Number
+    optimistic: true
+    mode: text
+    restore_value: true
+    icon: mdi:barcode
+
+  - platform: template
+    id: bambu_lan_access_code
+    state_topic:
+    name: Printer Lan Access Code
+    optimistic: true
+    mode: password
+    restore_value: true
+    icon: mdi:lock
+
+  - platform: template
+    id: bambu_ip_address
+    state_topic:
+    name: Printer IP Address
+    optimistic: true
+    mode: text
+    restore_value: true
+    icon: mdi:ip

@@ -1,4 +1,5 @@
 globals:
+  # TODO: get rid of global since stored in text
   - id: color_lookup
     type: std::map<std::string, std::string>
     initial_value: |
@@ -58,11 +59,12 @@ globals:
     initial_value: '"PETG"'
   - id: nozzle_temp_min
     type: int
-    initial_value: '180'
+    initial_value: "180"
   - id: nozzle_temp_max
     type: int
-    initial_value: '250'
+    initial_value: "250"
 
+#TODO: replace all these substitutions with run-time config
 substitutions:
   bambu_serial_number: !secret bambu_serial_number
   bambu_ip: !secret bambu_ip
@@ -133,7 +135,7 @@ binary_sensor:
     name: "MQTT Connection"
     id: mqtt_connected
     state_topic: # Don't post update to MQTT
-    internal: true
+    #internal: true
     on_state:
       then:
         if:
@@ -143,8 +145,6 @@ binary_sensor:
             - output.turn_on: onboard_led
           else:
             - output.turn_off: onboard_led
-
-
 # logger:
 #   level: VERY_VERBOSE
 #   logs:
