@@ -17,14 +17,13 @@
 #     lambda: |-
 #       auto my_empty_component = new empty_component::EmptyComponent();
 #       App.register_component(my_empty_component);
-      
+
 #       return {new CustomTextSensor([my_empty_component]() -> optional<std::string> {
 #         return my_empty_component->get_color();
 #       })};
 #     text_sensors:
 #       - name: "Empty Component Color"
 #         id: empty_component_color
-
 
 text_sensor:
   - platform: template
@@ -37,6 +36,7 @@ text_sensor:
         - text_sensor.template.publish:
             id: filament_color_hex
             state: !lambda |-
+              ESP_LOGD("main", "Color %s", id(filament_color).state.c_str());
               if (id(filament_color).state == "white") {
                 return "FFFFFFFF";
               } else if (id(filament_color).state == "yellow") {
@@ -88,14 +88,60 @@ text_sensor:
               } else {
                 return "Unknown";
               }
+
   - platform: template
     name: "Filament Type"
     id: filament_type
     state_topic:
     icon: mdi:movie-roll
-  
+    # on_value:
+    #   then:
+    #     - script.execute: publish_filament_setting
+
   - platform: template
     name: "Filament Color Hex"
     id: filament_color_hex
     state_topic:
     icon: mdi:hexagon-outline
+
+# Publish to mqtt when fillament type/color changes
+script:
+  - id: clear_filament_settings
+    then:
+      - text_sensor.template.publish:
+          id: filament_color
+          state: "" #Reset colors
+      - text_sensor.template.publish:
+          id: filament_type
+          state: "" #Reset type
+      - text_sensor.template.publish:
+          id: filament_color_hex
+          state: ""
+
+  - id: publish_filament_setting
+    then:
+      - if:
+          condition:
+            and:
+              - lambda: 'return id(filament_color).state != "";'
+              - lambda: 'return id(filament_color_hex).state != "";'
+              - lambda: 'return id(filament_type).state != "";'
+          then:
+            - mqtt.publish:
+                topic: device/${bambu_serial_number}/request
+                payload: !lambda |-
+                  auto data = json::build_json([=](JsonObject root) {
+                    auto print = root.createNestedObject("print");
+                    print["sequence_id"] = "0";
+                    print["command"] = "ams_filament_setting";
+                    print["ams_id"] = 255;
+                    print["tray_id"] = 254;
+                    # print["tray_info_idx"] = "GFG99";
+                    print["tray_color"] = id(filament_color_hex).state.c_str();
+                    print["nozzle_temp_min"] = 190;
+                    print["nozzle_temp_max"] = 220;
+                    print["tray_type"] = id(filament_type).state.c_str();
+                    print["setting_id"] = "";
+                  });
+                  ESP_LOGI("main", "Publishing %s", data.c_str());
+                  return data;

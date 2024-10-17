@@ -12,31 +12,39 @@ binary_sensor:
     on_release:
       then:
         - logger.log: "Button 0 pressed"
-        - mqtt.publish:
-            topic: device/${bambu_serial_number}/request
-            payload: !lambda |-
-              std::string hex_value = id(color_lookup)[id(tray_color)];
-              ESP_LOGD("main", "Tray color %s has hex value %s", id(tray_color).c_str(), hex_value.c_str());
+        - script.execute: clear_filament_settings
+        - lambda: |-
+            id(filament_color).publish_state("yellow");
+            id(filament_type).publish_state("TPU");
+        - script.execute: publish_filament_setting
 
-              id(filament_color).publish_state("bambu_green");
-              ESP_LOGD("main", "Filament color hex %s", id(filament_color_hex).state.c_str());   
+
+
+        # - mqtt.publish:
+        #     topic: device/${bambu_serial_number}/request
+        #     payload: !lambda |-
+        #       std::string hex_value = id(color_lookup)[id(tray_color)];
+        #       ESP_LOGD("main", "Tray color %s has hex value %s", id(tray_color).c_str(), hex_value.c_str());
+
+        #       id(filament_color).publish_state("bambu_green");
+        #       ESP_LOGD("main", "Filament color hex %s", id(filament_color_hex).state.c_str());   
         
-              id(filament_type).publish_state("PLA");
-              char payload[512];
-              snprintf(payload, sizeof(payload),
-                "{\n"
-                "  \"print\": {\n"
-                "    \"sequence_id\": \"0\",\n"
-                "    \"command\": \"ams_filament_setting\",\n"
-                "    \"ams_id\": 255,\n"
-                "    \"tray_id\": 254,\n"
-                "    \"tray_info_idx\": \"GFG99\",\n"
-                "    \"tray_color\": \"%s\",\n"
-                "    \"nozzle_temp_min\": %d,\n"
-                "    \"nozzle_temp_max\": %d,\n"
-                "    \"tray_type\": \"%s\",\n"
-                "    \"setting_id\": \"\"\n"
-                "  }\n"
-                "}",
-                id(filament_color_hex).state.c_str(), id(nozzle_temp_min), id(nozzle_temp_max), id(tray_type).c_str());
-              return std::string(payload);
+        #       id(filament_type).publish_state("PLA");
+        #       char payload[512];
+        #       snprintf(payload, sizeof(payload),
+        #         "{\n"
+        #         "  \"print\": {\n"
+        #         "    \"sequence_id\": \"0\",\n"
+        #         "    \"command\": \"ams_filament_setting\",\n"
+        #         "    \"ams_id\": 255,\n"
+        #         "    \"tray_id\": 254,\n"
+        #         "    \"tray_info_idx\": \"GFG99\",\n"
+        #         "    \"tray_color\": \"%s\",\n"
+        #         "    \"nozzle_temp_min\": %d,\n"
+        #         "    \"nozzle_temp_max\": %d,\n"
+        #         "    \"tray_type\": \"%s\",\n"
+        #         "    \"setting_id\": \"\"\n"
+        #         "  }\n"
+        #         "}",
+        #         id(filament_color_hex).state.c_str(), id(nozzle_temp_min), id(nozzle_temp_max), id(tray_type).c_str());
+        #       return std::string(payload);
