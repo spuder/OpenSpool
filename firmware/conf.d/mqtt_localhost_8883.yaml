@@ -1,0 +1,84 @@
+# mqttx conn --mqtt-version 3.1.1 -h test.mosquitto.org -p 8883 -l mqtts --insecure
+# mqttx sub -t 'testtopic/1234' --mqtt-version 3.1.1 -h test.mosquitto.org -p 8883 -l mqtts --insecure
+
+
+mqtt:
+  # broker: broker.emqx.io # This server gives many TLS errors. 
+  broker: 192.168.81.145
+  port: 8883
+  client_id: ${name}
+  username: bblp
+  password: 12345678
+  log_topic:
+  discover_ip: false
+  discovery: false
+  discovery_retain: false
+  discovery_prefix:
+  use_abbreviations: false
+  topic_prefix: testtopic/1234
+  birth_message:
+    topic: # Dont post update to MQTT
+    payload: # Dont post update to MQTT
+  will_message:
+    topic: # Dont post update to MQTT
+    payload: # Dont post update to MQTT
+  skip_cert_cn_check: true
+  certificate_authority: |
+    -----BEGIN CERTIFICATE-----
+    MIIDiTCCAnGgAwIBAgIUJpRqOX2r7kQRmfyzwN5DgJIljrQwDQYJKoZIhvcNAQEL
+    BQAwVDELMAkGA1UEBhMCVVMxDjAMBgNVBAgMBVN0YXRlMQ0wCwYDVQQHDARDaXR5
+    MRAwDgYDVQQKDAdFeGFtcGxlMRQwEgYDVQQDDAtleGFtcGxlLmNvbTAeFw0yNDEw
+    MDQyMTEwMzRaFw0zNDEwMDIyMTEwMzRaMFQxCzAJBgNVBAYTAlVTMQ4wDAYDVQQI
+    DAVTdGF0ZTENMAsGA1UEBwwEQ2l0eTEQMA4GA1UECgwHRXhhbXBsZTEUMBIGA1UE
+    AwwLZXhhbXBsZS5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCv
+    hhyu0biNBWmdd+r4j2jgA8eoPYtq/okKE2Kg2/nfPp05HZKWjBNWn7ZVLiDeXJnM
+    XR6aScEeKRFNOBHi51JMGY0C/2s7VLn3j7HBhGtxBUDfUT0Lh/qORwYQgDONkQm2
+    decZSwt7k7HIf8cY9K8X/qrFkr0vIK5wnBgLjtyZXssp4Vj5mVgXXBT6yH7Y0t7t
+    t/qV6jd5wE5EyCc9KxMi63S/f7aBLozZAIM4EOyPqPVnE4rFUDFheM7mXW1LkVf8
+    s9aMsZExfJ/dWDShImib2sDnLi+w66GovbPkV9VFTeeC6iyTkV3XcVJZ2/A/S2fM
+    tZIaaQFVIbzQqq2Uhe9ZAgMBAAGjUzBRMB0GA1UdDgQWBBS/qHlbsVFCMG/K6NOC
+    K1MEUwjWyzAfBgNVHSMEGDAWgBS/qHlbsVFCMG/K6NOCK1MEUwjWyzAPBgNVHRMB
+    Af8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQAHaUmm4ozzZF5hF8WJSq7tPK63
+    zqJAGuyBffJigV09q5RMIGEYMbj6OMTp97dQ+OZU6Ly8KyAKth2qmHGo9p56HQhR
+    sBPxutNi5Ydna7kIZghwibUpXKRRccVLaug92mZeZvSfONtridJE9Aymq6Deahlj
+    uXvXScA+XYOlUCm8IzVeIvgospMqSbIg4s1xXosz22V0ektP7vIkHZHPOzdCh6Z0
+    aBABSRgM/jx8/cxbZaXcDEr7Lq6nKbpq9X/lL7ezoWnLHYYDEYtxI8iVg3eFdtWr
+    Gu0zjoJN4XxHv7McCDBD1xB+qfXNGMJ9zRFpE8ZtSt5aA3YV6OcddNzuDnQW
+    -----END CERTIFICATE-----
+  # on_connect:
+  #   then:
+  #     - output.turn_on: onboard_led
+  #     - logger.log: "Connected to Bambu Printer"
+  # on_disconnect:
+  #   then:
+  #     - logger.log: "Disconnected from Bambu Printer"
+  # on_message:
+  #   - topic: "test/1234"
+  #     then:
+  #       - logger.log: "Received message on topic: test/1234"
+
+# text_sensor:
+#   - platform: mqtt_subscribe
+#     name: "Bambu Printer Status"
+#     id: bambu_printer_status
+#     topic: "testtopic/1234/status"
+#     state_topic:
+#     on_value:
+#       then:
+#         - logger.log:
+#             format: "Received status: %s"
+#             args: ["x.c_str()"]
+#             level: INFO
+
+logger:
+  level: VERBOSE
+  logs:
+    mqtt.component: VERBOSE
+    mqtt.client: VERBOSE
+
+# sensor:
+#   - platform: mqtt_subscribe
+#     name: "Data from topic"
+#     id: mysensor
+#     topic: testtopic/1234
+#     state_topic: # Don't post update to MQTT

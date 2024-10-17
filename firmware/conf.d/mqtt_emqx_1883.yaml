@@ -1,0 +1,54 @@
+mqtt:
+  broker: broker.emqx.io
+  port: 1883
+  client_id: ${name}
+  log_topic:
+  discover_ip: false
+  discovery: false
+  discovery_retain: false
+  discovery_prefix:
+  use_abbreviations: false
+  topic_prefix: testtopic/1234
+  birth_message:
+    topic: # Dont post update to MQTT
+    payload: # Dont post update to MQTT
+  will_message:
+    topic: # Dont post update to MQTT
+    payload: # Dont post update to MQTT
+  on_connect:
+    then:
+      - output.turn_on: onboard_led
+      - logger.log: "Connected to Bambu Printer"
+  on_disconnect:
+    then:
+      - logger.log: "Disconnected from Bambu Printer"
+  on_message:
+    - topic: "test/1234"
+      then:
+        - logger.log: "Received message on topic: test/1234"
+
+text_sensor:
+  - platform: mqtt_subscribe
+    name: "Bambu Printer Status"
+    id: bambu_printer_status
+    topic: "testtopic/1234/status"
+    state_topic:
+    on_value:
+      then:
+        - logger.log:
+            format: "Received status: %s"
+            args: ["x.c_str()"]
+            level: INFO
+
+logger:
+  level: VERBOSE
+  logs:
+    mqtt.component: VERBOSE
+    mqtt.client: VERBOSE
+
+sensor:
+  - platform: mqtt_subscribe
+    name: "Data from topic"
+    id: mysensor
+    topic: testtopic/1234
+    state_topic: # Don't post update to MQTT

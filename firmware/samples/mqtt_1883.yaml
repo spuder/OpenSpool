@@ -1,0 +1,17 @@
+# This works and is able to connect to broker.emqx.io
+# Note that it is on port 1883 and is not encrypted and not authenticated
+
+
+esp32:
+  board: lolin_s2_mini
+  variant: esp32s2
+  framework:
+    type: esp-idf #esp-idf has issues with mqtt
+
+mqtt:
+  broker: broker.emqx.io
+  port: 1883
+  client_id: rainbowreel-1 #TODO: make $Name
+  log_topic: null
+  discovery: false
+  topic_prefix: testtopic/1234

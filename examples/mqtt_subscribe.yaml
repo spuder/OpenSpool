@@ -1,0 +1,74 @@
+esphome:
+  name: wemos_d1_mini
+  platform: ESP8266
+  board: d1_mini
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  password: !secret ota_password
+
+mqtt:
+  broker: !secret mqtt_broker_address
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  client_id: wemos_d1_mini
+  protocol_version: 3.1.1
+
+# Define user-provided variables
+substitutions:
+  printer_ip: "192.168.1.100"
+  lan_access_code: "1234567890"
+  printer_serialnumber: "ABCDEF123456"
+
+# Button 1 configuration
+binary_sensor:
+  - platform: gpio
+    pin: D1
+    name: "Button 1"
+    filters:
+      - delayed_on_off: 50ms
+    on_press:
+      then:
+        - logger.log: "Button 1 pressed"
+
+# Button 2 configuration
+  - platform: gpio
+    pin: D2
+    name: "Button 2"
+    filters:
+      - delayed_on_off: 50ms
+    on_press:
+      then:
+        - logger.log: "Button 2 pressed"
+
+# MQTT Subscribe example
+mqtt:
+  on_message:
+    - topic: "printer/status"
+      then:
+        - logger.log:
+            format: "Received printer status: %s"
+            args: ['x.c_str()']
+
+# Text sensors for user-provided parameters
+text_sensor:
+  - platform: template
+    name: "Printer IP"
+    lambda: return {"${printer_ip}"};
+
+  - platform: template
+    name: "LAN Access Code"
+    lambda: return {"${lan_access_code}"};
+
+  - platform: template
+    name: "Printer Serial Number"
+    lambda: return {"${printer_serialnumber}"};
