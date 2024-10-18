@@ -18,6 +18,7 @@ rc522_spi:
             id(filament_brand).publish_state("Generic_PETG");
           } else {
             ESP_LOGI("rfid", "Unknown tag scanned");
+            id(filament_raw_data).publish_state(x);
           }
       - script.execute: publish_filament_setting
 
