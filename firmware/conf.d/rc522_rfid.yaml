@@ -8,6 +8,7 @@ rc522_spi:
   cs_pin: GPIO16
   on_tag:
     then:
+      - script.execute: clear_filament_settings
       - lambda: |-
           if (x == "A2-DD-FE-5A") {
             id(filament_color).publish_state("blue");
@@ -30,3 +31,24 @@ rc522_spi:
 #     uid: 22-0E-04-5B
 #     name: "RC522 RFID Tag 2"
 #     state_topic:
+
+text_sensor:
+  - platform: template
+    name: "NFC Raw Data"
+    id: filament_raw_data
+    state_topic:
+    icon: mdi:nfc-search-variant
+    web_server:
+      sorting_group_id: sorting_group_rfid
+
+# Create virtual button that can be pressed in the gui
+button:
+  - platform: template
+    name: "Write NFC"
+    state_topic:
+    icon: mdi:nfc-variant
+    web_server:
+      sorting_group_id: sorting_group_rfid
+    #TODO: can rename 'press' to 'program' ? 
+    # on_press:
+      # then:

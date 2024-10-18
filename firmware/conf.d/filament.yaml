@@ -125,6 +125,7 @@ select:
               } else {
                 return "Unknown";
               }
+        - script.execute: serialize_rfid_raw_data
   - platform: template
     name: "Filament Color"
     id: filament_color
@@ -216,6 +217,7 @@ select:
               } else {
                 return "Unknown";
               }
+        - script.execute: serialize_rfid_raw_data
 
 # Sensor objects store the various attributes about a filament
 # filament_color
@@ -283,7 +285,17 @@ script:
       - text_sensor.template.publish:
           id: filament_color_hex
           state: ""
-
+  - id: serialize_rfid_raw_data
+    then:
+      - text_sensor.template.publish:
+          id: filament_raw_data
+          state: !lambda |-
+            auto data = json::build_json([=](JsonObject root) {
+              root["version"] = "1.0";
+              root["color"] = id(filament_color).state.c_str();
+              root["type"] = id(filament_type).state.c_str();
+            });
+            return data;
   - id: publish_filament_setting
     then:
       - if:
@@ -316,3 +328,15 @@ script:
                   });
                   ESP_LOGI("main", "Publishing %s", data.c_str());
                   return data;
+
+button:
+  - platform: template
+    id: upload_filament_settings
+    name: Upload Settings
+    state_topic:
+    icon: mdi:upload
+    web_server:
+      sorting_group_id: sorting_group_filament_settings
+    on_press:
+      then:
+        - script.execute: publish_filament_setting

@@ -11,4 +11,7 @@ web_server:
     - id: sorting_group_printer_settings
       name: "Printer Settings"
       sorting_weight: -10
+    - id: sorting_group_rfid
+      name: "RFID Programming"
+      sorting_weight: 60 #TODO: what to set to make it be on bottom
   # TODO: add auth
