@@ -4,4 +4,11 @@ web_server:
   port: 80
   version: 3
   local: true
+  sorting_groups:
+    - id: sorting_group_filament_settings
+      name: "Filament Settings"
+      sorting_weight: -20
+    - id: sorting_group_printer_settings
+      name: "Printer Settings"
+      sorting_weight: -10
   # TODO: add auth

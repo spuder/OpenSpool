@@ -10,14 +10,15 @@ rc522_spi:
     then:
       - lambda: |-
           if (x == "A2-DD-FE-5A") {
-            id(filament_color).publish_state("bambu_green");
-            id(filament_type).publish_state("TPU");
+            id(filament_color).publish_state("blue");
+            id(filament_brand).publish_state("Generic_TPU");
           } else if (x == "22-0E-04-5B") {
             id(filament_color).publish_state("red");
-            id(filament_type).publish_state("PETG");
+            id(filament_brand).publish_state("Generic_PETG");
           } else {
             ESP_LOGI("rfid", "Unknown tag scanned");
           }
+      - script.execute: publish_filament_setting
 
 # binary_sensor:
 #   - platform: rc522

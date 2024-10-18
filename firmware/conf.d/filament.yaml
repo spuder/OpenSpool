@@ -8,6 +8,8 @@ select:
     state_topic:
     optimistic: true
     icon: mdi:alpha-f-circle
+    web_server:
+      sorting_group_id: sorting_group_filament_settings
     options:
       - ""
       - "Generic_TPU"
@@ -128,6 +130,8 @@ select:
     id: filament_color
     state_topic:
     icon: mdi:palette-outline
+    web_server:
+      sorting_group_id: sorting_group_filament_settings
     optimistic: true
     options:
       - ""
@@ -241,33 +245,41 @@ text_sensor:
     id: filament_brand_code
     state_topic:
     icon: mdi:code-brackets
+    web_server:
+      sorting_group_id: sorting_group_filament_settings
 
   - platform: template
     name: "Filament Type"
     id: filament_type
     state_topic:
     icon: mdi:movie-roll
-    # on_value:
-    #   then:
-    #     - script.execute: publish_filament_setting
+    web_server:
+      sorting_group_id: sorting_group_filament_settings
 
   - platform: template
     name: "Filament Color Hex"
     id: filament_color_hex
     state_topic:
     icon: mdi:hexagon-outline
+    web_server:
+      sorting_group_id: sorting_group_filament_settings
 
-# Publish to mqtt when fillament type/color changes
 script:
   - id: clear_filament_settings
     then:
-      #TODO: reset filament_color
-      # - text_sensor.template.publish:
-      #     id: filament_color
-      #     state: "" #Reset colors
+      # publish to select template filament_brand
+      - select.set:
+          id: filament_brand
+          option: ""
+      - text_sensor.template.publish:
+          id: filament_brand_code
+          state: ""
+      - select.set:
+          id: filament_color
+          option: ""
       - text_sensor.template.publish:
           id: filament_type
-          state: "" #Reset type
+          state: ""
       - text_sensor.template.publish:
           id: filament_color_hex
           state: ""

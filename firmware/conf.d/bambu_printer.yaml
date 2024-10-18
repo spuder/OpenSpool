@@ -10,6 +10,8 @@ select:
     optimistic: true
     state_topic:
     icon: mdi:printer-3d
+    web_server:
+      sorting_group_id: sorting_group_printer_settings
 
 text:
   #TODO: mqtt not able to pull dynamically yet
@@ -21,6 +23,8 @@ text:
     mode: text
     restore_value: true
     icon: mdi:barcode
+    web_server:
+      sorting_group_id: sorting_group_printer_settings
 
   - platform: template
     id: bambu_lan_access_code
@@ -30,6 +34,8 @@ text:
     mode: password
     restore_value: true
     icon: mdi:lock
+    web_server:
+      sorting_group_id: sorting_group_printer_settings
 
   - platform: template
     id: bambu_ip_address
@@ -39,3 +45,5 @@ text:
     mode: text
     restore_value: true
     icon: mdi:ip
+    web_server:
+      sorting_group_id: sorting_group_printer_settings
