@@ -1,93 +1,246 @@
-# external_components:
-#   - source: components
-#     # components: [ filament ]
-#     components: [ empty_component ]
-#     # components: [ filament, empty_component ]
-# filament:
-#   id: external_spool
-#   color: blue
-#   type: PLA
-
-# empty_component:
-#   id: empty_component_1
-#   my_attribute: 42
-
-# text_sensor:
-#   - platform: custom
-#     lambda: |-
-#       auto my_empty_component = new empty_component::EmptyComponent();
-#       App.register_component(my_empty_component);
-
-#       return {new CustomTextSensor([my_empty_component]() -> optional<std::string> {
-#         return my_empty_component->get_color();
-#       })};
-#     text_sensors:
-#       - name: "Empty Component Color"
-#         id: empty_component_color
-
-text_sensor:
+# Bambu Filament mappings
+# Credit to WolfWithSword for figuring all these out
+# https://gist.github.com/WolfwithSword/e3e4dc4f00629cc047b7cefd70d7b350#file-bambu_mqtt-json-L314
+select:
+  - platform: template
+    name: "Filament Brand"
+    id: filament_brand
+    state_topic:
+    optimistic: true
+    icon: mdi:alpha-f-circle
+    options:
+      - ""
+      - "Generic_TPU"
+      - "Generic_PVA"
+      - "Generic_PLACF"
+      - "Generic_PLA"
+      - "Generic_PETG"
+      - "Generic_PC"
+      - "Generic_PACF"
+      - "Generic_PA"
+      - "Generic_ASA"
+      - "Generic_ABS"
+      - "Bambu_TPU_95A"
+      - "Support_W"
+      - "Support_G"
+      - "Bambu_PLA_Matte"
+      - "Bambu_PLA_Basic"
+      - "Bambu_PC"
+      - "Bambu_PACF"
+      - "Bambu_ABS"
+      - "PolyTerra_PLA"
+    on_value:
+      then:
+        - text_sensor.template.publish:
+            id: filament_brand_code
+            state: !lambda |-
+              if ( x == "Generic_TPU" ) {
+                return "GFU99";
+              } else if ( x == "Generic_PVA" ) {
+                return "GFU99";
+              } else if ( x == "Generic_PLACF" ) {
+                return "GFL98";
+              } else if ( x == "Generic_PLA" ) {
+                return "GFL99";
+              } else if ( x == "Generic_PETG" ) {
+                return "GFG99";
+              } else if ( x == "Generic_PC" ) {
+                return "GFC99";
+              } else if ( x == "Generic_PACF" ) {
+                return "GFN98";
+              } else if ( x == "Generic_PA" ) {
+                return "GFN99";
+              } else if ( x == "Generic_ASA" ) {
+                return "GFB98";
+              } else if ( x == "Generic_ABS" ) {
+                return "GFB99";
+              } else if ( x == "Bambu_TPU_95A" ) {
+                return "GFU01";
+              } else if ( x == "Support_W" ) {
+                return "GFS00";
+              } else if ( x == "Support_G" ) {
+                return "GFS01";
+              } else if ( x == "Bambu_PLA_Matte" ) {
+                return "GFA01";
+              } else if ( x == "Bambu_PLA_Basic" ) {
+                return "GFA00";
+              } else if ( x == "Bambu_PC" ) {
+                return "GFC00";
+              } else if ( x == "Bambu_PACF" ) {
+                return "GFN03";
+              } else if ( x == "Bambu_ABS" ) {
+                return "GFB00";
+              } else if ( x == "PolyTerra_PLA" ) {
+                return "GFL01";
+              } else if ( x == "PolyLite_PLA" ) {
+                return "GFL00";
+              } else {
+                return "Unknown";
+              }
+        - text_sensor.template.publish:
+            id: filament_type
+            state: !lambda |-
+              if ( x =="Generic_TPU" ) {
+                return "TPU";
+              } else if ( x == "Generic_PVA" ) {
+                return "PVA";
+              } else if ( x == "Generic_PLACF" ) {
+                return "PA-CF";
+              } else if ( x == "Generic_PLA" ) {
+                return "PLA";
+              } else if ( x == "Generic_PETG" ) {
+                return "PETG";
+              } else if ( x == "Generic_PC" ) {
+                return "PC";
+              } else if ( x == "Generic_PACF" ) {
+                return "PA-CF";
+              } else if ( x == "Generic_PA" ) {
+                return "PA";
+              } else if ( x == "Generic_ASA" ) {
+                return "ASA";
+              } else if ( x == "Generic_ABS" ) {
+                return "ABS";
+              } else if ( x == "Bambu_TPU_95A" ) {
+                return "TPU";
+              } else if ( x == "Support_W" ) {
+                return "Support";
+              } else if ( x == "Support_G" ) {
+                return "Support";
+              } else if ( x == "Bambu_PLA_Matte" ) {
+                return "PLA";
+              } else if ( x == "Bambu_PLA_Basic" ) {
+                return "PLA";
+              } else if ( x == "Bambu_PC" ) { 
+                return "PC";
+              } else if ( x == "Bambu_PACF" ) {
+                return "PA-CF";
+              } else if ( x == "Bambu_ABS" ) {
+                return "ABS";
+              } else if ( x == "PolyTerra_PLA" ) {
+                return "PLA";
+              } else if ( x == "PolyLite_PLA" ) {
+                return "PLA";
+              } else {
+                return "Unknown";
+              }
   - platform: template
     name: "Filament Color"
     id: filament_color
     state_topic:
     icon: mdi:palette-outline
+    optimistic: true
+    options:
+      - ""
+      - "white"
+      - "yellow"
+      - "grass_green"
+      - "bambu_green"
+      - "missletoe_green"
+      - "dark_blue"
+      - "glow_green"
+      - "ice_blue"
+      - "cyan"
+      - "blue"
+      - "iris_purple"
+      - "magenta"
+      - "sakura_pink"
+      - "pink"
+      - "red"
+      - "dark_brown"
+      - "orange"
+      - "beige"
+      - "desert_tan"
+      - "brown"
+      - "ash_grey"
+      - "grey"
+      - "black"
+      - "Unknown"
     on_value:
       then:
         - text_sensor.template.publish:
             id: filament_color_hex
             state: !lambda |-
               ESP_LOGD("main", "Color %s", id(filament_color).state.c_str());
-              if (id(filament_color).state == "white") {
+              if ( x == "white") {
                 return "FFFFFFFF";
-              } else if (id(filament_color).state == "yellow") {
+              } else if ( x == "yellow") {
                 return "FFF144FF";
-              } else if (id(filament_color).state == "grass_green") {
+              } else if ( x == "grass_green") {
                 return "DCF478FF";
-              } else if (id(filament_color).state == "bambu_green") {
+              } else if ( x == "bambu_green") {
                 return "0ACC38FF";
-              } else if (id(filament_color).state == "missletoe_green") {
+              } else if ( x == "missletoe_green") {
                 return "057748FF";
-              } else if (id(filament_color).state == "dark_blue") {
+              } else if ( x == "dark_blue") {
                 return "0D6284FF";
-              } else if (id(filament_color).state == "glow_green") {
+              } else if ( x == "glow_green") {
                 return "0EE2A0FF";
-              } else if (id(filament_color).state == "ice_blue") {
+              } else if ( x == "ice_blue") {
                 return "76D9F4FF";
-              } else if (id(filament_color).state == "cyan") {
+              } else if ( x == "cyan") {
                 return "46A8F9FF";
-              } else if (id(filament_color).state == "blue") {
+              } else if ( x == "blue") {
                 return "2850E0FF";
-              } else if (id(filament_color).state == "iris_purple") {
+              } else if ( x == "iris_purple") {
                 return "443089FF";
-              } else if (id(filament_color).state == "purple") {
+              } else if ( x == "purple") {
                 return "A03CF7FF";
-              } else if (id(filament_color).state == "magenta") {
+              } else if ( x == "magenta") {
                 return "F330F9FF";
-              } else if (id(filament_color).state == "sakura_pink") {
+              } else if ( x == "sakura_pink") {
                 return "D4B1DDFF";
-              } else if (id(filament_color).state == "pink") {
+              } else if ( x == "pink") {
                 return "F95D73FF";
-              } else if (id(filament_color).state == "red") {
+              } else if ( x == "red") {
                 return "F72323FF";
-              } else if (id(filament_color).state == "dark_brown") {
+              } else if ( x == "dark_brown") {
                 return "7C4B00FF";
-              } else if (id(filament_color).state == "orange") {
+              } else if ( x == "orange") {
                 return "F98C36FF";
-              } else if (id(filament_color).state == "beige") {
+              } else if ( x == "beige") {
                 return "FCECD6FF";
-              } else if (id(filament_color).state == "desert_tan") {
+              } else if ( x == "desert_tan") {
                 return  "D3C5A3FF";
-              } else if (id(filament_color).state == "brown") {
+              } else if ( x == "brown") {
                 return "AF7933FF";
-              } else if (id(filament_color).state == "ash_grey") {
+              } else if ( x == "ash_grey") {
                 return "898989FF";
-              } else if (id(filament_color).state == "grey") {
+              } else if ( x == "grey") {
                 return "BCBCBCFF";
-              } else if (id(filament_color).state == "black") {
+              } else if ( x == "black") {
                 return "161616FF";
               } else {
                 return "Unknown";
               }
+
+# Sensor objects store the various attributes about a filament
+# filament_color
+# filament_type
+# filament_color_hex
+# filament_brand_code
+
+# These values are required for the mqtt payload
+# Example payload:
+# {
+#   "print": {
+#       "sequence_id": "0",
+#       "command": "ams_filament_setting",
+#       "ams_id": 0,
+#       "tray_id": 0,
+#       "tray_info_idx": "GFL99",
+#       "tray_color": "0000FFFF",
+#       "nozzle_temp_min": 190,
+#       "nozzle_temp_max": 230,
+#       "tray_type": "PLA"
+#   }
+# }
+
+text_sensor:
+  - platform: template
+    name: "Filament Brand Code"
+    id: filament_brand_code
+    state_topic:
+    icon: mdi:code-brackets
 
   - platform: template
     name: "Filament Type"
@@ -108,9 +261,10 @@ text_sensor:
 script:
   - id: clear_filament_settings
     then:
-      - text_sensor.template.publish:
-          id: filament_color
-          state: "" #Reset colors
+      #TODO: reset filament_color
+      # - text_sensor.template.publish:
+      #     id: filament_color
+      #     state: "" #Reset colors
       - text_sensor.template.publish:
           id: filament_type
           state: "" #Reset type
@@ -126,6 +280,8 @@ script:
               - lambda: 'return id(filament_color).state != "";'
               - lambda: 'return id(filament_color_hex).state != "";'
               - lambda: 'return id(filament_type).state != "";'
+              - lambda: 'return id(filament_brand).state != "";'
+              - lambda: 'return id(filament_brand_code).state != "";'
           then:
             - mqtt.publish:
                 topic: device/${bambu_serial_number}/request
@@ -136,12 +292,15 @@ script:
                     print["command"] = "ams_filament_setting";
                     print["ams_id"] = 255;
                     print["tray_id"] = 254;
-                    # print["tray_info_idx"] = "GFG99";
                     print["tray_color"] = id(filament_color_hex).state.c_str();
                     print["nozzle_temp_min"] = 190;
                     print["nozzle_temp_max"] = 220;
-                    print["tray_type"] = id(filament_type).state.c_str();
+                    //print["tray_type"] = id(filament_type).state.c_str();
                     print["setting_id"] = "";
+                    print["tray_info_idx"] = id(filament_brand_code).state.c_str();
+                    print["tray_type"] = id(filament_type).state.c_str();
+                    //print["tray_sub_brands"] = "TPU";
+
                   });
                   ESP_LOGI("main", "Publishing %s", data.c_str());
                   return data;

@@ -7,15 +7,16 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: true
     name: "Button"
-    icon: mdi:electric-switch
+    # icon: mdi:electric-switch
+    internal: true
     state_topic: # Don't post update to MQTT #TODO: silence this once finished testing
     on_release:
       then:
         - logger.log: "Button 0 pressed"
-        - script.execute: clear_filament_settings
-        - lambda: |-
-            id(filament_color).publish_state("yellow");
-            id(filament_type).publish_state("TPU");
+        # - script.execute: clear_filament_settings
+        # - lambda: |-
+        #     id(filament_color).publish_state("yellow");
+        #     id(filament_type).publish_state("TPU");
         - script.execute: publish_filament_setting
 
 
