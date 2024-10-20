@@ -15,6 +15,29 @@ OpenSpool is a combination of hardware and software that mimics the functionalit
 
 ![](/images/RainbowReel.png)
 
+## Protocol
+
+OpenSpool aims to use the simplest possible protocol for RFID tags. All you need is a 13.56Mhz RFID tag that supports NDEF records (NFC Tags). 
+
+### NDEF Record
+
+Example record stored on NFC tag. 
+
+type = `application/json`
+payload = 
+
+```json
+{
+    "protocol": "openspool",
+    "version": "1.0",
+    "type": "PLA",
+    "color": "bambu_green",
+    "min_temp": "220",
+    "max_temp": "240"
+}
+```
+
+`color` and `type` are currently limited to the predefined colors of BambuLabs AMS. 
 
 
 
@@ -33,6 +56,6 @@ Yes, people have tried setting up barcode scanners next to their printers. While
 
 Yes, Sort of. People on ebay will sell their existing RFID tags. While you can tape the tag onto your spool, finding all the colors/types of RFID tags on filaments is time consuming and difficult
 
-### Can't the RFID tags be cloned? 
+### Can't the BambuLabs RFID tags be cloned? 
 
 Yes, sort of. If you have a proxmox3 or Flipper Zero and a lot of time, you can clone bambulabs tags. Its still in early development and isn't for the faint of heart. Checkout the awesome folks over at [Bambu-Research-Group/RFID-Tag-Guide](https://github.com/Bambu-Research-Group/RFID-Tag-Guide) on github. 
