@@ -8,8 +8,8 @@ pn532_spi:
   id: nfc_reader
   on_tag_removed:
     then:
-    # Clear the NFC NDEF Data or NFC Raw Data field
-    # - lambda: |-
+    - lambda: |-
+        id(filament_raw_data).publish_state("");
   on_tag:
     then:
       - lambda: |-
@@ -85,12 +85,12 @@ text_sensor:
       sorting_group_id: sorting_group_rfid
 
   - platform: template
-    name: "NFC NDEF Data"
-    id: filament_ndef_data
+    name: "NFC Preview"
+    id: nfc_preview
     state_topic:
     icon: mdi:nfc-search-variant #TODO: change icon
     web_server:
-      sorting_group_id: sorting_group_rfid
+      sorting_group_id: sorting_group_openspool
 
 # Create virtual button that can be pressed in the gui
 button:
@@ -101,6 +101,7 @@ button:
       sorting_group_id: sorting_group_rfid
     on_press:
       then:
+          # TODO: Ensure raw_data isn't blank
           # Causes crash dump
           # - lambda: |-
           #     auto message = new nfc::NdefMessage();

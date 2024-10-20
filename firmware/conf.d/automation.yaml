@@ -17,11 +17,10 @@ script:
       - text_sensor.template.publish:
           id: filament_color_hex
           state: ""
-  #TODO: is serialize_rfid_raw_data even needed? It was causing race conditions from inside on_tag loop
   - id: serialize_rfid_raw_data
     then:
       - text_sensor.template.publish:
-          id: filament_raw_data
+          id: nfc_preview
           state: !lambda |-
             auto data = json::build_json([=](JsonObject root) {
               root["protocol"] = "openspool";

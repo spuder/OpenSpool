@@ -7,9 +7,12 @@ web_server:
   sorting_groups:
     - id: sorting_group_filament_settings
       name: "Filament Settings"
-      sorting_weight: -20
+      sorting_weight: -30
     - id: sorting_group_printer_settings
       name: "Printer Settings"
+      sorting_weight: -20
+    - id: sorting_group_openspool
+      name: "OpenSpool"
       sorting_weight: -10
     - id: sorting_group_rfid
       name: "RFID Programming"
