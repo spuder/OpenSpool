@@ -5,6 +5,7 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: true
     id: my_button
+    state_topic:
     on_press:
       then:
         - switch.toggle: virtual_switch  # Toggle the virtual switch on button press
@@ -14,6 +15,7 @@ switch:
     name: "Virtual Button"
     id: virtual_switch
     optimistic: true  # Allows immediate state change in Home Assistant
+    state_topic:
     turn_on_action:
       - logger.log: "Virtual Button turned ON"
       # Add actions for when the switch is turned ON, e.g., turning on an output

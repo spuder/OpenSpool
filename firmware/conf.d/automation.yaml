@@ -11,7 +11,7 @@ script:
       - select.set:
           id: filament_color
           option: ""
-      # TODO: do I need to reset filament_color_hex ? 
+      # TODO: do I need to reset filament_color_hex ?
       - text_sensor.template.publish:
           id: filament_color_hex
           state: ""
@@ -54,7 +54,7 @@ script:
       - if:
           condition:
             and:
-              - lambda: |- 
+              - lambda: |-
                   if (id(filament_brand).state == "") {
                     ESP_LOGE("main", "Filament Brand cannot be empty");
                     return false;
@@ -96,7 +96,7 @@ script:
                   } else {
                     return true;
                   }
-              - lambda: |- 
+              - lambda: |-
                   if (id(filament_type).state == "") {
                     ESP_LOGE("main", "Filament Type cannot be empty");
                     return false;

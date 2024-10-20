@@ -17,6 +17,7 @@ text_sensor:
     id: time_sensor
     icon: "mdi:clock"
     update_interval: 10s
+    state_topic:
     lambda: |-
       auto time = id(ntp_time).now();
       char str[20];

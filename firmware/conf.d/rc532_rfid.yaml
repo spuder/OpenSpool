@@ -3,22 +3,24 @@ binary_sensor:
     name: "NFC Tag Present"
     id: nfc_tag_present
     state_topic:
-
+    icon: mdi:circle-double
+    web_server:
+      sorting_group_id: sorting_group_rfid
 spi:
   clk_pin: GPIO35 # SCK
   mosi_pin: GPIO33 # MO/SDA/TX
   miso_pin: GPIO18 # M
 
 pn532_spi:
-  cs_pin: GPIO16 # NSS/SCL/RX 
+  cs_pin: GPIO16 # NSS/SCL/RX
   id: nfc_reader
   on_tag_removed:
     then:
-    - binary_sensor.template.publish:
-        id: nfc_tag_present
-        state: OFF
-    - lambda: |-
-        id(filament_raw_data).publish_state("");
+      - binary_sensor.template.publish:
+          id: nfc_tag_present
+          state: OFF
+      - lambda: |-
+          id(filament_raw_data).publish_state("");
   on_tag:
     then:
       - binary_sensor.template.publish:
@@ -134,7 +136,7 @@ button:
                     } else {
                       return true;
                     }
-                - lambda: |- 
+                - lambda: |-
                     if (id(filament_brand).state == "") {
                       ESP_LOGE("main", "Filament Brand cannot be empty");
                       return false;
@@ -176,17 +178,16 @@ button:
                     } else {
                       return true;
                     }
-                - lambda: |- 
+                - lambda: |-
                     if (id(filament_type).state == "") {
                       ESP_LOGE("main", "Filament Type cannot be empty");
                       return false;
                     } else {
                       return true;
                     }
-            then: 
+            then:
               - lambda: |-
                   //TODO: implement logic
-                  
 
           # TODO: Ensure raw_data isn't blank
           # Causes crash dump
@@ -228,8 +229,6 @@ button:
         #     // Write the message to the NFC tag
         #     id(nfc_reader).write_mode(message);
         #     ESP_LOGI("rfid", "Writing NDEF message to tag");
-
-
 
 # logger:
 #   level: VERBOSE
