@@ -4,7 +4,6 @@ wifi:
 
 debug:
   update_interval: 5s
-
 # https://esphome.io/components/logger.html
 # logger:
 #   # level: debug
