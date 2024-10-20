@@ -125,7 +125,7 @@ select:
               } else {
                 return "Unknown";
               }
-        - script.execute: serialize_rfid_raw_data
+        - script.execute: preview_rfid_data
   - platform: template
     name: "Filament Color"
     id: filament_color
@@ -217,7 +217,7 @@ select:
               } else {
                 return "Unknown";
               }
-        - script.execute: serialize_rfid_raw_data
+        - script.execute: preview_rfid_data
 
 # Sensor objects store the various attributes about a filament
 # filament_color
@@ -251,7 +251,7 @@ text_sensor:
       sorting_group_id: sorting_group_filament_settings
     on_value:
       then:
-        - script.execute: serialize_rfid_raw_data
+        - script.execute: preview_rfid_data
 
   - platform: template
     name: "Filament Type"
@@ -262,7 +262,7 @@ text_sensor:
       sorting_group_id: sorting_group_filament_settings
     on_value:
       then:
-        - script.execute: serialize_rfid_raw_data
+        - script.execute: preview_rfid_data
 
   - platform: template
     name: "Filament Color Hex"
@@ -273,7 +273,7 @@ text_sensor:
       sorting_group_id: sorting_group_filament_settings
     on_value:
       then:
-        - script.execute: serialize_rfid_raw_data
+        - script.execute: preview_rfid_data
 
 button:
   - platform: template

@@ -17,18 +17,25 @@ script:
       - text_sensor.template.publish:
           id: filament_color_hex
           state: ""
-  - id: serialize_rfid_raw_data
+  - id: preview_rfid_data
     then:
       - text_sensor.template.publish:
           id: nfc_preview
           state: !lambda |-
-            auto data = json::build_json([=](JsonObject root) {
+            auto pretty_json = [=]() -> std::string {
+              DynamicJsonDocument doc(256);  // Adjust size as needed
+              JsonObject root = doc.to<JsonObject>();
+              
               root["protocol"] = "openspool";
               root["version"] = "1.0";
               root["color"] = id(filament_color).state.c_str();
               root["type"] = id(filament_type).state.c_str();
-            });
-            return data;
+
+              std::string output;
+              serializeJsonPretty(doc, output);
+              return output;
+            };
+            return pretty_json();
   - id: publish_filament_setting
     then:
       - if:

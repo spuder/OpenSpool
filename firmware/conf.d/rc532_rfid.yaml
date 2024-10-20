@@ -80,7 +80,7 @@ text_sensor:
     name: "NFC Raw Data"
     id: filament_raw_data
     state_topic:
-    icon: mdi:nfc-search-variant
+    icon: mdi:nfc-variant
     web_server:
       sorting_group_id: sorting_group_rfid
 
@@ -88,15 +88,15 @@ text_sensor:
     name: "NFC Preview"
     id: nfc_preview
     state_topic:
-    icon: mdi:nfc-search-variant #TODO: change icon
+    icon: mdi:nfc-search-variant
     web_server:
-      sorting_group_id: sorting_group_openspool
+      sorting_group_id: sorting_group_rfid
 
 # Create virtual button that can be pressed in the gui
 button:
   - platform: template
     name: "Write NFC"
-    icon: mdi:nfc-variant
+    icon: mdi:nfc-tap
     web_server:
       sorting_group_id: sorting_group_rfid
     on_press:
