@@ -125,7 +125,7 @@ select:
               } else {
                 return "Unknown";
               }
-        - script.execute: serialize_rfid_raw_data
+        # - script.execute: serialize_rfid_raw_data
   - platform: template
     name: "Filament Color"
     id: filament_color
@@ -217,7 +217,7 @@ select:
               } else {
                 return "Unknown";
               }
-        - script.execute: serialize_rfid_raw_data
+        # - script.execute: serialize_rfid_raw_data
 
 # Sensor objects store the various attributes about a filament
 # filament_color

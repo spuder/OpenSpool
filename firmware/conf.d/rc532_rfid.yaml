@@ -6,10 +6,13 @@ spi:
 pn532_spi:
   cs_pin: GPIO16 # NSS/SCL/RX 
   id: nfc_reader
+  on_tag_removed:
+    then:
+    # Clear the NFC NDEF Data or NFC Raw Data field
+    # - lambda: |-
   on_tag:
     then:
       - lambda: |-
-          ESP_LOGI("NFC", "Tag detected: %s", x.c_str());
           auto tag_type = tag.get_tag_type();
           ESP_LOGD("NFC", "Tag type: %s", tag_type.c_str());
 
@@ -28,11 +31,10 @@ pn532_spi:
                 json_record_found = true;
 
                 auto data = record->get_payload();
-                ESP_LOGI("NFC", "JSON record found: %s", data.c_str());
-                id(filament_raw_data).publish_state(data);
+                ESP_LOGD("NFC", "JSON record found: %s", data.c_str());
+                id(filament_raw_data).publish_state(data.c_str());
 
                 bool parse_result = esphome::json::parse_json(data, [](const JsonObject& root) -> bool {
-                  //TODO: set filament_raw_data
                   if (root.containsKey("protocol") && root["protocol"] == "openspool") {
                     ESP_LOGD("NFC", "Tag is an openspool tag");
                     if (!root.containsKey("version")) {
@@ -40,13 +42,25 @@ pn532_spi:
                       return false;
                     }
                     if (root["version"] == "1.0") {
-                      id(clear_filament_settings).execute();
-                      ESP_LOGD("NFC", "Openspool -  v1.0");
-                      id(filament_color).publish_state(root["color"]);
-                      id(filament_type).publish_state(root["type"]); //TODO: this is blank
+                      //id(clear_filament_settings).execute();
+                      ESP_LOGD("NFC", "OpenSpool - v1.0");
+                      if (!root.containsKey("color")) {
+                        ESP_LOGE("NFC", "Missing color field");
+                        return false;
+                      } else {
+                        id(filament_color).publish_state(root["color"]);
+                      }
+                      if (!root.containsKey("type")) {
+                        ESP_LOGE("NFC", "Missing type field");
+                        return false;
+                      } else {
+                          id(filament_type).publish_state(root["type"]);
+                      }
                     } else {
                       ESP_LOGE("NFC", "Unsupported version: %s", root["version"].as<std::string>().c_str());
                     }
+                  } else {
+                    ESP_LOGE("NFC", "Tag is not an openspool tag");
                   }
                   return true;
                 });
