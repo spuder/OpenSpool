@@ -1,3 +1,8 @@
+binary_sensor:
+  - platform: template
+    name: "NFC Tag Present"
+    id: nfc_tag_present
+
 spi:
   clk_pin: GPIO35 # SCK
   mosi_pin: GPIO33 # MO/SDA/TX
@@ -8,10 +13,16 @@ pn532_spi:
   id: nfc_reader
   on_tag_removed:
     then:
+    - binary_sensor.template.publish:
+        id: nfc_tag_present
+        state: OFF
     - lambda: |-
         id(filament_raw_data).publish_state("");
   on_tag:
     then:
+      - binary_sensor.template.publish:
+          id: nfc_tag_present
+          state: ON
       - lambda: |-
           auto tag_type = tag.get_tag_type();
           ESP_LOGD("NFC", "Tag type: %s", tag_type.c_str());
@@ -25,7 +36,7 @@ pn532_spi:
             for (auto &record : records) {
               if (record->get_type() == "application/json") {
                 if (json_record_found) {
-                  ESP_LOGE("NFC", "Multiple JSON NDEF records found, not a valid openspool tag");
+                  ESP_LOGE("NFC", "Multiple JSON NDEF records found, not a valid OpenSpool tag");
                   break;
                 }
                 json_record_found = true;
@@ -45,16 +56,28 @@ pn532_spi:
                       //id(clear_filament_settings).execute();
                       ESP_LOGD("NFC", "OpenSpool - v1.0");
                       if (!root.containsKey("color")) {
-                        ESP_LOGE("NFC", "Missing color field");
-                        return false;
+                        ESP_LOGE("NFC", "Missing color field, required for OpenSpool v1.0");
+                        id(filament_color).publish_state("");
                       } else {
                         id(filament_color).publish_state(root["color"]);
                       }
                       if (!root.containsKey("type")) {
-                        ESP_LOGE("NFC", "Missing type field");
-                        return false;
+                        ESP_LOGE("NFC", "Missing type field, required for OpenSpool v1.0");
+                        id(filament_type).publish_state("");
                       } else {
                           id(filament_type).publish_state(root["type"]);
+                      }
+                      if (!root.containsKey("min_temp")) {
+                        ESP_LOGE("NFC", "Missing min_temp field, required for OpenSpool v1.0");
+                        id(filament_min_temp).publish_state(150);
+                      } else {
+                        id(filament_min_temp).publish_state(root["min_temp"]);
+                      }
+                      if (!root.containsKey("max_temp")) {
+                        ESP_LOGE("NFC", "Missing max_temp field, required for OpenSpool v1.0");
+                        id(filament_max_temp).publish_state(300);
+                      } else {
+                        id(filament_max_temp).publish_state(root["max_temp"]);
                       }
                     } else {
                       ESP_LOGE("NFC", "Unsupported version: %s", root["version"].as<std::string>().c_str());
@@ -101,6 +124,70 @@ button:
       sorting_group_id: sorting_group_rfid
     on_press:
       then:
+        - if:
+            condition:
+              and:
+                - lambda: |-
+                    if (!id(nfc_tag_present).state) {
+                      ESP_LOGE("main", "NFC Tag not present");
+                      return false;
+                    } else {
+                      return true;
+                    }
+                - lambda: |- 
+                    if (id(filament_brand).state == "") {
+                      ESP_LOGE("main", "Filament Brand cannot be empty");
+                      return false;
+                    } else {
+                      return true;
+                    }
+                - lambda: |-
+                    if (id(filament_brand_code).state == "") {
+                      ESP_LOGE("main", "Filament Brand Code cannot be empty");
+                      return false;
+                    } else {
+                      return true;
+                    }
+                - lambda: |-
+                    if (id(filament_color).state == "") {
+                      ESP_LOGE("main", "Filament Color cannot be empty");
+                      return false;
+                    } else {
+                      return true;
+                    }
+                - lambda: |-
+                    if (id(filament_color_hex).state == "") {
+                      ESP_LOGE("main", "Filament Color Hex cannot be empty");
+                      return false;
+                    } else {
+                      return true;
+                    }
+                - lambda: |-
+                    if (id(filament_max_temp).state >= 300) {
+                      ESP_LOGE("main", "Filament Min Temp must be less than 300");
+                      return false;
+                    } else {
+                      return true;
+                    }
+                - lambda: |-
+                    if (id(filament_min_temp).state <= 150) {
+                      ESP_LOGE("main", "Filament Max Temp must be greater than 150");
+                      return false;
+                    } else {
+                      return true;
+                    }
+                - lambda: |- 
+                    if (id(filament_type).state == "") {
+                      ESP_LOGE("main", "Filament Type cannot be empty");
+                      return false;
+                    } else {
+                      return true;
+                    }
+            then: 
+              - lambda: |-
+                  //TODO: implement logic
+                  
+
           # TODO: Ensure raw_data isn't blank
           # Causes crash dump
           # - lambda: |-

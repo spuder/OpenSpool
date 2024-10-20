@@ -11,11 +11,18 @@ script:
       - select.set:
           id: filament_color
           option: ""
-      - text_sensor.template.publish:
-          id: filament_type
-          state: ""
+      # TODO: do I need to reset filament_color_hex ? 
       - text_sensor.template.publish:
           id: filament_color_hex
+          state: ""
+      - number.set:
+          id: filament_min_temp
+          value: 150
+      - number.set:
+          id: filament_max_temp
+          value: 300
+      - text_sensor.template.publish:
+          id: filament_type
           state: ""
   - id: preview_rfid_data
     then:
@@ -30,6 +37,8 @@ script:
               root["version"] = "1.0";
               root["color"] = id(filament_color).state.c_str();
               root["type"] = id(filament_type).state.c_str();
+              root["min_temp"] = id(filament_min_temp).state;
+              root["max_temp"] = id(filament_max_temp).state;
 
               std::string output;
               serializeJsonPretty(doc, output);
@@ -41,11 +50,55 @@ script:
       - if:
           condition:
             and:
-              - lambda: 'return id(filament_color).state != "";'
-              - lambda: 'return id(filament_color_hex).state != "";'
-              - lambda: 'return id(filament_type).state != "";'
-              - lambda: 'return id(filament_brand).state != "";'
-              - lambda: 'return id(filament_brand_code).state != "";'
+              - lambda: |- 
+                  if (id(filament_brand).state == "") {
+                    ESP_LOGE("main", "Filament Brand cannot be empty");
+                    return false;
+                  } else {
+                    return true;
+                  }
+              - lambda: |-
+                  if (id(filament_brand_code).state == "") {
+                    ESP_LOGE("main", "Filament Brand Code cannot be empty");
+                    return false;
+                  } else {
+                    return true;
+                  }
+              - lambda: |-
+                  if (id(filament_color).state == "") {
+                    ESP_LOGE("main", "Filament Color cannot be empty");
+                    return false;
+                  } else {
+                    return true;
+                  }
+              - lambda: |-
+                  if (id(filament_color_hex).state == "") {
+                    ESP_LOGE("main", "Filament Color Hex cannot be empty");
+                    return false;
+                  } else {
+                    return true;
+                  }
+              - lambda: |-
+                  if (id(filament_max_temp).state >= 300) {
+                    ESP_LOGE("main", "Filament Min Temp must be less than 300");
+                    return false;
+                  } else {
+                    return true;
+                  }
+              - lambda: |-
+                  if (id(filament_min_temp).state <= 150) {
+                    ESP_LOGE("main", "Filament Max Temp must be greater than 150");
+                    return false;
+                  } else {
+                    return true;
+                  }
+              - lambda: |- 
+                  if (id(filament_type).state == "") {
+                    ESP_LOGE("main", "Filament Type cannot be empty");
+                    return false;
+                  } else {
+                    return true;
+                  }
           then:
             - mqtt.publish:
                 topic: device/${bambu_serial_number}/request
@@ -57,8 +110,8 @@ script:
                     print["ams_id"] = 255;
                     print["tray_id"] = 254;
                     print["tray_color"] = id(filament_color_hex).state.c_str();
-                    print["nozzle_temp_min"] = 190;
-                    print["nozzle_temp_max"] = 220;
+                    print["nozzle_temp_min"] = id(filament_min_temp).state; //TODO: string or int? 
+                    print["nozzle_temp_max"] = id(filament_max_temp).state; //TODO: string or int? 
                     //print["tray_type"] = id(filament_type).state.c_str();
                     print["setting_id"] = "";
                     print["tray_info_idx"] = id(filament_brand_code).state.c_str();

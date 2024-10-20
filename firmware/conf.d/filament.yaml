@@ -241,6 +241,54 @@ select:
 #   }
 # }
 
+number:
+  - platform: template
+    name: "Filament Min Temp"
+    id: filament_min_temp
+    min_value: 150
+    max_value: 300
+    unit_of_measurement: °C
+    step: 5
+    state_topic:
+    icon: mdi:thermometer-low
+    optimistic: true
+    web_server:
+      sorting_group_id: sorting_group_filament_settings
+    set_action:
+      then:
+        - lambda: |-
+            id(filament_min_temp).publish_state(int(round(x)));
+            if (id(filament_min_temp).state > id(filament_max_temp).state) {
+              id(filament_max_temp).publish_state(id(filament_min_temp).state);
+            }
+    on_value:
+      then:
+        - script.execute: preview_rfid_data
+
+  - platform: template
+    name: "Filament Max Temp"
+    id: filament_max_temp
+    min_value: 150
+    max_value: 300
+    initial_value: 300
+    unit_of_measurement: °C
+    step: 5
+    state_topic:
+    icon: mdi:thermometer-high
+    optimistic: true
+    web_server:
+      sorting_group_id: sorting_group_filament_settings
+    set_action:
+      then:
+        - lambda: |-
+            id(filament_max_temp).publish_state(int(round(x)));
+            if (id(filament_max_temp).state < id(filament_min_temp).state) {
+              id(filament_min_temp).publish_state(id(filament_max_temp).state);
+            }
+    on_value:
+      then:
+        - script.execute: preview_rfid_data
+
 text_sensor:
   - platform: template
     name: "Filament Brand Code"
