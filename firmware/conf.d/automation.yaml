@@ -1,5 +1,5 @@
 script:
-  - id: clear_filament_settings
+  - id: clear_filament_settings #TODO: unused
     then:
       # publish to select template filament_brand
       - select.set:
@@ -55,14 +55,14 @@ script:
           condition:
             and:
               - lambda: |-
-                  if (id(filament_brand).state == "") {
+                  if (id(filament_brand).state == "" || id(filament_brand).state == "Unknown") {
                     ESP_LOGE("main", "Filament Brand cannot be empty");
                     return false;
                   } else {
                     return true;
                   }
               - lambda: |-
-                  if (id(filament_brand_code).state == "") {
+                  if (id(filament_brand_code).state == "" || id(filament_brand_code).state == "Unknown") {
                     ESP_LOGE("main", "Filament Brand Code cannot be empty");
                     return false;
                   } else {
@@ -103,17 +103,23 @@ script:
                   } else {
                     return true;
                   }
+              - lambda: |-
+                  if (id(filament_type).state == "") {
+                    ESP_LOGE("main", "Filament Type cannot be empty");
+                    return false;
+                  } else {
+                    return true;
+                  }
           then:
             - mqtt.publish:
                 topic: device/${bambu_serial_number}/request
-                # TODO: validate all settings
                 payload: !lambda |-
                   auto data = json::build_json([=](JsonObject root) {
                     auto print = root.createNestedObject("print");
                     print["sequence_id"] = "0";
                     print["command"] = "ams_filament_setting";
-                    print["ams_id"] = 255;
-                    print["tray_id"] = 254;
+                    print["ams_id"] = 255; //TODO: support multiple AMS
+                    print["tray_id"] = 254; //TODO: support multiple trays
                     print["tray_color"] = id(filament_color_hex).state.c_str();
                     print["nozzle_temp_min"] = id(filament_min_temp).state; //TODO: string or int? 
                     print["nozzle_temp_max"] = id(filament_max_temp).state; //TODO: string or int? 
@@ -121,7 +127,7 @@ script:
                     print["setting_id"] = "";
                     print["tray_info_idx"] = id(filament_brand_code).state.c_str();
                     print["tray_type"] = id(filament_type).state.c_str();
-                    //print["tray_sub_brands"] = "TPU";
+                    //print["tray_sub_brands"] = "TPU"; //TODO: support sub brands
 
                   });
                   ESP_LOGI("main", "Publishing %s", data.c_str());
