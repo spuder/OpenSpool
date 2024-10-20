@@ -13,7 +13,6 @@ OpenSpool is a combination of hardware and software that mimics the functionalit
 - 100% reliability so that filament can be changed with your eyes closed. 
 
 
-![](/images/RainbowReel.png)
 
 ## Protocol
 
@@ -46,6 +45,9 @@ payload =
 TODO: Document hardware requirements
 
 
+## Architecture
+
+![](/images/RainbowReel.png)
 
 
 ### Hasn't this been done? 

@@ -12,7 +12,6 @@ spi:
 pn532_spi:
   cs_pin: GPIO16 # NSS/SCL/RX 
   id: nfc_reader
-  #TODO: how to set state_topic to prevent publishing to mqtt?
   on_tag_removed:
     then:
     - binary_sensor.template.publish:
@@ -52,10 +51,8 @@ pn532_spi:
                     ESP_LOGD("NFC", "Tag is an openspool tag");
                     if (!root.containsKey("version")) {
                       ESP_LOGE("NFC", "Missing version field");
-                      return false;
                     }
                     if (root["version"] == "1.0") {
-                      //id(clear_filament_settings).execute();
                       ESP_LOGD("NFC", "OpenSpool - v1.0");
                       if (!root.containsKey("color")) {
                         ESP_LOGE("NFC", "Missing color field, required for OpenSpool v1.0");

@@ -1,17 +1,12 @@
 substitutions:
   name: openspool
-  friendly_name: OpenSpool
 
 esphome:
   name: ${name} #Don't use underscore '_' in name https://esphome.io/guides/faq.html#why-shouldn-t-i-use-underscores-in-my-device-name
-  friendly_name: ${friendly_name} #TODO: only used by home assistant, probably should remove
   name_add_mac_suffix: true
   platformio_options:
     build_unflags: -std=gnu++11
     build_flags: -std=gnu++14
-  on_boot:
-    then:
-      - logger.log: "Booting ${friendly_name}"
 
 
 esp32:
