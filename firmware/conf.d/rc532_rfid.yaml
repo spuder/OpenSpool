@@ -1,0 +1,138 @@
+spi:
+  clk_pin: GPIO35 # SCK
+  mosi_pin: GPIO33 # MO/SDA/TX
+  miso_pin: GPIO18 # M
+
+pn532_spi:
+  cs_pin: GPIO16 # NSS/SCL/RX 
+  id: nfc_reader
+  on_tag:
+    then:
+      - lambda: |-
+          ESP_LOGI("NFC", "Tag detected: %s", x.c_str());
+          auto tag_type = tag.get_tag_type();
+          ESP_LOGD("NFC", "Tag type: %s", tag_type.c_str());
+
+          if (tag.has_ndef_message()) {
+            ESP_LOGD("NFC", "NDEF message found");
+            auto message = tag.get_ndef_message();
+            auto records = message->get_records();
+            bool json_record_found = false;
+
+            for (auto &record : records) {
+              if (record->get_type() == "application/json") {
+                if (json_record_found) {
+                  ESP_LOGE("NFC", "Multiple JSON NDEF records found, not a valid openspool tag");
+                  break;
+                }
+                json_record_found = true;
+
+                auto data = record->get_payload();
+                ESP_LOGI("NFC", "JSON record found: %s", data.c_str());
+                id(filament_raw_data).publish_state(data);
+
+                bool parse_result = esphome::json::parse_json(data, [](const JsonObject& root) -> bool {
+                  //TODO: set filament_raw_data
+                  if (root.containsKey("protocol") && root["protocol"] == "openspool") {
+                    ESP_LOGD("NFC", "Tag is an openspool tag");
+                    if (!root.containsKey("version")) {
+                      ESP_LOGE("NFC", "Missing version field");
+                      return false;
+                    }
+                    if (root["version"] == "1.0") {
+                      id(clear_filament_settings).execute();
+                      ESP_LOGD("NFC", "Openspool -  v1.0");
+                      id(filament_color).publish_state(root["color"]);
+                      id(filament_type).publish_state(root["type"]); //TODO: this is blank
+                    } else {
+                      ESP_LOGE("NFC", "Unsupported version: %s", root["version"].as<std::string>().c_str());
+                    }
+                  }
+                  return true;
+                });
+                if (!parse_result) {
+                  ESP_LOGE("NFC", "Failed to parse JSON data");
+                }
+              }
+            }
+
+            if (!json_record_found) {
+              ESP_LOGE("NFC", "No JSON record found, not an openspool tag");
+            }
+          }
+
+text_sensor:
+  - platform: template
+    name: "NFC Raw Data"
+    id: filament_raw_data
+    state_topic:
+    icon: mdi:nfc-search-variant
+    web_server:
+      sorting_group_id: sorting_group_rfid
+
+  - platform: template
+    name: "NFC NDEF Data"
+    id: filament_ndef_data
+    state_topic:
+    icon: mdi:nfc-search-variant #TODO: change icon
+    web_server:
+      sorting_group_id: sorting_group_rfid
+
+# Create virtual button that can be pressed in the gui
+button:
+  - platform: template
+    name: "Write NFC"
+    icon: mdi:nfc-variant
+    web_server:
+      sorting_group_id: sorting_group_rfid
+    on_press:
+      then:
+          # Causes crash dump
+          # - lambda: |-
+          #     auto message = new nfc::NdefMessage();
+          #     auto record = std::make_unique<nfc::NdefRecord>();
+
+          #     // Set TNF to Well Known and type to "T" for Text
+          #     record->set_tnf(nfc::TNF_WELL_KNOWN);
+          #     record->set_type("T");
+
+          #     // Define the payload for a text record
+          #     std::string text_payload = "FOO=BLUE";
+          #     std::string full_payload = "en" + text_payload;  // "en" for English language code
+          #     record->set_payload(full_payload);
+
+          #     // Add the record to the NDEF message
+          #     message->add_record(std::move(record));
+
+          #     // Write the message to the NFC tag
+          #     id(nfc_reader).write_mode(message);
+          #     ESP_LOGI("rfid", "Writing text NDEF message to tag");
+        # This looks like it should work, but it fails to write with no error every time
+        # - lambda: |-
+        #     auto message = new nfc::NdefMessage();
+        #     auto record = std::make_unique<nfc::NdefRecord>();
+
+        #     // Set TNF to MIME media and define the MIME type as a string
+        #     record->set_tnf(nfc::TNF_MIME_MEDIA);
+        #     record->set_type("application/json");  // MIME type as a string
+
+        #     // Define the payload in JSON format as a string
+        #     std::string json_payload = "{\"FOO\":\"42\"}";
+        #     record->set_payload(json_payload);  // Pass payload as a string
+
+        #     // Add the record to the NDEF message
+        #     message->add_record(std::move(record));
+
+        #     // Write the message to the NFC tag
+        #     id(nfc_reader).write_mode(message);
+        #     ESP_LOGI("rfid", "Writing NDEF message to tag");
+
+
+
+# logger:
+#   level: VERBOSE
+#   logs:
+#     pn532: VERBOSE
+#     nfc: VERBOSE
+#     mqtt: INFO
+#     wifi: INFO

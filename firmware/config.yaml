@@ -6,9 +6,9 @@ esphome:
   name: ${name} #Don't use underscore '_' in name https://esphome.io/guides/faq.html#why-shouldn-t-i-use-underscores-in-my-device-name
   friendly_name: ${friendly_name} #TODO: only used by home assistant, probably should remove
   name_add_mac_suffix: true
-  # platformio_options:
-  #   build_flags: 
-  #     -D CONFIG_MQTT_TRANSPORT_SSL=0
+  platformio_options:
+    build_unflags: -std=gnu++11
+    build_flags: -std=gnu++14
   on_boot:
     then:
       - logger.log: "Booting ${friendly_name}"
@@ -38,4 +38,6 @@ packages:
   button: !include conf.d/button.yaml
   filament: !include conf.d/filament.yaml
   bambu_printer: !include conf.d/bambu_printer.yaml
-  rc522_rfid: !include conf.d/rc522_rfid.yaml
+  # rc522_rfid: !include conf.d/rc522_rfid.yaml
+  rc532_rfid: !include conf.d/rc532_rfid.yaml
+  automation: !include conf.d/automation.yaml

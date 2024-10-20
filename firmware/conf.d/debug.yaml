@@ -8,4 +8,4 @@ debug:
 # https://esphome.io/components/logger.html
 # logger:
 #   # level: debug
-#   level: VERY_VERBOSE #TODO: drop to debug
+#   level: VERBOSE #TODO: drop to debug
