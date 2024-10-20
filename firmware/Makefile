@@ -28,14 +28,14 @@ run-usb:
 	# you can then run the run-ota command which will preserve the wifi settings
 	# this is a workaround until eshome supports improv_serial on esp32s2
 	esphome \
-		-s name rainbow-reel \
-		-s friendly_name "RainbowReel" \
+		-s name openspool \
+		-s friendly_name "OpenSpool" \
 		run config.yaml --device $(USB_ADDRESS)
 	# podman run -v $PWD:/data -it ghcr.io/esphome/esphome:dev compile /data/config.yaml
 	# podman run -v $PWD:/data --device=$(USB_ADDRESS) -it ghcr.io/esphome/esphome:dev run /data/config.yaml --device $(USB_ADDRESS)
 run-ota:
 	# run-ota is used for subsequent uploads after the device has been joined to the wifi network
 	esphome \
-		-s name rainbow-ree \
-		-s friendly_name "RainbowReel" \
+		-s name openspool \
+		-s friendly_name "OpenSpool" \
 		run config.yaml

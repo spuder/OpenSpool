@@ -1,6 +1,6 @@
 substitutions:
-  name: rainbow-reel
-  friendly_name: Rainbow Reel
+  name: openspool
+  friendly_name: OpenSpool
 
 esphome:
   name: ${name} #Don't use underscore '_' in name https://esphome.io/guides/faq.html#why-shouldn-t-i-use-underscores-in-my-device-name

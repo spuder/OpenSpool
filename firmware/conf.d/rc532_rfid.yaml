@@ -2,6 +2,7 @@ binary_sensor:
   - platform: template
     name: "NFC Tag Present"
     id: nfc_tag_present
+    state_topic:
 
 spi:
   clk_pin: GPIO35 # SCK
@@ -11,6 +12,7 @@ spi:
 pn532_spi:
   cs_pin: GPIO16 # NSS/SCL/RX 
   id: nfc_reader
+  #TODO: how to set state_topic to prevent publishing to mqtt?
   on_tag_removed:
     then:
     - binary_sensor.template.publish:
@@ -120,6 +122,7 @@ button:
   - platform: template
     name: "Write NFC"
     icon: mdi:nfc-tap
+    state_topic:
     web_server:
       sorting_group_id: sorting_group_rfid
     on_press:

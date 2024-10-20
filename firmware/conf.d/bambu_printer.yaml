@@ -14,7 +14,7 @@ select:
       sorting_group_id: sorting_group_printer_settings
 
 text:
-  #TODO: mqtt not able to pull dynamically yet
+  #TODO: mqtt not able to set credentials at runtime
   - platform: template
     id: bambu_serial_number
     state_topic:

@@ -13,5 +13,5 @@ web_server:
       sorting_weight: -20
     - id: sorting_group_rfid
       name: "RFID Programming"
-      sorting_weight: 60 #TODO: what to set to make it be on bottom
+      sorting_weight: -10
   # TODO: add auth

@@ -183,7 +183,7 @@ After I rebooted esp32
 
 ```
  1728534937: New connection from 10.89.0.22:38392 on port 8883.
-[mqtt-broker-tls] | 1728534938: New client connected from 10.89.0.22:38392 as rainbow-reel (p2, c0, k15, u'bblp').
+[mqtt-broker-tls] | 1728534938: New client connected from 10.89.0.22:38392 as openspool (p2, c0, k15, u'bblp').
 ```
 
 no clue why it says 10.89.0.22 (docker network perhaps?)
@@ -197,3 +197,106 @@ https://www.reddit.com/r/BambuLab/comments/167r16h/esp32_mqtt_connection/
 
 https://randomnerdtutorials.com/esp32-https-requests/#esp32-https-requests-wificlientsecure-without-certificate
 
+
+
+{
+    "print": {
+        "sequence_id": "2011",
+        "command": "ams_filament_setting",
+        "ams_id": 255,
+        "tray_id": 254,
+        "tray_info_idx": "GFA05",
+        "tray_color": "FFF144FF",
+        "nozzle_temp_min": 190,
+        "nozzle_temp_max": 240,
+        "tray_type": "PLA",
+        "setting_id": "",
+        "reason": "success",
+        "result": "success"
+    }
+}
+
+
+
+# Black PETG
+{
+    "print": {
+        "sequence_id": "2006",
+        "command": "ams_filament_setting",
+        "ams_id": 255,
+        "tray_id": 254,
+        "tray_info_idx": "GFG99",
+        "tray_color": "161616FF",
+        "nozzle_temp_min": 220,
+        "nozzle_temp_max": 270,
+        "tray_type": "PETG",
+        "setting_id": "",
+        "reason": "success",
+        "result": "success"
+    }
+}
+
+
+# Blue TPU
+{
+    "print": {
+        "sequence_id": "2010",
+        "command": "ams_filament_setting",
+        "ams_id": 255,
+        "tray_id": 254,
+        "tray_info_idx": "GFU99",
+        "tray_color": "2850E0FF",
+        "nozzle_temp_min": 200,
+        "nozzle_temp_max": 250,
+        "tray_type": "TPU",
+        "setting_id": "",
+        "reason": "success",
+        "result": "success"
+    }
+}
+
+# Purple PETG
+{
+    "print": {
+        "sequence_id": "2012",
+        "command": "ams_filament_setting",
+        "ams_id": 255,
+        "tray_id": 254,
+        "tray_info_idx": "GFG99",
+        "tray_color": "A03CF7FF",
+        "nozzle_temp_min": 220,
+        "nozzle_temp_max": 270,
+        "tray_type": "PETG",
+        "setting_id": "",
+        "reason": "success",
+        "result": "success"
+    }
+}
+{
+    "print": {
+        "sequence_id": "2013",
+        "command": "extrusion_cali_sel",
+        "nozzle_diameter": "0.4",
+        "nozzle_volume_type": "normal",
+        "filament_id": "GFG99",
+        "tray_id": 254,
+        "ams_id": 255,
+        "cali_idx": -1,
+        "reason": "success",
+        "result": "success"
+    }
+}
+{
+    "print": {
+        "vt_tray": {
+            "tray_info_idx": "GFG99",
+            "tray_type": "PETG",
+            "tray_color": "A03CF7FF",
+            "nozzle_temp_max": "270",
+            "nozzle_temp_min": "220"
+        },
+        "command": "push_status",
+        "msg": 1,
+        "sequence_id": "5707"
+    }
+}

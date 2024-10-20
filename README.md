@@ -1,9 +1,9 @@
-# Rainbow Reel
+# OpenSpool
 
 RFID tracking system for 3d printer filament
 
 
-Rainbow Reel is a combination of hardware and software that mimics the functionality of RFID tags on BambuLab filament roles. 
+OpenSpool is a combination of hardware and software that mimics the functionality of RFID tags on BambuLab filament roles. 
 
 ## Objectives
 
@@ -27,7 +27,7 @@ TODO: Document hardware requirements
 
 ### Hasn't this been done? 
 
-Yes, people have tried setting up barcode scanners next to their printers. While that is doable, it is bespoke and clunky. Rainbow Reel attempts to duplicate the seamless expierence of BambuLab filaments with BambuLab Printers with AMS. 
+Yes, people have tried setting up barcode scanners next to their printers. While that is doable, it is bespoke and clunky. OpenSpool attempts to duplicate the seamless expierence of BambuLab filaments with BambuLab Printers with AMS. 
 
 ### Can't the BambuLab RFID tags be reused? 
 

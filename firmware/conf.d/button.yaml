@@ -7,9 +7,8 @@ binary_sensor:
       mode: INPUT_PULLUP
       inverted: true
     name: "Button"
-    # icon: mdi:electric-switch
     internal: true
-    state_topic: # Don't post update to MQTT #TODO: silence this once finished testing
+    state_topic:
     on_release:
       then:
         - logger.log: "Button 0 pressed"
