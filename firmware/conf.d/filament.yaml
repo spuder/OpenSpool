@@ -2,6 +2,26 @@
 # Credit to WolfWithSword for figuring all these out
 # https://gist.github.com/WolfwithSword/e3e4dc4f00629cc047b7cefd70d7b350#file-bambu_mqtt-json-L314
 select:
+
+  - platform: template
+    name: "Filament Type"
+    id: filament_type
+    state_topic:
+    optimistic: true
+    icon: mdi:movie-roll
+    web_server:
+      sorting_group_id: sorting_group_filament_settings
+    options:
+      - PLA
+      - PETG
+      - TPU
+      - ABS
+    on_value:
+      then:
+        - script.execute: generate_filament_brand_code
+        - script.execute: generate_filament_temperatures
+        - script.execute: preview_rfid_data #TODO: needed? 
+
   - platform: template
     name: "Filament Brand"
     id: filament_brand
@@ -11,120 +31,153 @@ select:
     web_server:
       sorting_group_id: sorting_group_filament_settings
     options:
-      - ""
-      - "Generic_TPU"
-      - "Generic_PVA"
-      - "Generic_PLACF"
-      - "Generic_PLA"
-      - "Generic_PETG"
-      - "Generic_PC"
-      - "Generic_PACF"
-      - "Generic_PA"
-      - "Generic_ASA"
-      - "Generic_ABS"
-      - "Bambu_TPU_95A"
-      - "Support_W"
-      - "Support_G"
-      - "Bambu_PLA_Matte"
-      - "Bambu_PLA_Basic"
-      - "Bambu_PC"
-      - "Bambu_PACF"
-      - "Bambu_ABS"
-      - "PolyTerra_PLA"
+      - Generic
+      - Overture
+      - PolyTerra
+      - PolyLite
     on_value:
       then:
-        - text_sensor.template.publish:
-            id: filament_brand_code
-            state: !lambda |-
-              if ( x == "Generic_TPU" ) {
-                return "GFU99";
-              } else if ( x == "Generic_PVA" ) {
-                return "GFU99";
-              } else if ( x == "Generic_PLACF" ) {
-                return "GFL98";
-              } else if ( x == "Generic_PLA" ) {
-                return "GFL99";
-              } else if ( x == "Generic_PETG" ) {
-                return "GFG99";
-              } else if ( x == "Generic_PC" ) {
-                return "GFC99";
-              } else if ( x == "Generic_PACF" ) {
-                return "GFN98";
-              } else if ( x == "Generic_PA" ) {
-                return "GFN99";
-              } else if ( x == "Generic_ASA" ) {
-                return "GFB98";
-              } else if ( x == "Generic_ABS" ) {
-                return "GFB99";
-              } else if ( x == "Bambu_TPU_95A" ) {
-                return "GFU01";
-              } else if ( x == "Support_W" ) {
-                return "GFS00";
-              } else if ( x == "Support_G" ) {
-                return "GFS01";
-              } else if ( x == "Bambu_PLA_Matte" ) {
-                return "GFA01";
-              } else if ( x == "Bambu_PLA_Basic" ) {
-                return "GFA00";
-              } else if ( x == "Bambu_PC" ) {
-                return "GFC00";
-              } else if ( x == "Bambu_PACF" ) {
-                return "GFN03";
-              } else if ( x == "Bambu_ABS" ) {
-                return "GFB00";
-              } else if ( x == "PolyTerra_PLA" ) {
-                return "GFL01";
-              } else if ( x == "PolyLite_PLA" ) {
-                return "GFL00";
-              } else {
-                return "Unknown";
-              }
-        - text_sensor.template.publish:
-            id: filament_type
-            state: !lambda |-
-              if ( x =="Generic_TPU" ) {
-                return "TPU";
-              } else if ( x == "Generic_PVA" ) {
-                return "PVA";
-              } else if ( x == "Generic_PLACF" ) {
-                return "PA-CF";
-              } else if ( x == "Generic_PLA" ) {
-                return "PLA";
-              } else if ( x == "Generic_PETG" ) {
-                return "PETG";
-              } else if ( x == "Generic_PC" ) {
-                return "PC";
-              } else if ( x == "Generic_PACF" ) {
-                return "PA-CF";
-              } else if ( x == "Generic_PA" ) {
-                return "PA";
-              } else if ( x == "Generic_ASA" ) {
-                return "ASA";
-              } else if ( x == "Generic_ABS" ) {
-                return "ABS";
-              } else if ( x == "Bambu_TPU_95A" ) {
-                return "TPU";
-              } else if ( x == "Support_W" ) {
-                return "Support";
-              } else if ( x == "Support_G" ) {
-                return "Support";
-              } else if ( x == "Bambu_PLA_Matte" ) {
-                return "PLA";
-              } else if ( x == "Bambu_PLA_Basic" ) {
-                return "PLA";
-              } else if ( x == "Bambu_PC" ) { 
-                return "PC";
-              } else if ( x == "Bambu_PACF" ) {
-                return "PA-CF";
-              } else if ( x == "Bambu_ABS" ) {
-                return "ABS";
-              } else if ( x == "PolyTerra_PLA" ) {
-                return "PLA";
-              } else if ( x == "PolyLite_PLA" ) {
-                return "PLA";
-              } else {
-                return "Unknown";
-              }
+        - script.execute: generate_filament_brand_code
+        - script.execute: generate_filament_temperatures
+        # - lambda: |-
+        #     if (x == "Generic_TPU") {
+        #       id(filament_type).publish_state("TPU");
+        #       id(filament_brand_code).publish_state("GFU99");
+        #       id(filament_sub_brand).publish_state("TPU");
+        #       id(filament_max_temp).publish_state(250);
+        #       id(filament_min_temp).publish_state(200);
+        #     } else if (x == "Generic_PVA") {
+        #       id(filament_type).publish_state("PVA");
+        #       id(filament_brand_code).publish_state("GFS99");
+        #       id(filament_sub_brand).publish_state("PVA");
+        #       id(filament_max_temp).publish_state(240);
+        #       id(filament_min_temp).publish_state(190);
+        #     } else if (x == "Generic_PLACF") {
+        #       id(filament_type).publish_state("PA-CF");
+        #       id(filament_brand_code).publish_state("GFL98");
+        #       id(filament_sub_brand).publish_state("PLA-CF");
+        #       id(filament_max_temp).publish_state(240);
+        #       id(filament_min_temp).publish_state(190);
+        #     } else if (x == "Generic_PLA") {
+        #       id(filament_type).publish_state("PLA");
+        #       id(filament_brand_code).publish_state("GFL99");
+        #       id(filament_sub_brand).publish_state("PLA");
+        #       id(filament_max_temp).publish_state(240);
+        #       id(filament_min_temp).publish_state(190);
+        #     } else if (x == "Generic_PETG") {
+        #       id(filament_type).publish_state("PETG");
+        #       id(filament_brand_code).publish_state("GFG99");
+        #       id(filament_sub_brand).publish_state("PETG");
+        #       id(filament_max_temp).publish_state(270);
+        #       id(filament_min_temp).publish_state(220);
+        #     } else if (x == "Generic_PC") {
+        #       //TODO: only available on P1/X1 printers, not A1
+        #       id(filament_type).publish_state("PC");
+        #       id(filament_brand_code).publish_state("GFC99");
+        #       id(filament_sub_brand).publish_state("PC");
+        #       //TODO: add temps
+        #     } else if (x == "Generic_PACF") {
+        #       //TODO: only available on P1/X1 printers, not A1 ? 
+        #       id(filament_type).publish_state("PA-CF");
+        #       id(filament_brand_code).publish_state("GFN98");
+        #       id(filament_sub_brand).publish_state("PLA-CF");
+        #       //TODO: add temps
+        #     } else if (x == "Generic_PA") {
+        #       //TODO: only available on P1/X1 printers, not A1
+        #       id(filament_type).publish_state("PA");
+        #       id(filament_brand_code).publish_state("GFN99");
+        #       id(filament_sub_brand).publish_state("PA");
+        #       //TODO: add temps
+        #     } else if (x == "Generic_ASA") {
+        #       id(filament_type).publish_state("ASA");
+        #       id(filament_brand_code).publish_state("GFB98");
+        #       id(filament_sub_brand).publish_state("ASA");
+        #       //TODO: add temps
+        #     } else if (x == "Generic_ABS") {
+        #       id(filament_type).publish_state("ABS");
+        #       id(filament_brand_code).publish_state("GFB99");
+        #       id(filament_sub_brand).publish_state("ABS");
+        #       //TODO: add temps
+        #     } else if (x == "PolyTerra_PLA") {
+        #       id(filament_type).publish_state("PLA");
+        #       id(filament_brand_code).publish_state("GFL01");
+        #       id(filament_sub_brand).publish_state("PolyTerra PLA");
+        #       id(filament_max_temp).publish_state(240);
+        #       id(filament_min_temp).publish_state(190);
+        #     } else if (x == "PolyLite_PLA") {
+        #       id(filament_type).publish_state("PLA");
+        #       id(filament_brand_code).publish_state("GFL00");
+        #       id(filament_sub_brand).publish_state("PolyLite PLA");
+        #       id(filament_max_temp).publish_state(240);
+        #       id(filament_min_temp).publish_state(190);
+        #       //TODO: settingId: GFSL00_02
+        #     } else if (x == "Overture Matte PLA") {
+        #       id(filament_type).publish_state("PLA");
+        #       id(filament_brand_code).publish_state("GFL05");
+        #       id(filament_sub_brand).publish_state("Overture Matte PLA");
+        #       id(filament_max_temp).publish_state(240);
+        #       id(filament_min_temp).publish_state(190);
+        #       //TODO: settingId: GFSL05_07
+        #     } else if (x == "Overture PLA") {
+        #       id(filament_type).publish_state("PLA");
+        #       id(filament_brand_code).publish_state("GFL04");
+        #       //id(filament_sub_brand).publish_state("Overture PLA"); //TODO: is there subbrand?
+        #       id(filament_max_temp).publish_state(240);
+        #       id(filament_min_temp).publish_state(190);
+        #       //TODO: settingId: GFSL04_07
+        #     }
+        #     else {
+        #       ESP_LOGE("main", "Unknown filament type: %s", x.c_str());
+        #       id(filament_type).publish_state("Unknown");
+        #       id(filament_brand_code).publish_state("Unknown");
+        #       id(filament_sub_brand).publish_state("Unknown");
+        #     }
+        # - text_sensor.template.publish:
+        #     id: filament_type
+        #     state: !lambda |-
+        #       if ( x =="Generic_TPU" ) {
+        #         return "TPU";
+        #       } else if ( x == "Generic_PVA" ) {
+        #         return "PVA";
+        #       } else if ( x == "Generic_PLACF" ) {
+        #         return "PA-CF";
+        #       } else if ( x == "Generic_PLA" ) {
+        #         return "PLA";
+        #       } else if ( x == "Generic_PETG" ) {
+        #         return "PETG";
+        #       } else if ( x == "Generic_PC" ) {
+        #         return "PC";
+        #       } else if ( x == "Generic_PACF" ) {
+        #         return "PA-CF";
+        #       } else if ( x == "Generic_PA" ) {
+        #         return "PA";
+        #       } else if ( x == "Generic_ASA" ) {
+        #         return "ASA";
+        #       } else if ( x == "Generic_ABS" ) {
+        #         return "ABS";
+        #       } else if ( x == "Bambu_TPU_95A" ) {
+        #         return "TPU";
+        #       } else if ( x == "Support_W" ) {
+        #         return "Support";
+        #       } else if ( x == "Support_G" ) {
+        #         return "Support";
+        #       } else if ( x == "Bambu_PLA_Matte" ) {
+        #         return "PLA";
+        #       } else if ( x == "Bambu_PLA_Basic" ) {
+        #         return "PLA";
+        #       } else if ( x == "Bambu_PC" ) {
+        #         return "PC";
+        #       } else if ( x == "Bambu_PACF" ) {
+        #         return "PA-CF";
+        #       } else if ( x == "Bambu_ABS" ) {
+        #         return "ABS";
+        #       } else if ( x == "PolyTerra_PLA" ) {
+        #         return "PLA";
+        #       } else if ( x == "PolyLite_PLA" ) {
+        #         return "PLA";
+        #       } else {
+        #         return "Unknown";
+        #       }
         - script.execute: preview_rfid_data
   - platform: template
     name: "Filament Color"
@@ -162,6 +215,10 @@ select:
       - "Unknown"
     on_value:
       then:
+        # TODO: instead of doing a mapping for all these colors
+        # Do a traditional hex value lookup
+        # Bambu uses 8 character hex codes (with alpha) instead of the more traditional 6 character codes
+        # Note that every color ends in FF
         - text_sensor.template.publish:
             id: filament_color_hex
             state: !lambda |-
@@ -215,6 +272,7 @@ select:
               } else if ( x == "black") {
                 return "161616FF";
               } else {
+                ESP_LOGE("main", "Unknown filament_color_hex: %s", x.c_str());
                 return "Unknown";
               }
         - script.execute: preview_rfid_data
@@ -301,11 +359,24 @@ text_sensor:
       then:
         - script.execute: preview_rfid_data
 
+  # - platform: template
+  #   name: "Filament Type"
+  #   id: filament_type
+  #   state_topic:
+  #   icon: mdi:movie-roll
+  #   web_server:
+  #     sorting_group_id: sorting_group_filament_settings
+  #   on_value:
+  #     then:
+  #       - script.execute: generate_filament_brand_code
+  #       - script.execute: generate_filament_temperatures
+  #       - script.execute: preview_rfid_data #TODO: needed? 
+
   - platform: template
-    name: "Filament Type"
-    id: filament_type
+    name: "Filament Color Hex"
+    id: filament_color_hex
     state_topic:
-    icon: mdi:movie-roll
+    icon: mdi:hexagon-outline
     web_server:
       sorting_group_id: sorting_group_filament_settings
     on_value:
@@ -313,10 +384,10 @@ text_sensor:
         - script.execute: preview_rfid_data
 
   - platform: template
-    name: "Filament Color Hex"
-    id: filament_color_hex
+    name: Filament Sub Brand
+    id: filament_sub_brand
     state_topic:
-    icon: mdi:hexagon-outline
+    icon: mdi:movie-roll #TODO: change
     web_server:
       sorting_group_id: sorting_group_filament_settings
     on_value:

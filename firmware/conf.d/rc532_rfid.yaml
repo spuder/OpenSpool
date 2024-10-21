@@ -6,6 +6,19 @@ binary_sensor:
     icon: mdi:circle-double
     web_server:
       sorting_group_id: sorting_group_rfid
+
+# switch:
+#   # RFID Publish Enabled, set to OFF when programming new tags to prevent instantly writing to mqtt
+#   - platform: template
+#     name: "RFID Publish Enabled"
+#     id: rfid_sync_enabled
+#     optimistic: true
+#     state_topic:
+#     icon: mdi:nfc-variant
+#     restore_mode: ALWAYS_ON
+#     web_server:
+#       sorting_group_id: sorting_group_filament_settings
+
 spi:
   clk_pin: GPIO35 # SCK
   mosi_pin: GPIO33 # MO/SDA/TX
@@ -23,6 +36,7 @@ pn532_spi:
           id(filament_raw_data).publish_state("");
   on_tag:
     then:
+      # TOOD: only write mqtt if rfid_sync_enabled is true
       - binary_sensor.template.publish:
           id: nfc_tag_present
           state: ON
@@ -62,6 +76,12 @@ pn532_spi:
                       } else {
                         id(filament_color).publish_state(root["color"]);
                       }
+                      if (!root.containsKey("brand")) {
+                        ESP_LOGE("NFC", "Missing brand field, required for OpenSpool v1.0");
+                        id(filament_brand).publish_state("");
+                      } else {
+                        id(filament_brand).publish_state(root["brand"]);
+                      }
                       if (!root.containsKey("type")) {
                         ESP_LOGE("NFC", "Missing type field, required for OpenSpool v1.0");
                         id(filament_type).publish_state("");
@@ -93,7 +113,6 @@ pn532_spi:
                 }
               }
             }
-
             if (!json_record_found) {
               ESP_LOGE("NFC", "No JSON record found, not an openspool tag");
             }
@@ -187,7 +206,38 @@ button:
                     }
             then:
               - lambda: |-
-                  //TODO: implement logic
+                  auto message = new nfc::NdefMessage();
+                  auto record = std::make_unique<nfc::NdefRecord>();
+                  record->set_tnf(nfc::TNF_WELL_KNOWN);
+                  record->set_type("application/json");
+
+                  DynamicJsonDocument doc(256);  // Adjust size as needed
+                  JsonObject root = doc.to<JsonObject>();
+                  root["version"] = "1.0";
+                  root["protocol"] = "openspool";
+                  root["color"] = id(filament_color).state;
+                  root["type"] = id(filament_type).state;
+                  root["min_temp"] = id(filament_min_temp).state;
+                  root["max_temp"] = id(filament_max_temp).state;
+                  root["brand"] = id(filament_brand).state;
+
+                  std::string json_string;
+                  serializeJson(root, json_string);
+
+                  ESP_LOGI("rfid", "JSON content to be written: %s", json_string.c_str());
+
+                  record->set_payload(json_string);
+
+                  message->add_record(std::move(record));
+
+                  id(nfc_reader).write_mode(message);
+                  ESP_LOGI("rfid", "Writing JSON NDEF message to tag");
+                  //TODO: do I need to set back to read mode? 
+            else:
+              - lambda: |-
+                  ESP_LOGI("rfid", "NFC Tag not present");
+            # TODO: turn on RIFD Publish Enabled
+
 
           # TODO: Ensure raw_data isn't blank
           # Causes crash dump
