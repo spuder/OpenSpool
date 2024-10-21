@@ -188,7 +188,6 @@ select:
       sorting_group_id: sorting_group_filament_settings
     optimistic: true
     options:
-      - ""
       - "white"
       - "yellow"
       - "grass_green"

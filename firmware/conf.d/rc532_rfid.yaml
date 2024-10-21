@@ -21,8 +21,9 @@ binary_sensor:
 
 spi:
   clk_pin: GPIO35 # SCK
-  mosi_pin: GPIO33 # MO/SDA/TX
-  miso_pin: GPIO18 # M
+  mosi_pin: GPIO18 # M
+  miso_pin: GPIO33 # MO/SDA/TX
+
 
 pn532_spi:
   cs_pin: GPIO16 # NSS/SCL/RX
@@ -36,7 +37,6 @@ pn532_spi:
           id(filament_raw_data).publish_state("");
   on_tag:
     then:
-      # TOOD: only write mqtt if rfid_sync_enabled is true
       - binary_sensor.template.publish:
           id: nfc_tag_present
           state: ON
@@ -117,6 +117,7 @@ pn532_spi:
               ESP_LOGE("NFC", "No JSON record found, not an openspool tag");
             }
           }
+      - script.execute: publish_filament_setting
 
 text_sensor:
   - platform: template
@@ -131,9 +132,8 @@ text_sensor:
           auto pretty_json = [](const std::string &x) -> std::string {
             if (x.empty()) {
               ESP_LOGD("NFC", "Input string is empty");
-              return "Input is empty";
-            }
-            
+              return x;
+            }     
             ESP_LOGD("NFC", "Input string: %s", x.c_str());
             
             DynamicJsonDocument doc(1024);  // Adjust size as needed

@@ -4,14 +4,13 @@ script:
       # publish to select template filament_brand
       - select.set:
           id: filament_brand
-          option: ""
+          option: "Generic"
       - text_sensor.template.publish:
           id: filament_brand_code
           state: ""
       - select.set:
           id: filament_color
-          option: ""
-      # TODO: do I need to reset filament_color_hex ?
+          option: "white"
       - text_sensor.template.publish:
           id: filament_color_hex
           state: ""
@@ -23,7 +22,7 @@ script:
           value: 300
       - select.set:
           id: filament_type
-          option: "Generic"
+          option: "PLA"
   - id: preview_rfid_data
     then:
       - text_sensor.template.publish:
@@ -213,13 +212,6 @@ script:
       - if:
           condition:
             and:
-              # - lambda: |-
-              #     if (id(nfc_tag_present).state) {
-              #       ESP_LOGD("main", "skipping generate_filament_temperatures because tag is present");
-              #       return false;
-              #     } else {
-              #       return true;
-              #     }
               - lambda: |-
                   if (id(filament_type).state == "") {
                     ESP_LOGD("main", "skipping generate_filament_temperatures because filament_type is emptry");
@@ -227,7 +219,6 @@ script:
                   } else {
                     return true;
                   }
-              # TODO: is it possible to have an empty filament_brand? Or did I default it to Generic? 
           then:
             - lambda: |-
                 if (id(filament_type).state == "TPU") {
@@ -236,6 +227,8 @@ script:
                     id(filament_max_temp).publish_state(250);
                   } else {
                     ESP_LOGW("main", "Unknown temperatures for TPU: %s", id(filament_brand).state.c_str());
+                    id(filament_min_temp).publish_state(200);
+                    id(filament_max_temp).publish_state(250);
                   }
                 }
                 else if (id(filament_type).state == "PLA") {
@@ -244,6 +237,8 @@ script:
                     id(filament_max_temp).publish_state(240);
                   } else {
                     ESP_LOGW("main", "Unknown temperatures for PLA: %s", id(filament_brand).state.c_str());
+                    id(filament_min_temp).publish_state(190);
+                    id(filament_max_temp).publish_state(240);
                   }
                 }
                 else if (id(filament_type).state == "PETG") {
@@ -252,6 +247,8 @@ script:
                     id(filament_max_temp).publish_state(270);
                   } else {
                     ESP_LOGW("main", "Unknown temperatures for PETG: %s", id(filament_brand).state.c_str());
+                    id(filament_min_temp).publish_state(220);
+                    id(filament_max_temp).publish_state(270);
                   }
                 }
                 else if (id(filament_type).state == "ASA") {
@@ -274,6 +271,8 @@ script:
                     id(filament_max_temp).publish_state(240);
                   } else {
                     ESP_LOGW("main", "Unknown temperatures for PVA: %s", id(filament_brand).state.c_str());
+                    id(filament_min_temp).publish_state(190);
+                    id(filament_max_temp).publish_state(240);
                   }
                 }
                 else if (id(filament_type).state == "PA-CF") {
@@ -282,6 +281,8 @@ script:
                     id(filament_max_temp).publish_state(240);
                   } else {
                     ESP_LOGW("main", "Unknown temperatures for PA-CF: %s", id(filament_brand).state.c_str());
+                    id(filament_min_temp).publish_state(190);
+                    id(filament_max_temp).publish_state(240);
                   }
                 }
                 else if (id(filament_type).state == "PC") {
@@ -297,6 +298,8 @@ script:
                     id(filament_max_temp).publish_state(240);
                   } else {
                     ESP_LOGW("main", "Unknown temperatures for PA: %s", id(filament_brand).state.c_str());
+                    id(filament_min_temp).publish_state(190);
+                    id(filament_max_temp).publish_state(240);
                   }
                 }
                 else {
