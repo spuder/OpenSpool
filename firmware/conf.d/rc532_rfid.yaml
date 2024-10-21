@@ -126,6 +126,28 @@ text_sensor:
     icon: mdi:nfc-variant
     web_server:
       sorting_group_id: sorting_group_rfid
+    filters:
+      - lambda: |-
+          auto pretty_json = [](const std::string &x) -> std::string {
+            if (x.empty()) {
+              ESP_LOGD("NFC", "Input string is empty");
+              return "Input is empty";
+            }
+            
+            ESP_LOGD("NFC", "Input string: %s", x.c_str());
+            
+            DynamicJsonDocument doc(1024);  // Adjust size as needed
+            DeserializationError error = deserializeJson(doc, x);
+            if (error) {
+              ESP_LOGE("NFC", "JSON parsing failed: %s", error.c_str());
+              return "JSON parsing failed: " + std::string(error.c_str());
+            }
+            
+            std::string output;
+            serializeJsonPretty(doc, output);
+            return output;
+          };
+          return pretty_json(x);
 
   - platform: template
     name: "NFC Preview"
