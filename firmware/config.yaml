@@ -35,3 +35,4 @@ packages:
   # rc522_rfid: !include conf.d/rc522_rfid.yaml
   rc532_rfid: !include conf.d/rc532_rfid.yaml
   automation: !include conf.d/automation.yaml
+  # leds: !include conf.d/leds.yaml

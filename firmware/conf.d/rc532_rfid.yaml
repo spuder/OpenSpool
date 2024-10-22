@@ -6,7 +6,6 @@ binary_sensor:
     icon: mdi:circle-double
     web_server:
       sorting_group_id: sorting_group_rfid
-
 # switch:
 #   # RFID Publish Enabled, set to OFF when programming new tags to prevent instantly writing to mqtt
 #   - platform: template
@@ -20,13 +19,12 @@ binary_sensor:
 #       sorting_group_id: sorting_group_filament_settings
 
 spi:
-  clk_pin: GPIO35 # SCK
-  mosi_pin: GPIO18 # M
-  miso_pin: GPIO33 # MO/SDA/TX
-
+  clk_pin: GPIO39 # SCK
+  mosi_pin: GPIO35 # M
+  miso_pin: GPIO37 # MO/SDA/TX
 
 pn532_spi:
-  cs_pin: GPIO16 # NSS/SCL/RX
+  cs_pin: GPIO33 # NSS/SCL/RX
   id: nfc_reader
   on_tag_removed:
     then:

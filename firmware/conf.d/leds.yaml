@@ -1,0 +1,50 @@
+# TODO: solve the flicker problem
+# Most likley need a resistor on the data line
+
+light:
+  - platform: esp32_rmt_led_strip
+    id: neopixel_light
+    pin: GPIO16
+    num_leds: 6
+    rgb_order: GRB
+    name: leds
+    chipset: WS2812
+    rmt_channel: 0
+    effects:
+      - addressable_rainbow:
+          name: Rainbow Effect
+          speed: 25
+          width: 15
+
+#   - platform: rgb
+#     name: "Test LED"
+#     id: test_led
+#     state_topic:
+#     icon: mdi:led-on
+#     # optimistic: true
+#     green: virtual_green
+#     red: virtual_red
+#     blue: virtual_blue
+
+# output:
+#   - platform: template
+#     type: float
+#     id: virtual_red
+#     write_action:
+#       - lambda: |-
+#           float red_value = id(test_led).current_values.get_red();
+#           ESP_LOGD("main", "Red value: %.2f", x);
+#   - platform: template
+#     type: float
+#     id: virtual_green
+#     write_action:
+#       - lambda: |-
+#           float red_value = id(test_led).current_values.get_green();
+#           ESP_LOGD("main", "Green value: %.2f", x);
+#   - platform: template
+#     type: float
+#     id: virtual_blue
+#     write_action:
+#       - lambda: |-
+#           float red_value = id(test_led).current_values.get_blue();
+#           ESP_LOGD("main", "Blue value: %.2f", x);
