@@ -24,7 +24,7 @@ packages:
   uptime: !include conf.d/uptime.yaml
   wifi: !include conf.d/wifi.yaml
   web_server: !include conf.d/web_server.yaml
-  debug: !include conf.d/debug.yaml
+  #debug: !include conf.d/debug.yaml
   # test: !include conf.d/test.yaml
   # time: !include conf.d/time.yaml
   status_led: !include conf.d/status_led.yaml
