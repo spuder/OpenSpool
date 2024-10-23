@@ -14,7 +14,7 @@ OpenSpool is a combination of hardware and software that mimics the functionalit
 
 ## Demo
 
-[![](https://img.youtube.com/vi/ah7dm-dtQ5w)](https://youtube.com/watch?v=ah7dm-dtQ5w)
+[![](https://img.youtube.com/vi/ah7dm-dtQ5w/0.jpg)](https://youtube.com/watch?v=ah7dm-dtQ5w)
 
 
 
