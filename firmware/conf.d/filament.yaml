@@ -38,145 +38,6 @@ select:
       then:
         - script.execute: generate_filament_brand_code
         - script.execute: generate_filament_temperatures
-        # - lambda: |-
-        #     if (x == "Generic_TPU") {
-        #       id(filament_type).publish_state("TPU");
-        #       id(filament_brand_code).publish_state("GFU99");
-        #       id(filament_sub_brand).publish_state("TPU");
-        #       id(filament_max_temp).publish_state(250);
-        #       id(filament_min_temp).publish_state(200);
-        #     } else if (x == "Generic_PVA") {
-        #       id(filament_type).publish_state("PVA");
-        #       id(filament_brand_code).publish_state("GFS99");
-        #       id(filament_sub_brand).publish_state("PVA");
-        #       id(filament_max_temp).publish_state(240);
-        #       id(filament_min_temp).publish_state(190);
-        #     } else if (x == "Generic_PLACF") {
-        #       id(filament_type).publish_state("PA-CF");
-        #       id(filament_brand_code).publish_state("GFL98");
-        #       id(filament_sub_brand).publish_state("PLA-CF");
-        #       id(filament_max_temp).publish_state(240);
-        #       id(filament_min_temp).publish_state(190);
-        #     } else if (x == "Generic_PLA") {
-        #       id(filament_type).publish_state("PLA");
-        #       id(filament_brand_code).publish_state("GFL99");
-        #       id(filament_sub_brand).publish_state("PLA");
-        #       id(filament_max_temp).publish_state(240);
-        #       id(filament_min_temp).publish_state(190);
-        #     } else if (x == "Generic_PETG") {
-        #       id(filament_type).publish_state("PETG");
-        #       id(filament_brand_code).publish_state("GFG99");
-        #       id(filament_sub_brand).publish_state("PETG");
-        #       id(filament_max_temp).publish_state(270);
-        #       id(filament_min_temp).publish_state(220);
-        #     } else if (x == "Generic_PC") {
-        #       //TODO: only available on P1/X1 printers, not A1
-        #       id(filament_type).publish_state("PC");
-        #       id(filament_brand_code).publish_state("GFC99");
-        #       id(filament_sub_brand).publish_state("PC");
-        #       //TODO: add temps
-        #     } else if (x == "Generic_PACF") {
-        #       //TODO: only available on P1/X1 printers, not A1 ?
-        #       id(filament_type).publish_state("PA-CF");
-        #       id(filament_brand_code).publish_state("GFN98");
-        #       id(filament_sub_brand).publish_state("PLA-CF");
-        #       //TODO: add temps
-        #     } else if (x == "Generic_PA") {
-        #       //TODO: only available on P1/X1 printers, not A1
-        #       id(filament_type).publish_state("PA");
-        #       id(filament_brand_code).publish_state("GFN99");
-        #       id(filament_sub_brand).publish_state("PA");
-        #       //TODO: add temps
-        #     } else if (x == "Generic_ASA") {
-        #       id(filament_type).publish_state("ASA");
-        #       id(filament_brand_code).publish_state("GFB98");
-        #       id(filament_sub_brand).publish_state("ASA");
-        #       //TODO: add temps
-        #     } else if (x == "Generic_ABS") {
-        #       id(filament_type).publish_state("ABS");
-        #       id(filament_brand_code).publish_state("GFB99");
-        #       id(filament_sub_brand).publish_state("ABS");
-        #       //TODO: add temps
-        #     } else if (x == "PolyTerra_PLA") {
-        #       id(filament_type).publish_state("PLA");
-        #       id(filament_brand_code).publish_state("GFL01");
-        #       id(filament_sub_brand).publish_state("PolyTerra PLA");
-        #       id(filament_max_temp).publish_state(240);
-        #       id(filament_min_temp).publish_state(190);
-        #     } else if (x == "PolyLite_PLA") {
-        #       id(filament_type).publish_state("PLA");
-        #       id(filament_brand_code).publish_state("GFL00");
-        #       id(filament_sub_brand).publish_state("PolyLite PLA");
-        #       id(filament_max_temp).publish_state(240);
-        #       id(filament_min_temp).publish_state(190);
-        #       //TODO: settingId: GFSL00_02
-        #     } else if (x == "Overture Matte PLA") {
-        #       id(filament_type).publish_state("PLA");
-        #       id(filament_brand_code).publish_state("GFL05");
-        #       id(filament_sub_brand).publish_state("Overture Matte PLA");
-        #       id(filament_max_temp).publish_state(240);
-        #       id(filament_min_temp).publish_state(190);
-        #       //TODO: settingId: GFSL05_07
-        #     } else if (x == "Overture PLA") {
-        #       id(filament_type).publish_state("PLA");
-        #       id(filament_brand_code).publish_state("GFL04");
-        #       //id(filament_sub_brand).publish_state("Overture PLA"); //TODO: is there subbrand?
-        #       id(filament_max_temp).publish_state(240);
-        #       id(filament_min_temp).publish_state(190);
-        #       //TODO: settingId: GFSL04_07
-        #     }
-        #     else {
-        #       ESP_LOGE("main", "Unknown filament type: %s", x.c_str());
-        #       id(filament_type).publish_state("Unknown");
-        #       id(filament_brand_code).publish_state("Unknown");
-        #       id(filament_sub_brand).publish_state("Unknown");
-        #     }
-        # - text_sensor.template.publish:
-        #     id: filament_type
-        #     state: !lambda |-
-        #       if ( x =="Generic_TPU" ) {
-        #         return "TPU";
-        #       } else if ( x == "Generic_PVA" ) {
-        #         return "PVA";
-        #       } else if ( x == "Generic_PLACF" ) {
-        #         return "PA-CF";
-        #       } else if ( x == "Generic_PLA" ) {
-        #         return "PLA";
-        #       } else if ( x == "Generic_PETG" ) {
-        #         return "PETG";
-        #       } else if ( x == "Generic_PC" ) {
-        #         return "PC";
-        #       } else if ( x == "Generic_PACF" ) {
-        #         return "PA-CF";
-        #       } else if ( x == "Generic_PA" ) {
-        #         return "PA";
-        #       } else if ( x == "Generic_ASA" ) {
-        #         return "ASA";
-        #       } else if ( x == "Generic_ABS" ) {
-        #         return "ABS";
-        #       } else if ( x == "Bambu_TPU_95A" ) {
-        #         return "TPU";
-        #       } else if ( x == "Support_W" ) {
-        #         return "Support";
-        #       } else if ( x == "Support_G" ) {
-        #         return "Support";
-        #       } else if ( x == "Bambu_PLA_Matte" ) {
-        #         return "PLA";
-        #       } else if ( x == "Bambu_PLA_Basic" ) {
-        #         return "PLA";
-        #       } else if ( x == "Bambu_PC" ) {
-        #         return "PC";
-        #       } else if ( x == "Bambu_PACF" ) {
-        #         return "PA-CF";
-        #       } else if ( x == "Bambu_ABS" ) {
-        #         return "ABS";
-        #       } else if ( x == "PolyTerra_PLA" ) {
-        #         return "PLA";
-        #       } else if ( x == "PolyLite_PLA" ) {
-        #         return "PLA";
-        #       } else {
-        #         return "Unknown";
-        #       }
         - script.execute: preview_rfid_data
   - platform: template
     name: "Filament Color"
@@ -216,112 +77,65 @@ select:
       then:
         # TODO: instead of doing a mapping for all these colors
         # Do a traditional hex value lookup
-        # Bambu uses 8 character hex codes (with alpha) instead of the more traditional 6 character codes
-        # Note that every color ends in FF
         - text_sensor.template.publish:
-            id: filament_color_hex_bambu
+            id: filament_color_hex
             state: !lambda |-
               ESP_LOGD("main", "Color %s", id(filament_color).state.c_str());
               if ( x == "white") {
-                id(filament_color_hex).publish_state("FFFFFF");
-                return "FFFFFFFF";
+                return "FFFFFF";
               } else if ( x == "yellow") {
-                id(filament_color_hex).publish_state("FFF144");
-                return "FFF144FF";
+                return "FFF144";
               } else if ( x == "grass_green") {
-                id(filament_color_hex).publish_state("DCF478");
-                return "DCF478FF";
+                return "DCF478";
               } else if ( x == "bambu_green") {
-                id(filament_color_hex).publish_state("0ACC38");
-                return "0ACC38FF";
+                return "0ACC38";
               } else if ( x == "missletoe_green") {
-                id(filament_color_hex).publish_state("057748");
-                return "057748FF";
+                return "057748";
               } else if ( x == "dark_blue") {
-                id(filament_color_hex).publish_state("0D6284");
-                return "0D6284FF";
+                return "0D6284";
               } else if ( x == "glow_green") {
-                id(filament_color_hex).publish_state("0EE2A0");
-                return "0EE2A0FF";
+                return "0EE2A0";
               } else if ( x == "ice_blue") {
-                id(filament_color_hex).publish_state("76D9F4");
-                return "76D9F4FF";
+                return "76D9F4";
               } else if ( x == "cyan") {
-                id(filament_color_hex).publish_state("46A8F9");
-                return "46A8F9FF";
+                return "46A8F9";
               } else if ( x == "blue") {
-                id(filament_color_hex).publish_state("2850E0");
-                return "2850E0FF";
+                return "2850E0";
               } else if ( x == "iris_purple") {
-                id(filament_color_hex).publish_state("443089");
-                return "443089FF";
+                return "443089";
               } else if ( x == "purple") {
-                id(filament_color_hex).publish_state("A03CF7");
-                return "A03CF7FF";
+                return "A03CF7";
               } else if ( x == "magenta") {
-                id(filament_color_hex).publish_state("F330F9");
-                return "F330F9FF";
+                return "F330F9";
               } else if ( x == "sakura_pink") {
-                id(filament_color_hex).publish_state("D4B1DD");
-                return "D4B1DDFF";
+                return "D4B1DD";
               } else if ( x == "pink") {
-                id(filament_color_hex).publish_state("F95D73");
-                return "F95D73FF";
+                return "F95D73";
               } else if ( x == "red") {
-                id(filament_color_hex).publish_state("F72323");
-                return "F72323FF";
+                return "F72323";
               } else if ( x == "dark_brown") {
-                id(filament_color_hex).publish_state("7C4B00");
-                return "7C4B00FF";
+                return "7C4B00";
               } else if ( x == "orange") {
-                id(filament_color_hex).publish_state("F98C36");
-                return "F98C36FF";
+                return "F98C36";
               } else if ( x == "beige") {
-                id(filament_color_hex).publish_state("FCECD6");
-                return "FCECD6FF";
+                return "FCECD6";
               } else if ( x == "desert_tan") {
-                id(filament_color_hex).publish_state("D3C5A3");
-                return  "D3C5A3FF";
+                return  "D3C5A3";
               } else if ( x == "brown") {
-                id(filament_color_hex).publish_state("7C4B00");
-                return "AF7933FF";
+                return "AF7933";
               } else if ( x == "ash_grey") {
-                id(filament_color_hex).publish_state("898989");
-                return "898989FF";
+                return "898989";
               } else if ( x == "grey") {
-                id(filament_color_hex).publish_state("BCBCBC");
-                return "BCBCBCFF";
+                return "BCBCBC";
               } else if ( x == "black") {
-                id(filament_color_hex).publish_state("161616");
-                return "161616FF";
+                return "161616";
               } else {
-                id(filament_color_hex).publish_state("");
+                id(filament_color_hex).publish_state(""); //TODO: should filament_color_hex_bambu handle its own null value? 
                 ESP_LOGE("main", "Unknown filament_color_hex: %s", x.c_str());
                 return "Unknown";
               }
         - script.execute: preview_rfid_data
 
-# Sensor objects store the various attributes about a filament
-# filament_color
-# filament_type
-# filament_color_hex
-# filament_brand_code
-
-# These values are required for the mqtt payload
-# Example payload:
-# {
-#   "print": {
-#       "sequence_id": "0",
-#       "command": "ams_filament_setting",
-#       "ams_id": 0,
-#       "tray_id": 0,
-#       "tray_info_idx": "GFL99",
-#       "tray_color": "0000FFFF",
-#       "nozzle_temp_min": 190,
-#       "nozzle_temp_max": 230,
-#       "tray_type": "PLA"
-#   }
-# }
 
 number:
   - platform: template
@@ -382,19 +196,6 @@ text_sensor:
     on_value:
       then:
         - script.execute: preview_rfid_data
-
-  # - platform: template
-  #   name: "Filament Type"
-  #   id: filament_type
-  #   state_topic:
-  #   icon: mdi:movie-roll
-  #   web_server:
-  #     sorting_group_id: sorting_group_filament_settings
-  #   on_value:
-  #     then:
-  #       - script.execute: generate_filament_brand_code
-  #       - script.execute: generate_filament_temperatures
-  #       - script.execute: preview_rfid_data #TODO: needed?
 
   - platform: template
     name: "Filament Color Hex"

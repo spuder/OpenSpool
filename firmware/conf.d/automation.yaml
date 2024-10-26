@@ -70,13 +70,6 @@ script:
                     return true;
                   }
               - lambda: |-
-                  if (id(filament_color).state == "") {
-                    ESP_LOGE("main", "Filament Color cannot be empty");
-                    return false;
-                  } else {
-                    return true;
-                  }
-              - lambda: |-
                   if (id(filament_color_hex).state == "") {
                     ESP_LOGE("main", "Filament Color Hex cannot be empty");
                     return false;
