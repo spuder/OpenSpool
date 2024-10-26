@@ -14,6 +14,9 @@ script:
       - text_sensor.template.publish:
           id: filament_color_hex
           state: ""
+      - text_sensor.template.publish:
+          id: filament_color_hex_bambu
+          state: ""
       - number.set:
           id: filament_min_temp
           value: 150
@@ -112,6 +115,9 @@ script:
                     return true;
                   }
           then:
+            # - light.turn_on:
+            #     id: neopixel_light
+            #     effect: Flicker Green
             - mqtt.publish:
                 topic: device/${bambu_serial_number}/request
                 payload: !lambda |-
@@ -133,6 +139,9 @@ script:
                   });
                   ESP_LOGI("main", "Publishing %s", data.c_str());
                   return data;
+            # - light.turn_off: #TODO: instead of turning off, return to previous state
+            #   id: neopixel_light
+
   - id: generate_filament_brand_code
     then:
       - lambda: |-
@@ -260,7 +269,8 @@ script:
                 }
                 else if (id(filament_type).state == "ABS") {
                   if (id(filament_brand).state == "Generic") {
-                    //TODO: find temps for ABS
+                    id(filament_min_temp).publish_state(240);
+                    id(filament_max_temp).publish_state(280);
                   } else {
                     ESP_LOGW("main", "Unknown temperatures for ABS: %s", id(filament_brand).state.c_str());
                   }

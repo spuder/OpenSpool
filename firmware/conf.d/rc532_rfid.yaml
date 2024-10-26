@@ -20,14 +20,16 @@ binary_sensor:
 
 spi:
   clk_pin: GPIO39 # SCK
-  mosi_pin: GPIO35 # M
   miso_pin: GPIO37 # MO/SDA/TX
+  mosi_pin: GPIO35 # M
 
 pn532_spi:
   cs_pin: GPIO33 # NSS/SCL/RX
   id: nfc_reader
   on_tag_removed:
     then:
+      - light.turn_off:
+          id: neopixel_light
       - binary_sensor.template.publish:
           id: nfc_tag_present
           state: OFF
@@ -35,6 +37,12 @@ pn532_spi:
           id(filament_raw_data).publish_state("");
   on_tag:
     then:
+      - light.turn_on:
+          id: neopixel_light
+          brightness: 100%
+          red: 0.53
+          green: 0.81
+          blue: 0.98
       - binary_sensor.template.publish:
           id: nfc_tag_present
           state: ON

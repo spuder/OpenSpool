@@ -10,6 +10,7 @@ all: build upload dashboard logs
 clean:
 	esphome clean config.yaml
 	rm -rf .esphome/idedata/*
+	rm -rf ~/.platformio/penv
 build:
 	esphome config config.yaml
 	esphome compile config.yaml

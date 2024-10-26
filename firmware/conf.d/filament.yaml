@@ -219,58 +219,83 @@ select:
         # Bambu uses 8 character hex codes (with alpha) instead of the more traditional 6 character codes
         # Note that every color ends in FF
         - text_sensor.template.publish:
-            id: filament_color_hex
+            id: filament_color_hex_bambu
             state: !lambda |-
               ESP_LOGD("main", "Color %s", id(filament_color).state.c_str());
               if ( x == "white") {
+                id(filament_color_hex).publish_state("FFFFFF");
                 return "FFFFFFFF";
               } else if ( x == "yellow") {
+                id(filament_color_hex).publish_state("FFF144");
                 return "FFF144FF";
               } else if ( x == "grass_green") {
+                id(filament_color_hex).publish_state("DCF478");
                 return "DCF478FF";
               } else if ( x == "bambu_green") {
+                id(filament_color_hex).publish_state("0ACC38");
                 return "0ACC38FF";
               } else if ( x == "missletoe_green") {
+                id(filament_color_hex).publish_state("057748");
                 return "057748FF";
               } else if ( x == "dark_blue") {
+                id(filament_color_hex).publish_state("0D6284");
                 return "0D6284FF";
               } else if ( x == "glow_green") {
+                id(filament_color_hex).publish_state("0EE2A0");
                 return "0EE2A0FF";
               } else if ( x == "ice_blue") {
+                id(filament_color_hex).publish_state("76D9F4");
                 return "76D9F4FF";
               } else if ( x == "cyan") {
+                id(filament_color_hex).publish_state("46A8F9");
                 return "46A8F9FF";
               } else if ( x == "blue") {
+                id(filament_color_hex).publish_state("2850E0");
                 return "2850E0FF";
               } else if ( x == "iris_purple") {
+                id(filament_color_hex).publish_state("443089");
                 return "443089FF";
               } else if ( x == "purple") {
+                id(filament_color_hex).publish_state("A03CF7");
                 return "A03CF7FF";
               } else if ( x == "magenta") {
+                id(filament_color_hex).publish_state("F330F9");
                 return "F330F9FF";
               } else if ( x == "sakura_pink") {
+                id(filament_color_hex).publish_state("D4B1DD");
                 return "D4B1DDFF";
               } else if ( x == "pink") {
+                id(filament_color_hex).publish_state("F95D73");
                 return "F95D73FF";
               } else if ( x == "red") {
+                id(filament_color_hex).publish_state("F72323");
                 return "F72323FF";
               } else if ( x == "dark_brown") {
+                id(filament_color_hex).publish_state("7C4B00");
                 return "7C4B00FF";
               } else if ( x == "orange") {
+                id(filament_color_hex).publish_state("F98C36");
                 return "F98C36FF";
               } else if ( x == "beige") {
+                id(filament_color_hex).publish_state("FCECD6");
                 return "FCECD6FF";
               } else if ( x == "desert_tan") {
+                id(filament_color_hex).publish_state("D3C5A3");
                 return  "D3C5A3FF";
               } else if ( x == "brown") {
+                id(filament_color_hex).publish_state("7C4B00");
                 return "AF7933FF";
               } else if ( x == "ash_grey") {
+                id(filament_color_hex).publish_state("898989");
                 return "898989FF";
               } else if ( x == "grey") {
+                id(filament_color_hex).publish_state("BCBCBC");
                 return "BCBCBCFF";
               } else if ( x == "black") {
+                id(filament_color_hex).publish_state("161616");
                 return "161616FF";
               } else {
+                id(filament_color_hex).publish_state("");
                 ESP_LOGE("main", "Unknown filament_color_hex: %s", x.c_str());
                 return "Unknown";
               }
@@ -374,6 +399,17 @@ text_sensor:
   - platform: template
     name: "Filament Color Hex"
     id: filament_color_hex
+    state_topic:
+    icon: mdi:hexagon-outline
+    web_server:
+      sorting_group_id: sorting_group_filament_settings
+    on_value:
+      then:
+        - script.execute: preview_rfid_data
+
+  - platform: template
+    name: "Filament Color Hex"
+    id: filament_color_hex_bambu
     state_topic:
     icon: mdi:hexagon-outline
     web_server:

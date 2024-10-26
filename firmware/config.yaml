@@ -24,7 +24,7 @@ packages:
   uptime: !include conf.d/uptime.yaml
   wifi: !include conf.d/wifi.yaml
   web_server: !include conf.d/web_server.yaml
-  #debug: !include conf.d/debug.yaml
+  debug: !include conf.d/debug.yaml
   # test: !include conf.d/test.yaml
   # time: !include conf.d/time.yaml
   status_led: !include conf.d/status_led.yaml
@@ -35,4 +35,4 @@ packages:
   # rc522_rfid: !include conf.d/rc522_rfid.yaml
   rc532_rfid: !include conf.d/rc532_rfid.yaml
   automation: !include conf.d/automation.yaml
-  # leds: !include conf.d/leds.yaml
+  leds: !include conf.d/leds.yaml

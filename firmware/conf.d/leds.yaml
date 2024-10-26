@@ -1,6 +1,16 @@
 # TODO: solve the flicker problem
 # Most likley need a resistor on the data line
 
+esphome:
+  on_boot:
+    then:
+      - light.turn_off:
+          id: neopixel_light
+  on_shutdown:
+    then:
+      - light.turn_off:
+          id: neopixel_light
+
 light:
   - platform: esp32_rmt_led_strip
     id: neopixel_light
@@ -10,21 +20,24 @@ light:
     name: leds
     chipset: WS2812
     rmt_channel: 0
+    default_transition_length: 0.2s
     effects:
       - addressable_rainbow:
           name: Rainbow Effect
           speed: 25
           width: 15
+      - strobe:
+          name: "Data Upload"
+          colors:
+            - state: TRUE
+              brightness: 100%
+              duration: 50ms
+              red: 0%
+              green: 100%
+              blue: 0%
+            - state: FALSE
+              duration: 50ms
 
-#   - platform: rgb
-#     name: "Test LED"
-#     id: test_led
-#     state_topic:
-#     icon: mdi:led-on
-#     # optimistic: true
-#     green: virtual_green
-#     red: virtual_red
-#     blue: virtual_blue
 
 # output:
 #   - platform: template
