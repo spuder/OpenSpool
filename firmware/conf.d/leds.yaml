@@ -15,15 +15,16 @@ light:
   - platform: esp32_rmt_led_strip
     id: neopixel_light
     pin: GPIO16
-    num_leds: 6
+    num_leds: 1
     rgb_order: GRB
     name: leds
     chipset: WS2812
     rmt_channel: 0
     default_transition_length: 0.2s
+    restore_mode: ALWAYS_OFF
     effects:
       - addressable_rainbow:
-          name: Rainbow Effect
+          name: Rainbow
           speed: 25
           width: 15
       - strobe:
@@ -38,6 +39,44 @@ light:
             - state: FALSE
               duration: 50ms
 
+
+script:
+  - id: set_led_red
+    then:
+      - light.turn_on:
+          id: neopixel_light
+          red: 100%
+          green: 0%
+          blue: 0%
+          brightness: 100%
+  - id: set_led_green
+    then:
+      - light.turn_on:
+          id: neopixel_light
+          red: 0%
+          green: 100%
+          blue: 0%
+          brightness: 100%
+  - id: set_led_blue
+    then:
+      - light.turn_on:
+          id: neopixel_light
+          effect: none
+          red: 0%
+          green: 0%
+          blue: 100%
+          brightness: 100%
+  - id: set_led_off
+    then:
+      - light.turn_on:
+          id: neopixel_light
+          brightness: 0%
+          red: 0%
+          green: 0%
+          blue: 0%
+      - delay: 50ms
+      - light.turn_off:
+          id: neopixel_light
 
 # output:
 #   - platform: template

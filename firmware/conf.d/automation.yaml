@@ -10,7 +10,7 @@ script:
           state: ""
       - select.set:
           id: filament_color
-          option: "white"
+          option: ""
       - text_sensor.template.publish:
           id: filament_color_hex
           state: ""
@@ -49,7 +49,6 @@ script:
               return output;
             };
             return pretty_json();
-
   - id: publish_filament_setting
     then:
       - if:
@@ -131,7 +130,6 @@ script:
                   return data;
             # - light.turn_off: #TODO: instead of turning off, return to previous state
             #   id: neopixel_light
-
   - id: generate_filament_brand_code
     then:
       - lambda: |-
