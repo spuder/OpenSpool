@@ -7,6 +7,7 @@ esphome:
   platformio_options:
     build_unflags: -std=gnu++11
     build_flags: -std=gnu++14
+    upload_speed: 115200 # Wemos D1 Mini from Aliexpress struggle at 460800 baud rate
 
 esp32:
   board: lolin_s2_mini
@@ -32,7 +33,6 @@ packages:
   button: !include conf.d/button.yaml
   filament: !include conf.d/filament.yaml
   bambu_printer: !include conf.d/bambu_printer.yaml
-  # rc522_rfid: !include conf.d/rc522_rfid.yaml
   rc532_rfid: !include conf.d/rc532_rfid.yaml
   automation: !include conf.d/automation.yaml
   leds: !include conf.d/leds.yaml
