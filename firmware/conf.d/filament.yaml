@@ -2,7 +2,6 @@
 # Credit to WolfWithSword for figuring all these out
 # https://gist.github.com/WolfwithSword/e3e4dc4f00629cc047b7cefd70d7b350#file-bambu_mqtt-json-L314
 select:
-
   - platform: template
     name: "Filament Type"
     id: filament_type
@@ -20,7 +19,7 @@ select:
       then:
         - script.execute: generate_filament_brand_code
         - script.execute: generate_filament_temperatures
-        - script.execute: preview_rfid_data #TODO: needed? 
+        - script.execute: preview_rfid_data #TODO: needed?
 
   - platform: template
     name: "Filament Brand"
@@ -77,7 +76,7 @@ select:
         #       id(filament_sub_brand).publish_state("PC");
         #       //TODO: add temps
         #     } else if (x == "Generic_PACF") {
-        #       //TODO: only available on P1/X1 printers, not A1 ? 
+        #       //TODO: only available on P1/X1 printers, not A1 ?
         #       id(filament_type).publish_state("PA-CF");
         #       id(filament_brand_code).publish_state("GFN98");
         #       id(filament_sub_brand).publish_state("PLA-CF");
@@ -188,6 +187,7 @@ select:
       sorting_group_id: sorting_group_filament_settings
     optimistic: true
     options:
+      - ""
       - "white"
       - "yellow"
       - "grass_green"
@@ -394,7 +394,7 @@ text_sensor:
   #     then:
   #       - script.execute: generate_filament_brand_code
   #       - script.execute: generate_filament_temperatures
-  #       - script.execute: preview_rfid_data #TODO: needed? 
+  #       - script.execute: preview_rfid_data #TODO: needed?
 
   - platform: template
     name: "Filament Color Hex"
@@ -405,10 +405,12 @@ text_sensor:
       sorting_group_id: sorting_group_filament_settings
     on_value:
       then:
+        - lambda: |-
+            id(filament_color_hex_bambu).publish_state(x + "FF");
         - script.execute: preview_rfid_data
 
   - platform: template
-    name: "Filament Color Hex"
+    name: "Filament Color Hex Bambu"
     id: filament_color_hex_bambu
     state_topic:
     icon: mdi:hexagon-outline

@@ -6,17 +6,6 @@ binary_sensor:
     icon: mdi:circle-double
     web_server:
       sorting_group_id: sorting_group_rfid
-# switch:
-#   # RFID Publish Enabled, set to OFF when programming new tags to prevent instantly writing to mqtt
-#   - platform: template
-#     name: "RFID Publish Enabled"
-#     id: rfid_sync_enabled
-#     optimistic: true
-#     state_topic:
-#     icon: mdi:nfc-variant
-#     restore_mode: ALWAYS_ON
-#     web_server:
-#       sorting_group_id: sorting_group_filament_settings
 
 spi:
   clk_pin: GPIO39 # SCK
@@ -76,11 +65,11 @@ pn532_spi:
                     }
                     if (root["version"] == "1.0") {
                       ESP_LOGD("NFC", "OpenSpool - v1.0");
-                      if (!root.containsKey("color")) {
-                        ESP_LOGE("NFC", "Missing color field, required for OpenSpool v1.0");
-                        id(filament_color).publish_state("");
+                      if (!root.containsKey("color_hex")) {
+                        ESP_LOGE("NFC", "Missing color_hex field, required for OpenSpool v1.0");
+                        id(filament_color_hex).publish_state("");
                       } else {
-                        id(filament_color).publish_state(root["color"]);
+                        id(filament_color_hex).publish_state(root["color_hex"]);
                       }
                       if (!root.containsKey("brand")) {
                         ESP_LOGE("NFC", "Missing brand field, required for OpenSpool v1.0");
@@ -243,7 +232,7 @@ button:
                   JsonObject root = doc.to<JsonObject>();
                   root["version"] = "1.0";
                   root["protocol"] = "openspool";
-                  root["color"] = id(filament_color).state;
+                  root["color_hex"] = id(filament_color_hex).state;
                   root["type"] = id(filament_type).state;
                   root["min_temp"] = id(filament_min_temp).state;
                   root["max_temp"] = id(filament_max_temp).state;
@@ -260,53 +249,10 @@ button:
 
                   id(nfc_reader).write_mode(message);
                   ESP_LOGI("rfid", "Writing JSON NDEF message to tag");
-                  //TODO: do I need to set back to read mode? 
+                  //TODO: do I need to set back to read mode?
             else:
               - lambda: |-
                   ESP_LOGI("rfid", "NFC Tag not present");
-            # TODO: turn on RIFD Publish Enabled
-
-
-          # TODO: Ensure raw_data isn't blank
-          # Causes crash dump
-          # - lambda: |-
-          #     auto message = new nfc::NdefMessage();
-          #     auto record = std::make_unique<nfc::NdefRecord>();
-
-          #     // Set TNF to Well Known and type to "T" for Text
-          #     record->set_tnf(nfc::TNF_WELL_KNOWN);
-          #     record->set_type("T");
-
-          #     // Define the payload for a text record
-          #     std::string text_payload = "FOO=BLUE";
-          #     std::string full_payload = "en" + text_payload;  // "en" for English language code
-          #     record->set_payload(full_payload);
-
-          #     // Add the record to the NDEF message
-          #     message->add_record(std::move(record));
-
-          #     // Write the message to the NFC tag
-          #     id(nfc_reader).write_mode(message);
-          #     ESP_LOGI("rfid", "Writing text NDEF message to tag");
-        # This looks like it should work, but it fails to write with no error every time
-        # - lambda: |-
-        #     auto message = new nfc::NdefMessage();
-        #     auto record = std::make_unique<nfc::NdefRecord>();
-
-        #     // Set TNF to MIME media and define the MIME type as a string
-        #     record->set_tnf(nfc::TNF_MIME_MEDIA);
-        #     record->set_type("application/json");  // MIME type as a string
-
-        #     // Define the payload in JSON format as a string
-        #     std::string json_payload = "{\"FOO\":\"42\"}";
-        #     record->set_payload(json_payload);  // Pass payload as a string
-
-        #     // Add the record to the NDEF message
-        #     message->add_record(std::move(record));
-
-        #     // Write the message to the NFC tag
-        #     id(nfc_reader).write_mode(message);
-        #     ESP_LOGI("rfid", "Writing NDEF message to tag");
 
 # logger:
 #   level: VERBOSE

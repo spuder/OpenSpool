@@ -35,16 +35,13 @@ script:
               DynamicJsonDocument doc(256);  // Adjust size as needed
               JsonObject root = doc.to<JsonObject>();
               
-              // Filament Brand Code, Color Hex are only used for MQTT messages
-              // They should not be stored on the tags
-              // TODO: should brand be optional? 
               root["protocol"] = "openspool";
               root["version"] = "1.0";
               root["brand"] = id(filament_brand).state.c_str();
-              root["color"] = id(filament_color).state.c_str();
+              root["color_hex"] = id(filament_color_hex).state.c_str();
               root["min_temp"] = id(filament_min_temp).state;
               root["max_temp"] = id(filament_max_temp).state;
-              //root["type"] = id(filament_type).state.c_str();
+              root["type"] = id(filament_type).state.c_str();
               root["brand"] = id(filament_brand).state.c_str();
 
               std::string output;
@@ -315,4 +312,3 @@ script:
                 else {
                   ESP_LOGW("main", "Unknown filament type: %s", id(filament_type).state.c_str());
                 }
-
