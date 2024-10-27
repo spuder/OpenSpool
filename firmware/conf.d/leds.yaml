@@ -15,7 +15,7 @@ light:
   - platform: esp32_rmt_led_strip
     id: neopixel_light
     pin: GPIO16
-    num_leds: 1
+    num_leds: 4
     rgb_order: GRB
     name: leds
     chipset: WS2812
@@ -38,7 +38,6 @@ light:
               blue: 0%
             - state: FALSE
               duration: 50ms
-
 
 script:
   - id: set_led_red
@@ -77,6 +76,12 @@ script:
       - delay: 50ms
       - light.turn_off:
           id: neopixel_light
+          transition_length: 0s
+  - id: set_led_rainbow
+    then:
+      - light.turn_on:
+          id: neopixel_light
+          effect: Rainbow
 
 # output:
 #   - platform: template
