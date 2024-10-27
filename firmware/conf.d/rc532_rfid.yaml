@@ -17,13 +17,7 @@ pn532_spi:
   id: nfc_reader
   on_tag_removed:
     then:
-      - light.turn_on: #TODO: change to script.execute: set_led_blue
-          id: neopixel_light
-          brightness: 0%
-          red: 0%
-          green: 0%
-          blue: 0%
-          effect: none
+      - script.execute: set_led_white
       - binary_sensor.template.publish:
           id: nfc_tag_present
           state: OFF
@@ -117,7 +111,7 @@ pn532_spi:
             }
           }
           
-          auto call = id(neopixel_light).make_call(); //TODO: refactor to reuse script.execute: set_led_green
+          auto call = id(neopixel_light).make_call();
           // Only execute the script if the tag was read successfully
           if (tag_read_success) {
             call.set_rgb(0.0, 1.0, 0.0); // green
