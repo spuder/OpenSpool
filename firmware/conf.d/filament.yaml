@@ -130,9 +130,8 @@ select:
               } else if ( x == "black") {
                 return "161616";
               } else {
-                id(filament_color_hex).publish_state(""); //TODO: should filament_color_hex_bambu handle its own null value? 
                 ESP_LOGE("main", "Unknown filament_color_hex: %s", x.c_str());
-                return "Unknown";
+                return "";
               }
         - script.execute: preview_rfid_data
 
@@ -207,7 +206,11 @@ text_sensor:
     on_value:
       then:
         - lambda: |-
-            id(filament_color_hex_bambu).publish_state(x + "FF");
+            if (x != "") {
+              id(filament_color_hex_bambu).publish_state(x + "FF");
+            } else {
+              id(filament_color_hex_bambu).publish_state("");
+            }
         - script.execute: preview_rfid_data
 
   - platform: template
