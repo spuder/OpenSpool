@@ -71,6 +71,13 @@ OpenSpool requires an ESP32-S2 and PN532 NFC Reader that supports SPI.
 | ![](./images/pn532-small.png) |  PN532 (Small) | [Amazon](https://a.co/d/8ytFjLO) | [Aliexpress](https://www.aliexpress.us/item/3256805787598774.html)| 
 | ![](./images/NFC.png) | 13.56Mhz NFC Tags (>500k)| [Amazon](https://a.co/d/5ojDUNk) | | 
 
+
+| Tag | Bytes | Supported |  
+| NTAG 213 | 144 bytes | ❌ | 
+| NTAG 215 | 504 bytes | ✅ |  
+| NTAG 216 | 888 bytes | ✅ |   
+
+
 ## Firmware
 
 ### OSX/Linux
