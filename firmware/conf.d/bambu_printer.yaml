@@ -55,3 +55,10 @@ text:
       then:
         lambda: |-
           id(bambu_mqtt).set_broker_address(x.c_str());
+
+button:
+  - platform: restart
+    name: "Restart OpenSpool"
+    id: restart_openspool
+    web_server:
+      sorting_group_id: sorting_group_printer_settings
