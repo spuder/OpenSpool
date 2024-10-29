@@ -1,9 +1,16 @@
-# OpenSpool
+┌──────────────────────────┐
+│▞▀▖         ▞▀▖         ▜ │
+│▌ ▌▛▀▖▞▀▖▛▀▖▚▄ ▛▀▖▞▀▖▞▀▖▐ │
+│▌ ▌▙▄▘▛▀ ▌ ▌▖ ▌▙▄▘▌ ▌▌ ▌▐ │
+│▝▀ ▌  ▝▀▘▘ ▘▝▀ ▌  ▝▀ ▝▀  ▘│
+└──────────────────────────┘
 
-RFID tracking system for 3d printer filament
+Track all your filament with RFID
 
 
-OpenSpool is a combination of hardware and software that mimics the functionality of RFID tags on BambuLab filament roles. 
+Place NFC tags on all your filament. Build an ESP32 OpenSpool reader and place it next to your printer. 
+Touching the filament to the reader will automatically update your Bambu Printer filament settings on the printer. 
+Almost as seamlessly as if you were using Bambu filament with an AMS. 
 
 ## Objectives
 
@@ -23,12 +30,12 @@ OpenSpool is a combination of hardware and software that mimics the functionalit
 OpenSpool supports 2 protocols
 
 - OpenSpool  
-- [OpenSourceRFID](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/blob/main/OpenSourceRfid.md)  #TODO: not yet working
+- [OpenSourceRFID](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/blob/main/OpenSourceRfid.md)  #Pending 
 
 
 ### OpenSpool Protocol
 
-OpenSpool aims to use the simplest possible protocol for RFID tags. All you need is a 13.56Mhz RFID tag that supports NDEF records (NFC Tags). 
+OpenSpool aims to use the simplest possible protocol for RFID tags. All you need is a [13.56Mhz RFID tag](https://a.co/d/5ojDUNk) that supports NDEF records (NFC Tags) and has atleast 500 bytes of memory. 
 
 #### NDEF Record
 
@@ -42,15 +49,12 @@ payload =
     "protocol": "openspool",
     "version": "1.0",
     "type": "PLA",
-    "color": "bambu_green",
+    "color_hex": "FFAABB",
     "brand": "Generic",
     "min_temp": "220",
     "max_temp": "240"
 }
 ```
-
-`color` and `type` are currently limited to the predefined colors of BambuLabs AMS. 
-
 
 
 ## Hardware
@@ -104,6 +108,6 @@ Upload firmware and restart
 USB_ADDRESS=/dev/cu.usbmodemXXXXX make run-usb
 ```
 
-A new wifi network will appear called `OpenSpool-xxxx`, join the network, insert your wifi credentials and reboot. 
+A new wifi network will appear called `OpenSpool-xxxx`, join the network, navigate to [192.168.4.1](http://192.168.4.1),  insert your wifi credentials and reboot. 
 
 You can then navigate to the web interface at `openspool.local` or ip address. 
