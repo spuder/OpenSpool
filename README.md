@@ -36,7 +36,7 @@ OpenSpool aims to use the simplest possible protocol for RFID tags. All you need
 
 Example record stored on NFC tag. 
 
-type = `application/json`
+type = `application/json`  
 payload = 
 
 ```json
@@ -69,11 +69,11 @@ OpenSpool requires an ESP32-S2 and PN532 NFC Reader that supports SPI.
 | --- | --- | --- | --- | 
 | ![](./images/wemos-d1mini.png)| Wemos D1 Mini S2 | [Amazon](https://www.amazon.com/dp/B0B291LZ99?ref_=cm_sw_r_cp_ud_dp_373FWQ1MNKAS6SD4DDXV) | [Aliexpress](https://www.aliexpress.us/item/3256807359221969.html)|
 | ![](./images/pn532-small.png) |  PN532 (Small) | [Amazon](https://a.co/d/8ytFjLO) | [Aliexpress](https://www.aliexpress.us/item/3256805787598774.html)| 
-| ![](./images/NFC.png) | 13.56MHZ NFC TAgs | [Amazon](https://a.co/d/5ojDUNk) | | 
+| ![](./images/NFC.png) | 13.56Mhz NFC Tags (>500k)| [Amazon](https://a.co/d/5ojDUNk) | | 
 
 ## Firmware
 
-### OSX
+### OSX/Linux
 
 ```
 brew install esphome
@@ -92,7 +92,7 @@ bambu_serial_number: XXXXXXXXXXXXXXXX
 ```
 
 
-Press and hold the D0 button while pressing the reset button on the Wemos D1 Mini
+Press and hold the D0 button while pressing the reset button on the Wemos D1 Mini.  
 A new usb serial device will appear. 
 
 ```bash
@@ -104,6 +104,11 @@ Upload firmware and restart
 ```bash
 USB_ADDRESS=/dev/cu.usbmodemXXXXX make run-usb
 ```
+
+## Windows
+
+TODO: Document windows flashing procedure
+
 
 A new wifi network will appear called `OpenSpool-xxxx`, join the network, navigate to [192.168.4.1](http://192.168.4.1),  insert your wifi credentials and reboot. 
 
