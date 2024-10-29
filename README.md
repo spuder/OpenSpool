@@ -3,7 +3,7 @@
 Track all your filament with RFID
 
 
-Place NFC tags on all your filament. Build an ESP32 OpenSpool reader and place it next to your printer. 
+Adhere NFC stickers on all your filament. Build an ESP32 OpenSpool reader and place it next to your printer. 
 Touching the filament to the reader will automatically update your Bambu Printer filament settings on the printer. 
 Almost as seamlessly as if you were using Bambu filament with an AMS. 
 
@@ -50,6 +50,8 @@ payload =
     "max_temp": "240"
 }
 ```
+
+![](./images/phone1.PNG)
 
 
 ## Hardware
