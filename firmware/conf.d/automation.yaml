@@ -103,12 +103,20 @@ script:
                   } else {
                     return true;
                   }
+              - lambda: |-
+                  if (id(bambu_serial_number).state == "") {
+                    ESP_LOGE("main", "Bambu Serial Number cannot be empty");
+                    return false;
+                  } else {
+                    return true;
+                  }
           then:
             # - light.turn_on:
             #     id: neopixel_light
             #     effect: Flicker Green
             - mqtt.publish:
-                topic: device/${bambu_serial_number}/request
+                # topic: device/${bambu_serial_number}/request
+                topic: !lambda 'return "device/" + id(bambu_serial_number).state + "/request";'
                 payload: !lambda |-
                   auto data = json::build_json([=](JsonObject root) {
                     auto print = root.createNestedObject("print");

@@ -88,17 +88,7 @@ brew install esphome
 
 git clone https://github.com/spuder/OpenSpool
 cd OpenSpool/firmware
-touch secrets.yaml
 ```
-
-In the secrets.yaml file, populate the following variables
-
-```yaml
-bambu_ip: "192.168.2.0"
-bambu_access_code: "12345678"
-bambu_serial_number: XXXXXXXXXXXXXXXX
-```
-
 
 Press and hold the D0 button while pressing the reset button on the Wemos D1 Mini.  
 A new usb serial device will appear. 

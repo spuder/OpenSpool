@@ -1,4 +1,5 @@
 select:
+  #TODO: printer model is currently unused, but will be needed for setting AMS type
   - platform: template
     name: Printer Model
     id: bambu_model
@@ -14,7 +15,6 @@ select:
       sorting_group_id: sorting_group_printer_settings
 
 text:
-  #TODO: mqtt not able to set credentials at runtime
   - platform: template
     id: bambu_serial_number
     state_topic:
