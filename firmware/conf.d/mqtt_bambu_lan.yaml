@@ -1,14 +1,12 @@
-#TODO: replace all these substitutions with run-time config
 substitutions:
   bambu_serial_number: !secret bambu_serial_number
-  bambu_ip: !secret bambu_ip
-  bambu_access_code: !secret bambu_access_code
 
 mqtt:
-  broker: ${bambu_ip}
+  id: bambu_mqtt
+  broker: "" # Broker is set by text.bambu_ip_address
   port: 8883
   username: bblp
-  password: $bambu_access_code
+  password: "" # Password is set by text.bambu_lan_access_code
   client_id: ${name}
   discover_ip: false
   discovery: false
@@ -70,6 +68,8 @@ binary_sensor:
     id: mqtt_connected
     state_topic: # Don't post update to MQTT
     icon: mdi:lan-connect
+    web_server:
+      sorting_group_id: sorting_group_printer_settings
     on_state:
       then:
         if:
