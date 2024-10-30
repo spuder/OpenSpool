@@ -111,3 +111,15 @@ TODO: Document windows flashing procedure
 A new wifi network will appear called `OpenSpool-xxxx`, join the network, navigate to [192.168.4.1](http://192.168.4.1),  insert your wifi credentials and reboot. 
 
 You can then navigate to the web interface at `openspool.local` or ip address. 
+
+
+## Configuration
+
+On first boot, you will need to specify your 3d printer IP Address, Serial Number and Lan Access Code. 
+
+Do not put your printer into LAN Only Mode, it is not required. 
+
+![](./images/PrinterSettings.png)
+
+After changing these 3 settings, you will need to reboot the ESP32. 
+Upon successful connection to the 3d printer, you will observe a checkmark next to MQTT in the web interface, and a blue LED will illuminate next to the USB port. 

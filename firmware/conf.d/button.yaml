@@ -11,14 +11,4 @@ binary_sensor:
     state_topic:
     on_press:
       then:
-        - switch.toggle: test_state
-
-switch:
-  - platform: template
-    name: "Test State"
-    id: test_state
-    optimistic: true
-    on_turn_on:
-      - script.execute: set_led_green
-    on_turn_off:
-      - script.execute: set_led_off
+        #TODO: implement factory reset on 5 second hold

@@ -19,6 +19,7 @@ light:
     rmt_channel: 0
     default_transition_length: 0.4s
     restore_mode: ALWAYS_OFF
+    state_topic:
     effects:
       - addressable_rainbow:
           name: Rainbow
@@ -71,6 +72,7 @@ script:
           green: 100%
           blue: 100%
           brightness: 100%
+
   - id: set_led_off
     then:
       - light.turn_on:
@@ -88,26 +90,3 @@ script:
       - light.turn_on:
           id: neopixel_light
           effect: Rainbow
-
-# output:
-#   - platform: template
-#     type: float
-#     id: virtual_red
-#     write_action:
-#       - lambda: |-
-#           float red_value = id(test_led).current_values.get_red();
-#           ESP_LOGD("main", "Red value: %.2f", x);
-#   - platform: template
-#     type: float
-#     id: virtual_green
-#     write_action:
-#       - lambda: |-
-#           float red_value = id(test_led).current_values.get_green();
-#           ESP_LOGD("main", "Green value: %.2f", x);
-#   - platform: template
-#     type: float
-#     id: virtual_blue
-#     write_action:
-#       - lambda: |-
-#           float red_value = id(test_led).current_values.get_blue();
-#           ESP_LOGD("main", "Blue value: %.2f", x);
