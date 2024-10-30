@@ -1,3 +1,6 @@
+
+<img src="./images/OpenSpoolLogo.PNG" width="200">
+
 # OpenSpool
 
 Track all your filament with RFID
