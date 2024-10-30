@@ -135,7 +135,165 @@ select:
               }
         - script.execute: preview_rfid_data
 
+esphome:
+  includes:
+    - rgb2hex.h
+    - filament_colors.h
+  # Filament color is a workaround just so we can get a color picker in the gui
+  # Ideally this should but just a raw collor picker and not have a brightness slider
+  # or a on/off switch but the Color class doesn't support RGB leds without those 2 things
+  # https://discord.com/channels/429907082951524364/1299942698664333385
+  # - platform: custom
+  #   # name: "Filament Color 2"
+  #   id: filament_color2
+  #   # state_topic:
+  #   # icon: mdi:palette-outline
+  #   # optimistic: true
+  #   # web_server:
+  #   #   sorting_group_id: sorting_group_filament_settings
+  #   # on_value:
+  #   #   then:
+  #   #     - script.execute: preview_rfid_data
+  #   lambda: |-
+  #      auto light_out = new MyCustomLightOutput();
+  #      App.register_component(light_out);
+  #      return {light_out};
+  #   lights:
+  #     - name: "foobar"
+light:
+  - platform: rgb
+    name: "Filament Color 2"
+    id: filament_color2
+    state_topic:
+    icon: mdi:palette-outline
+    web_server:
+      sorting_group_id: sorting_group_filament_settings
+    red: dummy_red
+    green: dummy_green
+    blue: dummy_blue
+    on_state:
+      then:
+        #TODO: this is always 255 on the first write
+        - delay: 50ms #Light component doesn't have optimistic so there is a race condition
+        - logger.log:
+            format: "Filament Color 2 raw values: R=%.2f, G=%.2f, B=%.2f"
+            args: [id(filament_color2).remote_values.get_red(), 
+                  id(filament_color2).remote_values.get_green(), 
+                  id(filament_color2).remote_values.get_blue()]
+        - lambda: |-
+            std::string hex_color = float2hex(
+                static_cast<float>(id(filament_color2).remote_values.get_red()),
+                static_cast<float>(id(filament_color2).remote_values.get_green()),
+                static_cast<float>(id(filament_color2).remote_values.get_blue())
+            );
+            ESP_LOGD("main", "Color %s", hex_color.c_str());
+        # - logger.log:
+        #     format: "Filament Color 2 changed as rgb: R=%d, G=%d, B=%d"
+        #     args: [int(round(id(filament_color2).current_values_as_rgb.get_red() * 255)), 
+        #            int(round(id(filament_color2).current_values_as_rgb.get_green() * 255)), 
+        #            int(round(id(filament_color2).current_values_as_rgb.get_blue() * 255))]
+    # effects:
+    #   #TODO: handle clearing the color picker
+    #   - lambda:
+    #       name: green
+    #       update_interval: 60s
+    #       lambda: |-
+    #         //TODO: only make change once
+    #         auto call = id(filament_color2).turn_on();
+    #         call.set_rgb(0.0f, 1.0f, 0.0f);
+    #         call.set_brightness(1.0f);
+    #         call.perform();
 
+
+
+
+    #         //id(round(id(filament_color2).
+    #         //ESP_LOGD("main", "Color %s", id(filament_color).state.c_str());
+    #         //float red = id(global_red);
+    #         //ESP_LOGD("main", "Float red is %f", red);
+    #         //float green = id(global_green);
+    #         //ESP_LOGD("main", "Float green is %f", green);
+    #         //float blue = id(global_blue);
+    #         //ESP_LOGD("main", "Float blue is %f", blue);
+    #         //auto hex = float2hex(red, green, blue);
+    #         //ESP_LOGD("main", "Hex is %s", hex.c_str());
+    #         //static auto effect = new SetColorEffect("Red", "FF0000");
+    #         //if (initial_run) {
+    #         //  effect->init();
+    #         //}
+    #         //effect->apply();
+    #         //id(filament_color_hex3) = esphome::Color(255, 0, 0);
+    #         //id(filament_color_hex3) = esphome::Color(0x00FF00);
+    #         //id(filament_color_hex2).publish_state("00FF00");
+
+    #   - lambda:
+    #       name: red
+    #       update_interval: 0s
+    #       lambda: |-
+    #         static bool executed = false;
+    #         if (!executed) {
+    #           executed = true;
+    #           static int state = 0;
+    #           static const char* hex = "FF0000";
+    #           auto call = id(filament_color2).turn_on();
+    #           call.set_rgb(hex2color(hex).r, hex2color(hex).g, hex2color(hex).b);
+    #           id(filament_color_hex2).publish_state(hex);
+    #           call.perform();
+    #         }
+    #   - lambda:
+    #       name: blue
+    #       update_interval: 0s
+    #       lambda: |-
+    #         static bool executed = false;
+    #         if (!executed) {
+    #         executed = true;
+    #           static int state = 0;
+    #           static const char* hex = "0000FF";
+    #           auto call = id(filament_color2).turn_on();
+    #           call.set_rgb(hex2color(hex).r, hex2color(hex).g, hex2color(hex).b);
+    #           id(filament_color_hex2).publish_state(hex);
+    #           call.perform();
+    #         }
+
+
+globals:
+  - id: global_red
+    type: float
+    initial_value: '0'
+  - id: global_green
+    type: float
+    initial_value: '0'
+  - id: global_blue
+    type: float
+    initial_value: '0'
+  - id: filament_color_hex3
+    type: esphome::Color
+    # initial_value: 'Color(255,0,0)'
+
+output:
+  - platform: template
+    id: dummy_red
+    type: float
+    write_action:
+      - globals.set:
+          id: global_red
+          value: !lambda "return state;"
+
+  - platform: template
+    id: dummy_green
+    type: float
+    write_action:
+      - globals.set:
+          id: global_green
+          value: !lambda "return state;"
+
+  - platform: template
+    id: dummy_blue
+    type: float
+    write_action:
+      - globals.set:
+          id: global_blue
+          value: !lambda "return state;"
 number:
   - platform: template
     name: "Filament Min Temp"
@@ -211,6 +369,24 @@ text_sensor:
             } else {
               id(filament_color_hex_bambu).publish_state("");
             }
+        - script.execute: preview_rfid_data
+
+
+  - platform: template
+    name: "Filament Color Hex 2"
+    id: filament_color_hex2
+    state_topic:
+    icon: mdi:hexagon-outline
+    web_server:
+      sorting_group_id: sorting_group_filament_settings
+    on_value:
+      then:
+        # - lambda: |-
+        #     if (x != "") {
+        #       id(filament_color_hex_bambu).publish_state(x + "FF");
+        #     } else {
+        #       id(filament_color_hex_bambu).publish_state("");
+        #     }
         - script.execute: preview_rfid_data
 
   - platform: template
