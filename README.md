@@ -1,5 +1,5 @@
 
-<img src="./images/OpenSpoolLogo.PNG" width="200">
+<img src="./images/OpenSpoolLogo.png" width="200">
 
 # OpenSpool
 
@@ -54,7 +54,7 @@ payload =
 }
 ```
 
-<img src="./images/phone1.PNG" width="400">
+<img src="./images/phone1.png" width="400">
 
 
 ## Hardware
