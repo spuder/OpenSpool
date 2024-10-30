@@ -1,18 +1,18 @@
 esphome:
   on_boot:
     then:
-      - light.turn_off:
-          id: neopixel_light
+      - script.execute: set_led_rainbow
+      - delay: 5s
+      - script.execute: set_led_white
   on_shutdown:
     then:
-      - light.turn_off:
-          id: neopixel_light
+      - script.execute: set_led_off
 
 light:
   - platform: esp32_rmt_led_strip
     id: neopixel_light
     pin: GPIO16
-    num_leds: 4
+    num_leds: 1
     rgb_order: GRB
     name: leds
     chipset: WS2812
@@ -25,17 +25,17 @@ light:
           name: Rainbow
           speed: 25
           width: 15
-      - strobe:
-          name: "Data Upload"
-          colors:
-            - state: TRUE
-              brightness: 100%
-              duration: 50ms
-              red: 0%
-              green: 100%
-              blue: 0%
-            - state: FALSE
-              duration: 50ms
+    #   - strobe:
+    #       name: "Data Upload"
+    #       colors:
+    #         - state: TRUE
+    #           brightness: 100%
+    #           duration: 50ms
+    #           red: 0%
+    #           green: 100%
+    #           blue: 0%
+    #         - state: FALSE
+    #           duration: 50ms
 
 script:
   - id: set_led_red
@@ -71,8 +71,7 @@ script:
           red: 100%
           green: 100%
           blue: 100%
-          brightness: 100%
-
+          brightness: 75%
   - id: set_led_off
     then:
       - light.turn_on:

@@ -1,5 +1,5 @@
 substitutions:
-  name: OpenSpool
+  name: openspool
 
 esphome:
   name: ${name} #Don't use underscore '_' in name https://esphome.io/guides/faq.html#why-shouldn-t-i-use-underscores-in-my-device-name
@@ -35,3 +35,4 @@ packages:
   rc532_rfid: !include conf.d/rc532_rfid.yaml
   automation: !include conf.d/automation.yaml
   leds: !include conf.d/leds.yaml
+  improv: !include conf.d/improv.yaml
