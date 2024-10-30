@@ -51,7 +51,7 @@ payload =
 }
 ```
 
-![](./images/phone1.PNG)
+<img src="./images/phone1.PNG" width="400">
 
 
 ## Hardware
