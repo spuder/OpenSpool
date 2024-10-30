@@ -30,7 +30,7 @@ OpenSpool supports 2 protocols
 
 ### OpenSpool Protocol
 
-OpenSpool aims to use the simplest possible protocol for RFID tags. All you need is a [13.56Mhz RFID tag](https://a.co/d/5ojDUNk) that supports NDEF records (NFC Tags) and has atleast 500 bytes of memory. 
+OpenSpool aims to use the simplest possible protocol for RFID tags. All you need is a [13.56Mhz RFID tag](https://a.co/d/5ojDUNk) that supports NDEF records (NFC Tags) and has atleast 500 bytes of memory. NTAG 215/216 are a great choice. Purchasing links provided below. 
 
 #### NDEF Record
 
@@ -108,6 +108,8 @@ USB_ADDRESS=/dev/cu.usbmodemXXXXX make run-usb
 TODO: Document windows flashing procedure
 
 
+## First Time Configuration
+
 A new wifi network will appear called `OpenSpool-xxxx`, join the network, navigate to [192.168.4.1](http://192.168.4.1),  insert your wifi credentials and reboot. 
 
 You can then navigate to the web interface at `openspool.local` or ip address. 
@@ -123,3 +125,5 @@ Do not put your printer into LAN Only Mode, it is not required.
 
 After changing these 3 settings, you will need to reboot the ESP32. 
 Upon successful connection to the 3d printer, you will observe a checkmark next to MQTT in the web interface, and a blue LED will illuminate next to the USB port. 
+
+![](./images/WebInterface1.png)
