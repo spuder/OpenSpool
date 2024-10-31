@@ -9,8 +9,8 @@ binary_sensor:
 
 spi:
   clk_pin: GPIO39 # SCK
-  miso_pin: GPIO37 # MO/SDA/TX (MOSI)
-  mosi_pin: GPIO35 # M (MISO)
+  miso_pin: GPIO37 # MO/SDA/TX (MISO)
+  mosi_pin: GPIO35 # M (MOSI)
 
 pn532_spi:
   cs_pin: GPIO33 # NSS/SCL/RX

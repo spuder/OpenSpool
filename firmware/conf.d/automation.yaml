@@ -124,7 +124,7 @@ script:
                     print["command"] = "ams_filament_setting";
                     print["ams_id"] = 255; //TODO: support multiple AMS
                     print["tray_id"] = 254; //TODO: support multiple trays
-                    print["tray_color"] = id(filament_color_hex).state.c_str();
+                    print["tray_color"] = id(filament_color_hex_bambu).state.c_str();
                     print["nozzle_temp_min"] = id(filament_min_temp).state; //TODO: string or int? 
                     print["nozzle_temp_max"] = id(filament_max_temp).state; //TODO: string or int? 
                     print["tray_type"] = id(filament_type).state.c_str();

@@ -76,7 +76,7 @@ OpenSpool requires an ESP32-S2 and PN532 NFC Reader that supports SPI.
 | --- | --- | --- | --- | 
 | ![](./images/wemos-d1mini.png)| Wemos D1 Mini S2 | [Amazon](https://www.amazon.com/dp/B0B291LZ99?ref_=cm_sw_r_cp_ud_dp_373FWQ1MNKAS6SD4DDXV) | [Aliexpress](https://www.aliexpress.us/item/3256807359221969.html)|
 | ![](./images/pn532-small.png) |  PN532 (Small) | [Amazon](https://a.co/d/8ytFjLO) | [Aliexpress](https://www.aliexpress.us/item/3256805787598774.html)| 
-| ![](./images/NFC.png) | 13.56Mhz NFC Tags (>500 bytes)| [Amazon](https://a.co/d/5ojDUNk) | | 
+| ![](./images/NFC.png) | NTAG 215/216 (13.56Mhz NFC Tags >500 bytes) | [Amazon](https://a.co/d/5ojDUNk) | | 
 | ![](./images/LED1.png) | WS2812B LED | [Amazon](https://a.co/d/dzN19Ky) | |
 | ![](./images/PCB1.png) | 30x70mm PCB | [Amazon](https://a.co/d/dMfGMGb) | |
 | ![](./images/Headers1.png) | 2.54mm Headers | [Amazon](https://a.co/d/gVvpTyd) | | 
