@@ -86,11 +86,11 @@ OpenSpool requires an ESP32-S2 and PN532 NFC Reader that supports SPI.
 
 ![](./images/WiringDiagram1.png)
 
-GPIO39 -> SCK
-GPIO37 -> MISO
-GPIO35 -> MOSI
-GPIO33 -> SS
-GPIO16 -> LED
+GPIO39 -> SCK  
+GPIO37 -> MISO  
+GPIO35 -> MOSI  
+GPIO33 -> SS  
+GPIO16 -> LED  
 
 Be sure to put the PN532 into `SPI` mode (not `i2c` or `UART`)
 
