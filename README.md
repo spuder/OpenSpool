@@ -31,13 +31,13 @@ Almost as seamlessly as if you were using Bambu filament with an AMS.
 
 OpenSpool supports 2 protocols
 
-- OpenSpool  
 - [OpenSourceRFID](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/blob/main/OpenSourceRfid.md)  #Pending 
-
+- OpenSpool  
 
 ### OpenSourceRFID Protocol
 
-The OpenSourceRFID protocol is still pending finalization, once it is finalized it will be the preferred protocol for OpenSpool. OpenSourceRFID has momentium from suppliers [PolarFilament](https://polarfilament.com) and [3dfuel](https://www.3dfuel.com)
+The OpenSourceRFID protocol is still pending finalization, once it is finalized it will be the preferred protocol for OpenSpool. OpenSourceRFID has momentium from suppliers [PolarFilament](https://polarfilament.com) and [3D-fuel](https://www.3dfuel.com)
+It uses Mifare 1k classic RFID tags. 
 
 Follow [this github page](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/blob/main/OpenSourceRfid.md) for updates to OpenSourceRFID
 
