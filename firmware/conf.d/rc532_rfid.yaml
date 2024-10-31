@@ -28,10 +28,9 @@ pn532_spi:
       - binary_sensor.template.publish:
           id: nfc_tag_present
           state: ON
-      - delay: 100ms
       - lambda: |-
           uint8_t retry_count = 0;
-          const uint8_t max_retries = 5;
+          const uint8_t max_retries = 3;
           bool tag_read_success = false;
 
           auto read_and_process_tag = [&](nfc::NfcTag &tag) -> bool {

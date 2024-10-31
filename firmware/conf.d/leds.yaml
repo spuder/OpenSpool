@@ -59,6 +59,7 @@ script:
           green: 0%
           blue: 0%
           brightness: 100%
+          transition_length: 0.2s
   - id: set_led_green
     then:
       - light.turn_on:
@@ -67,6 +68,7 @@ script:
           green: 100%
           blue: 0%
           brightness: 100%
+          transition_length: 0.2s
   - id: set_led_blue
     then:
       - light.turn_on:
