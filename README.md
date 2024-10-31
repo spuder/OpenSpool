@@ -140,6 +140,16 @@ Upon successful connection to the 3d printer, you will observe a checkmark next 
 
 ![](./images/WebInterface1.png)
 
+
+# Troubleshooting
+
+Use the [MQTTX client](https://mqttx.app) to observe the messages that OpenSpool and Bambu Printer are sending. 
+
+
+```bash
+mqttx sub -t 'device/$SERIAL_NUMBER/report' -u -P $LAN_ACCESS_CODE --mqtt-version 3.1.1 -h $IP_ADDRESS -p 8883 -l mqtts --insecure
+```
+
 # License
 
 
