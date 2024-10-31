@@ -9,6 +9,7 @@ select:
       - "P1P/P1S"
       - "X1C/X1E"
     optimistic: true
+    restore_value: true
     state_topic:
     icon: mdi:printer-3d
     web_server:

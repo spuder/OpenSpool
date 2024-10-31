@@ -4,6 +4,12 @@ wifi:
     ssid: "OpenSpool" # TODO add ending mac address to wifi name
   reboot_timeout: 0s
   power_save_mode: none
+  # reboot_timeout: 15min
+  # power_save_mode: LIGHT # Reduce to NONE if encountering issues with wifi connectivity
+  #TODO: if it is in ap mode, then pulse blue
+  on_connect:
+    then:
+      - script.execute: set_led_white
 
 sensor:
   - platform: wifi_signal
@@ -11,6 +17,11 @@ sensor:
     update_interval: 60s
     state_topic: # Don't post update to MQTT
     icon: mdi:wifi
+
+text_sensor: 
+  - platform: wifi_info
+    # TODO: don't post to moqtt, static_topic isn't valid for wifi_info
+
 
 # text_sensor:
 #   # state_topic: # Don't post update to MQTT

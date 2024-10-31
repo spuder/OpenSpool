@@ -8,7 +8,6 @@ esphome:
     build_unflags: -std=gnu++11
     build_flags: -std=gnu++14
     # upload_speed: 115200 # Wemos D1 Mini from Aliexpress struggle at 460800 baud rate
-
 esp32:
   board: lolin_s2_mini
   variant: esp32s2

@@ -171,7 +171,20 @@ Upon successful connection to the 3d printer, you will observe a checkmark next 
 ![](./images/WebInterface1.png)
 
 
+## Facotry Reset
+
+Press and hold the D0 button for 10 seconds. 
+This will erase wifi credentials and bambu access credentials from OpenSpool. 
+
 # Troubleshooting
+
+### LED is breathing blue
+This means the OpenSpool is hosting a wireless access point called 'OpenSpool'. Connect to it then navigate to [192.168.4.1](http://192.168.4.1) to configure wifi. 
+
+### LED is solid white
+OpenSpool has succesfully joined the wifi network and is ready to scan for RFID tags
+
+### Advanced Troubleshooting
 
 Use the [MQTTX client](https://mqttx.app) to observe the messages that OpenSpool and Bambu Printer are sending. 
 
