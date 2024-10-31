@@ -68,6 +68,19 @@ payload =
 <img src="./images/phone2.png" width="400">
 
 
+## Integrations
+
+Currently OpenSpool only works with Bambu printers over mqtt. Other integrations are planned. Pull Requests welcome
+
+| Integration | Supported |
+| --- | --- |
+| Bambu | ✅ |
+| Anker | ❔ | 
+| Prusa Connect | ❔ |
+| OctoPrint | ❔ |
+| SpoolMan | ❔ |
+| Klipper / Moonraker | ❔ |
+
 ## Hardware
 
 OpenSpool requires an ESP32-S2 and PN532 NFC Reader that supports SPI. 
@@ -183,6 +196,15 @@ This means the OpenSpool is hosting a wireless access point called 'OpenSpool'. 
 
 ### LED is solid white
 OpenSpool has succesfully joined the wifi network and is ready to scan for RFID tags
+
+
+### NFC Tags aren't reading reliably
+
+If using the red NP5332 reader (smaller model), it detects tags best on the corners of the antenna. 
+
+If using the blue NP532 reader (larger model), it detects tags best directly in the center of the antenna.   
+
+
 
 ### Advanced Troubleshooting
 

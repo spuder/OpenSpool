@@ -8,6 +8,22 @@ esphome:
     build_unflags: -std=gnu++11
     build_flags: -std=gnu++14
     # upload_speed: 115200 # Wemos D1 Mini from Aliexpress struggle at 460800 baud rate
+  on_boot:
+    then:
+      - script.execute: set_led_rainbow
+      - delay: 3s
+      - lambda: |-
+          //TODO: this appears to have broken and no longer blinks blue
+          if (!wifi::global_wifi_component->is_connected() && 
+              wifi::global_wifi_component->wifi_soft_ap_ip().str() == "192.168.4.1") {
+            id(set_led_breathing_blue).execute();
+          }
+      - lambda: |-
+          id(my_ota).set_auth_password("New password");
+  on_shutdown:
+    then:
+      - script.execute: set_led_off
+
 esp32:
   board: lolin_s2_mini
   variant: esp32s2

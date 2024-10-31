@@ -2,6 +2,7 @@
 # Connected to pin 8
 binary_sensor:
   - platform: gpio
+    id: physical_button
     pin:
       number: 0
       mode: INPUT_PULLUP
@@ -9,54 +10,59 @@ binary_sensor:
     name: "Button"
     internal: true
     state_topic:
-    filters:
-      - delayed_off: 10s
+    # filters:
+    #   - delayed_off: 10s
     on_press:
       then:
+        - script.execute: set_led_red
         - globals.set:
             id: button_press_duration
-            value: '0'
+            value: "0"
         - script.execute: start_timer
-        #TODO: start flashing led
 
     on_release:
       then:
+        - script.execute: set_led_white
         - script.stop: timer_script
         - if:
             condition:
-              and:
-                - lambda: 'return id(button_press_duration) >= 10;'
+              lambda: "return id(button_press_duration) >= 10;"
             then:
               - logger.log: "Erasing WiFi credentials and restarting..."
               - button.press: factory_reset_openspool
-
+            else:
+              - logger.log: "Button released before 10 seconds, not performing factory reset."
 
 globals:
   - id: my_counter
     type: int
-    initial_value: '0'
+    initial_value: "0"
   - id: button_press_duration
     type: int
-    initial_value: '0'
+    initial_value: "0"
 
 script:
   - id: timer_script
-    mode: restart
     then:
-      - globals.set:
-          id: button_press_duration
-          value: !lambda "return id(button_press_duration) + 1;"
-      - delay: 1s
-      - script.execute: timer_script
+      - while:
+          condition:
+            binary_sensor.is_on: physical_button
+          then:
+            - globals.set:
+                id: button_press_duration
+                value: !lambda "return id(button_press_duration) + 1;"
+            - delay: 1s
 
   - id: start_timer
     then:
       - globals.set:
           id: button_press_duration
-          value: '0'
+          value: "0"
       - script.execute: timer_script
 
 button:
   - platform: factory_reset
-    name: Restart with Factory Default Settings
+    name: "Factory Reset"
     id: factory_reset_openspool
+    internal: true
+    state_topic:

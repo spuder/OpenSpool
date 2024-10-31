@@ -17,7 +17,7 @@ pn532_spi:
   id: nfc_reader
   on_tag_removed:
     then:
-      - script.execute: set_led_white
+      - script.execute: set_led_white #TODO: don't assume white instead default back to the default led state (breathing, blinkinig ect..)
       - binary_sensor.template.publish:
           id: nfc_tag_present
           state: OFF

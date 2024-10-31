@@ -1,17 +1,3 @@
-esphome:
-  on_boot:
-    then:
-      - script.execute: set_led_rainbow
-      - delay: 3s
-      - lambda: |-
-          if (!wifi::global_wifi_component->is_connected() && 
-              wifi::global_wifi_component->wifi_soft_ap_ip().str() == "192.168.4.1") {
-            id(set_led_breathing_blue).execute();
-          }
-  on_shutdown:
-    then:
-      - script.execute: set_led_off
-
 light:
   - platform: esp32_rmt_led_strip
     id: neopixel_light
@@ -89,6 +75,15 @@ script:
           red: 0%
           green: 0%
           blue: 100%
+          brightness: 100%
+  - id: set_led_yellow
+    then:
+      - light.turn_on:
+          id: neopixel_light
+          effect: none
+          red: 100%
+          green: 100%
+          blue: 0%
           brightness: 100%
   - id: set_led_white
     then:

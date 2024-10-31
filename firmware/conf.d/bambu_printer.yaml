@@ -61,5 +61,5 @@ button:
   - platform: restart
     name: "Restart OpenSpool"
     id: restart_openspool
-    web_server:
-      sorting_group_id: sorting_group_printer_settings
+    state_topic:
+

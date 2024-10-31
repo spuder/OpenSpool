@@ -1,6 +1,7 @@
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
+  # state_topic:
 
 debug:
   update_interval: 5s
