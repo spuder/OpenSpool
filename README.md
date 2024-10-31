@@ -35,6 +35,13 @@ OpenSpool supports 2 protocols
 - [OpenSourceRFID](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/blob/main/OpenSourceRfid.md)  #Pending 
 
 
+### OpenSourceRFID Protocol
+
+The OpenSourceRFID protocol is still pending finalization, once it is finalized it will be the preferred protocol for OpenSpool. OpenSourceRFID has momentium from suppliers [PolarFilament](https://polarfilament.com) and [3dfuel](https://www.3dfuel.com)
+
+Follow [this github page](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/blob/main/OpenSourceRfid.md) for updates to OpenSourceRFID
+
+
 ### OpenSpool Protocol
 
 OpenSpool aims to use the simplest possible protocol for RFID tags. All you need is a [13.56Mhz RFID tag](https://a.co/d/5ojDUNk) that supports NDEF records (NFC Tags) and has atleast 500 bytes of memory. NTAG 215/216 are a great choice. Purchasing links provided below. 

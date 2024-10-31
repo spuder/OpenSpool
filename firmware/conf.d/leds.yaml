@@ -2,7 +2,7 @@ esphome:
   on_boot:
     then:
       - script.execute: set_led_rainbow
-      - delay: 5s
+      - delay: 3s
       - script.execute: set_led_white
   on_shutdown:
     then:
