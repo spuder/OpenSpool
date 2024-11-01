@@ -4,7 +4,7 @@ light:
     pin: GPIO16
     num_leds: 1
     rgb_order: GRB
-    name: leds
+    name: LEDs
     chipset: WS2812
     rmt_channel: 0
     default_transition_length: 0.4s

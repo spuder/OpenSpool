@@ -1,5 +1,10 @@
 substitutions:
   name: openspool
+  rfid1_spi_interface: "any" #spi2 on PCB
+  rfid1_clk_pin: "GPIO39" #36 on PCB
+  rfid1_miso_pin: "GPIO37"
+  rfid1_mosi_pin: "GPIO35"
+  rfid1_ss_pin: "GPIO33" #34 on PCB
 
 esphome:
   name: ${name} #Don't use underscore '_' in name https://esphome.io/guides/faq.html#why-shouldn-t-i-use-underscores-in-my-device-name
@@ -18,8 +23,8 @@ esphome:
               wifi::global_wifi_component->wifi_soft_ap_ip().str() == "192.168.4.1") {
             id(set_led_breathing_blue).execute();
           }
-      - lambda: |-
-          id(my_ota).set_auth_password("New password");
+      # - lambda: |-
+      #     id(my_ota).set_auth_password("New password");
   on_shutdown:
     then:
       - script.execute: set_led_off
@@ -51,4 +56,5 @@ packages:
   automation: !include conf.d/automation.yaml
   leds: !include conf.d/leds.yaml
   #improv: !include conf.d/improv.yaml
+  #ota: !include conf.d/ota.yaml
   # bambu_ams: !include conf.d/bambu_ams.yaml

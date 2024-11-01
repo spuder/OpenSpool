@@ -205,6 +205,17 @@ If using the red NP5332 reader (smaller model), it detects tags best on the corn
 
 If using the blue NP532 reader (larger model), it detects tags best directly in the center of the antenna.   
 
+### MQTT Disconnects
+
+The A1/P1 have a limit of 4 mqtt connections. If more than 4 connections are reached clients may be asked to disconnect. 
+
+If a client attempts to write invalid data any mqtt topic, the printer will ask the client to disconnect. 
+All esphome resources must use `state_topic:` with a null value to prevent esphome from broadcasting on any topic. 
+
+
+### TLS Errors
+
+Reach out to the discord for help verifying that the Root Certificate is correct. 
 
 
 ### Advanced Troubleshooting

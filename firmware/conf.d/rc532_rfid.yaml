@@ -8,12 +8,13 @@ binary_sensor:
       sorting_group_id: sorting_group_rfid
 
 spi:
-  clk_pin: GPIO39 # SCK
-  miso_pin: GPIO37 # MO/SDA/TX (MISO)
-  mosi_pin: GPIO35 # M (MOSI)
+  clk_pin: ${rfid1_clk_pin} # SCK # Breadboard=GPIO39, PCB=GPIO36
+  miso_pin: ${rfid1_miso_pin} # MO/SDA/TX (MISO)
+  mosi_pin: ${rfid1_mosi_pin} # M (MOSI)
+  interface: ${rfid1_spi_interface}
 
 pn532_spi:
-  cs_pin: GPIO33 # NSS/SCL/RX
+  cs_pin: ${rfid1_ss_pin} # NSS/SCL/RX # Breadboard=GPIO33, PCB=GPIO34
   id: nfc_reader
   on_tag_removed:
     then:
