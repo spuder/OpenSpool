@@ -24,14 +24,14 @@ jobs:
       - name: List output files
         run: |
           ls -l
-          - name: Upload Artifacts
-          uses: actions/upload-artifact@v4
-          with:
-            name: openspool-esp32s2-${{ github.sha }}
-            path: |
-              openspool-esp32s2/*.bin
-              openspool-esp32s2/manifest.json
-            retention-days: 90
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: openspool-esp32s2-${{ github.sha }}
+          path: |
+            openspool-esp32s2/*.bin
+            openspool-esp32s2/manifest.json
+          retention-days: 90
       - name: Store Latest Commit Indefinitely
         uses: actions/upload-artifact@v4
         with:
