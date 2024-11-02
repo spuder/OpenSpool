@@ -18,7 +18,7 @@ select:
       - PLA-CF
       - PA-CF
       - PVA
-      - PETCF
+      - PET-CF #TODO: double check it is PET-CF and not PETCF as I think I've seen both in wolfwithsword code
     on_value:
       then:
         - script.execute: generate_filament_brand_code
