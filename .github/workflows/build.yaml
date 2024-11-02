@@ -12,7 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Create empty secrets file
-        run: touch firmware/conf.d/secerets.yaml
+        run: |
+            touch firmware/secrets.yaml
+            touch firmware/conf.d/secrets.yaml
       - name: Build ESPHome firmware
         uses: esphome/build-action@v4.0.2
         with:
