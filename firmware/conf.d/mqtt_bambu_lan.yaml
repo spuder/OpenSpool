@@ -1,5 +1,5 @@
 substitutions:
-  bambu_serial_number: !secret bambu_serial_number
+  base_topic: "device/%s/report"
 
 mqtt:
   id: bambu_mqtt
@@ -52,15 +52,38 @@ mqtt:
 #   - platform: mqtt_subscribe
 #     name: "Bambu Printer Status"
 #     id: bambu_printer_status
-#     topic: device/${bambu_serial_number}/report
+#     topic: "" # Set by text.bambu_serial_number
 #     state_topic:
-#     internal: true
-#     on_value:
-#       then:
-#         - logger.log:
-#             format: "Received status: %s"
-#             args: ["x.c_str()"]
-#             level: INFO
+#     # internal: true
+#     # web_server:
+#     #   sorting_group_id: sorting_group_printer_settings
+#     filters:
+#       - lambda: |-
+#           DynamicJsonDocument doc(4096);
+#           deserializeJson(doc, x);
+          
+#           if (doc["print"]["wifi_signal"]) {
+#             return {};
+#           }
+#           if (doc["print"]["command"] == "push_status") {
+#             return {};
+#           }
+#           if (doc["info"]["command"] == "get_version") {
+#             return {};
+#           }
+#           if (doc["system"]["command"] == "get_access_code") {
+#             return {};
+#           }
+#           if (doc["system"]["upgrade_state"]) {
+#             return {};
+#           }
+#           if (doc["print"]["ipcam"]) {
+#             return {};
+#           }
+#           return x;
+# #     # on_value:
+# #     #   then:
+# #     #     - lambda: |-
 
 binary_sensor:
   - platform: status

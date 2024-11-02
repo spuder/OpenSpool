@@ -26,6 +26,10 @@ text:
     icon: mdi:barcode
     web_server:
       sorting_group_id: sorting_group_printer_settings
+    # on_value:
+    #   then:
+    #     lambda: |-
+    #       id(bambu_printer_status).topic = "device/" + x + "/report";
 
   - platform: template
     id: bambu_lan_access_code
@@ -91,4 +95,5 @@ button:
 #     19: "Calibrating Extrusion Flow",
 #     20: "Paused due to nozzle temperature malfunction",
 #     21: "Paused due to heat bed temperature malfunction"
+#     255: A1 mini uses this, most likely as idle
 # }
