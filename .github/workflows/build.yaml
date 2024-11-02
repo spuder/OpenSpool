@@ -16,8 +16,7 @@ jobs:
         with:
           yaml_file: firmware/config.yaml
           release-summary: "Test"
-        #   release-url:
-            complete-manifest: true
+          complete-manifest: true
       - name: List output files
         run: |
           ls -l
