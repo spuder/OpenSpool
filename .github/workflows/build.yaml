@@ -24,3 +24,27 @@ jobs:
       - name: List output files
         run: |
           ls -l
+          - name: Upload Artifacts
+          uses: actions/upload-artifact@v2
+          with:
+            name: openspool-esp32s2-${{ github.sha }}
+            path: |
+              openspool-esp32s2/*.bin
+              openspool-esp32s2/manifest.json
+            retention-days: 90
+      - name: Store Latest Commit Indefinitely
+        uses: actions/upload-artifact@v2
+        with:
+          name: openspool-esp32s2-latest
+          path: |
+            openspool-esp32s2/*.bin
+            openspool-esp32s2/manifest.json
+  
+  cleanup:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Delete old artifacts
+        uses: c-hive/gha-remove-artifacts@v1
+        with:
+          age: '90 days'
+          skip-recent: 5
