@@ -25,7 +25,7 @@ jobs:
         run: |
           ls -l
           - name: Upload Artifacts
-          uses: actions/upload-artifact@v2
+          uses: actions/upload-artifact@v4
           with:
             name: openspool-esp32s2-${{ github.sha }}
             path: |
@@ -33,7 +33,7 @@ jobs:
               openspool-esp32s2/manifest.json
             retention-days: 90
       - name: Store Latest Commit Indefinitely
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: openspool-esp32s2-latest
           path: |
