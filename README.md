@@ -205,6 +205,8 @@ If using the red NP5332 reader (smaller model), it detects tags best on the corn
 
 If using the blue NP532 reader (larger model), it detects tags best directly in the center of the antenna.   
 
+Be sure you aren't using a [counterfit NP532](https://forum.dangerousthings.com/t/success-pn532-is-not-easy-to-work-with/1108/10)
+
 ### MQTT Disconnects
 
 The A1/P1 have a limit of 4 mqtt connections. If more than 4 connections are reached clients may be asked to disconnect. 

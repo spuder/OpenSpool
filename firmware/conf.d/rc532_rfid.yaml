@@ -16,6 +16,7 @@ spi:
 pn532_spi:
   cs_pin: ${rfid1_ss_pin} # NSS/SCL/RX # Breadboard=GPIO33, PCB=GPIO34
   id: nfc_reader
+  update_interval: 1s
   on_tag_removed:
     then:
       - script.execute: set_led_white #TODO: don't assume white instead default back to the default led state (breathing, blinkinig ect..)
