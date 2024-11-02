@@ -14,7 +14,7 @@ jobs:
       - name: Build ESPHome firmware
         uses: esphome/build-action@v4.0.2
         with:
-          yaml_file: firmware/config.yaml
+          yaml-file: firmware/config.yaml
           release-summary: "Test"
           complete-manifest: true
       - name: List output files
