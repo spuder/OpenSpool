@@ -22,8 +22,9 @@ jobs:
         uses: esphome/build-action@v4.0.2
         with:
           yaml-file: firmware/config.yaml
-          release-summary: "Test"
+          release-summary: "Test" #TODO: change this to the commit message
           complete-manifest: true
+          release-url: "https://raw.githubusercontent.com/spuder/OpenSpool/main/firmware/manifest.json"
 
       - name: List output files
         run: |
@@ -34,12 +35,13 @@ jobs:
           cp openspool-esp32s2/manifest.json firmware/manifest.json
 
       - name: Commit manifest file
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add firmware/manifest.json
-          git commit -m "Update manifest.json" || echo "No changes to commit"
-          git push
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: GitHub Action
+          author_email: github-actions[bot]@users.noreply.github.com
+          message: Update manifest.json
+          add: "firmware/manifest.json"
+          push: true
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
@@ -49,15 +51,6 @@ jobs:
             openspool-esp32s2/*.bin
             openspool-esp32s2/manifest.json
           retention-days: 90
-
-      - name: Store Latest Commit Indefinitely
-        uses: actions/upload-artifact@v4
-        with:
-          name: openspool-esp32s2-latest
-          path: |
-            openspool-esp32s2/*.bin
-            openspool-esp32s2/manifest.json
-
   cleanup:
     runs-on: ubuntu-latest
     steps:
