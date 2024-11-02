@@ -15,6 +15,10 @@ select:
       - PETG
       - TPU
       - ABS
+      - PLA-CF
+      - PA-CF
+      - PVA
+      - PETCF
     on_value:
       then:
         - script.execute: generate_filament_brand_code
