@@ -19,7 +19,28 @@ select:
       then:
         - script.execute: generate_filament_brand_code
         - script.execute: generate_filament_temperatures
-        - script.execute: preview_rfid_data #TODO: needed?
+        - script.execute: preview_rfid_data
+
+  - platform: template
+    name: "Filament Variant"
+    id: filament_variant
+    optimistic: true
+    icon: mdi:tag-variant
+    web_server:
+      sorting_group_id: sorting_group_filament_settings
+    options:
+      - Basic
+      - Matte
+      - Metal
+      - Impact
+      - G
+      - W
+      # TODO: add the rest of the options
+    on_value:
+      then:
+        - script.execute: generate_filament_brand_code
+        - script.execute: preview_rfid_data
+        - script.execute: generate_filament_temperatures #TODO: not fully implemented for variants yet
 
   - platform: template
     name: "Filament Brand"
@@ -31,6 +52,7 @@ select:
       sorting_group_id: sorting_group_filament_settings
     options:
       - Generic
+      - Bambu # Adding bambu even though you should never add a openspool tag to a bambu spool or you might get conflicts on RFID
       - Overture
       - PolyTerra
       - PolyLite
@@ -228,7 +250,7 @@ text_sensor:
     name: Filament Sub Brand
     id: filament_sub_brand
     state_topic:
-    icon: mdi:movie-roll #TODO: change
+    icon: mdi:label
     web_server:
       sorting_group_id: sorting_group_filament_settings
     on_value:
