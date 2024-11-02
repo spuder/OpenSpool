@@ -1,4 +1,4 @@
-name: ESPHome Build
+name: ESPHome Build and Commit Manifest
 
 on:
   push:
@@ -10,20 +10,37 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Create empty secrets file
         run: |
-            touch firmware/secrets.yaml
-            touch firmware/conf.d/secrets.yaml
+          touch firmware/secrets.yaml
+          touch firmware/conf.d/secrets.yaml
+
       - name: Build ESPHome firmware
         uses: esphome/build-action@v4.0.2
         with:
           yaml-file: firmware/config.yaml
           release-summary: "Test"
           complete-manifest: true
+
       - name: List output files
         run: |
-          ls -l
+          ls -l openspool-esp32s2
+
+      - name: Copy manifest to firmware folder
+        run: |
+          cp openspool-esp32s2/manifest.json firmware/manifest.json
+
+      - name: Commit manifest file
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add firmware/manifest.json
+          git commit -m "Update manifest.json" || echo "No changes to commit"
+          git push
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -32,6 +49,7 @@ jobs:
             openspool-esp32s2/*.bin
             openspool-esp32s2/manifest.json
           retention-days: 90
+
       - name: Store Latest Commit Indefinitely
         uses: actions/upload-artifact@v4
         with:
@@ -39,10 +57,10 @@ jobs:
           path: |
             openspool-esp32s2/*.bin
             openspool-esp32s2/manifest.json
-  
+
   cleanup:
-      runs-on: ubuntu-latest
-      steps:
+    runs-on: ubuntu-latest
+    steps:
       - name: Delete old artifacts
         uses: c-hive/gha-remove-artifacts@v1
         with:
