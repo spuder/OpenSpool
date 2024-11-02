@@ -1,0 +1,23 @@
+name: ESPHome Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build ESPHome firmware
+        uses: esphome/build-action@v4.0.2
+        with:
+          yaml_file: firmware/config.yaml
+          release-summary: "Test"
+        #   release-url:
+            complete-manifest: true
+      - name: List output files
+        run: |
+          ls -l
