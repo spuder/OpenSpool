@@ -1,0 +1,23 @@
+{"0": {
+    "doc": "Home",
+    "title": "ESP32 Firmware Installation",
+    "content": " ",
+    "url": "/#esp32-firmware-installation",
+    
+    "relUrl": "/#esp32-firmware-installation"
+  },"1": {
+    "doc": "Home",
+    "title": "Install the firmware",
+    "content": "Installation Instructions . 1. Connect your ESP32 device via USB . 2. Click the Install button above . 3. Follow the installation wizard . Note: Installation requires Chrome or Edge browser on desktop . ",
+    "url": "/",
+    
+    "relUrl": "/"
+  },"2": {
+    "doc": "Home",
+    "title": "Home",
+    "content": " ",
+    "url": "/",
+    
+    "relUrl": "/"
+  }
+}
