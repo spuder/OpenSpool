@@ -29,6 +29,9 @@ layout: home
     </div>
 </div>
 
+{: .note}
+If the above step fails, see the [README on github](https://github.com/spuder/OpenSpool) for running `make run-usb` command to upload manually. 
+
 # 🛠️ Configuration
 
 Once the firmware is installed, You will need to join the RFID reader to the same network as your 3d printer. 

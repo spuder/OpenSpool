@@ -9,6 +9,8 @@ Track all your filament with NFC tags
 
 
 
+## Official Documentation: [openspool.io](https://openspool.io)
+
 
 Adhere NFC stickers on all your filament. Build an ESP32 OpenSpool reader and place it next to your printer. 
 Touching the filament to the reader will automatically update your Bambu Printer filament settings. 
@@ -137,6 +139,10 @@ In order to comply with the [OpenSourceRfid standard](https://github.com/Bambu-R
 
 ## Firmware
 
+The recomended method to install firmware is by navigating to [openspool.io](https://openspool.io) in Chrome/Edge and using the web based programming tool. 
+
+Alternativly the firmware can be installed with `make` commands as shown below. 
+
 ### OSX/Linux
 
 ```
@@ -166,9 +172,9 @@ TODO: Document windows flashing procedure
 
 ## First Time Configuration
 
-A new wifi network will appear called `OpenSpool-xxxx`, join the network, navigate to [192.168.4.1](http://192.168.4.1),  insert your wifi credentials and reboot. 
+A new wifi network will appear called `OpenSpool`, join the network, navigate to [192.168.4.1](http://192.168.4.1),  insert your wifi credentials and reboot. 
 
-You can then navigate to the web interface at `openspool.local` or ip address. 
+You can then navigate to the web interface at `openspool-xxxxxx.local` or ip address. 
 
 
 ## Configuration
