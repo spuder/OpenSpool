@@ -1,5 +1,6 @@
 substitutions:
   name: openspool
+  version: "0.1.0" #TODO: ensure this is always set
   board: lolin_s2_mini
   variant: esp32s2
   rfid1_spi_interface: spi #any on Breadboard
@@ -11,7 +12,13 @@ substitutions:
 esphome:
   name: ${name} #Don't use underscore '_' in name https://esphome.io/guides/faq.html#why-shouldn-t-i-use-underscores-in-my-device-name
   name_add_mac_suffix: true
+  project:
+    name: spuder.openspool
+    version: ${version}
+    # on_update:
+  min_version: 2024.10.1
   platformio_options:
+    # upload_speed: 115200 #TODO: This fails the first time no matter what
     build_unflags: -std=gnu++11
     build_flags: -std=gnu++14
     # upload_speed: 115200 # Wemos D1 Mini from Aliexpress struggle at 460800 baud rate
@@ -36,6 +43,7 @@ esp32:
   #variant: ${variant}
   framework:
     type: esp-idf
+    version: recommended
 
 logger:
 # MQTT and api are not compatible: https://esphome.io/components/mqtt.html
