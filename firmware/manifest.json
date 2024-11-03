@@ -1,6 +1,6 @@
 {
   "name": "openspool",
-  "version": "2024.10.2",
+  "version": "0.1.0",
   "home_assistant_domain": "esphome",
   "new_install_prompt_erase": false,
   "builds": [
@@ -8,8 +8,8 @@
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "3e79db154cdeece6d21a7e9b11296ab7",
-        "summary": "Update release summary",
+        "md5": "80d83130ac2b2b36e4718ded5cfb0079",
+        "summary": "Add versions",
         "release_url": "https://raw.githubusercontent.com/spuder/OpenSpool/main/firmware/manifest.json"
       },
       "parts": [
