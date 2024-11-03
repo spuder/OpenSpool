@@ -3,12 +3,11 @@ name: ESPHome Build and Commit Manifest
 on:
   push:
     branches: [main]
+    paths:
+      - 'firmware/**'
     paths-ignore:
-      - '**/manifest.json'
-  pull_request:
-    paths-ignore:
-      - '**/manifest.json'
-    branches: [main]
+      - 'firmware/manifest.json'
+
 
 jobs:
   build:
