@@ -1,6 +1,12 @@
 substitutions:
   name: openspool
   board: lolin_s2_mini
+  variant: esp32s2
+  rfid1_spi_interface: spi #any on Breadboard
+  rfid1_clk_pin: GPIO36 #39 on Breadboard version
+  rfid1_miso_pin: GPIO37
+  rfid1_mosi_pin: GPIO35
+  rfid1_ss_pin: GPIO34 #33 on Breadboard version
 
 esphome:
   name: ${name} #Don't use underscore '_' in name https://esphome.io/guides/faq.html#why-shouldn-t-i-use-underscores-in-my-device-name
