@@ -6,6 +6,7 @@ on:
     paths:
       - 'firmware/**'          # Include all files in firmware/
       - '!firmware/manifest.json'  # Exclude manifest.json
+      - .github/workflows/build.yaml #Include changes to this file
 
 jobs:
   build:
@@ -25,7 +26,7 @@ jobs:
         uses: esphome/build-action@v4.0.2
         with:
           yaml-file: firmware/config.yaml
-          release-summary: "Test" #TODO: change this to the commit message
+          release-summary: "{{ github.event.head_commit.message }}"
           complete-manifest: true
           release-url: "https://raw.githubusercontent.com/spuder/OpenSpool/main/firmware/manifest.json"
 
@@ -36,7 +37,7 @@ jobs:
       - name: Copy manifest to firmware folder
         run: |
           cp openspool-esp32s2/manifest.json firmware/manifest.json
-          cp opensppool-esp32s2/*.bin firmware
+          cp openspool-esp32s2/*.bin firmware/
 
       - name: Commit manifest file
         uses: EndBug/add-and-commit@v9
