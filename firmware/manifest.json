@@ -8,7 +8,7 @@
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "a5ab3ebb49c993fa20d91a57b42cdba0",
+        "md5": "daef6101f77069b50b543b0e6cb01a1a",
         "summary": "{{ github.event.head_commit.message }}",
         "release_url": "https://raw.githubusercontent.com/spuder/OpenSpool/main/firmware/manifest.json"
       },
