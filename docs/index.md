@@ -6,7 +6,7 @@ layout: home
 # OpenSpool Firmware Installation
 
 <div class="install-container">
-    <script type="module" src="https://unpkg.com/esp-web-tools@9.4.3/dist/web/install-button.js"></script>
+    <script type="module" src="https://unpkg.com/esp-web-tools@8.0.6/dist/web/install-button.js"></script>
 
     <h2>Install the firmware</h2>
     
