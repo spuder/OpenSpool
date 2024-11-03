@@ -4,10 +4,8 @@ on:
   push:
     branches: [main]
     paths:
-      - 'firmware/**'
-    paths-ignore:
-      - 'firmware/manifest.json'
-
+      - 'firmware/**'          # Include all files in firmware/
+      - '!firmware/manifest.json'  # Exclude manifest.json
 
 jobs:
   build:
