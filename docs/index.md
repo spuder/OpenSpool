@@ -19,9 +19,9 @@ layout: home
     <div class="instructions">
         <h3>Installation Instructions</h3>
         <p>1. Connect your OpenSpool device via USB</p>
-        <p>2. Press & Hold D0 Button
-        <p>3. Press RST Button
-        <p>4. Release both D0 and RST simultaneously
+        <p>2. Press & Hold D0 Button</p>
+        <p>3. Press RST Button</p>
+        <p>4. Release both D0 and RST simultaneously</p>
         <p>5. Click the Install button above</p>
         <p>6. Follow the installation wizard</p>
         
