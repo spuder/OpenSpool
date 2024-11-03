@@ -11,7 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
 
       - name: Create empty secrets file
         run: |
@@ -37,8 +39,8 @@ jobs:
       - name: Commit manifest file
         uses: EndBug/add-and-commit@v9
         with:
-          author_name: GitHub Action
-          author_email: github-actions[bot]@users.noreply.github.com
+          committer_name: GitHub Actions
+          committer_email: actions@github.com      
           message: Update manifest.json
           add: "firmware/manifest.json"
           push: true
