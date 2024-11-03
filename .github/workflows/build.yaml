@@ -36,6 +36,7 @@ jobs:
       - name: Copy manifest to firmware folder
         run: |
           cp openspool-esp32s2/manifest.json firmware/manifest.json
+          cp opensppool-esp32s2/*.bin firmware
 
       - name: Commit manifest file
         uses: EndBug/add-and-commit@v9
@@ -43,7 +44,7 @@ jobs:
           committer_name: GitHub Actions
           committer_email: actions@github.com      
           message: Update manifest.json
-          add: "firmware/manifest.json"
+          add: "firmware/manifest.json firmware/*.bin"
           push: true
 
       - name: Upload Artifacts
