@@ -2,7 +2,8 @@ title: OpenSpool
 description: Your filament wants to be free
 theme: just-the-docs
 
-url: https://just-the-docs.github.io
+# url: https://just-the-docs.github.io
+url: https://openspool.io
 
 aux_links:
   Template Repository: https://github.com/just-the-docs/just-the-docs-template
