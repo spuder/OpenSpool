@@ -28,3 +28,6 @@ callouts:
   important:
     title: Important
     color: blue
+  caution:
+    title: Caution
+    color: yellow

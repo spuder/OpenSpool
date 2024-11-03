@@ -13,6 +13,8 @@ layout: home
     <div class="button-row">
         <esp-web-install-button 
             manifest="https://raw.githubusercontent.com/spuder/OpenSpool/refs/heads/main/firmware/manifest.json">
+        <span slot="unsupported">🛑 <b>Only Chrome/Edge Supported</b> 🛑</span>
+        <span slot="not-allowed">🔒 HTTPS Required 🔒 </span>
         </esp-web-install-button>
     </div>
 
@@ -24,13 +26,11 @@ layout: home
         <p>4. Release both D0 and RST simultaneously</p>
         <p>5. Click the Install button above</p>
         <p>6. Follow the installation wizard</p>
-        
-        <p><strong>Note:</strong> Installation requires Chrome or Edge browser on desktop</p>
     </div>
 </div>
 
-{: .note}
-If the above step fails, see the [README on github](https://github.com/spuder/OpenSpool) for running `make run-usb` command to upload manually. 
+{: .caution }
+If the above step fails, see the [README on github](https://github.com/spuder/OpenSpool) to upload manually with command `make run-usb`. 
 
 # 🛠️ Configuration
 
@@ -39,7 +39,7 @@ Once the firmware is installed, You will need to join the RFID reader to the sam
 
 ## 🛜 Wireless Configuration
 
-1. Join the wifi network 'OpenSpool'
+1. Join the wifi network `OpenSpool`
 2. Navigate to [192.168.4.1](http://192.168.4.1)
 3. Enter your wifi credentials
 4. Reboot the RFID Reader
@@ -47,18 +47,24 @@ Once the firmware is installed, You will need to join the RFID reader to the sam
 
 ## 🖨️ Printer Configuration
 
-Once openspool has joined your network, navigate to `openspool-xxXXxx.local` (where xxXXxx are the last 6 digits of the mac address). Or the ip address. 
+Once openspool has joined your network, navigate to `openspool-xxxxxx.local` (where xxxxxx are the last 6 digits of the mac address). Or the ip address. 
 
-{: .note }
-Mac/Linux:  `arp -a| grep openspool`
-Windows: `arp -a` 
+{: .note-title } 
+> Finding IP Address
+>
+> Mac/Linux:  `arp -a| grep openspool`  
+> Windows: `arp -a` 
+
+  
 
 Enter your Printer IP, LAN Access Code and Serial Number
 
 ![](./images/printersettings.png)
 
-{: .note }
-`Printer IP`, `Lan Access Code` and `Serial Number` are stored locally on the microcontroller and never leave the device. Do not share your Acces Code with anyone. 
+{: .note-title }
+> Security
+>
+> `Printer IP`, `Lan Access Code` and `Serial Number` are stored locally on the microcontroller and never leave the device. Do not share your Acces Code with anyone. 
 
 ----
 
