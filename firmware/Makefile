@@ -52,6 +52,8 @@ run-usb-breadboard:
 	# you can then run the run-ota command which will preserve the wifi settings
 	# this is a workaround until eshome supports improv_serial on esp32s2
 	esphome \
+		-s board lolin_s2_mini \
+		-s variant esp32s2 \
 		-s rfid1_miso_pin "GPIO39" \
 		-s rfid1_clk_pin "GPIO36" \
 		-s rfid1_mosi_pin "GPIO35" \
