@@ -85,12 +85,21 @@ jobs:
       - name: Cd back to repo root
         run: cd ${{ github.workspace }}
 
+      - name: Debug
+        run: |
+          ls -al
+          ls -ial OpenSpool || true
+          ls -ial artifacts/ || true
+          ls -ial artifacts/openspool-${{ matrix.target }} || true
+
+      #TODO: Fail if upload artifacts is empty
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: openspool-${{ matrix.target }}
           path: artifacts/openspool-${{ matrix.target }}
           retention-days: 5
+          if-no-files-found: error
 
   combine-manifests:
     needs: [check-tag, build]
