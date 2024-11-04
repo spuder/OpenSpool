@@ -43,7 +43,6 @@ jobs:
           yaml-file: firmware/config-${{ matrix.target }}.yaml
           release-summary: ${{ env.RELEASE_SUMMARY }}
           release-url: "https://raw.githubusercontent.com/spuder/OpenSpool/main/artifacts/openspool-${{ matrix.target }}/manifest.json"
-          version: ${{ env.VERSION }}
           complete-manifest: false
 
       - name: List output files
