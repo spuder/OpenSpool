@@ -1,12 +1,9 @@
 name: ESPHome Build and Commit Manifest
 
 on:
-  push: #TODO: revert to just tags once working
-    branches:
-      - main 
-  # push:
-  #   tags:
-  #     - '[0-9]+.[0-9]+.[0-9]+*'
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+*'
 
 jobs:
   check-tag:
@@ -78,7 +75,7 @@ jobs:
       - name: Generate md5 checksum
         run: |
           mkdir -p artifacts/openspool-${{ matrix.target }}
-          mv -f openspool-${{ matrix.target }}/*.bin artifacts/openspool-${{ matrix.target }}/
+          mv -f openspool-${{ matrix.target }}/* artifacts/openspool-${{ matrix.target }}/
 
           for file in artifacts/openspool-${{ matrix.target }}/*.bin; do
             md5sum "$file" | awk '{print $1}' > "${file}.md5"
