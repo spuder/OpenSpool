@@ -154,24 +154,35 @@ jobs:
 
       - name: Update manifest
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          
-          # Fetch all branches and tags
-          git fetch --all --tags
-          
-          # Check out the main branch
+          # Stash all changes
+          git stash push -m "Stash before switching to main"
+
+          # Switch to the main branch
           git checkout main
-          
+
           # Pull latest changes from main
           git pull origin main
-          
-          # Apply the changes from the detached HEAD state
-          git checkout ${GITHUB_SHA} -- artifacts/
-          
-          # Add and commit the changes
+
+          # Apply the stash
+          git stash apply
+
+          # Set Git username and email
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+          # Add all changes in the artifacts/ folder
           git add artifacts/
-          git commit -m "Update combined manifest.json for version ${{ env.VERSION }}"
-          
-          # Push the changes
-          git push origin main
+
+          # Commit changes if there are any
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+            exit 1
+          else
+            git commit -m "Update artifacts after stash"
+            
+            # Push changes to main
+            git push origin main
+          fi
+
+          # Show final status
+          git status
