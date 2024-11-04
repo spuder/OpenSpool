@@ -1,6 +1,7 @@
 name: Update Documentation Version
 on:
   push:
+    branches: ["main"]
     paths:
       - 'artifacts/openspool-esp32s2/manifest.json'
 
