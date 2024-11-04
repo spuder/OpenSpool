@@ -5,8 +5,6 @@ on:
     branches: [main]
     paths:
       - 'firmware/**'          # Include all files in firmware/
-      - '!firmware/manifest.json'  # Exclude manifest.json
-      - '!firmware/*.bin'
       - .github/workflows/build.yaml #Include changes to this file
       - '!artifacts/*'
 

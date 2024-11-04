@@ -9,11 +9,15 @@ layout: home
     <script type="module" src="https://unpkg.com/esp-web-tools@8.0.6/dist/web/install-button.js"></script>
 
     <h2> 🔩 Install the firmware</h2>
+
+    Latest Versions:  
+    ![](https://img.shields.io/badge/esp32s2-0.1.0-magenta)
+    
     
     <div class="button-row">
         <esp-web-install-button 
             manifest="https://raw.githubusercontent.com/spuder/OpenSpool/refs/heads/main/artifacts/openspool-esp32s2/manifest.json">
-        <span slot="unsupported">🛑 <b>Only Chrome/Edge Supported</b> 🛑</span>
+        <span slot="unsupported">🛑 <b>Only ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white) / ![Edge](https://img.shields.io/badge/Edge-0078D7?style=for-the-badge&logo=Microsoft-edge&logoColor=white) Supported</b> 🛑</span>
         <span slot="not-allowed">🔒 HTTPS Required 🔒 </span>
         </esp-web-install-button>
     </div>
@@ -24,7 +28,7 @@ layout: home
         <p>2. Press & Hold D0 Button</p>
         <p>3. Press RST Button</p>
         <p>4. Release both D0 and RST simultaneously</p>
-        <p>5. Click the Install button above</p>
+        <p>5. Click the blue 'Connect' button above</p>
         <p>6. Follow the installation wizard</p>
     </div>
 </div>
