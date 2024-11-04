@@ -157,14 +157,17 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           
-          # Stash changes in artifacts/ folder
-          git stash push artifacts/ -m "Stash artifacts before pulling"
+          # Fetch all branches and tags
+          git fetch --all --tags
+          
+          # Check out the main branch
+          git checkout main
           
           # Pull latest changes from main
           git pull origin main
           
-          # Apply the stashed changes
-          git stash apply
+          # Apply the changes from the detached HEAD state
+          git checkout ${GITHUB_SHA} -- artifacts/
           
           # Add and commit the changes
           git add artifacts/
