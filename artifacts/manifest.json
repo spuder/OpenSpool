@@ -1,0 +1,37 @@
+{
+  "name": "OpenSpool",
+  "version": "0.0.0",
+  "builds": [
+    {
+      "chipFamily": "ESP32-S2",
+      "ota": {
+        "path": "openspool-esp32s2.ota.bin",
+        "md5": "48dad60c79f02efaf33d032bdc574322",
+        "summary": "Fix python build",
+        "release_url": "https://raw.githubusercontent.com/spuder/OpenSpool/main/artifacts/openspool-esp32s2/manifest.json"
+      },
+      "parts": [
+        {
+          "path": "openspool-esp32s2.factory.bin",
+          "offset": 0
+        }
+      ]
+    },
+    {
+      "chipFamily": "ESP32",
+      "ota": {
+        "path": "openspool-esp32.ota.bin",
+        "md5": "481eba20b304dcb375bc6f90ba38795c",
+        "summary": "Fix python build",
+        "release_url": "https://raw.githubusercontent.com/spuder/OpenSpool/main/artifacts/openspool-esp32/manifest.json"
+      },
+      "parts": [
+        {
+          "path": "openspool-esp32.factory.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ],
+  "new_install_prompt_erase": true
+}
