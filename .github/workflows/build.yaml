@@ -71,16 +71,23 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
-          path: artifacts
+          path: downloaded-artifacts
 
       - name: Combine manifests
         run: |
           python3 - <<EOF
           import json
           import sys
+          import os
+          
+          # List the contents of the downloaded-artifacts directory
+          print("Contents of downloaded-artifacts:")
+          for root, dirs, files in os.walk("downloaded-artifacts"):
+              for file in files:
+                  print(os.path.join(root, file))
           
           # Read the first manifest to get the version
-          with open('artifacts/openspool-esp32s2/manifest.json', 'r') as f:
+          with open('downloaded-artifacts/openspool-esp32s2/manifest.json', 'r') as f:
               first_manifest = json.load(f)
               if 'version' not in first_manifest:
                   print("Error: Version not found in the manifest.")
@@ -94,7 +101,7 @@ jobs:
           }
           
           for target in ['esp32s2', 'esp32']:
-              with open(f'artifacts/openspool-{target}/manifest.json', 'r') as f:
+              with open(f'downloaded-artifacts/openspool-{target}/manifest.json', 'r') as f:
                   manifest = json.load(f)
                   if manifest.get('version') != version:
                       print(f"Error: Version mismatch in {target} manifest.")
