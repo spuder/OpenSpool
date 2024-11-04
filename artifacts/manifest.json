@@ -1,13 +1,13 @@
 {
   "name": "OpenSpool",
-  "version": "0.1.20",
+  "version": "0.1.22",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "aa35f90bd8fe127334bbe0a49c5c2646",
-        "summary": "only build on tags"
+        "md5": "1446305e240146df33c4ef2264c95ddc",
+        "summary": "Fix typo"
       },
       "parts": [
         {
@@ -20,8 +20,8 @@
       "chipFamily": "ESP32",
       "ota": {
         "path": "openspool-esp32.ota.bin",
-        "md5": "3bbbca8190fa1aae91d826cd59c6e3fc",
-        "summary": "only build on tags"
+        "md5": "dda0c79f4bff4b64ad0f5cd90773f839",
+        "summary": "Fix typo"
       },
       "parts": [
         {
