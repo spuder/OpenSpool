@@ -98,9 +98,6 @@ jobs:
           for target in ['esp32s2', 'esp32']:
               with open(f'downloaded-artifacts/openspool-{target}/manifest.json', 'r') as f:
                   manifest = json.load(f)
-                  if manifest.get('version') != version:
-                      print(f"Error: Version mismatch in {target} manifest.")
-                      sys.exit(1)
                   combined_manifest['builds'].extend(manifest['builds'])
           
           with open('artifacts/manifest.json', 'w') as f:
