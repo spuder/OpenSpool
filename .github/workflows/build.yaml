@@ -8,6 +8,7 @@ on:
       - '!firmware/manifest.json'  # Exclude manifest.json
       - '!firmware/*.bin'
       - .github/workflows/build.yaml #Include changes to this file
+      - '!artifacts/*'
 
 jobs:
   build:
@@ -31,21 +32,21 @@ jobs:
           yaml-file: firmware/config.yaml
           release-summary: ${{ env.RELEASE_SUMMARY }}
           complete-manifest: true
-          release-url: "https://raw.githubusercontent.com/spuder/OpenSpool/main/firmware/manifest.json"
+          release-url: "https://raw.githubusercontent.com/spuder/OpenSpool/main/artifacts/openspool-esp32s2/manifest.json"
 
       - name: List output files
         run: |
           ls -l openspool-esp32s2
 
-      - name: Copy manifest to firmware folder
+      - name: Copy manifest to artifacts folder
         run: |
-          cp openspool-esp32s2/manifest.json firmware/manifest.json
-          cp openspool-esp32s2/*.bin firmware/
-          for file in firmware/*.bin; do
-            md5sum "$file" | awk '{print $1}' > "firmware/${file}.md5"
-            filelength=$(wc -c <"$file")
-            if [ "$filelength" -ne 33 ]; then
-              echo "md5 failed for $file"
+          mkdir -p artifacts
+          mv openspool-esp32s2 artifacts/
+          for file in artifacts/openspool-esp32s2/*.bin; do
+            md5sum "$file" | awk '{print $1}' > "${file}.md5"
+            md5_length=$(wc -c < "${file}.md5")
+            if [ "$md5_length" -ne 33 ]; then
+              echo "MD5 generation failed for $file (length: $md5_length)"
               exit 1
             fi
           done
@@ -57,22 +58,22 @@ jobs:
           committer_name: GitHub Actions
           committer_email: actions@github.com      
           message: Update manifest.json
-          add: "firmware/manifest.json firmware/*.bin firmware/*.md5"
+          add: "artifacts/*"
           push: true
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: openspool-esp32s2-${{ github.sha }}
-          path: |
-            openspool-esp32s2/*.bin
-            openspool-esp32s2/manifest.json
-          retention-days: 90
-  cleanup:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Delete old artifacts
-        uses: c-hive/gha-remove-artifacts@v1
-        with:
-          age: '90 days'
-          skip-recent: 5
+      # - name: Upload Artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: openspool-esp32s2-${{ github.sha }}
+      #     path: |
+      #       openspool-esp32s2/*.bin
+      #       openspool-esp32s2/manifest.json
+      #     retention-days: 90
+  # cleanup:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Delete old artifacts
+  #       uses: c-hive/gha-remove-artifacts@v1
+  #       with:
+  #         age: '90 days'
+  #         skip-recent: 5
