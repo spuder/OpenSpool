@@ -1,6 +1,6 @@
 {
   "name": "OpenSpool",
-  "version": "0.1.15",
+  "version": "0.1.19",
   "builds": [],
   "new_install_prompt_erase": true
 }
