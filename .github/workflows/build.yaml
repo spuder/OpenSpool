@@ -4,13 +4,34 @@ on:
   push:
     tags:
       - '[0-9]+.[0-9]+.[0-9]+*'
-    # paths:
-    #   - 'firmware/**'
-    #   - .github/workflows/build.yaml
-    #   - '!artifacts/*'
 
 jobs:
+  check-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      tag_on_main: ${{ steps.check_tag.outputs.tag_on_main }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if tag is on main branch
+        id: check_tag
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          TAG_COMMIT=$(git rev-list -n 1 $TAG_NAME)
+          MAIN_COMMIT=$(git rev-parse origin/main)
+          if git merge-base --is-ancestor $TAG_COMMIT $MAIN_COMMIT; then
+            echo "tag_on_main=true" >> $GITHUB_OUTPUT
+            echo "Tag is on main branch"
+          else
+            echo "tag_on_main=false" >> $GITHUB_OUTPUT
+            echo "Tag is not on main branch"
+          fi
   build:
+    needs: check-tag
+    if: needs.check-tag.outputs.tag_on_main == 'true'
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -70,7 +91,8 @@ jobs:
           retention-days: 5
 
   combine-manifests:
-    needs: build
+    needs: [check-tag, build]
+    if: needs.check-tag.outputs.tag_on_main == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -130,11 +152,23 @@ jobs:
           print(json.dumps(combined_manifest, indent=2))
           EOF
 
-      - name: Commit combined manifest file
-        uses: EndBug/add-and-commit@v9
-        with:
-          committer_name: GitHub Actions
-          committer_email: actions@github.com      
-          message: Update combined manifest.json
-          add: "artifacts/*"
-          push: true
+      - name: Update manifest
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          
+          # Stash changes in artifacts/ folder
+          git stash push artifacts/ -m "Stash artifacts before pulling"
+          
+          # Pull latest changes from main
+          git pull origin main
+          
+          # Apply the stashed changes
+          git stash apply
+          
+          # Add and commit the changes
+          git add artifacts/
+          git commit -m "Update combined manifest.json for version ${{ env.VERSION }}"
+          
+          # Push the changes
+          git push origin main
