@@ -39,8 +39,10 @@ jobs:
 
       - name: Copy manifest to firmware folder
         run: |
-          for file in openspool-esp32s2/*.bin; do
-            md5sum -q "$file" > "${file}.md5"
+          cp openspool-esp32s2/manifest.json firmware/manifest.json
+          cp openspool-esp32s2/*.bin firmware/
+          for file in firmware/*.bin; do
+            md5sum "$file" | awk '{print $1}' > "firmware/${file}.md5"
             filelength=$(wc -c <"$file")
             if [ "$filelength" -ne 33 ]; then
               echo "md5 failed for $file"
@@ -55,7 +57,7 @@ jobs:
           committer_name: GitHub Actions
           committer_email: actions@github.com      
           message: Update manifest.json
-          add: "openspool-esp32s2/*"
+          add: "firmware/manifest.json firmware/*.bin firmware/*.md5"
           push: true
 
       - name: Upload Artifacts
