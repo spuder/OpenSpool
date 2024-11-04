@@ -86,18 +86,13 @@ jobs:
               for file in files:
                   print(os.path.join(root, file))
           
-          # Read the first manifest to get the version
-          with open('downloaded-artifacts/openspool-esp32s2/manifest.json', 'r') as f:
-              first_manifest = json.load(f)
-              if 'version' not in first_manifest:
-                  print("Error: Version not found in the manifest.")
-                  sys.exit(1)
-              version = first_manifest['version']
-          
+          #TODO: Don't hard code version, instead get from common.yaml or git tag
+          version = "0.1.2"
           combined_manifest = {
               "name": "OpenSpool",
               "version": version,
-              "builds": []
+              "builds": [],
+              "new_install_prompt_erase": True
           }
           
           for target in ['esp32s2', 'esp32']:
