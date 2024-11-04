@@ -22,10 +22,8 @@ jobs:
             VERSION=$(jq -r .version artifacts/manifest.json)
 
             echo "VERSION=$VERSION"
-            sed -i 's/badge\/esp32-[^-]*-magenta/badge\/esp32-'"$VERSION"'-magenta/' docs/index.md
-            sed -i 's/badge\/esp32-[^-]*-magenta/badge\/esp32s2-'"$VERSION"'-magenta/' docs/index.md
-            sed -i 's/badge\/esp32-[^-]*-magenta/badge\/esp32-'"$VERSION"'-magenta/' README.md
-            sed -i 's/badge\/esp32-[^-]*-magenta/badge\/esp32s2-'"$VERSION"'-magenta/' README.md
+            sed -i 's/badge\/esp32-[^-]*-magenta/badge\/openspool-'"$VERSION"'-magenta/' docs/index.md
+            sed -i 's/badge\/esp32-[^-]*-magenta/badge\/openspool-'"$VERSION"'-magenta/' README.md
             cat docs/index.md | grep shields.io
 
       - name: Commit manifest file
