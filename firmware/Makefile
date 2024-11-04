@@ -19,10 +19,8 @@ build-esp32:
 	esphome config config-esp32.yaml
 	esphome compile config-esp32.yaml
 build-esp32s2:
-	#TODO: These are just tempoarary pin placeholders for testing, refactor to actual pins
 	esphome config config-esp32s2.yaml
 	esphome compile config-esp32s2.yaml
-
 build-d1-mini-s2-breadboard:
 	esphome \
 		-s version dev \ 
@@ -60,7 +58,7 @@ run-usb-breadboard:
 	# you can then run the run-ota command which will preserve the wifi settings
 	# this is a workaround until eshome supports improv_serial on esp32s2
 	esphome \
-		-s version dev \ 
+		-s version dev \
 		-s rfid1_miso_pin "GPIO39" \
 		-s rfid1_clk_pin "GPIO36" \
 		-s rfid1_mosi_pin "GPIO35" \
