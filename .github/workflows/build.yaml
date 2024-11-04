@@ -1,9 +1,12 @@
 name: ESPHome Build and Commit Manifest
 
 on:
-  push:
-    tags:
-      - '[0-9]+.[0-9]+.[0-9]+*'
+  push: #TODO: revert to just tags once working
+    branches:
+      - main 
+  # push:
+  #   tags:
+  #     - '[0-9]+.[0-9]+.[0-9]+*'
 
 jobs:
   check-tag:
@@ -70,6 +73,7 @@ jobs:
       - name: ls
         run: |
           ls -la
+          ls openspool-${{ matrix.target }}/* || true
 
       - name: Generate md5 checksum
         run: |
