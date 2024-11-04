@@ -58,10 +58,6 @@ jobs:
       - name: Set git sha
         run: echo "RELEASE_SUMMARY=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
 
-      - name: Cd to artifacts dir
-        run: |
-          mkdir -p artifacts/
-          cd artifacts/
 
       - name: Build ESPHome firmware
         uses: esphome/build-action@v4.0.2
@@ -73,6 +69,9 @@ jobs:
       
       - name: Generate md5 checksum
         run: |
+          mv -f openspool-${{ matrix.target }}/*.bin artifacts/openspool-${{ matrix.target }}/
+          mv -f manifest.json artifacts/openspool-${{ matrix.target }}/
+          
           for file in openspool-${{ matrix.target }}/*.bin; do
             md5sum "$file" | awk '{print $1}' > "${file}.md5"
             md5_length=$(wc -c < "${file}.md5")
@@ -82,17 +81,6 @@ jobs:
             fi
           done
 
-      - name: Cd back to repo root
-        run: cd ${{ github.workspace }}
-
-      - name: Debug
-        run: |
-          ls -al
-          ls -ial OpenSpool || true
-          ls -ial artifacts/ || true
-          ls -ial artifacts/openspool-${{ matrix.target }} || true
-
-      #TODO: Fail if upload artifacts is empty
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
