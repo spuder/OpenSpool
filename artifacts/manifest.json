@@ -1,13 +1,13 @@
 {
   "name": "OpenSpool",
-  "version": "0.1.10",
+  "version": "0.1.12",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "8b1c2d187b9fb877b5b6b09a04226386",
-        "summary": "View manifests",
+        "md5": "7b844d7220943b738c46fa9ef378d75e",
+        "summary": "Add PSRAM image",
         "release_url": "https://raw.githubusercontent.com/spuder/OpenSpool/main/artifacts/openspool-esp32s2/manifest.json"
       },
       "parts": [
@@ -21,8 +21,8 @@
       "chipFamily": "ESP32",
       "ota": {
         "path": "openspool-esp32.ota.bin",
-        "md5": "58c60f8d4b5f8392e6104e9914379e3a",
-        "summary": "View manifests",
+        "md5": "569e0540e1e92865b61c66e9a2a9c048",
+        "summary": "Add PSRAM image",
         "release_url": "https://raw.githubusercontent.com/spuder/OpenSpool/main/artifacts/openspool-esp32/manifest.json"
       },
       "parts": [
