@@ -76,7 +76,7 @@ jobs:
         run: |
           mkdir -p artifacts/openspool-${{ matrix.target }}
           mv -f openspool-${{ matrix.target }}/* artifacts/openspool-${{ matrix.target }}/
-          ls -la artifacts/openspool-${{ matrix.target }}1
+          ls -la artifacts/openspool-${{ matrix.target }}
 
           for file in artifacts/openspool-${{ matrix.target }}/*.bin; do
             md5sum "$file" | awk '{print $1}' > "${file}.md5"
