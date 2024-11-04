@@ -80,7 +80,7 @@ jobs:
           mkdir -p artifacts/openspool-${{ matrix.target }}
           mv -f openspool-${{ matrix.target }}/*.bin artifacts/openspool-${{ matrix.target }}/
 
-          for file in openspool-${{ matrix.target }}/*.bin; do
+          for file in artifacts/openspool-${{ matrix.target }}/*.bin; do
             md5sum "$file" | awk '{print $1}' > "${file}.md5"
             md5_length=$(wc -c < "${file}.md5")
             if [ "$md5_length" -ne 33 ]; then
