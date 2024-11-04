@@ -1,6 +1,6 @@
 {
   "name": "openspool",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "home_assistant_domain": "esphome",
   "new_install_prompt_erase": false,
   "builds": [
@@ -8,8 +8,8 @@
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "499dddeb37fbde39bb4b5f880ad87c70",
-        "summary": "Move to artifacts folder",
+        "md5": "7a605e1a483dd39abc3e08d73f22cb29",
+        "summary": "Bump version 0.1.1",
         "release_url": "https://raw.githubusercontent.com/spuder/OpenSpool/main/artifacts/openspool-esp32s2/manifest.json"
       },
       "parts": [
