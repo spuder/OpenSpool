@@ -4,13 +4,16 @@ on:
   push:
     branches: [main]
     paths:
-      - 'firmware/**'          # Include all files in firmware/
-      - .github/workflows/build.yaml #Include changes to this file
+      - 'firmware/**'
+      - .github/workflows/build.yaml
       - '!artifacts/*'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [esp32s2, esp32]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -24,23 +27,23 @@ jobs:
 
       - name: Set git sha
         run: echo "RELEASE_SUMMARY=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
+
       - name: Build ESPHome firmware
         uses: esphome/build-action@v4.0.2
         with:
-          yaml-file: firmware/config.yaml
+          yaml-file: firmware/config-${{ matrix.target }}.yaml
           release-summary: ${{ env.RELEASE_SUMMARY }}
-          complete-manifest: true
-          release-url: "https://raw.githubusercontent.com/spuder/OpenSpool/main/artifacts/openspool-esp32s2/manifest.json"
+          release-url: "https://raw.githubusercontent.com/spuder/OpenSpool/main/artifacts/openspool-${{ matrix.target }}/manifest.json"
 
       - name: List output files
         run: |
-          ls -l openspool-esp32s2
+          ls -l openspool-${{ matrix.target }}
 
       - name: Copy manifest to artifacts folder
         run: |
-          mkdir -p artifacts/openspool-esp32s2
-          mv openspool-esp32s2/* artifacts/openspool-esp32s2/
-          for file in artifacts/openspool-esp32s2/*.bin; do
+          mkdir -p artifacts/openspool-${{ matrix.target }}
+          mv openspool-${{ matrix.target }}/* artifacts/openspool-${{ matrix.target }}/
+          for file in artifacts/openspool-${{ matrix.target }}/*.bin; do
             md5sum "$file" | awk '{print $1}' > "${file}.md5"
             md5_length=$(wc -c < "${file}.md5")
             if [ "$md5_length" -ne 33 ]; then
@@ -48,29 +51,67 @@ jobs:
               exit 1
             fi
           done
-           
-      - name: Commit manifest file
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: openspool-${{ matrix.target }}
+          path: artifacts/openspool-${{ matrix.target }}
+          retention-days: 5
+
+  combine-manifests:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT }}
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+
+      - name: Combine manifests
+        run: |
+          python3 - <<EOF
+          import json
+          import sys
+          
+          # Read the first manifest to get the version
+          with open('artifacts/openspool-esp32s2/manifest.json', 'r') as f:
+              first_manifest = json.load(f)
+              if 'version' not in first_manifest:
+                  print("Error: Version not found in the manifest.")
+                  sys.exit(1)
+              version = first_manifest['version']
+          
+          combined_manifest = {
+              "name": "OpenSpool",
+              "version": version,
+              "builds": []
+          }
+          
+          for target in ['esp32s2', 'esp32']:
+              with open(f'artifacts/openspool-{target}/manifest.json', 'r') as f:
+                  manifest = json.load(f)
+                  if manifest.get('version') != version:
+                      print(f"Error: Version mismatch in {target} manifest.")
+                      sys.exit(1)
+                  combined_manifest['builds'].extend(manifest['builds'])
+          
+          with open('artifacts/manifest.json', 'w') as f:
+              json.dump(combined_manifest, f, indent=2)
+          
+          print(f"Combined manifest created with version: {version}")
+          EOF
+
+      - name: Commit combined manifest file
         uses: EndBug/add-and-commit@v9
         with:
           committer_name: GitHub Actions
           committer_email: actions@github.com      
-          message: Update manifest.json
+          message: Update combined manifest.json
           add: "artifacts/*"
           push: true
-
-      # - name: Upload Artifacts
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: openspool-esp32s2-${{ github.sha }}
-      #     path: |
-      #       openspool-esp32s2/*.bin
-      #       openspool-esp32s2/manifest.json
-      #     retention-days: 90
-  # cleanup:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Delete old artifacts
-  #       uses: c-hive/gha-remove-artifacts@v1
-  #       with:
-  #         age: '90 days'
-  #         skip-recent: 5

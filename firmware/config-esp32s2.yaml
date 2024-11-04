@@ -1,0 +1,6 @@
+esp32:
+  board: lolin_s2_mini
+  variant: esp32s2
+
+packages:
+  base: !include common.yaml

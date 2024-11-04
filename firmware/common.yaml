@@ -1,8 +1,6 @@
 substitutions:
   name: openspool
   version: "0.1.1"
-  board: lolin_s2_mini
-  variant: esp32s2
   rfid1_spi_interface: spi #any on Breadboard
   rfid1_clk_pin: GPIO36 #39 on Breadboard version
   rfid1_miso_pin: GPIO37
@@ -14,7 +12,7 @@ esphome:
   name_add_mac_suffix: true
   project:
     name: spuder.openspool
-    version: ${version}
+    version: ${version} #TODO: why is this changing in github actions, but not sticking in 'make' command?
     # on_update:
   min_version: 2024.10.1
   platformio_options:
@@ -39,20 +37,37 @@ esphome:
       - script.execute: set_led_off
 
 esp32:
-  board: ${board}
-  #variant: ${variant}
   framework:
     type: esp-idf
     version: recommended
+    # sdkconfig_options:
+      # MBEDTLS_CERTIFICATE_BUNDLE: y
+      # MBEDTLS_CERTIFICATE_BUNDLE_DEFAULT_FULL: y
+      # CONFIG_SPIRAM_SUPPORT: y
+      # CONFIG_SPIRAM_CACHE_WORKAROUND: y
+      # ESP32_SPIRAM_SUPPORT: y
+      # HEAP_POISONING_DISABLED: y  # Reduces overhead
+      # HEAP_TRACING_OFF: y         # Reduces overhead
+      # CONFIG_ESP32_IRAM_AS_8BIT_ACCESSIBLE_MEMORY: y
+      # CONFIG_ESP32_WIFI_STATIC_TX_BUFFER_NUM: 6
+      # CONFIG_ESP32_WIFI_DYNAMIC_TX_BUFFER_NUM: 32
+      # CONFIG_ESP32_WIFI_STATIC_RX_BUFFER_NUM: 6
+      # CONFIG_ESP32_WIFI_DYNAMIC_RX_BUFFER_NUM: 32
+      # CONFIG_LWIP_MAX_SOCKETS: 10
+      # CONFIG_LWIP_TCPIP_RECVMBOX_SIZE: 32
+      # CONFIG_BT_ENABLED: n
+      # CONFIG_ESP_MAIN_TASK_STACK_SIZE: 3072
+      # CONFIG_ESP_IPC_TASK_STACK_SIZE: 1024
+      # CONFIG_ESP_TIMER_TASK_STACK_SIZE: 3072
+      # CONFIG_ESP_SYSTEM_EVENT_TASK_STACK_SIZE: 2048
 
 logger:
 # MQTT and api are not compatible: https://esphome.io/components/mqtt.html
 # api:
 #   reboot_timeout: 0s
-# ota:
 
 packages:
-  uptime: !include conf.d/uptime.yaml
+  # uptime: !include conf.d/uptime.yaml
   wifi: !include conf.d/wifi.yaml
   web_server: !include conf.d/web_server.yaml
   #debug: !include conf.d/debug.yaml
@@ -65,6 +80,6 @@ packages:
   rc532_rfid: !include conf.d/rc532_rfid.yaml
   automation: !include conf.d/automation.yaml
   leds: !include conf.d/leds.yaml
-  #improv: !include conf.d/improv.yaml
-  #ota: !include conf.d/ota.yaml
+  improv: !include conf.d/improv.yaml
   # bambu_ams: !include conf.d/bambu_ams.yaml
+  update: !include conf.d/update.yaml

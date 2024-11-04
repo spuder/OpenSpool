@@ -1,0 +1,6 @@
+esp32:
+  board: esp32dev
+
+
+packages:
+  base: !include common.yaml
