@@ -51,7 +51,7 @@ Once the firmware is installed, You will need to join the RFID reader to the sam
 
 ## 🖨️ Printer Configuration
 
-Once openspool has joined your network, navigate to `openspool-xxxxxx.local` (where xxxxxx are the last 6 digits of the mac address). Or the ip address. 
+Once openspool has joined your network, navigate to `openspool-xxxxxx.local`, or ip address (where xxxxxx are the last 6 digits of the mac address).
 
 {: .note-title } 
 > Finding IP Address
