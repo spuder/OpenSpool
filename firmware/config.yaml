@@ -1,6 +1,6 @@
 substitutions:
   name: openspool
-  version: "0.1.0" #TODO: ensure this is always set
+  version: "0.1.1"
   board: lolin_s2_mini
   variant: esp32s2
   rfid1_spi_interface: spi #any on Breadboard
