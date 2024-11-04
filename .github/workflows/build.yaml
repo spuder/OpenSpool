@@ -40,7 +40,7 @@ jobs:
       - name: Copy manifest to firmware folder
         run: |
           for file in openspool-esp32s2/*.bin; do
-            md5 -q "$file" > "${file}.md5"
+            md5sum -q "$file" > "${file}.md5"
             filelength=$(wc -c <"$file")
             if [ "$filelength" -ne 33 ]; then
               echo "md5 failed for $file"
