@@ -172,7 +172,7 @@ jobs:
 
           # Add all changes in the artifacts/ folder
           git add artifacts/
-
+          git diff --staged || true
           # Commit changes if there are any
           if git diff --staged --quiet; then
             echo "No changes to commit"
