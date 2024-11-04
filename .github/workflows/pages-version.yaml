@@ -19,10 +19,16 @@ jobs:
       - name: Read manifest and update docs
         run: |
             # Read version from manifest.json
-            VERSION=$(jq -r .version artifacts/openspool-esp32s2/manifest.json)
-            echo "VERSION=$VERSION"
-            sed -i 's/badge\/esp32s2-[^-]*-magenta/badge\/esp32s2-'"$VERSION"'-magenta/' docs/index.md
-            sed -i 's/badge\/esp32s2-[^-]*-magenta/badge\/esp32s2-'"$VERSION"'-magenta/' README.md
+            eps32VERSION=$(jq -r .version artifacts/openspool-esp32/manifest.json)
+            esp32s2VERSION=$(jq -r .version artifacts/openspool-esp32s2/manifest.json)
+
+            echo "VERSION=$eps32VERSION"
+            sed -i 's/badge\/esp32-[^-]*-magenta/badge\/esp32-'"$eps32VERSION"'-magenta/' docs/index.md
+            sed -i 's/badge\/esp32-[^-]*-magenta/badge\/esp32-'"$eps32VERSION"'-magenta/' README.md
+            cat docs/index.md | grep shields.io
+            echo "VERSION=$esp32s2VERSION"
+            sed -i 's/badge\/esp32s2-[^-]*-magenta/badge\/esp32s2-'"$esp32s2VERSION"'-magenta/' docs/index.md
+            sed -i 's/badge\/esp32s2-[^-]*-magenta/badge\/esp32s2-'"$esp32s2VERSION"'-magenta/' README.md
             cat docs/index.md | grep shields.io
 
       - name: Commit manifest file

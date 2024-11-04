@@ -3,11 +3,14 @@
 
 # OpenSpool
 
-![](https://img.shields.io/badge/esp32s2-0.0.2-magenta)
-
-Track all your filament with NFC tags
-
+![](https://img.shields.io/badge/esp32s2-0.0.2-magenta) 
+[![ESPHome Build and Commit Manifest](https://github.com/spuder/OpenSpool/actions/workflows/build.yaml/badge.svg)](https://github.com/spuder/OpenSpool/actions/workflows/build.yaml)  
 [![](https://dcbadge.limes.pink/api/server/4EaXHu9CEj)](https://discord.gg/4EaXHu9CEj)
+
+---
+**Track all your filament with RFID tags**
+
+
 
 
 

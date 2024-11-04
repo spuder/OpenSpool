@@ -16,21 +16,8 @@ clean:
 	rm -rf .esphome/idedata/*
 	rm -rf ~/.platformio/penv
 build-esp32:
-	#TODO: replace with real pin numbers, not just placeholders
-	esphome \
-		-s rfid1_miso_pin "GPIO21" \
-		-s rfid1_clk_pin "GPIO22" \
-		-s rfid1_mosi_pin "GPIO23" \
-		-s rfid1_ss_pin "GPIO25" \
-		-s rfid1_spi_interface "any" \
-		config config-esp32.yaml
-	esphome \
-		-s rfid1_miso_pin "GPIO21" \
-		-s rfid1_clk_pin "GPIO22" \
-		-s rfid1_mosi_pin "GPIO23" \
-		-s rfid1_ss_pin "GPIO25" \
-		-s rfid1_spi_interface "any" \
-		compile config-esp32.yaml
+	esphome config config-esp32.yaml
+	esphome compile config-esp32.yaml
 build-esp32s2:
 	#TODO: These are just tempoarary pin placeholders for testing, refactor to actual pins
 	esphome config config-esp32s2.yaml
