@@ -2,12 +2,12 @@ name: ESPHome Build and Commit Manifest
 
 on:
   push:
-    #TODO: reaplace with tags only
-    branches: [main]
-    paths:
-      - 'firmware/**'
-      - .github/workflows/build.yaml
-      - '!artifacts/*'
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+*'
+    # paths:
+    #   - 'firmware/**'
+    #   - .github/workflows/build.yaml
+    #   - '!artifacts/*'
 
 jobs:
   build:
@@ -43,7 +43,8 @@ jobs:
           yaml-file: firmware/config-${{ matrix.target }}.yaml
           release-summary: ${{ env.RELEASE_SUMMARY }}
           release-url: "https://raw.githubusercontent.com/spuder/OpenSpool/main/artifacts/openspool-${{ matrix.target }}/manifest.json"
-          esphome_version: ${{ env.VERSION }}
+          version: ${{ env.VERSION }}
+          complete-manifest: false
 
       - name: List output files
         run: |
