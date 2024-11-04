@@ -51,7 +51,6 @@ jobs:
             fi
           done
            
-
       - name: Commit manifest file
         uses: EndBug/add-and-commit@v9
         with:

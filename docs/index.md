@@ -12,7 +12,7 @@ layout: home
     
     <div class="button-row">
         <esp-web-install-button 
-            manifest="https://raw.githubusercontent.com/spuder/OpenSpool/refs/heads/main/firmware/manifest.json">
+            manifest="https://raw.githubusercontent.com/spuder/OpenSpool/refs/heads/main/artifacts/openspool-esp32s2/manifest.json">
         <span slot="unsupported">🛑 <b>Only Chrome/Edge Supported</b> 🛑</span>
         <span slot="not-allowed">🔒 HTTPS Required 🔒 </span>
         </esp-web-install-button>
