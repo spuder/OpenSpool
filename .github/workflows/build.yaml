@@ -38,8 +38,8 @@ jobs:
 
       - name: Copy manifest to artifacts folder
         run: |
-          mkdir -p artifacts
-          mv openspool-esp32s2 artifacts/
+          mkdir -p artifacts/openspool-esp32s2
+          mv openspool-esp32s2/* artifacts/openspool-esp32s2/
           for file in artifacts/openspool-esp32s2/*.bin; do
             md5sum "$file" | awk '{print $1}' > "${file}.md5"
             md5_length=$(wc -c < "${file}.md5")
