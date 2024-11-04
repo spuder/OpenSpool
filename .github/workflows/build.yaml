@@ -69,6 +69,7 @@ jobs:
       - name: List output files
         run: |
           ls -l openspool-${{ matrix.target }}
+          cat openspool-${{ matrix.target }}/manifest.json
 
       - name: Copy manifest to artifacts folder
         run: |
