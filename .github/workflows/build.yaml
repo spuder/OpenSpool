@@ -70,6 +70,8 @@ jobs:
         run: |
           ls -l openspool-${{ matrix.target }}
           cat openspool-${{ matrix.target }}/manifest.json
+          ls -l artifacts/
+          ls -l artifacts/openspool-${{ matrix.target }}
 
       - name: Copy manifest to artifacts folder
         run: |
@@ -83,6 +85,12 @@ jobs:
               exit 1
             fi
           done
+
+      - name: List output files
+        run: |
+          ls -l openspool-${{ matrix.target }}
+          ls -l artifacts/
+          ls -l artifacts/openspool-${{ matrix.target }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
