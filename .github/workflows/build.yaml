@@ -67,11 +67,14 @@ jobs:
           #release-url: "https://raw.githubusercontent.com/spuder/OpenSpool/main/artifacts/openspool-${{ matrix.target }}/manifest.json"
           complete-manifest: false
       
+      - name: ls
+        run: |
+          ls -la
+
       - name: Generate md5 checksum
         run: |
           mkdir -p artifacts/openspool-${{ matrix.target }}
           mv -f openspool-${{ matrix.target }}/*.bin artifacts/openspool-${{ matrix.target }}/
-          mv -f manifest.json artifacts/openspool-${{ matrix.target }}/
 
           for file in openspool-${{ matrix.target }}/*.bin; do
             md5sum "$file" | awk '{print $1}' > "${file}.md5"
