@@ -58,25 +58,21 @@ jobs:
       - name: Set git sha
         run: echo "RELEASE_SUMMARY=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
 
+      - name: Cd to artifacts dir
+        run: |
+          mkdir -p artifacts/openspool-${{ matrix.target }}
+          cd artifacts/openspool-${{ matrix.target }}
+
       - name: Build ESPHome firmware
         uses: esphome/build-action@v4.0.2
         with:
-          yaml-file: firmware/config-${{ matrix.target }}.yaml
+          yaml-file: ${{ github.workspace }}/firmware/config-${{ matrix.target }}.yaml
           release-summary: ${{ env.RELEASE_SUMMARY }}
-          release-url: "https://raw.githubusercontent.com/spuder/OpenSpool/main/artifacts/openspool-${{ matrix.target }}/manifest.json"
+          #release-url: "https://raw.githubusercontent.com/spuder/OpenSpool/main/artifacts/openspool-${{ matrix.target }}/manifest.json"
           complete-manifest: false
-
-      - name: List output files
+      
+      - name: Generate md5 checksum
         run: |
-          ls -l
-          ls -l openspool-${{ matrix.target }}
-          cat openspool-${{ matrix.target }}/manifest.json
-          ls -l artifacts/
-
-      - name: Copy manifest to artifacts folder
-        run: |
-          mkdir -p artifacts/openspool-${{ matrix.target }}
-          mv openspool-${{ matrix.target }}/* artifacts/openspool-${{ matrix.target }}/
           for file in artifacts/openspool-${{ matrix.target }}/*.bin; do
             md5sum "$file" | awk '{print $1}' > "${file}.md5"
             md5_length=$(wc -c < "${file}.md5")
@@ -86,10 +82,8 @@ jobs:
             fi
           done
 
-      - name: List output files
-        run: |
-          ls -l openspool-${{ matrix.target }}
-          ls -l artifacts/
+      - name: Cd back to repo root
+        run: cd ${{ github.workspace }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
