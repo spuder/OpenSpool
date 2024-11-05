@@ -1,7 +1,5 @@
-wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-  # state_topic:
+# NOTE None of these metrics are available until device is connected to MQTT
+# This feels like a bug, but not sure why
 
 debug:
   update_interval: 5s
