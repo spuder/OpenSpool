@@ -1,4 +1,4 @@
-name: ESPHome Build and Commit Manifest
+name: Build ESPHome
 
 on:
   push:
@@ -62,7 +62,7 @@ jobs:
         run: |
           sed -i "s/0.0.0/${{ env.VERSION }}/g" firmware/common.yaml
           cat firmware/common.yaml
-          
+
       - name: Build ESPHome firmware
         uses: esphome/build-action@v4.0.2
         with:
