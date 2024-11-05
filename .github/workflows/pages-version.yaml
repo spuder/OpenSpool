@@ -24,7 +24,10 @@ jobs:
             echo "VERSION=$VERSION"
             sed -i 's/badge\/openspool-[^-]*-magenta/badge\/openspool-'"$VERSION"'-magenta/' docs/index.md
             sed -i 's/badge\/openspool-[^-]*-magenta/badge\/openspool-'"$VERSION"'-magenta/' README.md
+            echo "docs/index.md"
             cat docs/index.md | grep shields.io
+            echo "README.md"
+            cat README.md | grep shields.io
 
       - name: Commit manifest file
         uses: EndBug/add-and-commit@v9
