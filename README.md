@@ -42,7 +42,7 @@ OpenSpool supports 2 protocols
 - [OpenSourceRFID](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/blob/main/OpenSourceRfid.md)  #Pending 
 - OpenSpool  
 
-### OpenSourceRFID Protocol
+### 🧬 OpenSourceRFID Protocol
 
 The OpenSourceRFID protocol is still pending finalization, once it is finalized it will be the preferred protocol for OpenSpool. OpenSourceRFID has momentium from suppliers [PolarFilament](https://polarfilament.com) and [3D-fuel](https://www.3dfuel.com)
 It uses Mifare 1k classic RFID tags. 
@@ -50,7 +50,7 @@ It uses Mifare 1k classic RFID tags.
 Follow [this github page](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/blob/main/OpenSourceRfid.md) for updates to OpenSourceRFID
 
 
-### OpenSpool Protocol
+### 🧬 OpenSpool Protocol
 
 OpenSpool aims to use the simplest possible protocol for RFID tags. All you need is a [13.56Mhz RFID tag](https://a.co/d/5ojDUNk) that supports NDEF records (NFC Tags) and has atleast 500 bytes of memory. NTAG 215/216 are a great choice. Purchasing links provided below. 
 
@@ -76,7 +76,7 @@ payload =
 <img src="./images/phone2.png" width="400">
 
 
-## Integrations
+## 🐼 Integrations
 
 Currently OpenSpool only works with Bambu printers over mqtt. Other integrations are planned. Pull Requests welcome
 
@@ -89,7 +89,7 @@ Currently OpenSpool only works with Bambu printers over mqtt. Other integrations
 | SpoolMan | ❔ |
 | Klipper / Moonraker | ❔ |
 
-## Hardware
+## 🐼 Hardware
 
 OpenSpool requires an ESP32-S2 and PN532 NFC Reader that supports SPI. 
 
@@ -113,8 +113,8 @@ OpenSpool requires an ESP32-S2 and PN532 NFC Reader that supports SPI.
 
 # Wiring Diagram
 
-![](./images/WiringDiagram2.png)
 
+<img src="./images/WiringDiagram2.png" width="600">
 
 Be sure to put the PN532 into `SPI` mode (not `i2c` or `UART`)
 
@@ -138,7 +138,7 @@ In order to comply with the [OpenSourceRfid standard](https://github.com/Bambu-R
 
 ![](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/raw/main/images/TagLocation.png))
 
-## Firmware
+## 🤖 Firmware
 
 The recomended method to install firmware is by navigating to [openspool.io](https://openspool.io) in Chrome/Edge and using the web based programming tool. 
 
@@ -163,22 +163,17 @@ ls /dev/cu*
 Upload firmware and restart
 
 ```bash
-USB_ADDRESS=/dev/cu.usbmodemXXXXX make run-usb
+USB_ADDRESS=/dev/cu.usbmodemXXXXX make run-usb-pcb
 ```
 
-## Windows
-
-TODO: Document windows flashing procedure
-
-
-## First Time Configuration
+## 🛜 First Time Configuration
 
 A new wifi network will appear called `OpenSpool`, join the network, navigate to [192.168.4.1](http://192.168.4.1),  insert your wifi credentials and reboot. 
 
 You can then navigate to the web interface at `openspool-xxxxxx.local` or ip address. 
 
 
-## Configuration
+## 🎛️ Configuration
 
 On first boot, you will need to specify your 3d printer IP Address, Serial Number and Lan Access Code. 
 
@@ -192,12 +187,12 @@ Upon successful connection to the 3d printer, you will observe a checkmark next 
 ![](./images/WebInterface1.png)
 
 
-## Facotry Reset
+## Factory Reset
 
 Press and hold the D0 button for 10 seconds. 
 This will erase wifi credentials and bambu access credentials from OpenSpool. 
 
-# Troubleshooting
+# 🔧 Troubleshooting
 
 ### LED is breathing blue
 This means the OpenSpool is hosting a wireless access point called 'OpenSpool'. Connect to it then navigate to [192.168.4.1](http://192.168.4.1) to configure wifi. 
@@ -236,7 +231,7 @@ Use the [MQTTX client](https://mqttx.app) to observe the messages that OpenSpool
 mqttx sub -t 'device/$SERIAL_NUMBER/report' -u -P $LAN_ACCESS_CODE --mqtt-version 3.1.1 -h $IP_ADDRESS -p 8883 -l mqtts --insecure
 ```
 
-# License
+# 🪪 License
 
 
 <p xmlns:cc="http://creativecommons.org/ns#" >Software, Hardware and 3d models are released under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
