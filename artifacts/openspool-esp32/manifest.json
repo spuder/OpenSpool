@@ -1,0 +1,14 @@
+{
+  "chipFamily": "ESP32",
+  "ota": {
+    "path": "openspool-esp32.ota.bin",
+    "md5": "e7738c7a0349420c03ce5566faf6d76e",
+    "summary": "Clean artifacts"
+  },
+  "parts": [
+    {
+      "path": "openspool-esp32.factory.bin",
+      "offset": 0
+    }
+  ]
+}
