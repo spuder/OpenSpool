@@ -5,7 +5,7 @@ layout: home
 
 # 📟 OpenSpool Firmware Installation
 
-![](https://img.shields.io/badge/openspool-0.1.24-magenta)
+![](https://img.shields.io/badge/openspool-0.1.25-magenta)
 
 <div class="install-container">
     <script type="module" src="https://unpkg.com/esp-web-tools@8.0.6/dist/web/install-button.js"></script>
