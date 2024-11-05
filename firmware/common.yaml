@@ -3,7 +3,7 @@ substitutions:
   version: "0.1.1"
 
 esphome:
-  name: ${name} #Don't use underscore '_' in name https://esphome.io/guides/faq.html#why-shouldn-t-i-use-underscores-in-my-device-name
+  name: ${name}
   name_add_mac_suffix: true
   project:
     name: spuder.openspool
