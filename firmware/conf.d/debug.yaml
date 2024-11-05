@@ -13,8 +13,8 @@ text_sensor:
     name: "Current Firmware Version"
     hide_timestamp: true
     state_topic:
-    web_server:
-      sorting_group_id: sorting_group_firmware
+    # web_server:
+    #   sorting_group_id: sorting_group_firmware
 
   - platform: debug
     device:
