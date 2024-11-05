@@ -32,7 +32,9 @@ esphome:
 esp32:
   framework:
     type: esp-idf
-    version: recommended
+    version: 5.3.1
+    platform_version: 6.8.1
+    # version: recommended
     # sdkconfig_options:
       # MBEDTLS_CERTIFICATE_BUNDLE: y
       # MBEDTLS_CERTIFICATE_BUNDLE_DEFAULT_FULL: y

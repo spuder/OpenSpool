@@ -3,7 +3,38 @@
 
 debug:
   update_interval: 5s
-# https://esphome.io/components/logger.html
-# logger:
-#   # level: debug
+
+logger:
+  level: debug
 #   level: VERBOSE #TODO: drop to debug
+
+text_sensor:
+  - platform: version
+    name: "Current Firmware Version"
+    hide_timestamp: true
+    state_topic:
+    web_server:
+      sorting_group_id: sorting_group_firmware
+
+  - platform: debug
+    device:
+      name: "Device Info"
+      state_topic:
+    reset_reason:
+      name: "Reset Reason"
+      state_topic:
+
+sensor:
+  - platform: debug
+    free:
+      name: "Heap Free"
+      state_topic:
+    block:
+      name: "Heap Max Block"
+      state_topic:
+    loop_time:
+      name: "Loop Time"
+      state_topic:
+    # psram: #TODO: only enable this if device has PSRAM
+    #   name: "Free PSRAM"
+    #   state_topic:
