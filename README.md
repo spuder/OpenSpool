@@ -3,7 +3,7 @@
 
 # OpenSpool
 
-![](https://img.shields.io/badge/openspool-v0.1.35-magenta) 
+![](https://img.shields.io/badge/openspool-v0.1.36-magenta) 
 [![ESPHome Build and Commit Manifest](https://github.com/spuder/OpenSpool/actions/workflows/build.yaml/badge.svg)](https://github.com/spuder/OpenSpool/actions/workflows/build.yaml)  
 [![](https://dcbadge.limes.pink/api/server/4EaXHu9CEj)](https://discord.gg/4EaXHu9CEj)
 
