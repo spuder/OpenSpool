@@ -5,7 +5,6 @@ layout: home
 
 # 📟 OpenSpool Firmware Installation
 
-Latest Versions:  
 ![](https://img.shields.io/badge/openspool-0.1.24-magenta)
 
 <div class="install-container">
