@@ -14,4 +14,7 @@ web_server:
     - id: sorting_group_rfid
       name: "RFID Programming"
       sorting_weight: -10
+    - id: sorting_group_info
+      name: "Information"
+      sorting_weight: -5
   # TODO: add auth

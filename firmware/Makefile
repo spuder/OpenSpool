@@ -58,15 +58,12 @@ run-usb-breadboard:
 	# you can then run the run-ota command which will preserve the wifi settings
 	# this is a workaround until eshome supports improv_serial on esp32s2
 	esphome \
-		-s version dev \
 		-s rfid1_miso_pin "GPIO39" \
 		-s rfid1_clk_pin "GPIO36" \
 		-s rfid1_mosi_pin "GPIO35" \
 		-s rfid1_ss_pin "GPIO33" \
 		-s rfid1_spi_interface "any" \
 		run config-esp32s2.yaml --device $(USB_ADDRESS)
-	# podman run -v $PWD:/data -it ghcr.io/esphome/esphome:dev compile /data/config.yaml
-	# podman run -v $PWD:/data --device=$(USB_ADDRESS) -it ghcr.io/esphome/esphome:dev run /data/config.yaml --device $(USB_ADDRESS)
 run-usb-pcb:
 	esphome \
 		run config-esp32s2.yaml --device $(USB_ADDRESS)
