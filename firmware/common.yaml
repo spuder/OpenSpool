@@ -1,5 +1,6 @@
 substitutions:
   name: openspool
+  version: "0.0.0" # Keep this empty as github-actions will modify it at build time
 
 esphome:
   name: ${name}
