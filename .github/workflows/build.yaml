@@ -119,6 +119,13 @@ jobs:
         with:
           path: downloaded-artifacts
 
+      - name: Clean artifacts
+        run: |
+          rm -rf artifacts/manifest.json
+          rm -rf artfacts/openspool-*
+          cp -R downloaded-artifacts/* artifacts
+          ls -al artifacts
+
       - name: Combine manifests
         run: |
           python3 - <<EOF
