@@ -1,13 +1,13 @@
 {
   "name": "OpenSpool",
-  "version": "v0.1.33",
+  "version": "v0.1.35",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "a7a603b5bf6250ea36e9f381e5dc5900",
-        "summary": "Modify version"
+        "md5": "313aaaf77da9d37b6ce70798c5f1fc0e",
+        "summary": "Merge branch 'main' of github.com:spuder/OpenSpool"
       },
       "parts": [
         {
@@ -20,8 +20,8 @@
       "chipFamily": "ESP32",
       "ota": {
         "path": "openspool-esp32.ota.bin",
-        "md5": "f7a8b1a13e7fe7d7cd084367c9a2e670",
-        "summary": "Modify version"
+        "md5": "03e54c745c8d27182fabe8ecb97fcef8",
+        "summary": "Merge branch 'main' of github.com:spuder/OpenSpool"
       },
       "parts": [
         {
