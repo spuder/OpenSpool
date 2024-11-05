@@ -6,7 +6,7 @@ layout: home
 # 📟 OpenSpool Firmware Installation
 
 Latest Versions:  
-![](https://img.shields.io/badge/esp32s2-0.1.10-magenta) ![](https://img.shields.io/badge/esp32s2-0.1.1-magenta)
+![](https://img.shields.io/badge/openspool-0.1.10-magenta)
 
 <div class="install-container">
     <script type="module" src="https://unpkg.com/esp-web-tools@8.0.6/dist/web/install-button.js"></script>
@@ -15,7 +15,7 @@ Latest Versions:
     
     <div class="button-row">
         <esp-web-install-button 
-            manifest="https://raw.githubusercontent.com/spuder/OpenSpool/refs/heads/main/artifacts/openspool-esp32s2/manifest.json">
+            manifest="https://raw.githubusercontent.com/spuder/OpenSpool/refs/heads/main/artifacts/manifest.json">
         <span slot="unsupported">🛑  <b>Only <img src="https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white" alt="Google Chrome"> / <img src="https://img.shields.io/badge/Edge-0078D7?style=for-the-badge&logo=Microsoft-edge&logoColor=white" alt="Edge"> Supported</b> 🛑</span>
 
         <span slot="not-allowed">🔒 HTTPS Required 🔒 </span>
