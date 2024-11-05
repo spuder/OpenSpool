@@ -2,8 +2,8 @@
   "chipFamily": "ESP32",
   "ota": {
     "path": "openspool-esp32.ota.bin",
-    "md5": "d7b4847958a979d9413f11c16ef2f619",
-    "summary": "Cleanup"
+    "md5": "6f1428167e2e5c16dc8c4b58b59b6ae6",
+    "summary": "Update manifest.json"
   },
   "parts": [
     {
