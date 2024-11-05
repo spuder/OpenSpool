@@ -123,7 +123,11 @@ jobs:
         run: |
           rm -rf artifacts/manifest.json
           rm -rf artfacts/openspool-*
-          cp -R downloaded-artifacts/* artifacts
+          cp downloaded-artifacts/manifest.json artifacts/
+          cp downloaded-artifacts/openspool-esp32/*.bin artifacts/
+          cp downloaded-artifacts/openspool-esp32/*.md5 artifacts/
+          cp downloaded-artifacts/openspool-esp32s2/*.bin artifacts/
+          cp downloaded-artifacts/openspool-esp32s2/*.md5 artifacts/
           ls -al artifacts
 
       - name: Combine manifests
