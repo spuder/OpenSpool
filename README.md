@@ -3,7 +3,7 @@
 
 # OpenSpool
 
-![](https://img.shields.io/badge/openspool-v0.1.36-magenta)
+![](https://img.shields.io/badge/openspool-v0.1.40-magenta)
 ![](https://github.com/spuder/openspool/actions/workflows/build.yaml/badge.svg)
 ![](https://github.com/spuder/openspool/actions/workflows/pages.yaml/badge.svg)
 [![](https://dcbadge.limes.pink/api/server/4EaXHu9CEj)](https://discord.gg/4EaXHu9CEj)
