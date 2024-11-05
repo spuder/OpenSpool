@@ -2,21 +2,21 @@
 <img src="./images/OpenSpoolLogo.png" width="200">
 
 # OpenSpool
+**Your filament wants to be free**
 
 ![](https://img.shields.io/badge/openspool-v0.1.36-magenta)
-![](https://github.com/spuder/openspool/actions/workflows/build.yaml/badge.svg)
+![](https://github.com/spuder/openspool/actions/workflows/esphome.yaml/badge.svg)
 ![](https://github.com/spuder/openspool/actions/workflows/pages.yaml/badge.svg)
 [![](https://dcbadge.limes.pink/api/server/4EaXHu9CEj)](https://discord.gg/4EaXHu9CEj)
 
 ---
-**Track all your filament with RFID tags**
 
 
+# 📖 [OpenSpool.io](https://openspool.io)
 
+Checkout the ofifical documentation on [https://openspool.io](https://openspool.io) 👈
 
-
-## Official Documentation: [openspool.io](https://openspool.io)
-
+---
 
 Adhere NFC stickers on all your filament. Build an ESP32 OpenSpool reader and place it next to your printer. 
 Touching the filament to the reader will automatically update your Bambu Printer filament settings. 
@@ -29,13 +29,13 @@ Almost as seamlessly as if you were using Bambu filament with an AMS.
 - Change filament in 10 seconds using 1 hand. 
 - 100% reliability so that filament can be changed with your eyes closed. 
 
-## Demo
+## 🎥 Demo
 
 [![](https://img.youtube.com/vi/ah7dm-dtQ5w/0.jpg)](https://youtube.com/watch?v=ah7dm-dtQ5w)
 
 
 
-## Protocol
+## 🖨️ Protocol
 
 OpenSpool supports 2 protocols
 
