@@ -10,6 +10,7 @@ light:
     default_transition_length: 0.4s
     restore_mode: ALWAYS_OFF
     state_topic:
+    entity_category: diagnostic
     effects:
       - addressable_rainbow:
           name: Rainbow

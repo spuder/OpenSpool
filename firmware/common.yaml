@@ -6,7 +6,7 @@ esphome:
   name_add_mac_suffix: true
   project:
     name: spuder.openspool
-    version: ${version} #TODO: why is this changing in github actions, but not sticking in 'make' command?
+    version: ${version}
     # on_update:
   min_version: 2024.10.1
   platformio_options:

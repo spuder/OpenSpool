@@ -32,5 +32,5 @@ jobs:
           committer_name: GitHub Actions
           committer_email: actions@github.com      
           message: Update manifest.json
-          add: "docs/*.md"
+          add: "docs/*.md README.md"
           push: true
