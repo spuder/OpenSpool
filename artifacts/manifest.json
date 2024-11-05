@@ -1,13 +1,13 @@
 {
   "name": "OpenSpool",
-  "version": "v0.1.31",
+  "version": "v0.1.32",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "a85124800e434b8672ed5fb470ba3dcc",
-        "summary": "Remove non existent file"
+        "md5": "b616defc16565f65aa46690291e25545",
+        "summary": "Add echos"
       },
       "parts": [
         {
@@ -20,8 +20,8 @@
       "chipFamily": "ESP32",
       "ota": {
         "path": "openspool-esp32.ota.bin",
-        "md5": "3878878d97f745e31b2597326dc39e17",
-        "summary": "Remove non existent file"
+        "md5": "4b5aadede153b3b6deca07b938bf2667",
+        "summary": "Add echos"
       },
       "parts": [
         {
