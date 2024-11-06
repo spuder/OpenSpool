@@ -8,129 +8,166 @@ binary_sensor:
       sorting_group_id: sorting_group_rfid
 
 spi:
-  clk_pin: ${rfid1_clk_pin} # SCK # Breadboard=GPIO39, PCB=GPIO36
-  miso_pin: ${rfid1_miso_pin} # MO/SDA/TX (MISO)
-  mosi_pin: ${rfid1_mosi_pin} # M (MOSI)
-  interface: ${rfid1_spi_interface}
+  - id: spi_i2c_bus_a
+    clk_pin: ${rfid1_clk_pin} # SCK # Breadboard=GPIO39, PCB=GPIO36
+    miso_pin: ${rfid1_miso_pin} # MO/SDA/TX (MISO)
+    mosi_pin: ${rfid1_mosi_pin} # M (MOSI)
+    interface: ${rfid1_spi_interface}
 
 pn532_spi:
-  cs_pin: ${rfid1_ss_pin} # NSS/SCL/RX # Breadboard=GPIO33, PCB=GPIO34
-  id: nfc_reader
-  update_interval: 1s
-  on_tag_removed:
-    then:
-      - script.execute: set_led_white #TODO: don't assume white instead default back to the default led state (breathing, blinkinig ect..)
-      - binary_sensor.template.publish:
-          id: nfc_tag_present
-          state: OFF
+  - id: rfid_reader_spi_1
+    cs_pin: ${rfid1_ss_pin} # NSS/SCL/RX # Breadboard=GPIO33, PCB=GPIO34
+    spi_id: spi_i2c_bus_a
+    update_interval: 1s
+    on_tag_removed:
+      then:
+        - script.execute: set_led_white #TODO: don't assume white instead default back to the default led state (breathing, blinkinig ect..)
+        - binary_sensor.template.publish:
+            id: nfc_tag_present
+            state: OFF
+        - lambda: |-
+            id(filament_raw_data).publish_state("");
+    on_tag:
+      then:
+        - binary_sensor.template.publish:
+            id: nfc_tag_present
+            state: ON
+        - script.execute:
+            id: rfid_parse_tag
+            tag: !lambda 'return tag;'
+            rfid_reader: rfid_reader_spi_1
+
+  - id: rfid_reader_spi_2
+    cs_pin: GPIO21 #TODO: make variable for consistency
+    spi_id: spi_i2c_bus_a
+    update_interval: 1s
+    on_tag_removed:
+      then:
+        - script.execute: set_led_white #TODO: don't assume white instead default back to the default led state (breathing, blinkinig ect..)
+        - binary_sensor.template.publish:
+            id: nfc_tag_present
+            state: OFF
+        - lambda: |-
+            id(filament_raw_data).publish_state("");
+    on_tag: 
+      then:
+        - binary_sensor.template.publish:
+            id: nfc_tag_present
+            state: ON
+        - script.execute:
+            id: rfid_parse_tag
+            tag: !lambda 'return tag;'
+            rfid_reader: rfid_reader_spi_2
+
+script:
+  - id: rfid_parse_tag
+    parameters:
+      tag: nfc::NfcTag
+      rfid_reader: std::string
+    then: 
       - lambda: |-
-          id(filament_raw_data).publish_state("");
-  on_tag:
-    then:
-      - binary_sensor.template.publish:
-          id: nfc_tag_present
-          state: ON
-      - lambda: |-
-          uint8_t retry_count = 0;
-          const uint8_t max_retries = 3;
-          bool tag_read_success = false;
+           ESP_LOGD("NFC", "Reading tag on reader %s", rfid_reader.c_str() );
+            uint8_t retry_count = 0;
+            const uint8_t max_retries = 3;
+            bool tag_read_success = false;
 
-          auto read_and_process_tag = [&](nfc::NfcTag &tag) -> bool {
-            auto tag_type = tag.get_tag_type();
-            ESP_LOGD("NFC", "Tag type: %s", tag_type.c_str());
+            auto read_and_process_tag = [&](nfc::NfcTag &tag) -> bool {
+              auto tag_type = tag.get_tag_type();
+              ESP_LOGD("NFC", "Tag type: %s", tag_type.c_str());
 
-            if (!tag.has_ndef_message()) {
-              ESP_LOGE("NFC", "No NDEF message found");
-              return false;
-            }
+              if (!tag.has_ndef_message()) {
+                ESP_LOGE("NFC", "No NDEF message found");
+                return false;
+              }
 
-            ESP_LOGD("NFC", "NDEF message found");
-            auto message = tag.get_ndef_message();
-            auto records = message->get_records();
-            bool json_record_found = false;
+              ESP_LOGD("NFC", "NDEF message found");
+              auto message = tag.get_ndef_message();
+              auto records = message->get_records();
+              bool json_record_found = false;
 
-            for (auto &record : records) {
-              if (record->get_type() == "application/json") {
-                if (json_record_found) {
-                  ESP_LOGE("NFC", "Multiple JSON NDEF records found, not a valid OpenSpool tag");
-                  return false;
-                }
-                json_record_found = true;
-
-                auto data = record->get_payload();
-                ESP_LOGD("NFC", "JSON record found: %s", data.c_str());
-                id(filament_raw_data).publish_state(data.c_str());
-
-                bool parse_result = esphome::json::parse_json(data, [&](const JsonObject& root) -> bool {
-                  if (!root.containsKey("protocol") || root["protocol"] != "openspool") {
-                    ESP_LOGE("NFC", "Tag is not an openspool tag");
+              for (auto &record : records) {
+                if (record->get_type() == "application/json") {
+                  if (json_record_found) {
+                    ESP_LOGE("NFC", "Multiple JSON NDEF records found, not a valid OpenSpool tag");
                     return false;
                   }
+                  json_record_found = true;
 
-                  if (!root.containsKey("version")) {
-                    ESP_LOGE("NFC", "Missing version field");
-                    return false;
-                  }
+                  auto data = record->get_payload();
+                  ESP_LOGD("NFC", "JSON record found: %s", data.c_str());
+                  id(filament_raw_data).publish_state(data.c_str());
 
-                  if (root["version"] != "1.0") {
-                    ESP_LOGE("NFC", "Unsupported version: %s", root["version"].as<std::string>().c_str());
-                    return false;
-                  }
-
-                  ESP_LOGD("NFC", "OpenSpool - v1.0");
-                  const char* required_fields[] = {"color_hex", "brand", "type", "min_temp", "max_temp"};
-                  for (const char* field : required_fields) {
-                    if (!root.containsKey(field)) {
-                      ESP_LOGE("NFC", "Missing %s field, required for OpenSpool v1.0", field);
+                  bool parse_result = esphome::json::parse_json(data, [&](const JsonObject& root) -> bool {
+                    if (!root.containsKey("protocol") || root["protocol"] != "openspool") {
+                      ESP_LOGE("NFC", "Tag is not an openspool tag");
                       return false;
                     }
+
+                    if (!root.containsKey("version")) {
+                      ESP_LOGE("NFC", "Missing version field");
+                      return false;
+                    }
+
+                    if (root["version"] != "1.0") {
+                      ESP_LOGE("NFC", "Unsupported version: %s", root["version"].as<std::string>().c_str());
+                      return false;
+                    }
+
+                    ESP_LOGD("NFC", "OpenSpool - v1.0");
+                    const char* required_fields[] = {"color_hex", "brand", "type", "min_temp", "max_temp"};
+                    for (const char* field : required_fields) {
+                      if (!root.containsKey(field)) {
+                        ESP_LOGE("NFC", "Missing %s field, required for OpenSpool v1.0", field);
+                        return false;
+                      }
+                    }
+
+                    // If we've made it this far, all required fields are present
+                    id(filament_color_hex).publish_state(root["color_hex"]);
+                    id(filament_brand).publish_state(root["brand"]);
+                    id(filament_type).publish_state(root["type"]);
+                    id(filament_min_temp).publish_state(root["min_temp"]);
+                    id(filament_max_temp).publish_state(root["max_temp"]);
+                    return true;
+                  });
+
+                  if (!parse_result) {
+                    ESP_LOGE("NFC", "Failed to parse JSON data");
+                    return false;
                   }
 
-                  // If we've made it this far, all required fields are present
-                  id(filament_color_hex).publish_state(root["color_hex"]);
-                  id(filament_brand).publish_state(root["brand"]);
-                  id(filament_type).publish_state(root["type"]);
-                  id(filament_min_temp).publish_state(root["min_temp"]);
-                  id(filament_max_temp).publish_state(root["max_temp"]);
                   return true;
-                });
-
-                if (!parse_result) {
-                  ESP_LOGE("NFC", "Failed to parse JSON data");
-                  return false;
                 }
+              }
 
-                return true;
+              if (!json_record_found) {
+                ESP_LOGE("NFC", "No JSON record found, not an openspool tag");
+              }
+              return false;
+            };
+
+            while (!tag_read_success && retry_count < max_retries) {
+              tag_read_success = read_and_process_tag(tag);
+              
+              if (!tag_read_success) {
+                retry_count++;
+                ESP_LOGW("NFC", "Tag read failed, retrying (%d/%d)", retry_count, max_retries);
+                delay(100);
               }
             }
 
-            if (!json_record_found) {
-              ESP_LOGE("NFC", "No JSON record found, not an openspool tag");
+            auto call = id(neopixel_light).make_call();
+            if (tag_read_success) {
+              ESP_LOGI("NFC", "Tag read successfully after %d attempt(s)", retry_count + 1);
+              call.set_rgb(0.0, 1.0, 0.0); // green
+              id(publish_filament_setting).execute();
+            } else {
+              ESP_LOGE("NFC", "Failed to read tag after %d attempts", max_retries);
+              call.set_rgb(1.0, 0.0, 0.0); // red
             }
-            return false;
-          };
+            call.set_brightness(1.0); // 100%
+            call.perform();
 
-          while (!tag_read_success && retry_count < max_retries) {
-            tag_read_success = read_and_process_tag(tag);
-            
-            if (!tag_read_success) {
-              retry_count++;
-              ESP_LOGW("NFC", "Tag read failed, retrying (%d/%d)", retry_count, max_retries);
-              delay(100);
-            }
-          }
-
-          auto call = id(neopixel_light).make_call();
-          if (tag_read_success) {
-            ESP_LOGI("NFC", "Tag read successfully after %d attempt(s)", retry_count + 1);
-            call.set_rgb(0.0, 1.0, 0.0); // green
-            id(publish_filament_setting).execute();
-          } else {
-            ESP_LOGE("NFC", "Failed to read tag after %d attempts", max_retries);
-            call.set_rgb(1.0, 0.0, 0.0); // red
-          }
-          call.set_brightness(1.0); // 100%
-          call.perform();
 
 text_sensor:
   - platform: template
@@ -258,7 +295,7 @@ button:
 
                   message->add_record(std::move(record));
 
-                  id(nfc_reader).write_mode(message);
+                  id(rfid_reader_spi_1).write_mode(message); //TODO: Write to the correct RFID reader
                   ESP_LOGI("rfid", "Writing JSON NDEF message to tag");
                   //TODO: do I need to set back to read mode?
             else:
@@ -266,9 +303,9 @@ button:
                   ESP_LOGI("rfid", "NFC Tag not present");
 
 # logger:
-#   level: VERBOSE
+#   level: VERY_VERBOSE
 #   logs:
-#     pn532: VERBOSE
+#     pn532: VERY_VERBOSE
 #     nfc: VERBOSE
-#     mqtt: INFO
-#     wifi: INFO
+#     i2c: VERY_VERBOSE
+#     '': NONE
