@@ -17,6 +17,8 @@ plugins:
 head_scripts:
 #https://github.com/esphome/esp-web-tools/issues/515#issuecomment-2387664391
   - https://unpkg.com/esp-web-tools@8.0.6/dist/web/install-button.js?module
+  # - https://unpkg.com/@improv-wifi/sdk-serial@1.1.0/dist/serial.min.js?module
+
 
 callouts:
   warning:

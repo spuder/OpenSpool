@@ -6,8 +6,30 @@ substitutions:
   rfid1_ss_pin: GPIO34 #33 on Breadboard version
 
 esp32:
+  # board: featheresp32-s2
   board: lolin_s2_mini
-  variant: esp32s2
+  framework: 
+      type: esp-idf
+  # variant: esp32s2
+  # partitions:
+  # framework: 
+  #   type: esp-idf
+  #   sdkconfig_options:
+  #     CONFIG_MBEDTLS_EXTERNAL_MEM_ALLOC: y
+  #     CONFIG_ESP_TLS_USE_SECURE_ELEMENT: y
+  #     # CONFIG_ESP_TLS_USE_DS_PERIPHERAL: y
+
+# esphome:
+#   platformio_options:
+#     build_flags:
+#       - -DBOARD_HAS_PSRAM
+#       # - -mfix-esp32-psram-cache-issue
 
 packages:
   base: !include common.yaml
+
+# Big warning about psram. 
+# Many clones are rebranded and dont have the PSRAM enabled
+# You may need to go into the arduino IDE, Tell arudino you have a "ESP Dev Kit" and enable PSRAM
+# images/PSRAM.png
+# psram:
