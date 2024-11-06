@@ -1,7 +1,6 @@
 substitutions:
   base_topic: "device/%s/report"
 
-# TODO: set enable_on_boot to false once this is merged: https://github.com/esphome/esphome/pull/7716
 mqtt:
   id: bambu_mqtt
   broker: "" # Broker is set by text.bambu_ip_address
@@ -48,6 +47,19 @@ mqtt:
     Blbjg3obpHo9
     -----END CERTIFICATE-----
   # clean_session: true
+  # enable_on_boot: false #TODO: set enable_on_boot to false once this is merged: https://github.com/esphome/esphome/pull/7716
+
+
+#TODO: set enable_on_boot to false once this is merged: https://github.com/esphome/esphome/pull/7716
+# script: 
+#   - id: check_mqtt_creds
+#     then:
+#       - lambda: |-
+#           if (id(bambu_mqtt)->broker != "" && id(bambu_mqtt)->password != "" && id(bambu_serial_number) != "") {
+#             ESP_LOGI("MQTT", "Enabling MQTT");
+#             id(bambu_mqtt)->enable = true;
+#           }
+
 
 # text_sensor:
 #   - platform: mqtt_subscribe

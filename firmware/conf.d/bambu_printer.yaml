@@ -28,6 +28,7 @@ text:
       sorting_group_id: sorting_group_printer_settings
     # on_value:
     #   then:
+    #       - script.execute: check_mqtt_creds #TODO: Enable once this is merged: https://github.com/esphome/esphome/pull/7716
     #     lambda: |-
     #       id(bambu_printer_status).topic = "device/" + x + "/report";
 
@@ -45,6 +46,7 @@ text:
       then:
         lambda: |-
           id(bambu_mqtt).set_password(x.c_str());
+  #     - script.execute: check_mqtt_creds #TODO: Enable once this is merged: https://github.com/esphome/esphome/pull/7716
 
   - platform: template
     id: bambu_ip_address
@@ -60,6 +62,7 @@ text:
       then:
         lambda: |-
           id(bambu_mqtt).set_broker_address(x.c_str());
+  #       - script.execute: check_mqtt_creds #TODO: Enable once this is merged: https://github.com/esphome/esphome/pull/7716
 
 button:
   - platform: restart

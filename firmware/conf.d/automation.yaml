@@ -109,6 +109,7 @@ script:
                   } else {
                     return true;
                   }
+              # TODO: Check if mqtt is enabled once this is merged: https://github.com/esphome/esphome/pull/7716
           then:
             - mqtt.publish:
                 # topic: device/${bambu_serial_number}/request
