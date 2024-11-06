@@ -1,7 +1,6 @@
 script:
   - id: clear_filament_settings #TODO: unused
     then:
-      # publish to select template filament_brand
       - select.set:
           id: filament_brand
           option: "Generic"
@@ -111,9 +110,6 @@ script:
                     return true;
                   }
           then:
-            # - light.turn_on:
-            #     id: neopixel_light
-            #     effect: Flicker Green
             - mqtt.publish:
                 # topic: device/${bambu_serial_number}/request
                 topic: !lambda 'return "device/" + id(bambu_serial_number).state + "/request";'
@@ -136,8 +132,6 @@ script:
                   });
                   ESP_LOGI("main", "Publishing %s", data.c_str());
                   return data;
-            # - light.turn_off: #TODO: instead of turning off, return to previous state
-            #   id: neopixel_light
   - id: generate_filament_brand_code
     then:
       - lambda: |-
