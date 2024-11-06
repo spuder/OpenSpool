@@ -59,4 +59,9 @@ The NDEF message is a single record of type `application/json`
 }
 ```
 
+`color_hex` = 6 digit hex color. For best results it needs to be one of [the predefined values](https://github.com/bambulab/BambuStudio/blob/733531b1c68e755da991c9503a09c2206c2e4984/src/slic3r/GUI/AMSMaterialsSetting.cpp#L1398-L1425) in bambu slicer.   
+`type` = One of [the predfined values](https://github.com/bambulab/BambuStudio/blob/733531b1c68e755da991c9503a09c2206c2e4984/src/libslic3r/PrintConfig.cpp#L1577-L1609) in bambu slicer.  
+`brand` = One of `Generic`, `Overture` `PolyLite`, `eSun`, `PolyTerra`. The full list can be found [in bambuslicer](https://github.com/bambulab/BambuStudio/tree/master/resources/profiles/BBL/filament). If a filament is defined that is not in this list, it will be assumed to be `Generic`.  
+
+
 ![](./images/phoneNFC.jpeg)  

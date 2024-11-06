@@ -6,7 +6,7 @@ theme: just-the-docs
 url: https://openspool.io
 
 aux_links:
-  Template Repository: https://github.com/just-the-docs/just-the-docs-template
+  Github: https://github.com/spuder/openspool
 
 color_scheme: dark
 

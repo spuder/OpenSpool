@@ -103,6 +103,8 @@ select:
       then:
         # TODO: instead of doing a mapping for all these colors
         # Do a traditional hex value lookup
+        # These are defined in bambustudio
+        # https://github.com/bambulab/BambuStudio/blob/733531b1c68e755da991c9503a09c2206c2e4984/src/slic3r/GUI/AMSMaterialsSetting.cpp#L1398-L1425
         - text_sensor.template.publish:
             id: filament_color_hex
             state: !lambda |-
