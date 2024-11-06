@@ -45,21 +45,26 @@ Once the firmware is installed, You will need to join the RFID reader to the sam
 
 1. Join the wifi network `OpenSpool`
 2. Navigate to [192.168.4.1](http://192.168.4.1)
-3. Enter your wifi credentials
+3. Enter your wifi credentials (take note of the mac address, you will need it to connect)
 4. Reboot the RFID Reader
+
+![](./images/wifi1.png)
+
+After reboot connect to http://openspool-d89be4.local (where d89be is your specific mac address)
 
 
 ## 🖨️ Printer Configuration
 
 Once openspool has joined your network, navigate to `openspool-xxxxxx.local`, or ip address (where xxxxxx are the last 6 digits of the mac address).
 
+If you forgot the mac address, or if you computer is unable to resolve `.local` domains. You can always connect via ip address. To find the ip address, consult your router documentation, or search your arp table. Instructions below. 
+
 {: .note-title } 
-> Finding IP Address
+> Finding IP Address via ARP Tables
 >
-> Mac/Linux:  `arp -a| grep openspool`  
+> Mac/Linux:  `arp -a | grep openspool`  
 > Windows: `arp -a` 
 
-  
 
 Enter your Printer IP, LAN Access Code and Serial Number
 
