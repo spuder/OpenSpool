@@ -6,7 +6,7 @@ nav_order: 2
 
 # RFID Tags
 
-At the heart of OpenSpool are the RFID/NFC tags that you will place on every spool you want to automate. The OpenSpool hardware workds with a wide variety of High-Frequency tags (13.56Mhz)
+At the heart of OpenSpool are the `NFC/RFID` tags that you will place on every spool you want to automate. The OpenSpool hardware works with a wide variety of High-Frequency tags (13.56Mhz)
 
 {: .note-title }
 > NFC vs RFID
@@ -36,3 +36,27 @@ In order to comply with the [OpenSourceRfid standard](https://github.com/Bambu-R
 - Two tags should be used, one on each end of the spool
 
 ![](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/raw/main/images/TagLocation.png))
+
+
+## Protocol
+
+OpenSpool NFC tags create an NDEF message on the tag. NDEF messages are human readable and can be viewed from your phone.
+
+[iPhone - NFC Tools app](https://apps.apple.com/us/app/nfc-tools/id1252962749)  
+[Android - NFC Tools app](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://play.google.com/store/apps/details%3Fid%3Dcom.wakdev.wdnfc%26hl%3Den_US&ved=2ahUKEwicptyi7caJAxXomO4BHZo4FIgQFnoECAwQAQ&usg=AOvVaw0XjR90J9AV8I4375hycopuz)  
+
+The NDEF message is a single record of type `application/json`
+
+```json
+{
+    "protocol": "openspool",
+    "version": "1.0",
+    "type": "PLA",
+    "color_hex": "FFAABB",
+    "brand": "Generic",
+    "min_temp": "220",
+    "max_temp": "240"
+}
+```
+
+![](./images/phoneNFC.jpeg)  

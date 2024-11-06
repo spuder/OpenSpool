@@ -1,7 +1,19 @@
 # Development
 
 ```bash
-bundle exec jekyll serve
+make
 ```
 
-[http://127.0.0.1:4000](http://127.0.0.1:4000)
+or
+
+```bash
+make serve
+```
+
+or 
+
+```bash
+make build
+```
+
+The page will then be served at [http://localhost:4000](http://localhost:4000)
