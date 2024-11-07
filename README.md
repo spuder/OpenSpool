@@ -110,6 +110,7 @@ OpenSpool requires an ESP32-S2 and PN532 NFC Reader that supports SPI.
 | ![](./images/PCB1.png) | 30x70mm PCB | [Amazon](https://a.co/d/dMfGMGb) | |
 | ![](./images/Headers1.png) | 2.54mm Headers | [Amazon](https://a.co/d/gVvpTyd) | | 
 | ![](./images/LLC1.png) | 3.3v - 5v Logic Level Converter | [Amazon](https://a.co/d/7IfuISb) | | 
+| ![](./images/jumper1.png | female-female jumper wire) | [Amazon](https://a.co/d/9FTu3wW) | | 
 
 # Wiring Diagram
 
