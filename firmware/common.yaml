@@ -11,7 +11,6 @@ esphome:
     # on_update:
   min_version: 2024.10.1
   platformio_options:
-    # upload_speed: 115200 #TODO: This fails the first time no matter what
     build_unflags: -std=gnu++11
     build_flags: -std=gnu++14
   on_boot:
@@ -34,28 +33,11 @@ esp32:
   framework:
     type: esp-idf
     version: 5.3.1
-    platform_version: 6.8.1
+    platform_version: 6.9.0 #TODO: Try 6.1.16
     # version: recommended
     # sdkconfig_options:
       # MBEDTLS_CERTIFICATE_BUNDLE: y
       # MBEDTLS_CERTIFICATE_BUNDLE_DEFAULT_FULL: y
-      # CONFIG_SPIRAM_SUPPORT: y
-      # CONFIG_SPIRAM_CACHE_WORKAROUND: y
-      # ESP32_SPIRAM_SUPPORT: y
-      # HEAP_POISONING_DISABLED: y  # Reduces overhead
-      # HEAP_TRACING_OFF: y         # Reduces overhead
-      # CONFIG_ESP32_IRAM_AS_8BIT_ACCESSIBLE_MEMORY: y
-      # CONFIG_ESP32_WIFI_STATIC_TX_BUFFER_NUM: 6
-      # CONFIG_ESP32_WIFI_DYNAMIC_TX_BUFFER_NUM: 32
-      # CONFIG_ESP32_WIFI_STATIC_RX_BUFFER_NUM: 6
-      # CONFIG_ESP32_WIFI_DYNAMIC_RX_BUFFER_NUM: 32
-      # CONFIG_LWIP_MAX_SOCKETS: 10
-      # CONFIG_LWIP_TCPIP_RECVMBOX_SIZE: 32
-      # CONFIG_BT_ENABLED: n
-      # CONFIG_ESP_MAIN_TASK_STACK_SIZE: 3072
-      # CONFIG_ESP_IPC_TASK_STACK_SIZE: 1024
-      # CONFIG_ESP_TIMER_TASK_STACK_SIZE: 3072
-      # CONFIG_ESP_SYSTEM_EVENT_TASK_STACK_SIZE: 2048
 
 logger:
 # MQTT and api are not compatible: https://esphome.io/components/mqtt.html
@@ -77,5 +59,4 @@ packages:
   automation: !include conf.d/automation.yaml
   leds: !include conf.d/leds.yaml
   improv: !include conf.d/improv.yaml
-  # bambu_ams: !include conf.d/bambu_ams.yaml
   #update: !include conf.d/update.yaml

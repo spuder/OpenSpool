@@ -34,7 +34,7 @@ nav_order: 1
 </div>
 
 {: .caution }
-If the above step fails, see the [README on github](https://github.com/spuder/OpenSpool) to upload manually with command `make run-usb`. 
+If the above step fails, see the [README on github](https://github.com/spuder/OpenSpool) to upload manually with command `make run-usb-pcb`. 
 
 # 🛠️ Configuration
 

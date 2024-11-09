@@ -1,9 +1,11 @@
 substitutions:
-  rfid1_spi_interface: spi #any on Breadboard
+  rfid1_spi_interface: spi2 #any on Breadboard
   rfid1_clk_pin: GPIO36 #39 on Breadboard version
   rfid1_miso_pin: GPIO37
   rfid1_mosi_pin: GPIO35
   rfid1_ss_pin: GPIO34 #33 on Breadboard version
+  ams: 'false'
+  hide_ams_sensors: 'true'
 
 esp32:
   # board: featheresp32-s2

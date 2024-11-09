@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: [esp32s2, esp32]
+        target: [solo] #TODO: add ams.yaml
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -126,10 +126,8 @@ jobs:
         run: |
           rm -rf artifacts/manifest.json
           rm -rf artfacts/openspool-*
-          cp downloaded-artifacts/openspool-esp32/*.bin artifacts/
-          cp downloaded-artifacts/openspool-esp32/*.md5 artifacts/
-          cp downloaded-artifacts/openspool-esp32s2/*.bin artifacts/
-          cp downloaded-artifacts/openspool-esp32s2/*.md5 artifacts/
+          cp downloaded-artifacts/openspool-solo/*.bin artifacts/
+          cp downloaded-artifacts/openspool-solo/*.md5 artifacts/
           ls -al artifacts
 
       - name: Combine manifests
@@ -152,7 +150,7 @@ jobs:
               "new_install_prompt_erase": True
           }
 
-          for target in ['esp32s2', 'esp32']:
+          for target in ['solo']:
               try:
                   with open(f'downloaded-artifacts/openspool-{target}/manifest.json', 'r') as f:
                       manifest = json.load(f)

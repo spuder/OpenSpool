@@ -9,18 +9,24 @@ all: build upload dashboard logs
 
 # Preserve backwards compatabliity in documentation
 run-usb: run-usb-breadboard
+run-usb-pcb: run-usb-pcb-solo
+build-pcb-solo: build-esp32s2-solo
+build-pcb-ams: build-esp32s2-ams
 
 clean:
-	esphome clean config-esp32.yaml
-	esphome clean config-esp32s2.yaml
+	esphome clean config-solo.yaml
+	esphome clean config-ams.yaml
 	rm -rf .esphome/idedata/*
 	rm -rf ~/.platformio/penv
 build-esp32:
 	esphome config config-esp32.yaml
 	esphome compile config-esp32.yaml
-build-esp32s2:
-	esphome config config-esp32s2.yaml
-	esphome compile config-esp32s2.yaml
+build-esp32s2-solo:
+	esphome config config-solo.yaml
+	esphome compile config-solo.yaml
+build-esp32s2-ams:
+	esphome config config-ams.yaml
+	esphome compile config-ams.yaml
 build-d1-mini-s2-breadboard:
 	esphome \
 		-s version dev \ 
@@ -38,15 +44,13 @@ build-d1-mini-s2-breadboard:
 		-s rfid1_ss_pin "GPIO33" \
 		-s rfid1_spi_interface "any" \
 		compile config-esp32s2.yaml
-build-pcb:
-	esphome \
-		config config-esp32s2.yaml
-	esphome \
-		compile config-esp32s2.yaml
-upload:
+upload-solo:
 	@echo "Uploading to $(USB_ADDRESS)"
-	esphome upload --device $(USB_ADDRESS) config-esp32s2.yaml
-logs:
+	esphome upload config-solo.yaml --device $(USB_ADDRESS)
+upload-ams:
+	@echo "Uploading to $(USB_ADDRESS)"
+	esphome upload config-ams.yaml --device $(USB_ADDRESS)
+logs-solo:
 	@echo "Uploading to $(USB_ADDRESS)"
 	esphome logs config-esp32s2.yaml --device $(USB_ADDRESS)
 dashboard:
@@ -63,10 +67,13 @@ run-usb-breadboard:
 		-s rfid1_mosi_pin "GPIO35" \
 		-s rfid1_ss_pin "GPIO33" \
 		-s rfid1_spi_interface "any" \
-		run config-esp32s2.yaml --device $(USB_ADDRESS)
-run-usb-pcb:
+		run config-solo.yaml --device $(USB_ADDRESS)
+run-usb-pcb-solo:
 	esphome \
-		run config-esp32s2.yaml --device $(USB_ADDRESS)
+		run config-solo.yaml --device $(USB_ADDRESS)
+run-usb-pcb-ams:
+	esphome \
+		run config-ams.yaml --device $(USB_ADDRESS)
 run-ota:
 	# run-ota is used for subsequent uploads after the device has been joined to the wifi network
 	esphome \
