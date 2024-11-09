@@ -47,16 +47,24 @@ jobs:
         id: get_version
         run: |
           VERSION=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.0.0")
+          VERSION="${VERSION//'%'/'%25'}"
+          VERSION="${VERSION//$'\n'/'%0A'}"
+          VERSION="${VERSION//$'\r'/'%0D'}"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-
+      
       - name: Create empty secrets file
         run: |
           touch firmware/secrets.yaml
           touch firmware/conf.d/secrets.yaml
-
+      
       - name: Set git sha
-        run: echo "RELEASE_SUMMARY=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
+        run: |
+          SUMMARY=$(git log -1 --pretty=%B)
+          SUMMARY="${SUMMARY//'%'/'%25'}"
+          SUMMARY="${SUMMARY//$'\n'/'%0A'}"
+          SUMMARY="${SUMMARY//$'\r'/'%0D'}"
+          echo "RELEASE_SUMMARY=$SUMMARY" >> $GITHUB_ENV
 
       - name: Modify version in common.yaml
         run: |
