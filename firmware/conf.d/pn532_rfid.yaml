@@ -91,56 +91,9 @@ pn532_spi:
             then:
               - mqtt.publish:
                   topic: !lambda 'return "device/" + id(bambu_serial_number).state + "/request";'
-                  payload: !lambda |-
-                    //TODO: There is still a bug in here where it causes a MQTT disconnect because payload is wrong
-
-                     StaticJsonDocument<1024> doc_in;
-                     StaticJsonDocument<1024> doc_out;
-                     
-                     DeserializationError error = deserializeJson(doc_in, id(filament_raw_data0).state);
-                     if (error) {
-                       ESP_LOGE("main", "Failed to parse input JSON: %s", error.c_str());
-                       return {}; // skip publishing
-                     }
-                     
-                     // Check if 'version' key exists and its value is 1.0
-                     if (!doc_in.containsKey("version") || std::string(doc_in["version"]) != "1.0") {
-                       ESP_LOGE("main", "Invalid or missing version. Expected version '1.0'");
-                       return {}; // skip publishing
-                     }
-
-                     // Check if required fields are present
-                     const char* required_fields[] = {"color_hex", "min_temp", "max_temp", "brand", "type"};
-                     for (const char* field : required_fields) {
-                       if (!doc_in.containsKey(field)) {
-                         ESP_LOGE("main", "Missing required field: %s", field);
-                         return {}; // skip publishing
-                       }
-                     }
-
-                     JsonObject print = doc_out.createNestedObject("print");
-                     print["sequence_id"] = "0";
-                     print["command"] = "ams_filament_setting";
-                     print["ams_id"] = 255; //TODO: support multiple AMS
-                     print["tray_id"] = 254; //TODO: support multiple trays
-                     print["tray_color"] = doc_in["color_hex"];
-                     print["nozzle_temp_min"] = int(doc_in["min_temp"]); //if not string or int, will fall back to 0
-                     print["nozzle_temp_max"] = int(doc_in["max_temp"]); //if not string or int, will fall back to 0
-                     print["tray_type"] = doc_in["type"];
-                     print["setting_id"] = "";
-                     print["tray_info_idx"] = doc_in["brand"];
-                     //print["tray_sub_brands"] = doc_in["sub_brand"]; //TODO: support sub brands if needed
-                     
-                     std::string result;
-                     serializeJson(doc_out, result);
-                     
-                     if (result.empty()) {
-                       ESP_LOGE("main", "Failed to build JSON");
-                       return {};
-                     }
-                     
-                     ESP_LOGI("main", "Publishing %s", result.c_str());
-                     return result;
+                  # 255 = external ams
+                  # 254 = external tray 
+                  payload: !lambda 'return bambulabs::generate_mqtt_payload( id(filament_raw_data0).state, 255, 254 );'
 text_sensor:
   - platform: template
     name: "NFC Raw Data"

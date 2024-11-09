@@ -1,38 +1,11 @@
 script:
-  - id: clear_filament_settings #TODO: unused
-    then:
-      - select.set:
-          id: filament_brand
-          option: "Generic"
-      - text_sensor.template.publish:
-          id: filament_brand_code
-          state: ""
-      - select.set:
-          id: filament_color
-          option: ""
-      - text_sensor.template.publish:
-          id: filament_color_hex
-          state: ""
-      - text_sensor.template.publish:
-          id: filament_color_hex_bambu
-          state: ""
-      - number.set:
-          id: filament_min_temp
-          value: 150
-      - number.set:
-          id: filament_max_temp
-          value: 300
-      - select.set:
-          id: filament_type
-          option: "PLA"
   - id: preview_rfid_data
     then:
       - text_sensor.template.publish:
           id: nfc_preview
           state: !lambda |-
             auto pretty_json = [=]() -> std::string {
-              //TODO: DynamicJsonDocument is memory inefficient, use StaticJsonDocument instead
-              DynamicJsonDocument doc(256);  // Adjust size as needed
+              StaticJsonDocument<256> doc;
               JsonObject root = doc.to<JsonObject>();
               
               root["protocol"] = "openspool";
@@ -42,7 +15,6 @@ script:
               root["min_temp"] = id(filament_min_temp).state;
               root["max_temp"] = id(filament_max_temp).state;
               root["type"] = id(filament_type).state.c_str();
-              root["brand"] = id(filament_brand).state.c_str();
 
               std::string output;
               serializeJsonPretty(doc, output);
@@ -371,107 +343,11 @@ script:
                   ESP_LOGW("main", "Unknown filament type: %s", id(filament_type).state.c_str());
                 }
 
-  # - id: publish_filament_settings_rfid
-  #   parameters:
-  #     x: string
-  #     ams_id: uint8_t
-  #     ams_tray: uint8_t
-  #   then:
-  #     - if:
-  #         condition:
-  #           and:
-  #             - lambda: |-
-  #                 if (id(bambu_serial_number).state == "") {
-  #                   ESP_LOGE("main", "Bambu Serial Number cannot be empty");
-  #                   return false;
-  #                 } else {
-  #                   return true;
-  #                 }
-  #             - lambda: |-
-  #                 if (id(bambu_ip_address).state == "") {
-  #                   ESP_LOGE("main", "Bambu IP Address cannot be empty");
-  #                   return false;
-  #                 } else {
-  #                   return true;
-  #                 }
-  #             - lambda: |-
-  #                 if (id(bambu_lan_access_code).state == "") {
-  #                   ESP_LOGE("main", "Bambu LAN Access Code cannot be empty");
-  #                   return false;
-  #                 } else {
-  #                   return true;
-  #                 }
-  #             #TODO: Verify mqtt is enabled
-  #             # TODO: duplicate paring is taking excessive memroy
-  #             # - lambda: |-
-  #             #     bool has_openspool = false;
-  #             #     esphome::json::parse_json(x, [&](JsonObject root) {
-  #             #       if (root.containsKey("openspool")) {
-  #             #         has_openspool = true;
-  #             #       } else {
-  #             #         ESP_LOGW("main", "skipping publish_filament_settings_rfid because nfc tag does not contain an openspool key");
-  #             #       }
-  #             #       return true;
-  #             #     });
-  #             #     return has_openspool;
-  #         then:
-  #           # - mqtt.publish:
-  #           #     topic: !lambda 'return "device/" + id(bambu_serial_number).state + "/request";'
-  #           #     payload: !lambda |-
-  #           #       std::string result;
-  #           #       bool parse_success = json::parse_json(x, [&](JsonObject root) {
-  #           #         // Check if this is an openspool protocol JSON
-  #           #         if (!root.containsKey("protocol") || strcmp(root["protocol"].as<const char*>(), "openspool") != 0) {
-  #           #           ESP_LOGW("main", "skipping publish_filament_settings_rfid because data is not openspool protocol");
-  #           #           return false;
-  #           #         }
 
-  #           #         // Build the new JSON structure
-  #           #         result = json::build_json([&](JsonObject root) {
-  #           #           auto print = root.createNestedObject("print");
-  #           #           print["sequence_id"] = "0";
-  #           #           print["command"] = "ams_filament_setting";
-  #           #           print["ams_id"] = ams_id;
-  #           #           print["tray_id"] = ams_tray;
-                      
-  #           #           // Copy values directly from root object
-  #           #           if (root.containsKey("color_hex")) {
-  #           #             print["tray_color"] = root["color_hex"].as<const char*>();
-  #           #           }
-  #           #           if (root.containsKey("min_temp")) {
-  #           #             print["nozzle_temp_min"] = root["min_temp"].as<const char*>();
-  #           #           }
-  #           #           if (root.containsKey("max_temp")) {
-  #           #             print["nozzle_temp_max"] = root["max_temp"].as<const char*>();
-  #           #           }
-  #           #           if (root.containsKey("type")) {
-  #           #             print["tray_type"] = root["type"].as<const char*>();
-  #           #           }
-                      
-  #           #           print["setting_id"] = "";
-                      
-  #           #           // Get bambu code if type and brand exist
-  #           #           if (root.containsKey("type") && root.containsKey("brand")) {
-  #           #             print["tray_info_idx"] = get_bambu_code(
-  #           #               root["type"].as<std::string>(),
-  #           #               root["brand"].as<std::string>()
-  #           #             );
-  #           #           }
-  #           #         });
-  #           #         return true;
-  #           #       });
-
-  #           #       if (!parse_success) {
-  #           #         ESP_LOGE("main", "Failed to parse JSON");
-  #           #         return "";
-  #           #       }
-
-  #           #       // Execute the script with all required parameters
-  #           #       id(publish_filament_settings_rfid).execute(x, ams_id, ams_tray);
-  #           #       return result;
+  
 esphome:
   includes:
-    - bambu_filament_codes.h
+    - bambu.h
 
 binary_sensor:
   - id: rfid_reader_spi_0_tag_parsed
