@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: [solo] #TODO: add ams.yaml
+        target: [esp32s2]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -74,7 +74,7 @@ jobs:
       - name: Build ESPHome firmware
         uses: esphome/build-action@v4.0.2
         with:
-          yaml-file: ${{ github.workspace }}/firmware/config-${{ matrix.target }}.yaml
+          yaml-file: ${{ github.workspace }}/firmware/config-solo.yaml
           release-summary: ${{ env.RELEASE_SUMMARY }}
           complete-manifest: false
       
