@@ -2,7 +2,7 @@ light:
   - platform: esp32_rmt_led_strip
     id: neopixel_light
     pin: GPIO16
-    num_leds: 1
+    num_leds: 3
     rgb_order: GRB
     name: LEDs
     chipset: WS2812
