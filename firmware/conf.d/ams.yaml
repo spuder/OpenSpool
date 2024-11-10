@@ -60,6 +60,20 @@ pn532_spi:
             } else {
               id(set_led_red).execute(1);
             }
+        - if:
+            condition:
+              and:
+                #TODO: Verify mqtt is connected
+                - lambda: 'return id(filament_raw_data1a).state != "";'
+                - lambda: 'return id(filament_raw_data1a).state != "{}";'
+                - binary_sensor.is_on: rfid_reader_spi_1a_tag_is_openspool
+                - binary_sensor.is_on: rfid_reader_spi_1a_tag_parsed
+            then:
+              - mqtt.publish:
+                  topic: !lambda 'return "device/" + id(bambu_serial_number).state + "/request";'
+                  # 0 = external ams, first AMS is 0
+                  # 0 = external tray, first filament slot is tray 0
+                  payload: !lambda 'return bambulabs::generate_mqtt_payload( id(filament_raw_data1a).state, 0, 0 );'
   - id: rfid_reader_spi_1b
     cs_pin: GPIO17 #TODO: make variable for consistency
     spi_id: spi_i2c_bus_a
@@ -121,7 +135,20 @@ pn532_spi:
             } else {
               id(set_led_red).execute(2);
             }
-
+        - if:
+            condition:
+              and:
+                #TODO: Verify mqtt is connected
+                - lambda: 'return id(filament_raw_data1b).state != "";'
+                - lambda: 'return id(filament_raw_data1b).state != "{}";'
+                - binary_sensor.is_on: rfid_reader_spi_1b_tag_is_openspool
+                - binary_sensor.is_on: rfid_reader_spi_1b_tag_parsed
+            then:
+              - mqtt.publish:
+                  topic: !lambda 'return "device/" + id(bambu_serial_number).state + "/request";'
+                  # 0 = external ams, first AMS is 0
+                  # 0 = external tray, first filament slot is tray 0
+                  payload: !lambda 'return bambulabs::generate_mqtt_payload( id(filament_raw_data1b).state, 0, 0 );'
 text_sensor:
   # NFC Raw Data 1-8 are hidden unless ams.yaml is included
   - platform: template
