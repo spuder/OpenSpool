@@ -1,0 +1,44 @@
+# https://github.com/esphome/issues/issues/4481#issuecomment-1556930070
+# https://github.com/esphome/issues/issues/5264#issuecomment-1869807913
+# - dio_qspi
+# - dio_opi
+# - qio_qspi
+# - qio_opi
+# - opi_qspi
+# - opi_opi
+
+esphome:
+  platformio_options:
+    build_flags: 
+      - -DBOARD_HAS_PSRAM
+      - -mfix-esp32-psram-cache-issue
+    # OPI (8bits)> QIO (4bits) > DIO (2bits)
+    # board_build.arduino.memory_type: qio_opi #NEEDED FOR PSRAM also dio_qspi/qsi_qspi for other configs
+    # board_build.arduino.memory_type: dio_opi
+    # board.build.arduino.memory_type: qio_qspi
+    # board_build.memory_type:  qio_opi
+    # board.build.arduino.memory_type: qio_opi
+    # board_build.memory_type:  qio_dio
+    # board.build.arduino.memory_type: qio_dio
+    # board_build.memory_type:  dio_dio          # [wifi]: m f null
+    # board.build.arduino.memory_type: dio_dio
+    board_build.memory_type:  dio_qspi           # [wifi]: m f null
+    board.build.arduino.memory_type: dio_qspi
+esp32:
+  # https://community.home-assistant.io/t/esp32-s3-devkitc-1-n16r8-using-psram-howto/652601
+  flash_size: 4MB #This should be auto detected, but users report having to define it to get psram working 
+# Big warning about psram. 
+# Many d1 mini s2 clones are rebranded and dont have the PSRAM enabled
+psram:
+#   mode: quad
+#   speed: 40MHz
+
+logger:
+  level: VERY_VERBOSE
+
+# I (30) boot: ESP-IDF 5.3.1 2nd stage bootloader
+# I (30) boot: compile time Nov 10 2024 08:16:30
+# I (30) boot: chip revision: v0.0
+# I (30) boot.esp32s2: SPI Speed      : 80MHz
+# I (30) boot.esp32s2: SPI Mode       : DIO
+# I (30) boot.esp32s2: SPI Flash Size : 4MB

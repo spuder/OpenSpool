@@ -12,7 +12,8 @@ esphome:
   min_version: 2024.10.1
   platformio_options:
     build_unflags: -std=gnu++11
-    build_flags: -std=gnu++14
+    build_flags: 
+      - -std=gnu++14
   on_boot:
     then:
       - script.execute: set_led_rainbow
@@ -39,7 +40,7 @@ esp32:
   framework:
     type: esp-idf
     version: 5.3.1
-    platform_version: 6.9.0 #TODO: Try 6.1.16
+    platform_version: 6.9.0
     # version: recommended
     # sdkconfig_options:
       # MBEDTLS_CERTIFICATE_BUNDLE: y
@@ -64,5 +65,6 @@ packages:
   pn532_rfid: !include conf.d/pn532_rfid.yaml
   automation: !include conf.d/automation.yaml
   leds: !include conf.d/leds.yaml
-  improv: !include conf.d/improv.yaml
-  #update: !include conf.d/update.yaml
+  # improv: !include conf.d/improv.yaml
+  # update: !include conf.d/update.yaml
+  # psram: !include conf.d/psram.yaml
