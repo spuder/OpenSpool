@@ -22,16 +22,20 @@ esphome:
     # board.build.arduino.memory_type: qio_dio
     # board_build.memory_type:  dio_dio          # [wifi]: m f null
     # board.build.arduino.memory_type: dio_dio
-    board_build.memory_type:  dio_qspi           # [wifi]: m f null
-    board.build.arduino.memory_type: dio_qspi
+    # board_build.memory_type:  dio_qspi           # [wifi]: m f null
+    # board.build.arduino.memory_type: dio_qspi
+    board_build.arduino.memory_type: qio_qspi
+
+
 esp32:
   # https://community.home-assistant.io/t/esp32-s3-devkitc-1-n16r8-using-psram-howto/652601
   flash_size: 4MB #This should be auto detected, but users report having to define it to get psram working 
 # Big warning about psram. 
 # Many d1 mini s2 clones are rebranded and dont have the PSRAM enabled
 psram:
-#   mode: quad
-#   speed: 40MHz
+  mode: quad
+  speed: 40MHz
+  # speed: 80MHz
 
 logger:
   level: VERY_VERBOSE
@@ -46,5 +50,5 @@ logger:
 sensor: 
   - platform: debug
     psram:
-    name: "Free PSRAM"
-    state_topic:
+      name: "Free PSRAM"
+      state_topic:
