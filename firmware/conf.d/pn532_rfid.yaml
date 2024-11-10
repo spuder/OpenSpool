@@ -28,7 +28,7 @@ pn532_spi:
     update_interval: ${update_interval}
     on_tag_removed:
       then:
-        - script.execute: 
+        - script.execute:
             id: set_led_white
             led_number: 0
         - binary_sensor.template.publish:
@@ -95,7 +95,7 @@ pn532_spi:
                   topic: !lambda 'return "device/" + id(bambu_serial_number).state + "/request";'
                   # 255 = external ams, TODO: A1,P1,X1 might use different values for AMS
                   # 254 = external tray, first filament slot is tray 0
-                  payload: !lambda 'return bambulabs::generate_mqtt_payload( id(filament_raw_data0).state, 255, 254 );'
+                  payload: !lambda "return bambulabs::generate_mqtt_payload( id(filament_raw_data0).state, 255, 254 );"
 text_sensor:
   - platform: template
     name: "NFC Raw Data"
