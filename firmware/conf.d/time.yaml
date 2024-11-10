@@ -4,7 +4,7 @@ time:
     servers:
       - "time.nist.gov"
       - "pool.ntp.org"
-    timezone: "America/Denver"  # Change this to your timezone
+    timezone: "America/Denver" # Change this to your timezone
     on_time:
       - seconds: /10
         then:

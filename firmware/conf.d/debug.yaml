@@ -7,7 +7,6 @@ debug:
 logger:
   level: debug
 
-
 text_sensor:
   # Note that this only returns the esphome compiled version
   # It does not return esphome.platform.version, as that value is only available through the api
@@ -46,6 +45,3 @@ sensor:
     loop_time:
       name: "Loop Time"
       state_topic:
-    # psram: #TODO: only enable this if device has PSRAM
-    #   name: "Free PSRAM"
-    #   state_topic:

@@ -42,3 +42,9 @@ logger:
 # I (30) boot.esp32s2: SPI Speed      : 80MHz
 # I (30) boot.esp32s2: SPI Mode       : DIO
 # I (30) boot.esp32s2: SPI Flash Size : 4MB
+
+sensor: 
+  - platform: debug
+    psram:
+    name: "Free PSRAM"
+    state_topic:

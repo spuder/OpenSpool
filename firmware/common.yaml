@@ -47,9 +47,6 @@ esp32:
       # MBEDTLS_CERTIFICATE_BUNDLE_DEFAULT_FULL: y
 
 logger:
-# MQTT and api are not compatible: https://esphome.io/components/mqtt.html
-# api:
-#   reboot_timeout: 0s
 
 packages:
   # uptime: !include conf.d/uptime.yaml

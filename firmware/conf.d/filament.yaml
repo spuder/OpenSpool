@@ -163,7 +163,6 @@ select:
               }
         - script.execute: preview_rfid_data
 
-
 number:
   - platform: template
     name: "Filament Min Temp"
