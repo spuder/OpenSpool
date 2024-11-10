@@ -93,24 +93,24 @@ Currently OpenSpool only works with Bambu printers over mqtt. Other integrations
 
 OpenSpool requires an ESP32-S2 and PN532 NFC Reader that supports SPI. 
 
-| Microcontroller | Supported |
-| --- | --- | 
-| esp32-s2 | ✅ | 
-| esp8266 | ❌ | 
-
 
 
 | | Hardware | Link 1 | Link 2| 
 | --- | --- | --- | --- | 
-| ![](./images/wemos-d1mini.png)| Wemos D1 Mini S2 (Beware of Clones!)| [Amazon](https://www.amazon.com/dp/B0B291LZ99?ref_=cm_sw_r_cp_ud_dp_373FWQ1MNKAS6SD4DDXV) | [Aliexpress](https://www.aliexpress.us/item/3256802958877264.html)|
-| ![](./images/pn532-large.png) |  PN532 (Large) | [Amazon](https://a.co/d/aOXpu3g) | [Aliexpress](https://www.aliexpress.us/item/3256806348384449.html)|
-| ![](./images/pn532-small.png) |  PN532 (Small) | [Amazon](https://a.co/d/8ytFjLO) | [Aliexpress](https://www.aliexpress.us/item/3256805787598774.html)| 
-| ![](./images/NFC.png) | NTAG 215/216 (13.56Mhz NFC Tags >500 bytes) | [Amazon](https://a.co/d/5ojDUNk) | | 
-| ![](./images/LED1.png) | WS2812B LED | [Amazon](https://a.co/d/dzN19Ky) | |
+| ![](./images/wemos-d1mini.png)| Wemos D1 Mini S2 (Beware of Fakes!)| [Amazon](https://amzn.to/4fqq9m7) | [Aliexpress](https://www.aliexpress.us/item/3256802958877264.html)|
+| ![](./images/pn532-large.png) |  PN532 (Large) (Beware of Fakes!) | [Amazon](https://amzn.to/40CVE7R) | [Aliexpress](https://www.aliexpress.us/item/3256806348384449.html)|
+| ![](./images/pn532-small.png) |  PN532 (Small) | [Amazon](https://amzn.to/4eoBz8s) | [Aliexpress](https://www.aliexpress.us/item/3256805787598774.html)| 
+| ![](./images/NFC.png) | NTAG 215/216 (13.56Mhz NFC Tags >500 bytes) | [Amazon](https://amzn.to/4epJzpO) | | 
+| ![](./images/LED1.png) | WS2812B LED | [Amazon](https://amzn.to/40FFOt5) | |
 | ![](./images/PCB1.png) | 30x70mm PCB | [Amazon](https://a.co/d/dMfGMGb) | |
-| ![](./images/Headers1.png) | 2.54mm Headers | [Amazon](https://a.co/d/gVvpTyd) | | 
-| ![](./images/LLC1.png) | 3.3v - 5v Logic Level Converter | [Amazon](https://a.co/d/7IfuISb) | | 
-| ![](./images/jumper1.png | female-female jumper wire) | [Amazon](https://a.co/d/9FTu3wW) | | 
+| ![](./images/Headers1.png) | 2.54mm Headers | [Amazon](https://amzn.to/4en6138) | | 
+| ![](./images/LLC1.png) | 3.3v - 5v Logic Level Converter | [Amazon](https://amzn.to/3UMfMkp) | | 
+| ![](./images/jumper1.png | female-female jumper wire) | [Amazon](https://amzn.to/3AMwRDM) | | 
+
+{: .caution }
+There is a plethora of fake D1 Mini S2 and PN532 in the market. 
+While temping to buy them at a lower cost, they inevitibly cause headaches as they are less reliable at reading NFC tags. 
+Purchasing at reputable vendors is highly recomended. 
 
 # Wiring Diagram
 
