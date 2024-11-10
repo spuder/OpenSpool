@@ -89,10 +89,9 @@ Currently OpenSpool only works with Bambu printers over mqtt. Other integrations
 | SpoolMan | ❔ |
 | Klipper / Moonraker | ❔ |
 
-## 🐼 Hardware
+## 🔧 Hardware
 
-OpenSpool requires an ESP32-S2 and PN532 NFC Reader that supports SPI. 
-
+OpenSpool requires an ESP32-S2 and PN532 NFC Reader (SPI Mode).
 
 
 | | Hardware | Link 1 | Link 2| 
@@ -102,15 +101,17 @@ OpenSpool requires an ESP32-S2 and PN532 NFC Reader that supports SPI.
 | ![](./images/pn532-small.png) |  PN532 (Small) | [Amazon](https://amzn.to/4eoBz8s) | [Aliexpress](https://www.aliexpress.us/item/3256805787598774.html)| 
 | ![](./images/NFC.png) | NTAG 215/216 (13.56Mhz NFC Tags >500 bytes) | [Amazon](https://amzn.to/4epJzpO) | | 
 | ![](./images/LED1.png) | WS2812B LED | [Amazon](https://amzn.to/40FFOt5) | |
-| ![](./images/PCB1.png) | 30x70mm PCB | [Amazon](https://a.co/d/dMfGMGb) | |
+| ![](./images/PCB1.png) | 30x70mm PCB | [Amazon](https://amzn.to/3NZzHZp) | |
 | ![](./images/Headers1.png) | 2.54mm Headers | [Amazon](https://amzn.to/4en6138) | | 
 | ![](./images/LLC1.png) | 3.3v - 5v Logic Level Converter | [Amazon](https://amzn.to/3UMfMkp) | | 
 | ![](./images/jumper1.png | female-female jumper wire) | [Amazon](https://amzn.to/3AMwRDM) | | 
 
-{: .caution }
-There is a plethora of fake D1 Mini S2 and PN532 in the market. 
+### Caution of Fakes
+
+There is a plethora of fake D1 Mini S2 and PN532 in the market.  
 While temping to buy them at a lower cost, they inevitibly cause headaches as they are less reliable at reading NFC tags. 
 Purchasing at reputable vendors is highly recomended. 
+If you do find a cheaper price and have verified reliablity, please let us know. 
 
 # Wiring Diagram
 
