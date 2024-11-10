@@ -28,7 +28,7 @@ pn532_spi:
               if (records.size() == 1 && records[0]->get_type() == "application/json") {
                 payload = records[0]->get_payload();
                 ESP_LOGD("NFC", "Payload: %s", payload.c_str());
-                id(filament_raw_data0).publish_state(payload);
+                id(filament_raw_data1a).publish_state(payload);
 
                 // Parse JSON and check for OpenSpool protocol
                 auto parse_result = json::parse_json(payload, [&](JsonObject root) {
@@ -103,7 +103,7 @@ pn532_spi:
               if (records.size() == 1 && records[0]->get_type() == "application/json") {
                 payload = records[0]->get_payload();
                 ESP_LOGD("NFC", "Payload: %s", payload.c_str());
-                id(filament_raw_data0).publish_state(payload);
+                id(filament_raw_data1b).publish_state(payload);
 
                 // Parse JSON and check for OpenSpool protocol
                 auto parse_result = json::parse_json(payload, [&](JsonObject root) {
@@ -168,15 +168,34 @@ text_sensor:
             }     
             ESP_LOGD("NFC", "Input string: %s", x.c_str());
             
-            DynamicJsonDocument doc(1024);  // Adjust size as needed
+            StaticJsonDocument<1024> doc;  // Use StaticJsonDocument for memory efficiency
             DeserializationError error = deserializeJson(doc, x);
             if (error) {
               ESP_LOGE("NFC", "JSON parsing failed: %s", error.c_str());
-              return "JSON parsing failed: " + std::string(error.c_str());
+              return "";
+            }
+            
+            if (!doc.is<JsonObject>()) {
+              ESP_LOGE("NFC", "Invalid JSON: Not an object");
+              return "";
+            }
+            
+            const char* required_fields[] = {"protocol", "color_hex", "type", "min_temp", "max_temp", "brand"};
+            for (const char* field : required_fields) {
+              if (!doc.containsKey(field)) {
+                ESP_LOGE("NFC", "Invalid JSON: Missing required field '%s'", field);
+                return "";
+              }
             }
             
             std::string output;
             serializeJsonPretty(doc, output);
+            
+            if (output.length() > 1024) {
+              ESP_LOGE("NFC", "Prettified JSON exceeds 1024 bytes");
+              return "";
+            }
+            
             return output;
           };
           return pretty_json(x);
@@ -197,15 +216,34 @@ text_sensor:
             }     
             ESP_LOGD("NFC", "Input string: %s", x.c_str());
             
-            DynamicJsonDocument doc(1024);  // Adjust size as needed
+            StaticJsonDocument<1024> doc;  // Use StaticJsonDocument for memory efficiency
             DeserializationError error = deserializeJson(doc, x);
             if (error) {
               ESP_LOGE("NFC", "JSON parsing failed: %s", error.c_str());
-              return "JSON parsing failed: " + std::string(error.c_str());
+              return "";
+            }
+            
+            if (!doc.is<JsonObject>()) {
+              ESP_LOGE("NFC", "Invalid JSON: Not an object");
+              return "";
+            }
+            
+            const char* required_fields[] = {"protocol", "color_hex", "type", "min_temp", "max_temp", "brand"};
+            for (const char* field : required_fields) {
+              if (!doc.containsKey(field)) {
+                ESP_LOGE("NFC", "Invalid JSON: Missing required field '%s'", field);
+                return "";
+              }
             }
             
             std::string output;
             serializeJsonPretty(doc, output);
+            
+            if (output.length() > 1024) {
+              ESP_LOGE("NFC", "Prettified JSON exceeds 1024 bytes");
+              return "";
+            }
+            
             return output;
           };
           return pretty_json(x);

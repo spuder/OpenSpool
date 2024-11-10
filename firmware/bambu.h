@@ -101,17 +101,19 @@ namespace bambulabs
             }
         }
 
+        // TODO: verify color_hex is 6 digit code, not 8 digit
+
         JsonObject print = doc_out.createNestedObject("print");
         print["sequence_id"] = "0";
         print["command"] = "ams_filament_setting";
         print["ams_id"] = ams_id;
         print["tray_id"] = ams_tray;
-        print["tray_color"] = doc_in["color_hex"];
+        print["tray_color"] = doc_in["color_hex"].as<std::string>() + "FF";
         print["nozzle_temp_min"] = uint16_t(doc_in["min_temp"]); // if not string or int, will fall back to 0
         print["nozzle_temp_max"] = uint16_t(doc_in["max_temp"]); // if not string or int, will fall back to 0
         print["tray_type"] = doc_in["type"];
         print["setting_id"] = "";
-        print["tray_info_idx"] = doc_in["brand"];
+        print["tray_info_idx"] = get_bambu_code(doc_in["type"], doc_in["brand"]);
         // print["tray_sub_brands"] = doc_in["sub_brand"]; //TODO: support sub brands if needed
 
         std::string result;
