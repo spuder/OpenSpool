@@ -27,13 +27,13 @@ text_sensor:
     web_server:
       sorting_group_id: sorting_group_info
 
-  # - platform: debug
-  #   device:
-  #     name: "Device Info"
-  #     state_topic:
-  #   reset_reason:
-  #     name: "Reset Reason"
-  #     state_topic:
+  - platform: debug
+    # device:
+    #   name: "Device Info"
+    #   state_topic:
+    reset_reason:
+      name: "Reset Reason"
+      state_topic:
 
 sensor:
   - platform: debug

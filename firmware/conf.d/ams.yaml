@@ -1,0 +1,217 @@
+pn532_spi:
+  - id: rfid_reader_spi_1a
+    cs_pin: GPIO21 #TODO: make variable for consistency
+    spi_id: spi_i2c_bus_a
+    data_rate: ${spi_data_rate}
+    update_interval: ${update_interval}
+    on_tag_removed:
+      then:
+        - script.execute: 
+            id: set_led_white
+            led_number: 1
+        - binary_sensor.template.publish:
+            id: nfc_tag_present1a
+            state: OFF
+        - lambda: |-
+            id(filament_raw_data1a).publish_state("");
+    on_tag: 
+      then:
+        - binary_sensor.template.publish:
+            id: nfc_tag_present1a
+            state: ON
+        - lambda: |-
+           bool is_valid_openspool = false;
+            std::string payload;
+
+            if (tag.has_ndef_message()) {
+              auto records = tag.get_ndef_message()->get_records();
+              if (records.size() == 1 && records[0]->get_type() == "application/json") {
+                payload = records[0]->get_payload();
+                ESP_LOGD("NFC", "Payload: %s", payload.c_str());
+                id(filament_raw_data0).publish_state(payload);
+
+                // Parse JSON and check for OpenSpool protocol
+                auto parse_result = json::parse_json(payload, [&](JsonObject root) {
+                  is_valid_openspool = root["protocol"] == "openspool";
+                  return true;
+                });
+
+                if (!parse_result) {
+                  ESP_LOGE("NFC", "Failed to parse JSON payload");
+                }
+              } else {
+                ESP_LOGE("NFC", "Invalid NDEF message structure");
+              }
+            } else {
+              ESP_LOGD("NFC", "Tag found without NDEF message");
+            }
+
+            // Update states
+            id(rfid_reader_spi_1a_tag_parsed).publish_state(true);
+            id(rfid_reader_spi_1a_tag_is_openspool).publish_state(is_valid_openspool);
+
+            // Set LED color
+            if (is_valid_openspool) {
+              id(set_led_green).execute(1);
+              //TODO: Generate and send MQTT message here
+              if (!payload.empty()) {
+                //id(publish_filament_settings_rfid).execute(payload, 0, 0); // Adjust AMS ID and tray as needed
+              }
+            } else {
+              id(set_led_red).execute(1);
+            }
+  - id: rfid_reader_spi_1b
+    cs_pin: GPIO17 #TODO: make variable for consistency
+    spi_id: spi_i2c_bus_a
+    data_rate: ${spi_data_rate}
+    update_interval: ${update_interval}
+    on_tag_removed:
+      then:
+        - script.execute: 
+            id: set_led_white
+            led_number: 2
+        - binary_sensor.template.publish:
+            id: nfc_tag_present1b
+            state: OFF
+        - lambda: |-
+            id(filament_raw_data1b).publish_state("");
+    on_tag: 
+      then:
+        - binary_sensor.template.publish:
+            id: nfc_tag_present1b
+            state: ON
+        - lambda: |-
+           bool is_valid_openspool = false;
+            std::string payload;
+
+            if (tag.has_ndef_message()) {
+              auto records = tag.get_ndef_message()->get_records();
+              if (records.size() == 1 && records[0]->get_type() == "application/json") {
+                payload = records[0]->get_payload();
+                ESP_LOGD("NFC", "Payload: %s", payload.c_str());
+                id(filament_raw_data0).publish_state(payload);
+
+                // Parse JSON and check for OpenSpool protocol
+                auto parse_result = json::parse_json(payload, [&](JsonObject root) {
+                  is_valid_openspool = root["protocol"] == "openspool";
+                  return true;
+                });
+
+                if (!parse_result) {
+                  ESP_LOGE("NFC", "Failed to parse JSON payload");
+                }
+              } else {
+                ESP_LOGE("NFC", "Invalid NDEF message structure");
+              }
+            } else {
+              ESP_LOGD("NFC", "Tag found without NDEF message");
+            }
+
+            // Update states
+            id(rfid_reader_spi_1b_tag_parsed).publish_state(true);
+            id(rfid_reader_spi_1b_tag_is_openspool).publish_state(is_valid_openspool);
+
+            // Set LED color
+            if (is_valid_openspool) {
+              id(set_led_green).execute(2);
+              //TODO: Generate and send MQTT message here
+              if (!payload.empty()) {
+                //id(publish_filament_settings_rfid).execute(payload, 0, 0); // Adjust AMS ID and tray as needed
+              }
+            } else {
+              id(set_led_red).execute(2);
+            }
+
+text_sensor:
+  # NFC Raw Data 1-8 are hidden unless ams.yaml is included
+  - platform: template
+    name: "NFC Raw Data 1a"
+    id: filament_raw_data1a
+    internal: ${hide_ams_sensors} # Only present on raw data 1-8
+    state_topic:
+    icon: mdi:nfc-variant
+    web_server:
+      sorting_group_id: sorting_group_rfid
+    filters:
+      - lambda: |-
+          auto pretty_json = [](const std::string &x) -> std::string {
+            if (x.empty()) {
+              ESP_LOGD("NFC", "Input string is empty");
+              return x;
+            }     
+            ESP_LOGD("NFC", "Input string: %s", x.c_str());
+            
+            DynamicJsonDocument doc(1024);  // Adjust size as needed
+            DeserializationError error = deserializeJson(doc, x);
+            if (error) {
+              ESP_LOGE("NFC", "JSON parsing failed: %s", error.c_str());
+              return "JSON parsing failed: " + std::string(error.c_str());
+            }
+            
+            std::string output;
+            serializeJsonPretty(doc, output);
+            return output;
+          };
+          return pretty_json(x);
+  - platform: template
+    name: "NFC Raw Data 1b"
+    id: filament_raw_data1b
+    internal: ${hide_ams_sensors} # Only present on raw data 1-8
+    state_topic:
+    icon: mdi:nfc-variant
+    web_server:
+      sorting_group_id: sorting_group_rfid
+    filters:
+      - lambda: |-
+          auto pretty_json = [](const std::string &x) -> std::string {
+            if (x.empty()) {
+              ESP_LOGD("NFC", "Input string is empty");
+              return x;
+            }     
+            ESP_LOGD("NFC", "Input string: %s", x.c_str());
+            
+            DynamicJsonDocument doc(1024);  // Adjust size as needed
+            DeserializationError error = deserializeJson(doc, x);
+            if (error) {
+              ESP_LOGE("NFC", "JSON parsing failed: %s", error.c_str());
+              return "JSON parsing failed: " + std::string(error.c_str());
+            }
+            
+            std::string output;
+            serializeJsonPretty(doc, output);
+            return output;
+          };
+          return pretty_json(x);
+
+binary_sensor:
+  - platform: template
+    name: "NFC Tag Present 1a"
+    id: nfc_tag_present1a
+    state_topic:
+    icon: mdi:circle-double
+    web_server:
+      sorting_group_id: sorting_group_rfid
+  - id: rfid_reader_spi_1a_tag_parsed
+    platform: template
+    internal: true
+    state_topic:
+  - id: rfid_reader_spi_1a_tag_is_openspool
+    platform: template
+    internal: true
+    state_topic:
+
+  - platform: template
+    name: "NFC Tag Present 1b"
+    id: nfc_tag_present1b
+    state_topic:
+    icon: mdi:circle-double
+    web_server:
+      sorting_group_id: sorting_group_rfid
+  - id: rfid_reader_spi_1b_tag_parsed
+    platform: template
+    internal: true
+    state_topic:
+  - id: rfid_reader_spi_1b_tag_is_openspool
+    platform: template
+    internal: true
+    state_topic:

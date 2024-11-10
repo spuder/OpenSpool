@@ -10,11 +10,11 @@ binary_sensor:
     name: "Button"
     internal: true
     state_topic:
-    # filters:
-    #   - delayed_off: 10s
     on_press:
       then:
-        - script.execute: set_led_red
+        - script.execute: 
+            id: set_led_red
+            led_number: -1
         - globals.set:
             id: button_press_duration
             value: "0"
@@ -22,7 +22,10 @@ binary_sensor:
 
     on_release:
       then:
-        - script.execute: set_led_white
+        - script.execute: 
+            id: set_led_white
+            led_number: -1
+        # - script.stop: set_led_white
         - script.stop: timer_script
         - if:
             condition:

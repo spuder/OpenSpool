@@ -28,7 +28,9 @@ pn532_spi:
     update_interval: ${update_interval}
     on_tag_removed:
       then:
-        - script.execute: set_led_white #TODO: don't assume white instead default back to the default led state (breathing, blinkinig ect..)
+        - script.execute: 
+            id: set_led_white
+            led_number: 0
         - binary_sensor.template.publish:
             id: nfc_tag_present0
             state: OFF
@@ -72,13 +74,13 @@ pn532_spi:
 
             // Set LED color
             if (is_valid_openspool) {
-              id(set_led_green).execute();
+              id(set_led_green).execute(0);
               //TODO: Generate and send MQTT message here
               if (!payload.empty()) {
                 //id(publish_filament_settings_rfid).execute(payload, 0, 0); // Adjust AMS ID and tray as needed
               }
             } else {
-              id(set_led_red).execute();
+              id(set_led_red).execute(0);
             }
         - if:
             condition:
@@ -143,13 +145,6 @@ text_sensor:
             return output;
           };
           return pretty_json(x);
-    # on_value:
-    #   then:
-    #     - script.execute:
-    #         id: publish_filament_settings_rfid
-    #         x: !lambda "return std::string(x);"
-    #         ams_id: 255 #TODO: Conditional depending on printer type?
-    #         ams_tray: 254 #TODO: Conditional depending on printer type?
   - platform: template
     name: "NFC Preview"
     id: nfc_preview

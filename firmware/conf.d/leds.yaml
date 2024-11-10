@@ -1,8 +1,11 @@
+substitutions:
+  led_count: '5'
+
 light:
   - platform: esp32_rmt_led_strip
     id: neopixel_light
     pin: GPIO16
-    num_leds: 3
+    num_leds: ${led_count}
     rgb_order: GRB
     name: LEDs
     chipset: WS2812
@@ -53,50 +56,74 @@ light:
 
 script:
   - id: set_led_red
+    parameters:
+      led_number: int8_t
     then:
-      - light.turn_on:
+      - light.addressable_set:
           id: neopixel_light
+          color_brightness: 100%
+          range_from: !lambda "return led_number < 0 ? 0 : led_number;"
+          range_to: !lambda "return led_number < 0 ? ${led_count} : led_number;"
           red: 100%
           green: 0%
           blue: 0%
-          brightness: 100%
-          transition_length: 0.2s
   - id: set_led_green
+    parameters:
+      led_number: int8_t
     then:
-      - light.turn_on:
+      - light.addressable_set:
           id: neopixel_light
+          color_brightness: 100%
+          range_from: !lambda "return led_number < 0 ? 0 : led_number;"
+          range_to: !lambda "return led_number < 0 ? ${led_count} : led_number;"
           red: 0%
           green: 100%
           blue: 0%
-          brightness: 100%
-          transition_length: 0.2s
   - id: set_led_blue
+    parameters:
+      led_number: int8_t
     then:
-      - light.turn_on:
+      - light.addressable_set:
           id: neopixel_light
-          effect: none
+          color_brightness: 100%
+          range_from: !lambda "return led_number < 0 ? 0 : led_number;"
+          range_to: !lambda "return led_number < 0 ? ${led_count} : led_number;"
           red: 0%
           green: 0%
           blue: 100%
-          brightness: 100%
   - id: set_led_yellow
+    parameters:
+      led_number: int8_t
     then:
-      - light.turn_on:
+      - light.addressable_set:
           id: neopixel_light
-          effect: none
+          color_brightness: 100%
+          range_from: !lambda "return led_number < 0 ? 0 : led_number;"
+          range_to: !lambda "return led_number < 0 ? ${led_count} : led_number;"
           red: 100%
           green: 100%
           blue: 0%
-          brightness: 100%
   - id: set_led_white
+    parameters:
+      led_number: int8_t
+    then:
+      - light.addressable_set:
+          id: neopixel_light
+          color_brightness: 50%
+          range_from: !lambda "return led_number < 0 ? 0 : led_number;"
+          range_to: !lambda "return led_number < 0 ? ${led_count} : led_number;"
+          red: 100%
+          green: 100%
+          blue: 100%
+  - id: set_all_leds_white
     then:
       - light.turn_on:
           id: neopixel_light
           effect: none
+          brightness: 50%
           red: 100%
           green: 100%
           blue: 100%
-          brightness: 75%
   - id: set_led_off
     then:
       - light.turn_on:
@@ -105,6 +132,7 @@ script:
           red: 0%
           green: 0%
           blue: 0%
+          effect: none
       - delay: 50ms
       - light.turn_off:
           id: neopixel_light
@@ -118,17 +146,20 @@ script:
     then:
       - light.turn_on:
           id: neopixel_light
-          effect:  Breathing Blue
+          effect: none
+      - light.turn_on:
+          id: neopixel_light
+          effect: Breathing Blue
           brightness: 100%
   - id: set_led_breathing_green
     then:
       - light.turn_on:
           id: neopixel_light
-          effect:  Breathing Green
+          effect: Breathing Green
           brightness: 100%
   - id: set_led_apple_breathing
     then:
       - light.turn_on:
           id: neopixel_light
-          effect:  Apple Breathing
+          effect: Apple Breathing
           brightness: 100%

@@ -1,6 +1,6 @@
 substitutions:
   name: openspool
-  version: "0.0.0" # Keep this empty as github-actions will modify it at build time
+  version: "0.0.0" # Keep this at 0.0.0 as github-actions will modify this file at build time
 
 esphome:
   name: ${name}
@@ -17,12 +17,18 @@ esphome:
     then:
       - script.execute: set_led_rainbow
       - delay: 3s
-      - lambda: |-
-          //TODO: this appears to have broken and no longer blinks blue
-          if (!wifi::global_wifi_component->is_connected() && 
-              wifi::global_wifi_component->wifi_soft_ap_ip().str() == "192.168.4.1") {
-            id(set_led_breathing_blue).execute();
-          }
+      - script.stop: set_led_rainbow
+      - light.turn_on:
+          id: neopixel_light
+          effect: none
+      - script.execute: set_all_leds_white
+      # - script.execute: set_all_leds_white
+      # - lambda: |-
+      #     //TODO: this appears to have broken and no longer blinks blue
+      #     if (!wifi::global_wifi_component->is_connected() && 
+      #         wifi::global_wifi_component->wifi_soft_ap_ip().str() == "192.168.4.1") {
+      #       id(set_led_breathing_blue).execute();
+      #     }
       # - lambda: |-
       #     id(my_ota).set_auth_password("New password");
   on_shutdown:

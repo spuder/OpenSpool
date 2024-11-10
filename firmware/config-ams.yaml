@@ -1,0 +1,40 @@
+substitutions:
+  rfid1_spi_interface: spi2 #TODO: Document new pins
+  rfid1_clk_pin: GPIO36 #TODO: Document new pins
+  rfid1_miso_pin: GPIO37
+  rfid1_mosi_pin: GPIO35
+  rfid1_ss_pin: GPIO34 #TODO: Document new pins
+  ams: 'true'
+  hide_ams_sensors: 'false'
+
+esp32:
+  # board: esp32-s3-devkitc-1
+  board: lolin_s2_mini
+  framework: 
+      type: esp-idf
+  # variant: esp32s2
+  # partitions:
+  # framework: 
+  #   type: esp-idf
+  #   sdkconfig_options:
+  #     CONFIG_MBEDTLS_EXTERNAL_MEM_ALLOC: y
+  #     CONFIG_ESP_TLS_USE_SECURE_ELEMENT: y
+  #     # CONFIG_ESP_TLS_USE_DS_PERIPHERAL: y
+
+# esphome:
+#   platformio_options:
+#     build_flags:
+#       - -DBOARD_HAS_PSRAM
+#       # - -mfix-esp32-psram-cache-issue
+
+packages:
+  base: !include common.yaml
+  ams: !include conf.d/ams.yaml
+
+# Big warning about psram. 
+# Many clones are rebranded and dont have the PSRAM enabled
+# You may need to go into the arduino IDE, Tell arudino you have a "ESP Dev Kit" and enable PSRAM
+# images/PSRAM.png
+# psram:
+
+#TODO: Enable BLE if it would be useful
