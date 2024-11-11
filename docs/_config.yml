@@ -6,7 +6,12 @@ theme: just-the-docs
 url: https://openspool.io
 
 aux_links:
-  Github: https://github.com/spuder/openspool
+  "Edit this page on Github": 
+    - https://github.com/spuder/openspool
+
+logo: "images/OpenSpoolLogoMedium1.png"
+
+favicon: "images/favicon.ico"
 
 color_scheme: dark
 
