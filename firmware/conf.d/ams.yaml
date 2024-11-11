@@ -55,7 +55,7 @@ pn532_spi:
                id(set_led_green).execute(1);
                //TODO: Generate and send MQTT message here
                if (!payload.empty()) {
-                 //id(publish_filament_settings_rfid).execute(payload, 0, 0); // Adjust AMS ID and tray as needed
+                  //TODO: should this publish mqtt payload here? 
                }
              } else {
                id(set_led_red).execute(1);
@@ -130,7 +130,7 @@ pn532_spi:
                id(set_led_green).execute(2);
                //TODO: Generate and send MQTT message here
                if (!payload.empty()) {
-                 //id(publish_filament_settings_rfid).execute(payload, 0, 0); // Adjust AMS ID and tray as needed
+                  //TODO: should this publish mqtt payload here? 
                }
              } else {
                id(set_led_red).execute(2);

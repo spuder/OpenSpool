@@ -21,7 +21,7 @@ script:
               return output;
             };
             return pretty_json();
-  - id: publish_filament_setting #TODO: unused
+  - id: publish_filament_setting
     then:
       - if:
           condition:
@@ -95,8 +95,8 @@ script:
                     print["ams_id"] = 255; //TODO: support multiple AMS
                     print["tray_id"] = 254; //TODO: support multiple trays
                     print["tray_color"] = id(filament_color_hex_bambu).state.c_str();
-                    print["nozzle_temp_min"] = id(filament_min_temp).state; //TODO: string or int? 
-                    print["nozzle_temp_max"] = id(filament_max_temp).state; //TODO: string or int? 
+                    print["nozzle_temp_min"] = int8_t(id(filament_min_temp).state);
+                    print["nozzle_temp_max"] = int8_t(id(filament_max_temp).state);
                     print["tray_type"] = id(filament_type).state.c_str();
                     print["setting_id"] = "";
                     print["tray_info_idx"] = id(filament_brand_code).state.c_str();
@@ -106,7 +106,7 @@ script:
                   });
                   ESP_LOGI("main", "Publishing %s", data.c_str());
                   return data;
-  - id: generate_filament_brand_code
+  - id: generate_filament_brand_code # TODO: Replace with filament_mappings()
     then:
       - lambda: |-
           id(filament_sub_brand).publish_state("");
@@ -344,7 +344,6 @@ script:
                 }
 
 
-  
 esphome:
   includes:
     - bambu.h
@@ -358,4 +357,3 @@ binary_sensor:
     platform: template
     internal: true
     state_topic:
-  #TODO: ADd binary sensors for every other rfid reader

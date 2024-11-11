@@ -108,8 +108,11 @@ OpenSpool requires an ESP32-S2 and PN532 NFC Reader (SPI Mode).
 
 ### Caution of Fakes
 
-There is a plethora of fake D1 Mini S2 and PN532 in the market.  
-While temping to buy them at a lower cost, they inevitibly cause headaches as they are less reliable at reading NFC tags. 
+There is a plethora of fake D1 Mini S2 and PN532 in the market. 
+For the D1 Mini you need the `ESP32-S2FN4R2` not the `ESP32-S2FH4`. 
+For the PN532 you need the model that contains the silkscreen. 
+
+While temping to buy a fake/clone esp32 or PN5432 at a lower cost, they inevitibly cause headaches as they are less reliable at reading NFC tags. 
 Purchasing at reputable vendors is highly recomended. 
 If you do find a cheaper price and have verified reliablity, please let us know. 
 
