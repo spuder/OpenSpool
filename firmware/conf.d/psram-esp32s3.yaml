@@ -1,0 +1,6 @@
+psram:
+sensor: 
+  - platform: debug
+    psram:
+      name: "Free PSRAM"
+      state_topic:

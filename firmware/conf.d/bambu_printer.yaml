@@ -47,7 +47,6 @@ text:
         lambda: |-
           id(bambu_mqtt).set_password(x.c_str());
   #     - script.execute: check_mqtt_creds #TODO: Enable once this is merged: https://github.com/esphome/esphome/pull/7716
-
   - platform: template
     id: bambu_ip_address
     state_topic:
@@ -70,8 +69,6 @@ button:
     id: restart_openspool
     state_topic:
     entity_category: diagnostic
-
-
 #TODO: Show the current state of the printer
 
 # ACTION_IDS = {

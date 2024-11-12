@@ -1,0 +1,82 @@
+# Esphome provides mulitple forms of OTA updates
+# The esphome-update allows you to update from a centralized esphome server (commonly installed on home assitant)
+# The http-update allows you to pull updates from github or other http server. 
+# The http-update requires much more memory. In order to use http update, the problem of the missing
+# PRAM needs to be solved first. It might not be possible on Wemos D1Minis2 boards
+
+
+# update:
+#   - platform: http_request
+#     id: firmware_update
+#     name: Firmware Update
+#     source: https://raw.githubusercontent.com/spuder/openspool/main/firmware/manifest.json
+#     update_interval: 60s #TODO: Change to 6h
+#     web_server:
+#       sorting_group_id: sorting_group_firmware
+
+# http_request:
+# ota:
+#   - platform: http_request
+#     id: my_ota
+#     on_error:
+#       then:
+#         - logger.log:
+#             format: "OTA update error %d"
+#             args: ["x"]
+
+# Wemos D1Mini has 2MB PSRam which is needed for TLS/SSL
+# Note that real ESP32-S2 is part ESP32-S2FN4R2
+# There are counterfit boards which use ESP32-S2FH4 which don't have PS-RAM
+# psram:
+
+
+# button:
+#   - platform: template
+#     name: "Check for Updates"
+#     update_id: firmware_update
+#     on_press:
+#       - update.is_available:
+#           id: firmware_update
+
+# button:
+#   - platform: template
+#     name: "Update Firmware"
+#     on_press:
+#       - ota.http_request.flash:
+#           url: "https://raw.githubusercontent.com/spuder/OpenSpool/main/firmware/openspool-esp32s2.ota.bin" #TODO: make board agnostic
+#           md5_url: "https://raw.githubusercontent.com/spuder/OpenSpool/main/firmware/manifest.json"
+
+# text_sensor:
+#   - platform: version
+#     name: "Current Firmware Version"
+#     id: current_version
+
+#   - platform: http_request
+#     name: "Latest Firmware Version"
+#     url: https://raw.githubusercontent.com/spuder/OpenSpool/main/firmware/manifest.json
+#     id: latest_version
+#     update_interval: 1h
+#     json_parse: true
+#     json_path: "$.version"
+
+# text:
+#   - platform: template
+#     name: "Firmware Versions"
+#     id: firmware_versions
+#     lambda: |-
+#       return "Current: " + id(current_version).state + 
+#              " | Latest: " + id(latest_version).state;
+
+# logger:
+#   level: VERY_VERBOSE
+#   logs:
+#     # pn532: VERBOSE
+#     # nfc: VERBOSE
+#     # mqtt: INFO
+#     # wifi: INFO
+#     esp-tls: VERY_VERBOSE
+#     esp-tls-mbedtls: VERY_VERBOSE
+#     http_client: VERY_VERBOSE
+#     http_request: VERY_VERBOSE
+
+

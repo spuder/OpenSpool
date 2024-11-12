@@ -1,7 +1,7 @@
 substitutions:
   # spi_data_rate: 200kHz
   # update_interval: "2s"
-  spi_data_rate: 1Mhz
+  spi_data_rate: 1Mhz #TODO: decrease this to increase reliability for long cable runs
   update_interval: "1s"
 
 binary_sensor:
@@ -14,16 +14,17 @@ binary_sensor:
       sorting_group_id: sorting_group_rfid
 
 spi:
-  - id: spi_i2c_bus_a
-    clk_pin: ${rfid1_clk_pin} # SCK # Breadboard=GPIO39, PCB=GPIO36
-    miso_pin: ${rfid1_miso_pin} # MO/SDA/TX (MISO)
-    mosi_pin: ${rfid1_mosi_pin} # M (MOSI)
-    interface: ${rfid1_spi_interface}
+  # On esp32-s3 SPI2 a can support 6 devices, whereas only 3 on bus SPI3
+  - id: SPI2
+    clk_pin: ${spi2_clk_pin} # SCK
+    miso_pin: ${spi2_miso_pin} # MO/SDA/TX (MISO)
+    mosi_pin: ${spi2_mosi_pin} # M (MOSI)
+    interface: ${spi2_type}
 
 pn532_spi:
   - id: rfid_reader_spi_0
-    cs_pin: ${rfid1_ss_pin} # NSS/SCL/RX # Breadboard=GPIO33, PCB=GPIO34
-    spi_id: spi_i2c_bus_a
+    cs_pin: ${rfid0_ss_pin} # NSS/SCL/RX
+    spi_id: ${rfid0_spi_interface}
     data_rate: ${spi_data_rate}
     update_interval: ${update_interval}
     on_tag_removed:
@@ -77,7 +78,6 @@ pn532_spi:
               id(set_led_green).execute(0);
               //TODO: Generate and send MQTT message here
               if (!payload.empty()) {
-                //id(publish_filament_settings_rfid).execute(payload, 0, 0); // Adjust AMS ID and tray as needed
               }
             } else {
               id(set_led_red).execute(0);
@@ -96,6 +96,81 @@ pn532_spi:
                   # 255 = external ams, TODO: A1,P1,X1 might use different values for AMS
                   # 254 = external tray, first filament slot is tray 0
                   payload: !lambda "return bambulabs::generate_mqtt_payload( id(filament_raw_data0).state, 255, 254 );"
+  - id: rfid_reader_spi_1
+    cs_pin: ${rfid1_clk_pin}
+    spi_id: SPI2
+    data_rate: ${spi_data_rate}
+    update_interval: ${update_interval}
+    on_tag_removed:
+      then:
+        - script.execute:
+            id: set_led_white
+            led_number: 1
+        - binary_sensor.template.publish:
+            id: nfc_tag_present1
+            state: OFF
+        - lambda: |-
+            id(filament_raw_data1).publish_state("");
+    on_tag:
+      then:
+        - binary_sensor.template.publish:
+            id: nfc_tag_present1
+            state: ON
+        - lambda: |-
+            bool is_valid_openspool = false;
+            std::string payload;
+
+            if (tag.has_ndef_message()) {
+              auto records = tag.get_ndef_message()->get_records();
+              if (records.size() == 1 && records[0]->get_type() == "application/json") {
+                payload = records[0]->get_payload();
+                ESP_LOGD("NFC", "Payload: %s", payload.c_str());
+                id(filament_raw_data1).publish_state(payload);
+
+                // Parse JSON and check for OpenSpool protocol
+                auto parse_result = json::parse_json(payload, [&](JsonObject root) {
+                  is_valid_openspool = root["protocol"] == "openspool";
+                  return true;
+                });
+
+                if (!parse_result) {
+                  ESP_LOGE("NFC", "Failed to parse JSON payload");
+                }
+              } else {
+                ESP_LOGE("NFC", "Invalid NDEF message structure");
+              }
+            } else {
+              ESP_LOGD("NFC", "Tag found without NDEF message");
+            }
+
+            // Update states
+            id(rfid_reader_spi_1_tag_parsed).publish_state(true);
+            id(rfid_reader_spi_1_tag_is_openspool).publish_state(is_valid_openspool);
+
+            // Set LED color
+            if (is_valid_openspool) {
+              id(set_led_green).execute(1);
+              //TODO: Generate and send MQTT message here
+              if (!payload.empty()) {
+                  //TODO: should this publish mqtt payload here? 
+              }
+            } else {
+              id(set_led_red).execute(1);
+            }
+        - if:
+            condition:
+              and:
+                #TODO: Verify mqtt is connected
+                - lambda: 'return id(filament_raw_data1).state != "";'
+                - lambda: 'return id(filament_raw_data1).state != "{}";'
+                - binary_sensor.is_on: rfid_reader_spi_1_tag_is_openspool
+                - binary_sensor.is_on: rfid_reader_spi_1_tag_parsed
+            then:
+              - mqtt.publish:
+                  topic: !lambda 'return "device/" + id(bambu_serial_number).state + "/request";'
+                  # 0 = external ams, first AMS is 0
+                  # 0 = external tray, first filament slot is tray 0
+                  payload: !lambda "return bambulabs::generate_mqtt_payload( id(filament_raw_data1).state, 0, 0 );"
 text_sensor:
   - platform: template
     name: "NFC Raw Data"
@@ -145,6 +220,7 @@ text_sensor:
             return output;
           };
           return pretty_json(x);
+
   - platform: template
     name: "NFC Preview"
     id: nfc_preview
@@ -217,41 +293,41 @@ button:
                     }
             then:
               - lambda: |-
-                  auto message = new nfc::NdefMessage();
+                  constexpr size_t json_capacity = 256;
+
+                  StaticJsonDocument<json_capacity> doc;
+
+                  doc["version"] = "1.0";
+                  doc["protocol"] = "openspool";
+                  doc["color_hex"] = id(filament_color_hex).state;
+                  doc["type"] = id(filament_type).state;
+                  doc["min_temp"] = id(filament_min_temp).state;
+                  doc["max_temp"] = id(filament_max_temp).state;
+                  doc["brand"] = id(filament_brand).state;
+
+                  char json_buffer[json_capacity];
+                  size_t json_length = serializeJson(doc, json_buffer, sizeof(json_buffer));
+
+                  ESP_LOGI("rfid", "JSON content to be written: %s", json_buffer);
+
+                  auto message = std::make_unique<nfc::NdefMessage>();
                   auto record = std::make_unique<nfc::NdefRecord>();
                   record->set_tnf(nfc::TNF_WELL_KNOWN);
                   record->set_type("application/json");
-                  //TODO: DynamicJsonDocument is memory inefficient, use StaticJsonDocument instead
-                  DynamicJsonDocument doc(512);
-                  JsonObject root = doc.to<JsonObject>();
-                  root["version"] = "1.0";
-                  root["protocol"] = "openspool";
-                  root["color_hex"] = id(filament_color_hex).state;
-                  root["type"] = id(filament_type).state;
-                  root["min_temp"] = id(filament_min_temp).state;
-                  root["max_temp"] = id(filament_max_temp).state;
-                  root["brand"] = id(filament_brand).state;
-
-                  std::string json_string;
-                  serializeJson(root, json_string);
-
-                  ESP_LOGI("rfid", "JSON content to be written: %s", json_string.c_str());
-
-                  record->set_payload(json_string);
+                  record->set_payload(std::string(json_buffer, json_length));
 
                   message->add_record(std::move(record));
 
-                  id(rfid_reader_spi_0).write_mode(message); //TODO: Write to the correct RFID reader
+                  id(rfid_reader_spi_0).write_mode(message.get());
                   ESP_LOGI("rfid", "Writing JSON NDEF message to tag");
-                  //TODO: do I need to set back to read mode?
             else:
               - lambda: |-
                   ESP_LOGI("rfid", "NFC Tag not present");
 
-logger:
-  level: DEBUG
-  logs:
-    pn532: DEBUG
-    nfc: DEBUG
-    i2c: DEBUG
-    # "": NONE
+# logger:
+#   level: DEBUG
+#   logs:
+#     pn532: DEBUG
+#     nfc: DEBUG
+#     i2c: DEBUG
+#     # "": NONE

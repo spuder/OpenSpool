@@ -1,10 +1,16 @@
 substitutions:
-  rfid1_spi_interface: spi2
-  rfid1_clk_pin: GPIO36
-  rfid1_miso_pin: GPIO37
-  rfid1_mosi_pin: GPIO35
-  rfid1_ss_pin: GPIO34
   hide_ams_sensors: 'true'
+
+  spi2_type: SPI2
+  spi2_clk_pin: GPIO36
+  spi2_miso_pin: GPIO37
+  spi2_mosi_pin: GPIO35
+
+  rfid0_spi_interface: SPI2
+  rfid0_ss_pin: GPIO34
+
+  rfid1_spi_interface: SPI2
+  rfid1_clk_pin: GPIO21
 
 esp32:
   # board: featheresp32-s2
@@ -22,3 +28,8 @@ esp32:
 
 packages:
   base: !include common.yaml
+  status_led: !include conf.d/status_led.yaml
+  ota-esphome: !include conf.d/ota-esphome.yaml
+  button: !include conf.d/button.yaml
+
+  # psram: !include conf.d/psram-esp32s2.yaml

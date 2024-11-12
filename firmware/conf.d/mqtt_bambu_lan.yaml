@@ -106,15 +106,16 @@ binary_sensor:
     icon: mdi:lan-connect
     web_server:
       sorting_group_id: sorting_group_printer_settings
-    on_state:
-      then:
-        if:
-          condition:
-            mqtt.connected:
-          then:
-            - output.turn_on: onboard_led
-          else:
-            - output.turn_off: onboard_led
+    # TODO: turn on led for both d1 mini and esp32-s3
+    # on_state:
+    #   then:
+    #     if:
+    #       condition:
+    #         mqtt.connected:
+    #       then:
+    #         - output.turn_on: onboard_led
+    #       else:
+    #         - output.turn_off: onboard_led
 # logger:
 #   level: VERY_VERBOSE
 #   logs:

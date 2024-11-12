@@ -12,7 +12,7 @@ binary_sensor:
     state_topic:
     on_press:
       then:
-        - script.execute: 
+        - script.execute:
             id: set_led_red
             led_number: -1
         - globals.set:
@@ -22,7 +22,7 @@ binary_sensor:
 
     on_release:
       then:
-        - script.execute: 
+        - script.execute:
             id: set_led_white
             led_number: -1
         # - script.stop: set_led_white
