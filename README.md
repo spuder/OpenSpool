@@ -239,6 +239,26 @@ mqttx sub -t 'device/$SERIAL_NUMBER/report' -u -P $LAN_ACCESS_CODE --mqtt-versio
 ### Contributors
 
 <!-- readme: contributors -start -->
+<table>
+	<tbody>
+		<tr>
+            <td align="center">
+                <a href="https://github.com/spuder">
+                    <img src="https://avatars.githubusercontent.com/u/242382?v=4" width="100;" alt="spuder"/>
+                    <br />
+                    <sub><b>Spencer Owen</b></sub>
+                </a>
+            </td>
+            <td align="center">
+                <a href="https://github.com/thomasjpatterson">
+                    <img src="https://avatars.githubusercontent.com/u/8883279?v=4" width="100;" alt="thomasjpatterson"/>
+                    <br />
+                    <sub><b>secprepper</b></sub>
+                </a>
+            </td>
+		</tr>
+	<tbody>
+</table>
 <!-- readme: contributors -end -->
 
 # 🪪 License
