@@ -74,7 +74,7 @@ pn532_spi:
                   topic: !lambda 'return "device/" + id(bambu_serial_number).state + "/request";'
                   # 0 = external ams, first AMS is 0
                   # 0 = external tray, first filament slot is tray 0
-                  payload: !lambda "return bambulabs::generate_mqtt_payload( id(filament_raw_data2).state, 0, 0 );"
+                  payload: !lambda "return bambulabs::generate_mqtt_payload( id(filament_raw_data2).state, 0, 1 );"
 text_sensor:
   # NFC Raw Data 1-8 are hidden unless ams.yaml is included
   - platform: template
