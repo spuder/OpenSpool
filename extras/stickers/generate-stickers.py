@@ -8,10 +8,10 @@ import tempfile
 import shutil
 
 # User modifiable parameters
-LEFT_MARGIN = 0.5  # in inches
-RIGHT_MARGIN = 0.5
+LEFT_MARGIN = 3/8  # in inches
+RIGHT_MARGIN = 3/8 #3/8
 TOP_MARGIN = 0.5
-BOTTOM_MARGIN = 0.5
+BOTTOM_MARGIN = 0.5 #1/2
 CIRCLE_DIAMETER = 1.0  # diameter of each circle in inches
 NUM_COLUMNS = 7
 NUM_ROWS = 9
@@ -76,7 +76,8 @@ def create_circle_pdf(filename,
                      bottom_margin=BOTTOM_MARGIN*inch,
                      circle_diameter=CIRCLE_DIAMETER*inch,
                      num_columns=NUM_COLUMNS,
-                     num_rows=NUM_ROWS):
+                     num_rows=NUM_ROWS,
+                     oversize_factor=1.05):
     """
     Generate a PDF with evenly spaced circles and logo overlays arranged in a grid.
     
@@ -90,8 +91,12 @@ def create_circle_pdf(filename,
         circle_diameter (float): Diameter of each circle in points
         num_columns (int): Number of columns in the grid
         num_rows (int): Number of rows in the grid
+        oversize_factor (float): Make the image slightly larger to account for tolerances
     """
     try:
+
+        circle_diameter *= oversize_factor
+
         # Prepare the logo
         temp_logo_path = prepare_logo(logo_path, CIRCLE_DIAMETER)
         
