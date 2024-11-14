@@ -16,12 +16,14 @@ esphome:
       - -std=gnu++14
   on_boot:
     then:
+      - delay: 6s #Wait until wifi is initalized or else the leds studder
       - script.execute: set_led_rainbow
       - delay: 3s
-      - script.stop: set_led_rainbow
+      # - script.stop: set_led_rainbow
       - light.turn_on:
           id: neopixel_light
           effect: none
+      - delay: 100ms
       - script.execute: set_all_leds_white
       # - script.execute: set_all_leds_white
       # - lambda: |-
