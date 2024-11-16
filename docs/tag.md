@@ -1,25 +1,23 @@
 ---
 title: Tag Info
 layout: default
-nav_order: 3
 custom_js: true
+permalink: /tag_info
 ---
 
 <div class="spool-container">
+  <div id="noParamsMessage" class="message-banner" style="display: none;">
+    <div class="message-content">
+      <span class="message-icon">🔍</span>
+      <span class="message-text">Touch your phone to an NFC tag to view data</span>
+    </div>
+  </div>
   <div id="colorBox" class="color-circle"></div>
   <div id="hexValue" class="hex-value"></div>
 
   <div class="spool-data">
     <h2>Filament Properties</h2>
     <div class="data-grid">
-      <div class="data-item">
-        <span class="label">Protocol</span>
-        <span class="value" id="protocol"></span>
-      </div>
-      <div class="data-item">
-        <span class="label">Version</span>
-        <span class="value" id="version"></span>
-      </div>
       <div class="data-item">
         <span class="label">Type</span>
         <span class="value" id="type"></span>
@@ -33,7 +31,29 @@ custom_js: true
         <span class="value" id="temp-range"></span>
       </div>
     </div>
+    <h2>Tag Properties</h2>
+      <div class="data-grid">
+        <div class="data-item">
+          <span class="label">Protocol</span>
+          <span class="value" id="protocol"></span>
+        </div>
+        <div class="data-item">
+           <span class="label">Version</span>
+          <span class="value" id="version"></span>
+        </div>
+      </div>
   </div>
+
+  <div class="json-display">
+    <h2>Raw JSON Data</h2>
+    <pre id="jsonDisplay" class="json-code"></pre>
+  </div>
+
+  <!-- <div class="qr-container">
+    <h2>QR Code</h2>
+    <div id="qrcode"></div>
+    <p class="qr-hint">Scan to share these filament settings</p>
+  </div> -->
 </div>
 
 <style>
@@ -120,6 +140,90 @@ custom_js: true
   font-size: 1.2em;
   font-weight: bold;
 }
+
+.json-display {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.json-display h2 {
+  text-align: center;
+  color: #2196F3;
+  margin-bottom: 1rem;
+}
+
+.json-code {
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 1.5rem;
+  overflow-x: auto;
+  font-family: monospace;
+  font-size: 1.1em;
+  line-height: 1.5;
+  border: 1px solid rgba(100,181,246,0.2);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+/* .qr-container {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.qr-container h2 {
+  color: #2196F3;
+  margin-bottom: 1rem;
+}
+
+#qrcode {
+  display: flex;
+  justify-content: center;
+  margin: 1rem auto;
+  padding: 1rem;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.qr-hint {
+  color: #64B5F6;
+  font-size: 0.9em;
+  margin-top: 0.5rem;
+} */
+
+.message-banner {
+  width: 100%;
+  background: rgba(33, 150, 243, 0.1);
+  border: 1px solid #2196F3;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.message-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.message-icon {
+  font-size: 1.5em;
+}
+
+.message-text {
+  color: #2196F3;
+  font-size: 1.1em;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 </style>
 
 <script>
@@ -152,4 +256,10 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('temp-range').textContent = 
     `${spoolData.min_temp || 'N/A'}°C - ${spoolData.max_temp || 'N/A'}°C`;
 });
+
+
 </script>
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script> -->
+<script type="module" src="https://unpkg.com/esp-web-tools@8.0.6/dist/web/install-button.js"></script>
+<script src="{{ '/assets/js/tag-handler.js' | relative_url }}"></script>

@@ -18,10 +18,10 @@ plugins:
   - jekyll-default-layout
 
 head_scripts:
-#https://github.com/esphome/esp-web-tools/issues/515#issuecomment-2387664391
-  - https://unpkg.com/esp-web-tools@8.0.6/dist/web/install-button.js?module
+  # https://github.com/esphome/esp-web-tools/issues/515#issuecomment-2387664391
   # - https://unpkg.com/@improv-wifi/sdk-serial@1.1.0/dist/serial.min.js?module
-
+  - https://unpkg.com/esp-web-tools@8.0.6/dist/web/install-button.js?module
+  # - https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js
 defaults:
   - scope:
       path: "assets/js"
