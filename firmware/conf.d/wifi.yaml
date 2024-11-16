@@ -23,7 +23,10 @@ sensor:
 text_sensor: 
   - platform: wifi_info
     # TODO: don't post to mqtt, static_topic isn't valid for wifi_info
-
+    mac_address:
+      name: Mac Address
+      state_topic:
+      id: mac_address
 
 # text_sensor:
 #   # state_topic: # Don't post update to MQTT
@@ -35,6 +38,4 @@ text_sensor:
 #     ssid:
 #       name: ${name} SSID
 #       state_topic:
-#     mac_address:
-#       name: ${name} Mac Address
-#       state_topic:
+

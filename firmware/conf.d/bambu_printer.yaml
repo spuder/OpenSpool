@@ -63,12 +63,47 @@ text:
           id(bambu_mqtt).set_broker_address(x.c_str());
   #       - script.execute: check_mqtt_creds #TODO: Enable once this is merged: https://github.com/esphome/esphome/pull/7716
 
+  - platform: template
+    name: "OpenSpool URL"
+    id: openspool_url
+    state_topic:
+    icon: mdi:web
+    mode: text
+    web_server:
+      sorting_group_id: sorting_group_printer_settings
+    lambda: |-
+      std::string mac = id(mac_address).state;
+      // Extract just the last 6 characters (3 pairs of hex digits)
+      std::string last_6 = mac.substr(15, 2) + mac.substr(12, 2) + mac.substr(9, 2);
+      return {"http://openspool-" + last_6 + ".local"};
+    set_action:
+      - lambda: |-
+          id(openspool_url).publish_state(x);
 button:
   - platform: restart
     name: "Restart OpenSpool"
     id: restart_openspool
     state_topic:
     entity_category: diagnostic
+
+  - platform: template
+    name: "Write URL to NFC"
+    id: write_url_button
+    icon: mdi:web
+    web_server:
+      sorting_group_id: sorting_group_rfid
+    on_press:
+      then:
+        lambda: |-
+          auto message = std::make_unique<nfc::NdefMessage>();
+          auto url_record = std::make_unique<nfc::NdefRecord>();
+          url_record->set_tnf(nfc::TNF_WELL_KNOWN);
+          url_record->set_type("U");
+          url_record->set_payload(id(openspool_url).state);
+          message->add_record(std::move(url_record));
+
+          id(rfid_reader_spi_0).write_mode(message.get());
+          ESP_LOGI("rfid", "Wrote URL to NFC tag: %s", id(openspool_url).state.c_str());
 #TODO: Show the current state of the printer
 
 # ACTION_IDS = {

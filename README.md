@@ -1,5 +1,8 @@
 
-<img src="./images/OpenSpoolLogo.png" width="200">
+<p align=center>
+    <img src="./images/OpenSpoolLogoMedium1.png" width="200">
+</p>
+
 
 # OpenSpool
 **Your filament wants to be free**
