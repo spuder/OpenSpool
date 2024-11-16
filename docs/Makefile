@@ -1,7 +1,11 @@
 # Run bundle exec jekyll serve
 
 # defualt to serve
-all: serve
+all: clean serve
+
+.PHONY: clean
+clean: 
+	bundle exec jekyll clean
 
 .PHONY: serve
 serve:
@@ -10,3 +14,4 @@ serve:
 .PHONY: build
 build:
 	bundle exec jekyll build
+
