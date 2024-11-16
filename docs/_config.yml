@@ -2,7 +2,6 @@ title: OpenSpool
 description: Your filament wants to be free
 theme: just-the-docs
 
-# url: https://just-the-docs.github.io
 url: https://openspool.io
 
 aux_links:
@@ -15,7 +14,6 @@ favicon: "images/favicon.ico"
 
 color_scheme: dark
 
-
 plugins:
   - jekyll-default-layout
 
@@ -24,6 +22,11 @@ head_scripts:
   - https://unpkg.com/esp-web-tools@8.0.6/dist/web/install-button.js?module
   # - https://unpkg.com/@improv-wifi/sdk-serial@1.1.0/dist/serial.min.js?module
 
+defaults:
+  - scope:
+      path: "assets/js"
+    values:
+      js: true
 
 callouts:
   warning:
@@ -38,3 +41,14 @@ callouts:
   caution:
     title: Caution
     color: yellow
+
+
+# footer_content: "Copyright &copy; 2017-2020 Patrick Marsceill. Distributed by an <a href=\"https://github.com/just-the-docs/just-the-docs/tree/main/LICENSE.txt\">MIT license.</a>"
+
+# # Footer "Edit this page on GitHub" link text
+# gh_edit_link: true # show or hide edit this page link
+# gh_edit_link_text: "Edit this page on GitHub."
+# gh_edit_repository: "https://github.com/just-the-docs/just-the-docs" # the github URL for your repo
+# gh_edit_branch: "main" # the branch that your docs is served from
+# # gh_edit_source: docs # the source that your files originate from
+# gh_edit_view_mode: "tree" # "tree" or "edit" if you want the user to jump into the editor immediately
