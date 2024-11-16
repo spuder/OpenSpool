@@ -75,6 +75,26 @@ document.addEventListener('DOMContentLoaded', function() {
       jsonDisplay.textContent = prettyJson;
     }
 
+    // Show url display
+    const urlNdefDisplay = document.getElementById('urlNdefDisplay');
+    if (urlNdefDisplay) {
+        // Create URL with parameters
+        const url = new URL('https://openspool.io/tag_info');
+        
+        // Only add parameters that exist and have values
+        Object.entries(spoolData).forEach(([key, value]) => {
+            if (value) {
+                url.searchParams.set(key, value);
+            }
+        });
+
+        // Set the URL text content and make it visible
+        urlNdefDisplay.textContent = url.toString();
+        urlNdefDisplay.style.display = 'block';  // Make sure it's visible
+        
+        // Optional: Add a class for styling
+        urlNdefDisplay.classList.add('url-display');
+    }
     // Generate QR code
     // try {
     //   const qrcodeContainer = document.getElementById('qrcode');

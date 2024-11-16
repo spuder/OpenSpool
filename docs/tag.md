@@ -45,9 +45,14 @@ permalink: /tag_info
   </div>
 
   <div class="json-display">
-    <h2>Raw JSON Data</h2>
+    <h2>Application/Json NDEF Record</h2>
     <pre id="jsonDisplay" class="json-code"></pre>
   </div>
+
+<div class="url-display">
+    <h2>URL NDEF Record</h2>
+    <pre id="urlNdefDisplay" class="url-code"></pre>
+</div>  
 
   <!-- <div class="qr-container">
     <h2>QR Code</h2>
@@ -155,6 +160,31 @@ permalink: /tag_info
 }
 
 .json-code {
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  padding: 1.5rem;
+  overflow-x: auto;
+  font-family: monospace;
+  font-size: 1.1em;
+  line-height: 1.5;
+  border: 1px solid rgba(100,181,246,0.2);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.url-display {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 2rem;
+  text-align: left;
+}
+
+.url-display h2 {
+  text-align: center;
+  color: #2196F3;
+  margin-bottom: 1rem;
+}
+
+.url-code {
   background: rgba(255,255,255,0.05);
   border-radius: 10px;
   padding: 1.5rem;
