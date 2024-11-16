@@ -80,7 +80,18 @@ payload =
 }
 ```
 
-<img src="./images/phone2.png" width="400">
+<img src="./images/phone2.png" width="300">
+
+
+#### Web Preview
+
+By touching your phone to a spool tag, you can see information about the spool. 
+
+![](./images/NFC2.png)
+
+```
+https://openspool.io/tag_info?color_hex=FFAABB&brand=Generic&min_temp=220&max_temp=240&protocol=openspool&version=1.0
+```
 
 
 ## 🐼 Integrations
