@@ -9,7 +9,7 @@ nav_order: 1
 
 
 <p align=center>
-    <img src="./images/OpenSpoolMini1.heic" width="600">
+    <img src="../images/OpenSpoolMini2.png" width="600">
 </p>
 
 ## Links
@@ -24,12 +24,12 @@ nav_order: 1
 
 ## Wiring Diagram
 
-![](./images/OpenSpoolMiniWiringDiagram.png)
+![](../images/OpenSpoolMiniWiringDiagram.png)
 
 ![](https://www.wemos.cc/en/latest/_images/s2_mini_v1.0.0_4_16x9.jpg)
 
 
-Assembly Video: 
+## Assembly Video: 
 
 Coming soon
 {: .label .label-yellow }
