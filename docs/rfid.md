@@ -4,6 +4,10 @@ title: RFID Tags
 nav_order: 2
 ---
 
+<p align=center>
+    <img src="../images/NFC1.png" width="400">
+</p>
+
 # RFID Tags
 
 At the heart of OpenSpool are the `NFC/RFID` tags that you will place on every spool you want to automate. The OpenSpool hardware works with a wide variety of High-Frequency tags (13.56Mhz)
@@ -26,16 +30,6 @@ Purchase NTAG 215 or 216
 | NTAG 213 | 144 bytes | ❌ | 
 | NTAG 215 | 504 bytes | ✅ |  
 | NTAG 216 | 888 bytes | ✅ |   
-
-## Tag Placement
-
-In order to comply with the [OpenSourceRfid standard](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/blob/main/OpenSourceRfid.md), the tag should be placed according to the following constraints. 
-
-- Tag center should be 56.0mm away from the center of the spool (see pic)
-- The tag should never be more than 4.0mm away from the outside edge of the spool. For spool sides thicker than 4mm, there must be a cutout to embed the tag, or the tag should be fixed to the outside of the spool
-- Two tags should be used, one on each end of the spool
-
-![](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/raw/main/images/TagLocation.png))
 
 
 ## Protocol
