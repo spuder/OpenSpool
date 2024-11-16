@@ -125,11 +125,11 @@ If you do find a cheaper price and have verified reliablity, please let us know.
 # Wiring Diagram
 
 
-<img src="./images/WiringDiagram2.png" width="600">
+<img src="./images/OpenSpoolMiniWiringDiagram.png" width="500">
 
 Be sure to put the PN532 into `SPI` mode (not `i2c` or `UART`)
 
-![](./images/PN532-4.jpg)
+<img src="./images/PN532-4.jpg" width="300">
 
 
 | Tag | Bytes | Supported |  
