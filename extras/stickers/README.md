@@ -2,14 +2,6 @@
 
 Buy thsese Stickers: [https://amzn.to/40FfteV](https://amzn.to/40FfteV)
 
-Print using this pdf: 
-
-- [1-Inch-Stickers.pdf](./1-Inch-Stickers.pdf)  
-
-Or modify your own using the template: 
-
-- [1-Inch-Template.pdf](./1-Inch-Template.pdf)  
-
 
 ## Generating templates
 
