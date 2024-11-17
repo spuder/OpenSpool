@@ -96,7 +96,7 @@ https://openspool.io/tag_info?color_hex=FFAABB&brand=Generic&min_temp=220&max_te
 
 ## 🐼 Integrations
 
-Currently OpenSpool only works with Bambu printers over mqtt. Other integrations are planned. Pull Requests welcome
+Currently OpenSpool works with Bambu printers over mqtt. Other integrations are planned. Pull Requests welcome
 
 | Integration | Supported |
 | --- | --- |
@@ -123,11 +123,17 @@ OpenSpool requires an ESP32-S2 and PN532 NFC Reader (SPI Mode).
 | ![](./images/LLC1.png) | 3.3v - 5v Logic Level Converter | [Amazon](https://amzn.to/3UMfMkp) | | 
 | ![](./images/jumper1.png) | female-female jumper wire) | [Amazon](https://amzn.to/3AMwRDM) | | 
 
+| Tag | Bytes | Supported |  
+| --- | --- | --- |  
+| NTAG 213 | 144 bytes | ❌ | 
+| NTAG 215 | 504 bytes | ✅ |  
+| NTAG 216 | 888 bytes | ✅ |   
+
 ### Caution of Fakes
 
-There is a plethora of fake D1 Mini S2 and PN532 in the market. 
-For the D1 Mini you need the `ESP32-S2FN4R2` not the `ESP32-S2FH4`. 
-For the PN532 you need the model that contains the silkscreen. 
+There is a plethora of fake D1 Mini S2 microcontrollers and PN532 RFID readers in the market. 
+For the D1 Mini microcontroller, you need the `ESP32-S2FN4R2` not the `ESP32-S2FH4`. 
+For the PN532 RFID reader, you need the model that contains the silkscreen. 
 
 While temping to buy a fake/clone esp32 or PN5432 at a lower cost, they inevitibly cause headaches as they are less reliable at reading NFC tags. 
 Purchasing at reputable vendors is highly recomended. 
@@ -143,22 +149,7 @@ Be sure to put the PN532 into `SPI` mode (not `i2c` or `UART`)
 <img src="./images/PN532-4.jpg" width="300">
 
 
-| Tag | Bytes | Supported |  
-| --- | --- | --- |  
-| NTAG 213 | 144 bytes | ❌ | 
-| NTAG 215 | 504 bytes | ✅ |  
-| NTAG 216 | 888 bytes | ✅ |   
 
-
-## Tag Placement
-
-In order to comply with the [OpenSourceRfid standard](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/blob/main/OpenSourceRfid.md), the tag should be placed according to the following constraints. 
-
-- Tag center should be 56.0mm away from the center of the spool (see pic)
-- The tag should never be more than 4.0mm away from the outside edge of the spool. For spool sides thicker than 4mm, there must be a cutout to embed the tag, or the tag should be fixed to the outside of the spool
-- Two tags should be used, one on each end of the spool
-
-![](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/raw/main/images/TagLocation.png))
 
 ## 🤖 Firmware
 
@@ -185,7 +176,7 @@ ls /dev/cu*
 Upload firmware and restart
 
 ```bash
-USB_ADDRESS=/dev/cu.usbmodemXXXXX make run-usb-pcb
+USB_ADDRESS=/dev/cu.usbmodemXXXXX make run-usb-pcb-solo
 ```
 
 ## 🛜 First Time Configuration
