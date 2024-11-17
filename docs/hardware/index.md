@@ -10,13 +10,17 @@ nav_order: 3
         <a href="{{ '/hardware/openspool-mini' | relative_url }}">
             <img src="../images/OpenSpoolMini3.png" alt="OpenSpoolMini2">
         </a>
-        <button type="button" name="button" class="btn">OpenSpool Mini</button>
+        <a href="{{ '/hardware/openspool-mini' | relative_url }}">
+            <button type="button" name="button" class="btn">OpenSpool Mini</button>
+        </a>
     </div>
     <div class="image-item">
         <a href="{{ '/hardware/openspool-ams' | relative_url }}">
             <img src="../images/OpenSpoolAMS1.png" alt="OpenSpoolAMS1">
         </a>
-        <button type="button" name="button" class="btn">OpenSpool AMS</button>
+        <a href="{{ '/hardware/openspool-ams' | relative_url }}">
+            <button type="button" name="button" class="btn">OpenSpool AMS</button>
+        </a>
     </div>
 </div>
 

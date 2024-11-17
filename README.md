@@ -54,7 +54,6 @@ OpenSpool aims to use the simplest possible protocol for RFID tags. All you need
 ### 🧬 OpenSourceRFID Protocol
 
 The OpenSourceRFID protocol is still pending finalization, o OpenSourceRFID has momentium from suppliers [PolarFilament](https://polarfilament.com) and [3D-fuel](https://www.3dfuel.com)
-It uses Mifare 1k classic RFID tags. OpenSourceRFID is still pending radification. 
 
 Follow [this github page](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/blob/main/OpenSourceRfid.md) for updates to OpenSourceRFID
 
