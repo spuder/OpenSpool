@@ -1,10 +1,10 @@
 substitutions:
-  led_count: '5'
+  led_count: '9'
 
 light:
   - platform: esp32_rmt_led_strip
     id: neopixel_light
-    pin: GPIO16
+    pin: ${led_pin}
     num_leds: ${led_count}
     rgb_order: GRB
     name: LEDs

@@ -1,7 +1,9 @@
 substitutions:
   hide_ams_sensors: 'true'
 
-  spi2_type: SPI2
+  led_pin: GPIO16
+
+  spi2_type: SPI2 #SPI2,SPI3,any,hardware
   spi2_clk_pin: GPIO36
   spi2_miso_pin: GPIO37
   spi2_mosi_pin: GPIO35
@@ -9,27 +11,18 @@ substitutions:
   rfid0_spi_interface: SPI2
   rfid0_ss_pin: GPIO34
 
-  rfid1_spi_interface: SPI2
-  rfid1_clk_pin: GPIO21
+  #rfid1_spi_interface: SPI2
+  #rfid1_clk_pin: GPIO21
+  ## rfid1_spi_interface: SPI2
+  ## rfid1_clk_pin: GPIO08
 
 esp32:
-  # board: featheresp32-s2
   board: lolin_s2_mini
   framework: 
       type: esp-idf
-  # variant: esp32s2
-  # partitions:
-  # framework: 
-  #   type: esp-idf
-  #   sdkconfig_options:
-  #     CONFIG_MBEDTLS_EXTERNAL_MEM_ALLOC: y
-  #     CONFIG_ESP_TLS_USE_SECURE_ELEMENT: y
-  #     # CONFIG_ESP_TLS_USE_DS_PERIPHERAL: y
 
 packages:
   base: !include common.yaml
   status_led: !include conf.d/status_led.yaml
-  ota-esphome: !include conf.d/ota-esphome.yaml
+  # ota-esphome: !include conf.d/ota-esphome.yaml #TODO: reenalbe ota-esphome, disabled to troubleshoot wb not loading
   button: !include conf.d/button.yaml
-
-  # psram: !include conf.d/psram-esp32s2.yaml
