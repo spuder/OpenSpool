@@ -1,0 +1,24 @@
+# i2c is very unreliable with the PN532 because it uses clock stretching
+# https://discord.com/channels/429907082951524364/429907082955718657/1303771768648896522
+# i2c:
+#   - id: i2c_bus_a
+#     sda: GPIO01
+#     scl: GPIO02
+#     scan: true
+#     # frequency: 10kHz # https://github.com/esphome/issues/issues/4340
+#     # frequency: 200kHz
+#     # frequency: 40kHz
+#     frequency: 100kHz # PN532 data sheet says it supports 100k and 400k
+#     timeout: 2000µs  # https://community.home-assistant.io/t/timed-out-waiting-for-readiness-from-pn532/683952
+#     # timeout: 50ms
+# # [C][i2c.idf:078]:   Frequency: 40000 Hz
+# # [C][i2c.idf:080]:   Timeout: 13000us
+# pn532_i2c:
+#   update_interval: 1s #TODO: Should this be more aggressive? 
+#   id: rfid_reader_i2c_1
+#   address: 0x24
+#   # i2c_id: i2c_bus_a
+#   on_tag:
+#     then:
+#       - lambda: |-
+#           ESP_LOGW("NFC", "I2C tag detected");

@@ -14,12 +14,9 @@ nav_order: 1
 
 ## Links
 
-
 | --- | --- |
 | 3MF/STL Files | <span class="label label-yellow">Coming soon</span> | 
 | Fusion360 CAD Files | <span class="label label-yellow">Coming soon</span>
-
-
 
 
 ## Wiring Diagram
