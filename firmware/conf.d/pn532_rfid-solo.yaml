@@ -258,9 +258,11 @@ button:
                   std::string url = "https://openspool.io/tag_info?";
                   url += "color_hex=" + std::string(id(filament_color_hex).state);
                   url += "&type=" + std::string(id(filament_type).state);
-                  url += "&min_temp=" + std::to_string(id(filament_min_temp).state);
-                  url += "&max_temp=" + std::to_string(id(filament_max_temp).state);
+                  url += "&min_temp=" + std::to_string(static_cast<int>(id(filament_min_temp).state));
+                  url += "&max_temp=" + std::to_string(static_cast<int>(id(filament_max_temp).state));
                   url += "&brand=" + std::string(id(filament_brand).state);
+                  url += "protocol" + std::string("openspool");
+                  url += "version" + std::string("1.0");
                   ESP_LOGI("rfid", "NDEF Record URL: %s", url.c_str());
                   message->add_uri_record(url);
 
@@ -275,10 +277,14 @@ button:
 
                   id(rfid_reader_spi_0).write_mode(message);
                   ESP_LOGI("rfid", "Writing JSON NDEF message to tag");
+                  //TODO: GPT says there is a memory leak here, yet when I use 'delete' or std::make_unique<> I get crashes
               - wait_until:
                   not: 
                     pn532.is_writing:
-              - logger.log: "Finished writing tag" #TODO: change log namespace
+              - logger.log: 
+                  tag: "rfid"
+                  format: "Finished writing tag"
+                  level: INFO
             else:
               - lambda: |-
                   ESP_LOGI("rfid", "NFC Tag not present");
