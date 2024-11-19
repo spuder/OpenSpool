@@ -22,11 +22,11 @@ text_sensor:
     state_topic:
     icon: mdi:web
     web_server:
-      sorting_group_id: sorting_group_info
+      sorting_group_id: sorting_group_extra
     lambda: |-
       std::string mac = id(mac_address).state;
       // Extract just the last 6 characters (3 pairs of hex digits)
-      std::string last_6 = mac.substr(15, 2) + mac.substr(12, 2) + mac.substr(9, 2);
+      std::string last_6 = mac.substr(9, 2) + mac.substr(12, 2) + mac.substr(15, 2);
       return {"http://openspool-" + last_6 + ".local"};
 
 text:
