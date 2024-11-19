@@ -28,6 +28,15 @@ text_sensor:
       // Extract just the last 6 characters (3 pairs of hex digits)
       std::string last_6 = mac.substr(9, 2) + mac.substr(12, 2) + mac.substr(15, 2);
       return {"http://openspool-" + last_6 + ".local"};
+  - platform: template
+    name: "BambuHandy URL"
+    id: bambuhandy_url
+    state_topic:
+    icon: mdi:cellphone
+    web_server:
+      sorting_group_id: sorting_group_extra
+    lambda: |-
+      return {"bambulab://"};
 
 text:
   - platform: template
@@ -84,66 +93,72 @@ button:
     state_topic:
     entity_category: diagnostic
 
-  - platform: template #TODO: Collapse into Write NFC once tested
-    name: "Write URL to NFC"
+  - platform: template
+    name: "OpenSpool Create Tag"
     id: write_url_button
     icon: mdi:web
     web_server:
       sorting_group_id: sorting_group_extra
     on_press:
-      then:
-        lambda: |-
-            ESP_LOGI("rfid", "Starting NFC write...");
-            
-            if (!id(rfid_reader_spi_0).is_ready()) {
-              ESP_LOGW("rfid", "NFC reader not ready!");
-              return;
-            }
-            
+      then: 
+        # TODO: binary sensor that shows reader write_mode? 
+        # TODO: blink lights when light mode changes
+        - logger.log: "Writing tag" #TODO: change log namespace
+        - lambda: |-
+            // This causes esp32 to lockup, stackoverflow perhaps? 
+            // Leaving this code here as an example of what not to do
+
+            // std::string url = id(openspool_url).state;
+            // nfc::NdefMessage message;
+            // message.add_uri_record(url);
+            //id(rfid_reader_spi_0).write_mode(&message);
+
+            // This also causes it to lockup
+
+            // std::string url = id(openspool_url).state;
+            // auto message = std::make_unique<nfc::NdefMessage>();
+            // message->add_uri_record(url);
+            // id(rfid_reader_spi_0).write_mode(message.get());
+
+            // deleting the message also causes a lockup
+
+            // std::string url = id(openspool_url).state;
+            // auto message = new nfc::NdefMessage();
+            // message->add_uri_record(url);
+            // id(rfid_reader_spi_0).write_mode(message);
+            // delete message; 
+
             std::string url = id(openspool_url).state;
-            if (url.empty()) {
-              ESP_LOGW("rfid", "URL is empty!");
-              return;
-            }
-            ESP_LOGI("rfid", "Original URL: %s", url.c_str());
+            ESP_LOGD("NFC", "Writing URL: %s", url.c_str());
+            auto message = new nfc::NdefMessage();
+            message->add_uri_record(url);
+            id(rfid_reader_spi_0).write_mode(message);
+        - wait_until:
+            not: 
+              pn532.is_writing:
+        - logger.log: "Finished writing tag" #TODO: change log namespace
 
-            // Remove "http://" if present
-            if (url.substr(0, 7) == "http://") {
-              url = url.substr(7);
-            }
-            ESP_LOGI("rfid", "Processed URL: %s", url.c_str());
-
-            auto message = std::make_unique<nfc::NdefMessage>();
-            if (!message) {
-              ESP_LOGW("rfid", "Failed to create NDEF message!");
-              return;
-            }
-
-            auto url_record = std::make_unique<nfc::NdefRecord>();
-            if (!url_record) {
-              ESP_LOGW("rfid", "Failed to create NDEF record!");
-              return;
-            }
-
-            ESP_LOGI("rfid", "Setting up NDEF record...");
-            url_record->set_tnf(nfc::TNF_WELL_KNOWN);
-            url_record->set_type("U");
-
-            std::vector<uint8_t> payload;
-            payload.reserve(url.length() + 1);  // Reserve space to prevent reallocations
-            payload.push_back(0x03);  // Prefix for "http://"
-            payload.insert(payload.end(), url.begin(), url.end());
-            
-            ESP_LOGI("rfid", "Setting payload...");
-            url_record->set_payload(std::string(payload.begin(), payload.end()));
-            
-            ESP_LOGI("rfid", "Adding record to message...");
-            message->add_record(std::move(url_record));
-            
-            ESP_LOGI("rfid", "Initiating write mode...");
-            id(rfid_reader_spi_0).write_mode(message.get());
-            
-            ESP_LOGI("rfid", "NFC write completed successfully");
+  - platform: template
+    name: "BambuHandy Create Tag"
+    id: write_bambuhandy_url_button
+    icon: mdi:cellphone
+    web_server:
+      sorting_group_id: sorting_group_extra
+    on_press:
+      then: 
+        # TODO: binary sensor that shows reader write_mode? 
+        # TODO: blink lights when light mode changes
+        - logger.log: "Writing tag" #TODO: change log namespace
+        - lambda: |-
+            std::string url = id(bambuhandy_url).state;
+            ESP_LOGD("NFC", "Writing URL: %s", url.c_str());
+            auto message = new nfc::NdefMessage();
+            message->add_uri_record(url);
+            id(rfid_reader_spi_0).write_mode(message);
+        - wait_until:
+            not: 
+              pn532.is_writing:
+        - logger.log: "Finished writing tag" #TODO: change log namespace   
 
 #TODO: Show the current state of the printer
 
