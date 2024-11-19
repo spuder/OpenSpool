@@ -1,13 +1,13 @@
 {
   "name": "OpenSpool",
-  "version": "v1.0.4",
+  "version": "v1.1.0",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "b7e321e2b6b467f35544610228f0532d",
-        "summary": "Fix name"
+        "md5": "8da97efb265106ed594f1bf192051658",
+        "summary": "Improve logging and add missing protocol to NDEF record"
       },
       "parts": [
         {
