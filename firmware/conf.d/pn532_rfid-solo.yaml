@@ -237,7 +237,7 @@ button:
                     }
             then:
               - lambda: |-
-                  constexpr size_t json_capacity = 256;
+                  constexpr size_t json_capacity = 512;
 
                   StaticJsonDocument<json_capacity> doc;
 
@@ -252,15 +252,7 @@ button:
                   char json_buffer[json_capacity];
                   size_t json_length = serializeJson(doc, json_buffer, sizeof(json_buffer));
 
-                  ESP_LOGI("rfid", "JSON content to be written: %s", json_buffer);
-
-                  auto message = std::make_unique<nfc::NdefMessage>();
-                  auto tag_data_record = std::make_unique<nfc::NdefRecord>();
-                  tag_data_record->set_tnf(nfc::TNF_WELL_KNOWN);
-                  tag_data_record->set_type("application/json");
-                  tag_data_record->set_payload(std::string(json_buffer, json_length));
-
-                  message->add_record(std::move(tag_data_record));
+                  auto message = new nfc::NdefMessage();
 
                   //Create openspool.io/tag_info uri
                   std::string url = "https://openspool.io/tag_info?";
@@ -269,17 +261,24 @@ button:
                   url += "&min_temp=" + std::to_string(id(filament_min_temp).state);
                   url += "&max_temp=" + std::to_string(id(filament_max_temp).state);
                   url += "&brand=" + std::string(id(filament_brand).state);
-
                   ESP_LOGI("rfid", "NDEF Record URL: %s", url.c_str());
+                  message->add_uri_record(url);
 
-                  auto url_record = std::make_unique<nfc::NdefRecord>();
-                  url_record->set_tnf(nfc::TNF_WELL_KNOWN);
-                  url_record->set_type("U");
-                  url_record->set_payload(url);
-                  message->add_record(std::move(url_record));
+                  ESP_LOGI("rfid", "JSON content to be written: %s", json_buffer);
 
-                  id(rfid_reader_spi_0).write_mode(message.get());
+                  auto tag_data_record = std::make_unique<nfc::NdefRecord>();
+                  tag_data_record->set_tnf(nfc::TNF_WELL_KNOWN);
+                  tag_data_record->set_type("application/json");
+                  tag_data_record->set_payload(std::string(json_buffer, json_length));
+
+                  message->add_record(std::move(tag_data_record));
+
+                  id(rfid_reader_spi_0).write_mode(message);
                   ESP_LOGI("rfid", "Writing JSON NDEF message to tag");
+              - wait_until:
+                  not: 
+                    pn532.is_writing:
+              - logger.log: "Finished writing tag" #TODO: change log namespace
             else:
               - lambda: |-
                   ESP_LOGI("rfid", "NFC Tag not present");
