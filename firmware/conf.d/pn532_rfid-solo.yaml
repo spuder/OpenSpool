@@ -121,7 +121,46 @@ text_sensor:
     web_server:
       sorting_group_id: sorting_group_rfid
     filters:
-      - lambda: "auto pretty_json = [](const std::string &x) -> std::string {\n  if (x.empty()) {\n    ESP_LOGD(\"NFC\", \"Input string is empty\");\n    return x;\n  }     \n  ESP_LOGD(\"NFC\", \"Input string: %s\", x.c_str());\n  \n  StaticJsonDocument<1024> doc;  // Use StaticJsonDocument for memory efficiency\n  DeserializationError error = deserializeJson(doc, x);\n  if (error) {\n    ESP_LOGE(\"NFC\", \"JSON parsing failed: %s\", error.c_str());\n    return \"\";\n  }\n  \n  if (!doc.is<JsonObject>()) {\n    ESP_LOGE(\"NFC\", \"Invalid JSON: Not an object\");\n    return \"\";\n  }\n  \n  const char* required_fields[] = {\"protocol\", \"color_hex\", \"type\", \"min_temp\", \"max_temp\", \"brand\"};\n  for (const char* field : required_fields) {\n    if (!doc.containsKey(field)) {\n      ESP_LOGE(\"NFC\", \"Invalid JSON: Missing required field '%s'\", field);\n      return \"\";\n    }\n  }\n  \n  std::string output;\n  serializeJsonPretty(doc, output);\n  \n  if (output.length() > 1024) {\n    ESP_LOGE(\"NFC\", \"Prettified JSON exceeds 1024 bytes\");\n    return \"\";\n  }\n  \n  return output;\n};\nreturn pretty_json(x);"
+      - lambda: |-
+          auto pretty_json = [](const std::string &x) -> std::string {
+            if (x.empty()) {
+              ESP_LOGD("NFC", "Input string is empty");
+              return x;
+            }     
+            ESP_LOGD("NFC", "Input string: %s", x.c_str());
+            
+            StaticJsonDocument<1024> doc;  // Use StaticJsonDocument for memory efficiency
+            DeserializationError error = deserializeJson(doc, x);
+            if (error) {
+              ESP_LOGE("NFC", "JSON parsing failed: %s", error.c_str());
+              return "";
+            }
+            
+            if (!doc.is<JsonObject>()) {
+              ESP_LOGE("NFC", "Invalid JSON: Not an object");
+              return "";
+            }
+            
+            const char* required_fields[] = {"protocol", "color_hex", "type", "min_temp", "max_temp", "brand"};
+            for (const char* field : required_fields) {
+              if (!doc.containsKey(field)) {
+                ESP_LOGE("NFC", "Invalid JSON: Missing required field '%s'", field);
+                return "";
+              }
+            }
+            
+            std::string output;
+            serializeJsonPretty(doc, output);
+            
+            if (output.length() > 1024) {
+              ESP_LOGE("NFC", "Prettified JSON exceeds 1024 bytes");
+              return "";
+            }
+            
+            return output;
+          };
+          return pretty_json(x);
+
   - platform: template
     name: "NFC Preview"
     id: nfc_preview
