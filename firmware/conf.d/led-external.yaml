@@ -14,6 +14,7 @@ light:
     restore_mode: ALWAYS_OFF
     state_topic:
     entity_category: diagnostic
+    icon: mdi:led-strip
     effects:
       - addressable_rainbow:
           name: Rainbow
