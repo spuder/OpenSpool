@@ -1,18 +1,16 @@
 substitutions:
   name: openspool
   version: "0.0.0" # Keep this at 0.0.0 as github-actions will modify this file at build time
-
 esphome:
   name: ${name}
   name_add_mac_suffix: true
   project:
     name: spuder.openspool
     version: ${version}
-    # on_update:
-  min_version: 2024.10.1
+  min_version: 2024.11.0
   platformio_options:
     build_unflags: -std=gnu++11
-    build_flags: 
+    build_flags:
       - -std=gnu++14
   on_boot:
     then:
@@ -25,19 +23,18 @@ esphome:
           effect: none
       - delay: 100ms
       - script.execute: set_all_leds_white
-      # - script.execute: set_all_leds_white
-      # - lambda: |-
-      #     //TODO: this appears to have broken and no longer blinks blue
-      #     if (!wifi::global_wifi_component->is_connected() && 
-      #         wifi::global_wifi_component->wifi_soft_ap_ip().str() == "192.168.4.1") {
-      #       id(set_led_breathing_blue).execute();
-      #     }
-      # - lambda: |-
-      #     id(my_ota).set_auth_password("New password");
+        # - script.execute: set_all_leds_white
+        # - lambda: |-
+        #     //TODO: this appears to have broken and no longer blinks blue
+        #     if (!wifi::global_wifi_component->is_connected() && 
+        #         wifi::global_wifi_component->wifi_soft_ap_ip().str() == "192.168.4.1") {
+        #       id(set_led_breathing_blue).execute();
+        #     }
+        # - lambda: |-
+        #     id(my_ota).set_auth_password("New password");
   on_shutdown:
     then:
       - script.execute: set_led_off
-
 esp32:
   framework:
     type: esp-idf
@@ -45,11 +42,9 @@ esp32:
     platform_version: 6.9.0
     # version: recommended
     # sdkconfig_options:
-      # MBEDTLS_CERTIFICATE_BUNDLE: y
-      # MBEDTLS_CERTIFICATE_BUNDLE_DEFAULT_FULL: y
-
+    # MBEDTLS_CERTIFICATE_BUNDLE: y
+    # MBEDTLS_CERTIFICATE_BUNDLE_DEFAULT_FULL: y
 logger:
-
 packages:
   # uptime: !include conf.d/uptime.yaml
   wifi: !include conf.d/wifi.yaml

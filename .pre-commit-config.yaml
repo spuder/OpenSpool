@@ -3,3 +3,15 @@ repos:
     rev: v0.10.0
     hooks:
       - id: yamlfmt
+  - repo: local
+    hooks:
+      - id: esphome-config-solo
+        name: ESPHome Compile Solo
+        entry: bash -c 'podman run -v "$(pwd)/firmware:/data" --rm ghcr.io/esphome/esphome:2024.11.0 config /data/config-solo.yaml'
+        language: system
+        pass_filenames: false
+      - id: esphome-config-ams
+        name: ESPHome Compile AMS
+        entry: bash -c 'podman run -v "$(pwd)/firmware:/data" --rm ghcr.io/esphome/esphome:2024.11.0 config /data/config-ams.yaml'
+        language: system
+        pass_filenames: false

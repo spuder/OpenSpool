@@ -1,6 +1,5 @@
 substitutions:
   base_topic: "device/%s/report"
-
 mqtt:
   id: bambu_mqtt
   broker: "" # Broker is set by text.bambu_ip_address
@@ -46,10 +45,8 @@ mqtt:
     Rs6d8SCU89xyrwzQ0PR853irHas3WrHVqab3P+qNwR0YirL0Qk7Xt/q3O1griNg2
     Blbjg3obpHo9
     -----END CERTIFICATE-----
-  # clean_session: true
-  # enable_on_boot: false #TODO: set enable_on_boot to false once this is merged: https://github.com/esphome/esphome/pull/7716
-
-
+  clean_session: true
+  enable_on_boot: false
 #TODO: set enable_on_boot to false once this is merged: https://github.com/esphome/esphome/pull/7716
 # script: 
 #   - id: check_mqtt_creds
@@ -59,7 +56,6 @@ mqtt:
 #             ESP_LOGI("MQTT", "Enabling MQTT");
 #             id(bambu_mqtt)->enable = true;
 #           }
-
 
 # text_sensor:
 #   - platform: mqtt_subscribe
@@ -74,7 +70,7 @@ mqtt:
 #       - lambda: |-
 #           DynamicJsonDocument doc(4096);
 #           deserializeJson(doc, x);
-          
+
 #           if (doc["print"]["wifi_signal"]) {
 #             return {};
 #           }
@@ -97,7 +93,6 @@ mqtt:
 # #     # on_value:
 # #     #   then:
 # #     #     - lambda: |-
-
 binary_sensor:
   - platform: status
     name: "MQTT Connection"
@@ -106,16 +101,16 @@ binary_sensor:
     icon: mdi:lan-connect
     web_server:
       sorting_group_id: sorting_group_printer_settings
-    # TODO: turn on led for both d1 mini and esp32-s3
-    # on_state:
-    #   then:
-    #     if:
-    #       condition:
-    #         mqtt.connected:
-    #       then:
-    #         - output.turn_on: onboard_led
-    #       else:
-    #         - output.turn_off: onboard_led
+      # TODO: turn on led for both d1 mini and esp32-s3
+      # on_state:
+      #   then:
+      #     if:
+      #       condition:
+      #         mqtt.connected:
+      #       then:
+      #         - output.turn_on: onboard_led
+      #       else:
+      #         - output.turn_off: onboard_led
 # logger:
 #   level: VERY_VERBOSE
 #   logs:

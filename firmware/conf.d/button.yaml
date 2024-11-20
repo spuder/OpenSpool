@@ -1,5 +1,3 @@
-# Button is pin on the side of the ESP32s2
-# Connected to pin 8
 binary_sensor:
   - platform: gpio
     id: physical_button
@@ -19,7 +17,6 @@ binary_sensor:
             id: button_press_duration
             value: "0"
         - script.execute: start_timer
-
     on_release:
       then:
         - script.execute:
@@ -35,7 +32,6 @@ binary_sensor:
               - button.press: factory_reset_openspool
             else:
               - logger.log: "Button released before 10 seconds, not performing factory reset."
-
 globals:
   - id: my_counter
     type: int
@@ -43,7 +39,6 @@ globals:
   - id: button_press_duration
     type: int
     initial_value: "0"
-
 script:
   - id: timer_script
     then:
@@ -55,14 +50,12 @@ script:
                 id: button_press_duration
                 value: !lambda "return id(button_press_duration) + 1;"
             - delay: 1s
-
   - id: start_timer
     then:
       - globals.set:
           id: button_press_duration
           value: "0"
       - script.execute: timer_script
-
 button:
   - platform: factory_reset
     name: "Factory Reset"

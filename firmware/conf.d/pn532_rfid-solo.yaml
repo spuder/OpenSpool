@@ -6,7 +6,6 @@ substitutions:
   # update_interval: "1s"
   # update_interval: "1500ms"
   update_interval: "750ms"
-
 binary_sensor:
   - platform: template
     name: "NFC Tag Present"
@@ -15,7 +14,6 @@ binary_sensor:
     icon: mdi:circle-double
     web_server:
       sorting_group_id: sorting_group_rfid
-
 spi:
   # On esp32-s3 SPI2 a can support 6 devices, whereas only 3 on bus SPI3
   - id: SPI2
@@ -23,7 +21,6 @@ spi:
     miso_pin: ${spi2_miso_pin} # MO/SDA/TX (MISO)
     mosi_pin: ${spi2_mosi_pin} # M (MOSI)
     interface: ${spi2_type}
-
 pn532_spi:
   - id: rfid_reader_spi_0
     cs_pin: ${rfid0_ss_pin} # NSS/SCL/RX
@@ -114,7 +111,6 @@ pn532_spi:
                   # 255 = external ams, TODO: A1,P1,X1 might use different values for AMS
                   # 254 = external tray, first filament slot is tray 0
                   payload: !lambda "return bambulabs::generate_mqtt_payload( id(filament_raw_data0).state, 255, 254 );"
-  
 text_sensor:
   - platform: template
     name: "NFC Raw Data"
@@ -125,46 +121,7 @@ text_sensor:
     web_server:
       sorting_group_id: sorting_group_rfid
     filters:
-      - lambda: |-
-          auto pretty_json = [](const std::string &x) -> std::string {
-            if (x.empty()) {
-              ESP_LOGD("NFC", "Input string is empty");
-              return x;
-            }     
-            ESP_LOGD("NFC", "Input string: %s", x.c_str());
-            
-            StaticJsonDocument<1024> doc;  // Use StaticJsonDocument for memory efficiency
-            DeserializationError error = deserializeJson(doc, x);
-            if (error) {
-              ESP_LOGE("NFC", "JSON parsing failed: %s", error.c_str());
-              return "";
-            }
-            
-            if (!doc.is<JsonObject>()) {
-              ESP_LOGE("NFC", "Invalid JSON: Not an object");
-              return "";
-            }
-            
-            const char* required_fields[] = {"protocol", "color_hex", "type", "min_temp", "max_temp", "brand"};
-            for (const char* field : required_fields) {
-              if (!doc.containsKey(field)) {
-                ESP_LOGE("NFC", "Invalid JSON: Missing required field '%s'", field);
-                return "";
-              }
-            }
-            
-            std::string output;
-            serializeJsonPretty(doc, output);
-            
-            if (output.length() > 1024) {
-              ESP_LOGE("NFC", "Prettified JSON exceeds 1024 bytes");
-              return "";
-            }
-            
-            return output;
-          };
-          return pretty_json(x);
-
+      - lambda: "auto pretty_json = [](const std::string &x) -> std::string {\n  if (x.empty()) {\n    ESP_LOGD(\"NFC\", \"Input string is empty\");\n    return x;\n  }     \n  ESP_LOGD(\"NFC\", \"Input string: %s\", x.c_str());\n  \n  StaticJsonDocument<1024> doc;  // Use StaticJsonDocument for memory efficiency\n  DeserializationError error = deserializeJson(doc, x);\n  if (error) {\n    ESP_LOGE(\"NFC\", \"JSON parsing failed: %s\", error.c_str());\n    return \"\";\n  }\n  \n  if (!doc.is<JsonObject>()) {\n    ESP_LOGE(\"NFC\", \"Invalid JSON: Not an object\");\n    return \"\";\n  }\n  \n  const char* required_fields[] = {\"protocol\", \"color_hex\", \"type\", \"min_temp\", \"max_temp\", \"brand\"};\n  for (const char* field : required_fields) {\n    if (!doc.containsKey(field)) {\n      ESP_LOGE(\"NFC\", \"Invalid JSON: Missing required field '%s'\", field);\n      return \"\";\n    }\n  }\n  \n  std::string output;\n  serializeJsonPretty(doc, output);\n  \n  if (output.length() > 1024) {\n    ESP_LOGE(\"NFC\", \"Prettified JSON exceeds 1024 bytes\");\n    return \"\";\n  }\n  \n  return output;\n};\nreturn pretty_json(x);"
   - platform: template
     name: "NFC Preview"
     id: nfc_preview
@@ -172,7 +129,6 @@ text_sensor:
     icon: mdi:nfc-search-variant
     web_server:
       sorting_group_id: sorting_group_rfid
-
 # Create virtual button that can be pressed in the gui
 button:
   - platform: template
@@ -281,6 +237,7 @@ button:
               - wait_until:
                   not: 
                     pn532.is_writing:
+                      id: rfid_reader_spi_0
               - logger.log: 
                   tag: "rfid"
                   format: "Finished writing tag"

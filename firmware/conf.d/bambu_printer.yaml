@@ -14,7 +14,6 @@ select:
     icon: mdi:printer-3d
     web_server:
       sorting_group_id: sorting_group_printer_settings
-
 text_sensor:
   - platform: template
     name: "OpenSpool URL"
@@ -37,7 +36,6 @@ text_sensor:
       sorting_group_id: sorting_group_extra
     lambda: |-
       return {"bambulab://"};
-
 text:
   - platform: template
     id: bambu_serial_number
@@ -54,7 +52,6 @@ text:
     #       - script.execute: check_mqtt_creds #TODO: Enable once this is merged: https://github.com/esphome/esphome/pull/7716
     #     lambda: |-
     #       id(bambu_printer_status).topic = "device/" + x + "/report";
-
   - platform: template
     id: bambu_lan_access_code
     state_topic:
@@ -92,7 +89,6 @@ button:
     id: restart_openspool
     state_topic:
     entity_category: diagnostic
-
   - platform: template
     name: "OpenSpool Create Tag"
     id: write_url_button
@@ -136,8 +132,8 @@ button:
         - wait_until:
             not: 
               pn532.is_writing:
+                id: rfid_reader_spi_0
         - logger.log: "Finished writing tag" #TODO: change log namespace
-
   - platform: template
     name: "BambuHandy Create Tag"
     id: write_bambuhandy_url_button
@@ -158,6 +154,7 @@ button:
         - wait_until:
             not: 
               pn532.is_writing:
+                id: rfid_reader_spi_0
         - logger.log: "Finished writing tag" #TODO: change log namespace   
 
 #TODO: Show the current state of the printer
