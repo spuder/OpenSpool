@@ -15,15 +15,36 @@ esphome:
       - -std=gnu++14
   on_boot:
     then:
-      - delay: 6s #Wait until wifi is initalized or else the leds studder
-      - script.execute: set_led_rainbow
-      - delay: 3s
+      #TODO: breahting blue studders a little bit
+      - light.turn_on:
+          id: neopixel_light
+          effect: Breathing Blue
+          brightness: 100%
+      - wait_until:
+          condition:
+            wifi.connected:
+      - delay: 100ms
+      - light.turn_on:
+          id: neopixel_light
+          effect: none
+      - delay: 100ms
+      - light.turn_on:
+          id: neopixel_light
+          effect: Rainbow
+      - delay: 4s
       # - script.stop: set_led_rainbow
       - light.turn_on:
           id: neopixel_light
           effect: none
       - delay: 100ms
-      - script.execute: set_all_leds_white
+      - light.addressable_set:
+          id: neopixel_light
+          color_brightness: 50%
+          range_from: 0
+          range_to: ${led_count}
+          red: 100%
+          green: 100%
+          blue: 100%
         # - script.execute: set_all_leds_white
         # - lambda: |-
         #     //TODO: this appears to have broken and no longer blinks blue
