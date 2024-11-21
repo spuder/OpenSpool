@@ -7,7 +7,7 @@ mqtt:
   port: 8883
   username: bblp
   password: "" # Password is set by text.bambu_lan_access_code
-  client_id: ${name} #TODO: Add mac address as suffix
+  client_id: ${name}
   discover_ip: false
   discovery: false
   discovery_retain: false

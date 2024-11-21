@@ -45,6 +45,24 @@ esphome:
           red: 100%
           green: 100%
           blue: 100%
+      - if:
+          condition:
+            lambda: |-
+              return !id(bambu_lan_access_code).state.empty() &&
+                    !id(bambu_ip_address).state.empty() &&
+                    !id(bambu_serial_number).state.empty();
+          then:
+            - logger.log:
+                format: "Connecting to Bambu printer"
+                tag: "MQTT"
+                level: INFO
+            - mqtt.enable: 
+                id: bambu_mqtt
+          else:
+            - logger.log:
+                format: "Missing Bambu Credentials, skipping mqtt connect"
+                tag: "MQTT"
+                level: INFO
         # - script.execute: set_all_leds_white
         # - lambda: |-
         #     //TODO: this appears to have broken and no longer blinks blue
