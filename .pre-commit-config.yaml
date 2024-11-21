@@ -8,14 +8,16 @@ repos:
   - repo: local
     hooks:
       - id: esphome-config-solo
-        name: ESPHome Compile Solo
-        entry: bash -c 'podman run -v "$(pwd)/firmware:/data" --rm ghcr.io/esphome/esphome:2024.11.0 config /data/config-solo.yaml'
+        name: ESPHome Validate Solo Config
+        # entry: bash -c 'podman run -v "$(pwd)/firmware:/data" --rm ghcr.io/esphome/esphome:2024.11.0 config /data/config-solo.yaml'
+        entry: esphome config firmware/config-solo.yaml
         language: system
         pass_filenames: false
         files: ^firmware/
       - id: esphome-config-ams
-        name: ESPHome Compile AMS
-        entry: bash -c 'podman run -v "$(pwd)/firmware:/data" --rm ghcr.io/esphome/esphome:2024.11.0 config /data/config-ams.yaml'
+        name: ESPHome Validate AMS Config
+        # entry: bash -c 'podman run -v "$(pwd)/firmware:/data" --rm ghcr.io/esphome/esphome:2024.11.0 config /data/config-ams.yaml'
+        entry: esphome config firmware/config-ams.yaml
         language: system
         pass_filenames: false
         files: ^firmware/
