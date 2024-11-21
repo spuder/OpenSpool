@@ -3,7 +3,7 @@ wifi:
   output_power: 10 # https://github.com/esphome/issues/issues/3988#issuecomment-1449954758
   ap:
     ssid: "OpenSpool"
-  reboot_timeout: 0s
+  reboot_timeout: 0s #This must stay at 0s if api and mqtt are enabled, otherwise it will reboot every 15 minutes
   power_save_mode: none
   #TODO: if it is in ap mode, then pulse blue
   # on_connect:
@@ -17,23 +17,23 @@ sensor:
   - platform: wifi_signal
     name: "WiFi Signal Sensor"
     update_interval: 60s
-    state_topic: # Don't post update to MQTT
-    icon: mdi:wifi
+    state_topic:
+    icon: mdi:wifi-strength-outline
 text_sensor:
   - platform: wifi_info
-    # TODO: don't post to mqtt, static_topic isn't valid for wifi_info
     mac_address:
       name: Mac Address
       state_topic:
       id: mac_address
-
-# text_sensor:
-#   # state_topic: # Don't post update to MQTT
-#   # Get the WiFi details
-#   - platform: wifi_info
-#     ip_address:
-#       name: ${name} IP Address
-#       state_topic:
-#     ssid:
-#       name: ${name} SSID
-#       state_topic:
+      icon: mdi:network
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+      id: ip_address
+      state_topic:
+      icon: mdi:lan
+    ssid:
+      name: Wifi Network
+      id: ssid
+      state_topic:
+      icon: mdi:wifi

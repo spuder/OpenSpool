@@ -29,7 +29,7 @@ select:
     name: "Filament Variant"
     id: filament_variant
     optimistic: true
-    icon: mdi:tag-variant
+    icon: mdi:label
     web_server:
       sorting_group_id: sorting_group_filament_settings
     options:
