@@ -1,3 +1,4 @@
+---
 # Bambu Filament mappings
 # Credit to WolfWithSword for figuring all these out
 # https://gist.github.com/WolfwithSword/e3e4dc4f00629cc047b7cefd70d7b350#file-bambu_mqtt-json-L314
@@ -24,7 +25,6 @@ select:
         - script.execute: generate_filament_brand_code
         - script.execute: generate_filament_temperatures
         - script.execute: preview_rfid_data
-
   - platform: template
     name: "Filament Variant"
     id: filament_variant
@@ -45,7 +45,6 @@ select:
         - script.execute: generate_filament_brand_code
         - script.execute: preview_rfid_data
         - script.execute: generate_filament_temperatures #TODO: not fully implemented for variants yet
-
   - platform: template
     name: "Filament Brand"
     id: filament_brand
@@ -162,7 +161,6 @@ select:
                 return "";
               }
         - script.execute: preview_rfid_data
-
 number:
   - platform: template
     name: "Filament Min Temp"
@@ -186,7 +184,6 @@ number:
     on_value:
       then:
         - script.execute: preview_rfid_data
-
   - platform: template
     name: "Filament Max Temp"
     id: filament_max_temp
@@ -210,7 +207,6 @@ number:
     on_value:
       then:
         - script.execute: preview_rfid_data
-
 text_sensor:
   - platform: template
     name: "Filament Brand Code"
@@ -222,7 +218,6 @@ text_sensor:
     on_value:
       then:
         - script.execute: preview_rfid_data
-
   - platform: template
     name: "Filament Color Hex"
     id: filament_color_hex
@@ -239,7 +234,6 @@ text_sensor:
               id(filament_color_hex_bambu).publish_state("");
             }
         - script.execute: preview_rfid_data
-
   - platform: template
     name: "Filament Color Hex Bambu"
     id: filament_color_hex_bambu
@@ -250,7 +244,6 @@ text_sensor:
     on_value:
       then:
         - script.execute: preview_rfid_data
-
   - platform: template
     name: Filament Sub Brand
     id: filament_sub_brand
@@ -261,7 +254,6 @@ text_sensor:
     on_value:
       then:
         - script.execute: preview_rfid_data
-
 button:
   - platform: template
     id: upload_filament_settings

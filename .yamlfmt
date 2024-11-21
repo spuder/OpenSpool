@@ -1,0 +1,8 @@
+formatter:
+  indent: 2
+  line_ending: lf
+  include_document_start: true
+  colons: align
+  scan_folded_as_literal: true
+  disallow_anchors: false
+  retain_line_breaks: true

@@ -1,3 +1,4 @@
+---
 time:
   - platform: sntp
     id: ntp_time
@@ -9,7 +10,6 @@ time:
       - seconds: /10
         then:
           - component.update: time_sensor
-
 # Sensor to hold formatted time string
 text_sensor:
   - platform: template

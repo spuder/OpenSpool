@@ -1,3 +1,4 @@
+---
 script:
   - id: preview_rfid_data
     then:
@@ -7,7 +8,7 @@ script:
             auto pretty_json = [=]() -> std::string {
               StaticJsonDocument<256> doc;
               JsonObject root = doc.to<JsonObject>();
-              
+
               root["protocol"] = "openspool";
               root["version"] = "1.0";
               root["brand"] = id(filament_brand).state.c_str();
@@ -82,7 +83,7 @@ script:
                   } else {
                     return true;
                   }
-              # TODO: Check if mqtt is enabled once this is merged: https://github.com/esphome/esphome/pull/7716
+                # TODO: Check if mqtt is enabled once this is merged: https://github.com/esphome/esphome/pull/7716
           then:
             - mqtt.publish:
                 # topic: device/${bambu_serial_number}/request

@@ -1,3 +1,4 @@
+---
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
 # separate terms of service, privacy policy, and support
@@ -5,34 +6,29 @@
 
 # Sample workflow for building and deploying a Jekyll site to GitHub Pages
 name: OpenSpool.io Docs
-
 on:
   push:
     branches: ["main"]
     paths:
       - "docs/**"
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
-
 # Allow one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: true
-
 jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
     defaults:
-        run:
-          working-directory: docs
+      run:
+        working-directory: docs
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -43,7 +39,6 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
           cache-version: 0 # Increment this number if you need to re-download cached gems
           working-directory: '${{ github.workspace }}/docs'
-
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
@@ -56,9 +51,7 @@ jobs:
         # Automatically uploads an artifact from the './_site' directory by default
         uses: actions/upload-pages-artifact@v3
         with:
-            path: "docs/_site/"
-
-
+          path: "docs/_site/"
   # Deployment job
   deploy:
     environment:

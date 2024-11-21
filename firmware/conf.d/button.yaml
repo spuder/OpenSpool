@@ -1,3 +1,4 @@
+---
 binary_sensor:
   - platform: gpio
     id: physical_button

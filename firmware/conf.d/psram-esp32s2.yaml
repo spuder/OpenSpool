@@ -1,3 +1,4 @@
+---
 # https://github.com/esphome/issues/issues/4481#issuecomment-1556930070
 # https://github.com/esphome/issues/issues/5264#issuecomment-1869807913
 # - dio_qspi
@@ -48,7 +49,7 @@ psram:
 # I (30) boot.esp32s2: SPI Mode       : DIO
 # I (30) boot.esp32s2: SPI Flash Size : 4MB
 
-sensor: 
+sensor:
   - platform: debug
     psram:
       name: "Free PSRAM"

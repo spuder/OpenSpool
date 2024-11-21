@@ -1,3 +1,4 @@
+---
 substitutions:
   base_topic: "device/%s/report"
 mqtt:

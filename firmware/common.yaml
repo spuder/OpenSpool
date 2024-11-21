@@ -1,3 +1,4 @@
+---
 substitutions:
   name: openspool
   version: "0.0.0" # Keep this at 0.0.0 as github-actions will modify this file at build time

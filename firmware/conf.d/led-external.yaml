@@ -1,6 +1,6 @@
+---
 substitutions:
   led_count: '9'
-
 light:
   - platform: esp32_rmt_led_strip
     id: neopixel_light
@@ -43,18 +43,17 @@ light:
             for (int i = 0; i < it.size(); ++i) {
               it[i] = color;
             }
-    #   - strobe:
-    #       name: "Data Upload"
-    #       colors:
-    #         - state: TRUE
-    #           brightness: 100%
-    #           duration: 50ms
-    #           red: 0%
-    #           green: 100%
-    #           blue: 0%
-    #         - state: FALSE
-    #           duration: 50ms
-
+          #   - strobe:
+          #       name: "Data Upload"
+          #       colors:
+          #         - state: TRUE
+          #           brightness: 100%
+          #           duration: 50ms
+          #           red: 0%
+          #           green: 100%
+          #           blue: 0%
+          #         - state: FALSE
+          #           duration: 50ms
 script:
   - id: set_led_red
     parameters:

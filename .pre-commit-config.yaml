@@ -1,8 +1,10 @@
+---
 repos:
-  - repo: https://github.com/google/yamlfmt
-    rev: v0.10.0
-    hooks:
-      - id: yamlfmt
+  # yamllint has trouble with scalars like '- lambda: |- '
+  # - repo: https://github.com/google/yamlfmt
+  #   rev: v0.10.0
+  #   hooks:
+  #     - id: yamlfmt
   - repo: local
     hooks:
       - id: esphome-config-solo
@@ -10,8 +12,10 @@ repos:
         entry: bash -c 'podman run -v "$(pwd)/firmware:/data" --rm ghcr.io/esphome/esphome:2024.11.0 config /data/config-solo.yaml'
         language: system
         pass_filenames: false
+        files: ^firmware/
       - id: esphome-config-ams
         name: ESPHome Compile AMS
         entry: bash -c 'podman run -v "$(pwd)/firmware:/data" --rm ghcr.io/esphome/esphome:2024.11.0 config /data/config-ams.yaml'
         language: system
         pass_filenames: false
+        files: ^firmware/

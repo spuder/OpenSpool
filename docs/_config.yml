@@ -1,22 +1,16 @@
+---
 title: OpenSpool
 description: Your filament wants to be free
 theme: just-the-docs
-
 url: https://openspool.io
-
 aux_links:
-  "Edit this page on Github": 
+  "Edit this page on Github":
     - https://github.com/spuder/openspool
-
 logo: "images/OpenSpoolLogoMedium1.png"
-
 favicon: "images/favicon.ico"
-
 color_scheme: dark
-
 plugins:
   - jekyll-default-layout
-
 head_scripts:
   # https://github.com/esphome/esp-web-tools/issues/515#issuecomment-2387664391
   # - https://unpkg.com/@improv-wifi/sdk-serial@1.1.0/dist/serial.min.js?module
@@ -27,12 +21,11 @@ defaults:
       path: "assets/js"
     values:
       js: true
-
 callouts:
   warning:
     title: Warning
     color: red
-  note: 
+  note:
     title: Note
     color: blue
   important:
@@ -41,7 +34,6 @@ callouts:
   caution:
     title: Caution
     color: yellow
-
 
 # footer_content: "Copyright &copy; 2017-2020 Patrick Marsceill. Distributed by an <a href=\"https://github.com/just-the-docs/just-the-docs/tree/main/LICENSE.txt\">MIT license.</a>"
 

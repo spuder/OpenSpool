@@ -1,8 +1,6 @@
+---
 output:
   - id: onboard_led
     platform: gpio
     pin: 15
     inverted: false
-    # TODO: disable mqtt messages
-    # Neither state_topic or command_topic are valid
-    # https://github.com/esphome/esphome/pull/5213

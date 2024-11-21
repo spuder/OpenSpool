@@ -1,3 +1,4 @@
+---
 light:
   - platform: esp32_rmt_led_strip
     id: internal_led

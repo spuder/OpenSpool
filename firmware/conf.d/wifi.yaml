@@ -1,3 +1,4 @@
+---
 wifi:
   output_power: 10 # https://github.com/esphome/issues/issues/3988#issuecomment-1449954758
   ap:
@@ -12,15 +13,13 @@ wifi:
   #         id: set_led_white
   #         led_number: -1
   #     - script.stop: set_led_white
-
 sensor:
   - platform: wifi_signal
     name: "WiFi Signal Sensor"
     update_interval: 60s
     state_topic: # Don't post update to MQTT
     icon: mdi:wifi
-
-text_sensor: 
+text_sensor:
   - platform: wifi_info
     # TODO: don't post to mqtt, static_topic isn't valid for wifi_info
     mac_address:
@@ -38,4 +37,3 @@ text_sensor:
 #     ssid:
 #       name: ${name} SSID
 #       state_topic:
-

@@ -1,3 +1,4 @@
+---
 select:
   #TODO: printer model is currently unused, but will be needed for setting AMS type
   - platform: template

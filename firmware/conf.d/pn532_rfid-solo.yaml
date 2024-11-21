@@ -1,3 +1,4 @@
+---
 substitutions:
   spi_data_rate: 200kHz
   # spi_data_rate: 1Mhz #TODO: decrease this to increase reliability for long cable runs
@@ -49,7 +50,7 @@ pn532_spi:
             if (tag.has_ndef_message()) {
               auto records = tag.get_ndef_message()->get_records();
               bool found_json = false;
-              
+
               // Look for application/json record
               for (const auto& record : records) {
                 if (record->get_type() == "application/json") {
@@ -58,7 +59,7 @@ pn532_spi:
                     ESP_LOGW("NFC", "Multiple JSON records found, using first one");
                     break;
                   }
-                  
+
                   payload = record->get_payload();
                   ESP_LOGD("NFC", "Payload: %s", payload.c_str());
                   id(filament_raw_data0).publish_state(payload);
@@ -72,7 +73,7 @@ pn532_spi:
                   if (!parse_result) {
                     ESP_LOGE("NFC", "Failed to parse JSON payload");
                   }
-                  
+
                   found_json = true;
                 }
               }
@@ -274,10 +275,10 @@ button:
                   ESP_LOGI("rfid", "Writing JSON NDEF message to tag");
                   //TODO: GPT says there is a memory leak here, yet when I use 'delete' or std::make_unique<> I get crashes
               - wait_until:
-                  not: 
+                  not:
                     pn532.is_writing:
                       id: rfid_reader_spi_0
-              - logger.log: 
+              - logger.log:
                   tag: "rfid"
                   format: "Finished writing tag"
                   level: INFO

@@ -1,9 +1,8 @@
+---
 # NOTE None of these metrics are available until device is connected to MQTT
 # This feels like a bug, but not sure why
-
 debug:
   update_interval: 5s
-
 logger:
   level: debug
   logs:
@@ -17,7 +16,6 @@ text_sensor:
   #   state_topic:
   #   # web_server:
   #   #   sorting_group_id: sorting_group_info
-
   - platform: template
     name: "OpenSpool Version"
     lambda: |-
@@ -26,7 +24,6 @@ text_sensor:
     icon: mdi:new-box
     web_server:
       sorting_group_id: sorting_group_info
-
   - platform: debug
     # device:
     #   name: "Device Info"
@@ -34,7 +31,6 @@ text_sensor:
     reset_reason:
       name: "Reset Reason"
       state_topic:
-
 sensor:
   - platform: debug
     free:
