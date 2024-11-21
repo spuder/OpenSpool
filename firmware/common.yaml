@@ -86,7 +86,7 @@ esp32:
     # MBEDTLS_CERTIFICATE_BUNDLE_DEFAULT_FULL: y
 logger:
 packages:
-  # uptime: !include conf.d/uptime.yaml
+  uptime: !include conf.d/uptime.yaml
   wifi: !include conf.d/wifi.yaml
   web_server: !include conf.d/web_server.yaml
   debug: !include conf.d/debug.yaml
