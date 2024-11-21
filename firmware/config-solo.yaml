@@ -21,3 +21,10 @@ packages:
   status_led: !include conf.d/status_led.yaml
   # ota-esphome: !include conf.d/ota-esphome.yaml #TODO: reenalbe ota-esphome, disabled to troubleshoot wb not loading
   button: !include conf.d/button.yaml
+
+api: 
+  reboot_timeout: 0s #reboot_timeout must be 0 if api and mqtt are defined
+  id: api_openspool
+dashboard_import:
+  package_import_url: github://spuder/openspool/firmware/config-solo.yaml@main
+  import_full_config: false

@@ -68,3 +68,10 @@ packages:
   psram: !include conf.d/psram-esp32s3.yaml
   led-internal: !include conf.d/led-internal.yaml
   pn_532_rfid-ams: !include conf.d/pn532_rfid-ams.yaml
+
+api: 
+  reboot_timeout: 0s #reboot_timeout must be 0 if api and mqtt are defined
+  id: api_openspool
+dashboard_import:
+  package_import_url: github://spuder/openspool/firmware/config-ams.yaml@main
+  import_full_config: false
