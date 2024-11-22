@@ -4,7 +4,6 @@
 # The http-update requires much more memory. In order to use http update, the problem of the missing
 # PRAM needs to be solved first. It might not be possible on Wemos D1Minis2 boards
 
-
 # update:
 #   - platform: http_request
 #     id: firmware_update
@@ -28,7 +27,6 @@
 # Note that real ESP32-S2 is part ESP32-S2FN4R2
 # There are counterfit boards which use ESP32-S2FH4 which don't have PS-RAM
 # psram:
-
 
 # button:
 #   - platform: template
@@ -78,5 +76,3 @@
 #     esp-tls-mbedtls: VERY_VERBOSE
 #     http_client: VERY_VERBOSE
 #     http_request: VERY_VERBOSE
-
-

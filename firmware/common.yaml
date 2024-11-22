@@ -79,7 +79,7 @@ esp32:
   framework:
     type: esp-idf
     version: 5.3.1
-    platform_version: 6.9.0
+    platform_version: 6.9.0 # https://github.com/platformio/platform-espressif32/releases/
     # version: recommended
     # sdkconfig_options:
     # MBEDTLS_CERTIFICATE_BUNDLE: y
@@ -97,5 +97,5 @@ packages:
   pn532_rfid-solo: !include conf.d/pn532_rfid-solo.yaml
   automation: !include conf.d/automation.yaml
   led-external: !include conf.d/led-external.yaml
-  improv: !include conf.d/improv.yaml
+  ota: !include conf.d/ota.yaml
   #update: !include conf.d/update.yaml

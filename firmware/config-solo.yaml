@@ -19,8 +19,8 @@ esp32:
 packages:
   base: !include common.yaml
   status_led: !include conf.d/status_led.yaml
-  # ota-esphome: !include conf.d/ota-esphome.yaml #TODO: reenalbe ota-esphome, disabled to troubleshoot wb not loading
   button: !include conf.d/button.yaml
+  improv-serial: !include conf.d/improv-serial.yaml
 
 api: 
   reboot_timeout: 0s #reboot_timeout must be 0 if api and mqtt are defined
