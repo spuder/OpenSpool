@@ -1,7 +1,6 @@
 ---
 substitutions:
   name: openspool
-  version: "0.0.0" # Keep this at 0.0.0 as github-actions will modify this file at build time
 esphome:
   name: ${name}
   name_add_mac_suffix: true
@@ -32,7 +31,6 @@ esphome:
           id: neopixel_light
           effect: Rainbow
       - delay: 4s
-      # - script.stop: set_led_rainbow
       - light.turn_on:
           id: neopixel_light
           effect: none
@@ -86,6 +84,7 @@ esp32:
     # MBEDTLS_CERTIFICATE_BUNDLE_DEFAULT_FULL: y
 logger:
 packages:
+  version: !include conf.d/version.yaml
   uptime: !include conf.d/uptime.yaml
   wifi: !include conf.d/wifi.yaml
   web_server: !include conf.d/web_server.yaml

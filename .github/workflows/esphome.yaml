@@ -58,6 +58,9 @@ jobs:
           touch firmware/secrets.yaml
           touch firmware/conf.d/secrets.yaml
       
+      - name: Setup yq
+        uses: vegardit/gha-setup-yq@v1
+
       - name: Set git sha
         run: |
           SUMMARY=$(git log -1 --pretty=%B)
@@ -66,10 +69,10 @@ jobs:
           SUMMARY="${SUMMARY//$'\r'/'%0D'}"
           echo "RELEASE_SUMMARY=$SUMMARY" >> $GITHUB_ENV
 
-      - name: Modify version in common.yaml
+      - name: Modify version.yaml
         run: |
-          sed -i "s/0.0.0/${{ env.VERSION }}/g" firmware/common.yaml
-          cat firmware/common.yaml
+          yq -i '.substitutions.version = "${{ env.VERSION }}"' firmware/conf.d/version.yaml
+          cat firmware/conf.d/version.yaml
 
       - name: Build ESPHome firmware
         uses: esphome/build-action@v4.0.2
@@ -177,6 +180,14 @@ jobs:
           print(json.dumps(combined_manifest, indent=2))
           EOF
 
+      - name: Setup yq
+        uses: vegardit/gha-setup-yq@v1
+
+      - name: Modify version.yaml
+        run: |
+          yq -i '.substitutions.version = "${{ env.VERSION }}"' firmware/conf.d/version.yaml
+          cat firmware/conf.d/version.yaml
+
       - name: Update manifest
         run: |
           # Stash all changes
@@ -194,6 +205,9 @@ jobs:
           # Set Git username and email
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
+
+          # Add version.yaml
+          git add firmware/conf.d/version.yaml
 
           # Add all changes in the artifacts/ folder
           git add artifacts/

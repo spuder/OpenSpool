@@ -1,0 +1,4 @@
+---
+# Do not modify, github actions will update the number on each new release
+substitutions:
+  version: "0.0.0"
