@@ -1,13 +1,13 @@
 {
   "name": "OpenSpool",
-  "version": "v1.3.1",
+  "version": "1.3.2",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "1ae57b63333fb63282f55da8892e3848",
-        "summary": "Refator version to have version.yaml"
+        "md5": "f109997edc4ca9dcca7147f35ee2edcf",
+        "summary": "use github ref name"
       },
       "parts": [
         {
