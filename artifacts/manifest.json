@@ -1,13 +1,13 @@
 {
   "name": "OpenSpool",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "f109997edc4ca9dcca7147f35ee2edcf",
-        "summary": "use github ref name"
+        "md5": "19a6556d18f9d257d2b09651e7287ad3",
+        "summary": "Remove improv-bluetooth"
       },
       "parts": [
         {
