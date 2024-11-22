@@ -1,0 +1,22 @@
+{
+  "name": "OpenSpool",
+  "version": "1.4.6",
+  "builds": [
+    {
+      "chipFamily": "ESP32-S2",
+      "ota": {
+        "path": "openspool-esp32s2.ota.bin",
+        "md5": "44ec4ebf8e742cc8e6d0527e65b0aa82",
+        "summary": "Add manifest.json",
+        "release_url": "https://github.com/spuder/openspool/releases/download/1.4.6"
+      },
+      "parts": [
+        {
+          "path": "openspool-esp32s2.factory.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ],
+  "new_install_prompt_erase": true
+}
