@@ -74,6 +74,7 @@ jobs:
         with:
           yaml-file: ${{ github.workspace }}/firmware/config-solo.yaml
           release-summary: ${{ env.RELEASE_SUMMARY }}
+          release-url: https://github.com/spuder/openspool/releases/download/${{ github.ref_name }}
           complete-manifest: false
       
       - name: ls
@@ -169,6 +170,9 @@ jobs:
           print(json.dumps(combined_manifest, indent=2))
           EOF
 
+      - name: Update manifest.json
+        run: |
+          cat artifacts/manifest.json > firmware/manifest.json
       - name: Setup yq
         uses: vegardit/gha-setup-yq@v1
 
