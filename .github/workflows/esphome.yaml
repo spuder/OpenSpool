@@ -173,6 +173,8 @@ jobs:
       - name: Update manifest.json
         run: |
           cat artifacts/manifest.json > firmware/manifest.json
+          cat artifacts/manifest.json
+
       - name: Setup yq
         uses: vegardit/gha-setup-yq@v1
 
@@ -190,6 +192,7 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add firmware/conf.d/version.yaml
+          git add firmware/manifest.json
           git diff --staged || true
           if git diff --staged --quiet; then
             echo "No changes to commit"
