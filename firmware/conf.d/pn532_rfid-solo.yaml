@@ -101,7 +101,7 @@ pn532_spi:
         - if:
             condition:
               and:
-                #TODO: Verify mqtt is connected
+                - mqtt.connected
                 - lambda: 'return id(filament_raw_data0).state != "";'
                 - lambda: 'return id(filament_raw_data0).state != "{}";'
                 - binary_sensor.is_on: rfid_reader_spi_0_tag_is_openspool
