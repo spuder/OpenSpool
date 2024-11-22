@@ -1,13 +1,13 @@
 {
   "name": "OpenSpool",
-  "version": "v1.3.0",
+  "version": "v1.3.1",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "2230e3379591ea8518b3562c15bb373b",
-        "summary": "Add ota, improv-bluetooth"
+        "md5": "1ae57b63333fb63282f55da8892e3848",
+        "summary": "Refator version to have version.yaml"
       },
       "parts": [
         {
