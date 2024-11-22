@@ -4,7 +4,7 @@ on:
   push:
     branches: ["main"]
     paths:
-      - 'artifacts/manifest.json'
+      - 'firmware/conf.d/version.yaml'
 jobs:
   update-docs:
     runs-on: ubuntu-latest
@@ -13,12 +13,16 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT }}
+
+      - name: Setup yq
+        uses: vegardit/gha-setup-yq@v1
+
       # Replace the badge with the latest version
       # https://img.shields.io/badge/esp32s2-0.1.0-magenta
       - name: Read manifest and update docs
         run: |
           # Read version from manifest.json
-          VERSION=$(jq -r .version artifacts/manifest.json)
+          VERSION=$(yq eval '.substitutions.version' firmware/conf.d/version.yaml)
 
           echo "VERSION=$VERSION"
           sed -i 's/badge\/openspool-[^-]*-magenta/badge\/openspool-'"$VERSION"'-magenta/' docs/index.md
@@ -27,6 +31,7 @@ jobs:
           cat docs/index.md | grep shields.io
           echo "README.md"
           cat README.md | grep shields.io
+
       - name: Commit manifest file
         uses: EndBug/add-and-commit@v9
         with:

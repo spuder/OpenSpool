@@ -118,8 +118,9 @@ jobs:
 
       - name: Clean artifacts
         run: |
-          rm -rf artifacts/manifest.json
-          rm -rf artfacts/openspool-*
+          mkdir -p artifacts || true
+          rm -rf artifacts/manifest.json || true
+          rm -rf artfacts/openspool-* || true
           cp downloaded-artifacts/openspool-esp32s2/*.bin artifacts/
           cp downloaded-artifacts/openspool-esp32s2/*.md5 artifacts/
           ls -al artifacts
@@ -180,13 +181,21 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add firmware/conf.d/version.yaml
-          git add artifacts/
           git diff --staged || true
           if git diff --staged --quiet; then
             echo "No changes to commit"
             exit 1
           else
-            git commit -m "Update artifacts after stash"
+            git commit -m "Update version to ${{ github.ref_name }}"
             git push origin main
           fi
           git status
+
+      - name: Release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: false
+          files: |
+            artifacts/**/*
