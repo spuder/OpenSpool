@@ -3,16 +3,16 @@ substitutions:
   led_count: '9'
 light:
   - platform: esp32_rmt_led_strip
+    name: LEDs
     id: neopixel_light
+    state_topic:
     pin: ${led_pin}
     num_leds: ${led_count}
     rgb_order: GRB
-    name: LEDs
     chipset: WS2812
     rmt_channel: 0
     default_transition_length: 0.4s
     restore_mode: RESTORE_DEFAULT_ON
-    state_topic:
     entity_category: diagnostic
     icon: mdi:led-strip
     effects:

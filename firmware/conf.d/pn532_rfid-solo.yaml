@@ -116,8 +116,8 @@ text_sensor:
   - platform: template
     name: "NFC Raw Data"
     id: filament_raw_data0
-    internal: false # Always show raw data 0
     state_topic:
+    internal: false # Always show raw data 0
     icon: mdi:nfc-variant
     web_server:
       sorting_group_id: sorting_group_rfid
@@ -173,8 +173,9 @@ text_sensor:
 button:
   - platform: template
     name: "Write NFC"
-    icon: mdi:nfc-tap
+    id: write_nfc
     state_topic:
+    icon: mdi:nfc-tap
     web_server:
       sorting_group_id: sorting_group_rfid
     on_press:

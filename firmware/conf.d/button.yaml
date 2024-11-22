@@ -1,14 +1,14 @@
 ---
 binary_sensor:
   - platform: gpio
+    name: "Button"
     id: physical_button
+    state_topic:
+    internal: true
     pin:
       number: 0
       mode: INPUT_PULLUP
       inverted: true
-    name: "Button"
-    internal: true
-    state_topic:
     on_press:
       then:
         - script.execute:
@@ -23,7 +23,6 @@ binary_sensor:
         - script.execute:
             id: set_led_white
             led_number: -1
-        # - script.stop: set_led_white
         - script.stop: timer_script
         - if:
             condition:

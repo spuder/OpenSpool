@@ -1,13 +1,13 @@
 ---
 light:
   - platform: esp32_rmt_led_strip
-    id: internal_led
     name: "Internal LED"
+    id: internal_led
+    state_topic:
     pin: 48 #some boards have this on pin 38
     chipset: WS2812
     rmt_channel: 1
     rgb_order: GRB
     num_leds: 1
     entity_category: diagnostic
-    state_topic:
     restore_mode: ALWAYS_OFF

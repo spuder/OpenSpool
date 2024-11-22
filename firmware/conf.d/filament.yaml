@@ -28,6 +28,7 @@ select:
   - platform: template
     name: "Filament Variant"
     id: filament_variant
+    state_topic:
     optimistic: true
     icon: mdi:label
     web_server:
@@ -165,11 +166,11 @@ number:
   - platform: template
     name: "Filament Min Temp"
     id: filament_min_temp
+    state_topic:
     min_value: 150
     max_value: 300
     unit_of_measurement: °C
     step: 5
-    state_topic:
     icon: mdi:thermometer-low
     optimistic: true
     web_server:
@@ -187,12 +188,12 @@ number:
   - platform: template
     name: "Filament Max Temp"
     id: filament_max_temp
+    state_topic:
     min_value: 150
     max_value: 300
     initial_value: 300
     unit_of_measurement: °C
     step: 5
-    state_topic:
     icon: mdi:thermometer-high
     optimistic: true
     web_server:
@@ -256,8 +257,8 @@ text_sensor:
         - script.execute: preview_rfid_data
 button:
   - platform: template
-    id: upload_filament_settings
     name: Upload Settings
+    id: upload_filament_settings
     state_topic:
     icon: mdi:upload
     web_server:

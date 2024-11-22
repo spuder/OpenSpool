@@ -54,9 +54,9 @@ text:
     #     lambda: |-
     #       id(bambu_printer_status).topic = "device/" + x + "/report";
   - platform: template
+    name: Printer Lan Access Code
     id: bambu_lan_access_code
     state_topic:
-    name: Printer Lan Access Code
     optimistic: true
     mode: password
     restore_value: true
@@ -69,9 +69,9 @@ text:
           id(bambu_mqtt).set_password(x.c_str());
   #     - script.execute: check_mqtt_creds #TODO: Enable once this is merged: https://github.com/esphome/esphome/pull/7716
   - platform: template
+    name: Printer IP Address
     id: bambu_ip_address
     state_topic:
-    name: Printer IP Address
     optimistic: true
     mode: text
     restore_value: true
@@ -93,6 +93,7 @@ button:
   - platform: template
     name: "OpenSpool Create Tag"
     id: write_url_button
+    state_topic:
     icon: mdi:web
     web_server:
       sorting_group_id: sorting_group_extra
@@ -138,6 +139,7 @@ button:
   - platform: template
     name: "BambuHandy Create Tag"
     id: write_bambuhandy_url_button
+    state_topic:
     icon: mdi:cellphone
     web_server:
       sorting_group_id: sorting_group_extra

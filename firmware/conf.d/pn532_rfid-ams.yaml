@@ -169,8 +169,8 @@ text_sensor:
   - platform: template
     name: "NFC Raw Data 1"
     id: filament_raw_data1
-    internal:  false # Always show raw data 1
     state_topic:
+    internal:  false # Always show raw data 1
     icon: mdi:nfc-variant
     web_server:
       sorting_group_id: sorting_group_rfid
@@ -218,8 +218,8 @@ text_sensor:
   - platform: template
     name: "NFC Raw Data 2"
     id: filament_raw_data2
-    internal: ${hide_ams_sensors} # Only present on raw data 1-8
     state_topic:
+    internal: ${hide_ams_sensors} # Only present on raw data 1-8
     icon: mdi:nfc-variant
     web_server:
       sorting_group_id: sorting_group_rfid
@@ -273,13 +273,13 @@ binary_sensor:
     web_server:
       sorting_group_id: sorting_group_rfid
   - id: rfid_reader_spi_1_tag_parsed
+    state_topic:
     platform: template
     internal: true
-    state_topic:
   - id: rfid_reader_spi_1_tag_is_openspool
+    state_topic:
     platform: template
     internal: true
-    state_topic:
   - platform: template
     name: "NFC Tag Present 2"
     id: nfc_tag_present2
@@ -288,10 +288,10 @@ binary_sensor:
     web_server:
       sorting_group_id: sorting_group_rfid
   - id: rfid_reader_spi_2_tag_parsed
+    state_topic:
     platform: template
     internal: true
-    state_topic:
   - id: rfid_reader_spi_2_tag_is_openspool
+    state_topic:
     platform: template
     internal: true
-    state_topic:

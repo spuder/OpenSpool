@@ -18,18 +18,17 @@ text_sensor:
   #   #   sorting_group_id: sorting_group_info
   - platform: template
     name: "OpenSpool Version"
+    id: openspool_version
+    state_topic:
     lambda: |-
       return to_string(ESPHOME_PROJECT_VERSION);
-    state_topic:
     icon: mdi:new-box
     web_server:
       sorting_group_id: sorting_group_info
   - platform: debug
-    # device:
-    #   name: "Device Info"
-    #   state_topic:
     reset_reason:
       name: "Reset Reason"
+      id: reset_reason
       state_topic:
 sensor:
   - platform: debug
