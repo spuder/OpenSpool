@@ -1,13 +1,13 @@
 {
   "name": "OpenSpool",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "19a6556d18f9d257d2b09651e7287ad3",
-        "summary": "Remove improv-bluetooth"
+        "md5": "0ed0319f12948bf1d1e501d427d722da",
+        "summary": "Add checks if mqtt is connected"
       },
       "parts": [
         {
