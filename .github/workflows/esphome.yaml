@@ -69,13 +69,23 @@ jobs:
           yq -i '.substitutions.version = "${{ github.ref_name }}"' firmware/conf.d/version.yaml
           cat firmware/conf.d/version.yaml
 
-      - name: Build ESPHome firmware
+      - name: Build OpenSpool-Mini firmware
         uses: esphome/build-action@v4.0.2
         with:
           yaml-file: ${{ github.workspace }}/firmware/config-solo.yaml
           release-summary: ${{ env.RELEASE_SUMMARY }}
-          release-url: https://github.com/spuder/openspool/releases/download/${{ github.ref_name }}
+          release-url: https://openspool.io/firmware
           complete-manifest: false
+        if: matrix.target == 'esp32s2'
+
+      # - name: Build OpenSpool-AMS firmware
+      #   uses: esphome/build-action@v4.0.2
+      #   with:
+      #     yaml-file: ${{ github.workspace }}/firmware/config-ams.yaml
+      #     release-summary: ${{ env.RELEASE_SUMMARY }}
+      #     release-url: https://openspool.io/firmware
+      #     complete-manifest: false
+      #   if: matrix.target == 'esp32s3'
       
       - name: ls
         run: |
@@ -122,58 +132,32 @@ jobs:
         with:
           path: downloaded-artifacts
 
-      - name: Clean artifacts
+      - name: Purge local firmware
         run: |
-          mkdir -p artifacts || true
-          rm -rf artifacts/manifest.json || true
-          rm -rf artfacts/openspool-* || true
-          cp downloaded-artifacts/openspool-esp32s2/*.bin artifacts/
-          cp downloaded-artifacts/openspool-esp32s2/*.md5 artifacts/
-          ls -al artifacts
+          rm -f docs/firmware/*.json || true
+          rm -f docs/firmware/*.bin || true
+          cp downloaded-artifacts/*.bin docs/firmware/
+          cp downloaded-artifacts/*.md5 docs/firmware/
 
-      - name: Combine manifests
+      - name: Combined manifests
         run: |
-          python3 - <<EOF
-          import json
-          import sys
-          import os
+          jq -n --arg version "$version" '{
+            name: "OpenSpool",
+            version: ${{ github.ref_name }},
+            builds: [],
+            new_install_prompt_erase: true
+          }' > docs/firmware/manifest.json
 
-          print("Contents of downloaded-artifacts:")
-          for root, dirs, files in os.walk("downloaded-artifacts"):
-              for file in files:
-                  print(os.path.join(root, file))
+          for target in esp32s2; do
+            if [ -f "downloaded-artifacts/openspool-$target/manifest.json" ]; then
+              jq --slurpfile new_build "downloaded-artifacts/openspool-$target/manifest.json" '.builds += $new_build' docs/firmware/manifest.json > temp.json && mv temp.json docs/firmware/manifest.json
+            else
+              echo "Warning: manifest for $target not found"
+            fi
+          done
 
-          version = "${{ github.ref_name }}"
-          combined_manifest = {
-              "name": "OpenSpool",
-              "version": version,
-              "builds": [],
-              "new_install_prompt_erase": True
-          }
-
-          for target in ['esp32s2']:
-              try:
-                  with open(f'downloaded-artifacts/openspool-{target}/manifest.json', 'r') as f:
-                      manifest = json.load(f)
-                      # Add the entire manifest to the builds array
-                      combined_manifest['builds'].append(manifest)
-              except FileNotFoundError:
-                  print(f"Warning: manifest for {target} not found")
-              except json.JSONDecodeError:
-                  print(f"Error: Invalid JSON in manifest for {target}")
-
-          with open('artifacts/manifest.json', 'w') as f:
-              json.dump(combined_manifest, f, indent=2)
-
-          print(f"Combined manifest created with version: {version}")
-          print("Combined manifest content:")
-          print(json.dumps(combined_manifest, indent=2))
-          EOF
-
-      - name: Update manifest.json
-        run: |
-          cat artifacts/manifest.json > firmware/manifest.json
-          cat artifacts/manifest.json
+          jq '.' docs/firmware/manifest.json
+          ls -l docs/firmware
 
       - name: Setup yq
         uses: vegardit/gha-setup-yq@v1
@@ -192,7 +176,7 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add firmware/conf.d/version.yaml
-          git add firmware/manifest.json
+          git add docs/firmware/*
           git diff --staged || true
           if git diff --staged --quiet; then
             echo "No changes to commit"
@@ -203,6 +187,13 @@ jobs:
           fi
           git status
 
+      - name: Create Release Folder
+        run: |
+          mkdir -p release
+          cp docs/firmware/manifest.json release/manifest.json
+          cp docs/firmware/*.bin release/
+          cp docs/firmware/*.md5 release/
+
       - name: Release ${{ github.ref_name }}
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
@@ -210,7 +201,7 @@ jobs:
           automatic_release_tag: "${{ github.ref_name }}"
           prerelease: false
           files: |
-            artifacts/**/*
+            release/**/*
 
       - name: Release Latest
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -219,4 +210,4 @@ jobs:
           automatic_release_tag: "latest"
           prerelease: false
           files: |
-            artifacts/**/*
+            release/**/*
