@@ -130,12 +130,16 @@ jobs:
         with:
           path: downloaded-artifacts
 
+      - name: list artifacts
+        run: |
+          ls -ial 
+
       - name: Purge local firmware
         run: |
           rm -f docs/firmware/*.json || true
           rm -f docs/firmware/*.bin || true
-          cp downloaded-artifacts/*.bin docs/firmware/
-          cp downloaded-artifacts/*.md5 docs/firmware/
+          cp downloaded-artifacts/openspool-esp32s2/*.bin docs/firmware/
+          cp downloaded-artifacts/openspool-esp32s2/*.md5 docs/firmware/
 
       - name: Combined manifests
         run: |
@@ -151,6 +155,7 @@ jobs:
               jq --slurpfile new_build "downloaded-artifacts/openspool-$target/manifest.json" '.builds += $new_build' docs/firmware/manifest.json > temp.json && mv temp.json docs/firmware/manifest.json
             else
               echo "Warning: manifest for $target not found"
+              exit 1
             fi
           done
 
