@@ -1,6 +1,6 @@
 {
   "name": "OpenSpool",
-  "version": "1.4.6",
+  "version": "0.0.1",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
@@ -12,7 +12,7 @@
       },
       "parts": [
         {
-          "path": "openspool-esp32s2.factory.bin",
+          "path": "https://github.com/spuder/openspool/releases/download/1.4.6/openspool-esp32s2.factory.bin",
           "offset": 0
         }
       ]
