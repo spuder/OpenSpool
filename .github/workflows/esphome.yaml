@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        target: [esp32s2]
+        target: [esp32s2, esp32s3]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -78,14 +78,14 @@ jobs:
           complete-manifest: false
         if: matrix.target == 'esp32s2'
 
-      # - name: Build OpenSpool-AMS firmware
-      #   uses: esphome/build-action@v4.0.2
-      #   with:
-      #     yaml-file: ${{ github.workspace }}/firmware/config-ams.yaml
-      #     release-summary: ${{ env.RELEASE_SUMMARY }}
-      #     release-url: https://openspool.io/firmware
-      #     complete-manifest: false
-      #   if: matrix.target == 'esp32s3'
+      - name: Build OpenSpool-AMS firmware
+        uses: esphome/build-action@v4.0.2
+        with:
+          yaml-file: ${{ github.workspace }}/firmware/config-ams.yaml
+          release-summary: ${{ env.RELEASE_SUMMARY }}
+          release-url: https://openspool.io/firmware
+          complete-manifest: false
+        if: matrix.target == 'esp32s3'
       
       - name: ls
         run: |
@@ -140,6 +140,8 @@ jobs:
           rm -f docs/firmware/*.bin || true
           cp downloaded-artifacts/openspool-esp32s2/*.bin docs/firmware/
           cp downloaded-artifacts/openspool-esp32s2/*.md5 docs/firmware/
+          cp downloaded-artifacts/openspool-esp32s3/*.bin docs/firmware/
+          cp downloaded-artifacts/openspool-esp32s3/*.md5 docs/firmware/
 
       - name: Combined manifests
         run: |
@@ -150,7 +152,7 @@ jobs:
             new_install_prompt_erase: true
           }' > docs/firmware/manifest.json
 
-          for target in esp32s2; do
+          for target in esp32s2 esp32s3; do
             if [ -f "downloaded-artifacts/openspool-$target/manifest.json" ]; then
               jq --slurpfile new_build "downloaded-artifacts/openspool-$target/manifest.json" '.builds += $new_build' docs/firmware/manifest.json > temp.json && mv temp.json docs/firmware/manifest.json
             else
