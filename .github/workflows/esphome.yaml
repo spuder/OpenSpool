@@ -143,9 +143,9 @@ jobs:
 
       - name: Combined manifests
         run: |
-          jq -n --arg version "$version" '{
+          jq -n --arg version "${{ github.ref_name }}" '{
             name: "OpenSpool",
-            version: ${{ github.ref_name }},
+            version: $version,
             builds: [],
             new_install_prompt_erase: true
           }' > docs/firmware/manifest.json
