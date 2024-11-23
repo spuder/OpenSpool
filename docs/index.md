@@ -40,7 +40,6 @@ If the above step fails, see the [README on github](https://github.com/spuder/Op
 
 Once the firmware is installed, You will need to join the RFID reader to the same network as your 3d printer. 
 
-
 ## 🛜 Wireless Configuration
 
 1. Join the wifi network `OpenSpool`
