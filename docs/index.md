@@ -16,7 +16,7 @@ nav_order: 1
     <div class="button-row">
         <esp-web-install-button 
             manifest="https://openspool.io/firmware/manifest.json">
-        <span slot="unsupported">🛑  <b>Only <img src="https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white" alt="Google Chrome"> / <img src="https://img.shields.io/badge/Edge-0078D7?style=for-the-badge&logo=Microsoft-edge&logoColor=white" alt="Edge"> Supported</b> 🛑</span>
+        <span slot="unsupported"> <b>Only <img src="https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white" alt="Google Chrome"> / <img src="https://img.shields.io/badge/Edge-0078D7?style=for-the-badge&logo=Microsoft-edge&logoColor=white" alt="Edge"> Supported</b> </span>
 
         <span slot="not-allowed">🔒 HTTPS Required 🔒 </span>
         </esp-web-install-button>

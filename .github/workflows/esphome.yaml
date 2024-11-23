@@ -94,25 +94,23 @@ jobs:
 
       - name: Generate md5 checksum
         run: |
-          mkdir -p artifacts/openspool-${{ matrix.target }}
-          mv -f openspool-${{ matrix.target }}/* artifacts/openspool-${{ matrix.target }}/
-          ls -la artifacts/openspool-${{ matrix.target }}
+          ls -la openspool-${{ matrix.target }}
 
-          for file in artifacts/openspool-${{ matrix.target }}/*.bin; do
+          for file in openspool-${{ matrix.target }}/*.bin; do
             md5sum "$file" | awk '{print $1}' > "${file}.md5"
             md5_length=$(wc -c < "${file}.md5")
             if [ "$md5_length" -ne 33 ]; then
               echo "MD5 generation failed for $file (length: $md5_length)"
               exit 1
             fi
-          ls -la artifacts/openspool-${{ matrix.target }}
+          ls -la openspool-${{ matrix.target }}
           done
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: openspool-${{ matrix.target }}
-          path: artifacts/openspool-${{ matrix.target }}
+          path: openspool-${{ matrix.target }}/**/*
           retention-days: 5
           if-no-files-found: error
 
