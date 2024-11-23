@@ -19,7 +19,15 @@ search_exclude: true
 <tr>
     <td><a href="{{ file.path | relative_url }}">{{ file.name }}</a></td>
     <td>{{ file.modified_time | date: "%Y-%m-%d %H:%M" }}</td>
-    <td class="size">{{ file.size | divided_by: 1024 }}KB</td>
+    <td class="size">
+    {% assign file_path = file.path | prepend: site.source %}
+    {% if file_path | file_exists %}
+        {% assign file_size = file_path | file_size | divided_by: 1024.0 %}
+        {{ file_size | round: 2 }} KB
+    {% else %}
+        N/A
+    {% endif %}
+    </td>
 </tr>
 {% endfor %}
 </table>
