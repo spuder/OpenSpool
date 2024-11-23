@@ -1,0 +1,22 @@
+{
+  "name": "OpenSpool",
+  "version": "1.5.3",
+  "builds": [
+    {
+      "chipFamily": "ESP32-S2",
+      "ota": {
+        "path": "openspool-esp32s2.ota.bin",
+        "md5": "7b34147e71a155dd06fda64e801464e0",
+        "summary": "Fix version",
+        "release_url": "https://openspool.io/firmware"
+      },
+      "parts": [
+        {
+          "path": "openspool-esp32s2.factory.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ],
+  "new_install_prompt_erase": true
+}
