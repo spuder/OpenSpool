@@ -27,4 +27,9 @@ logger:
     json: INFO
     esp32.preferences: DEBUG
     esp-idf: DEBUG
+    component: VERBOSE
+    binary_sensor: VERBOSE
+    template.text: DEBUG
+    text: DEBUG
+    spi_device: ERROR
     "": ERROR

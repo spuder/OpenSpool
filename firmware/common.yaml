@@ -82,7 +82,6 @@ esp32:
     # sdkconfig_options:
     # MBEDTLS_CERTIFICATE_BUNDLE: y
     # MBEDTLS_CERTIFICATE_BUNDLE_DEFAULT_FULL: y
-logger:
 packages:
   version: !include conf.d/version.yaml
   uptime: !include conf.d/uptime.yaml
