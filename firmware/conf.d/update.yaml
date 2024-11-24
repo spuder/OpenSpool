@@ -64,15 +64,3 @@
 #     lambda: |-
 #       return "Current: " + id(current_version).state + 
 #              " | Latest: " + id(latest_version).state;
-
-# logger:
-#   level: VERY_VERBOSE
-#   logs:
-#     # pn532: VERBOSE
-#     # nfc: VERBOSE
-#     # mqtt: INFO
-#     # wifi: INFO
-#     esp-tls: VERY_VERBOSE
-#     esp-tls-mbedtls: VERY_VERBOSE
-#     http_client: VERY_VERBOSE
-#     http_request: VERY_VERBOSE

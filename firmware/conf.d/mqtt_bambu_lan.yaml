@@ -1,6 +1,6 @@
 ---
 substitutions:
-  base_topic: "device/%s/report"
+  base_topic: "device/%s/report" #TODO: likely not used
 mqtt:
   id: bambu_mqtt
   broker: "" # Broker is set by text.bambu_ip_address
@@ -46,8 +46,8 @@ mqtt:
     Rs6d8SCU89xyrwzQ0PR853irHas3WrHVqab3P+qNwR0YirL0Qk7Xt/q3O1griNg2
     Blbjg3obpHo9
     -----END CERTIFICATE-----
-  clean_session: true
-  enable_on_boot: false
+  # clean_session: true
+  # enable_on_boot: false
 
 # text_sensor:
 #   - platform: mqtt_subscribe
@@ -93,21 +93,6 @@ binary_sensor:
     icon: mdi:lan-connect
     web_server:
       sorting_group_id: sorting_group_printer_settings
-      # TODO: turn on led for both d1 mini and esp32-s3
-      # on_state:
-      #   then:
-      #     if:
-      #       condition:
-      #         mqtt.connected:
-      #       then:
-      #         - output.turn_on: onboard_led
-      #       else:
-      #         - output.turn_off: onboard_led
-# logger:
-#   level: VERY_VERBOSE
-#   logs:
-#     mqtt.component: VERY_VERBOSE
-#     mqtt.client: VERY_VERBOSE
 
 # sensor:
 #   - platform: mqtt_subscribe

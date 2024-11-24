@@ -60,5 +60,5 @@ button:
   - platform: factory_reset
     name: "Factory Reset"
     id: factory_reset_openspool
-    internal: true
     state_topic:
+    internal: true

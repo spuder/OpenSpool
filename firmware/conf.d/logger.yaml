@@ -1,0 +1,29 @@
+logger:
+  level: VERBOSE
+  logs:
+    sensor: INFO
+    pn532: DEBUG
+    pn532_spi: DEBUG
+    spi: INFO
+    nfc: DEBUG
+    i2c: INFO
+    mqtt: DEBUG
+    mqtt.component: DEBUG
+    mqtt.client: DEBUG
+    wifi: INFO
+    wifi_esp32: INFO
+    esp-tls: DEBUG
+    esp-tls-mbedtls: DEBUG
+    http_client: INFO
+    http_request: INFO
+    scheduler: INFO
+    text_sensor: INFO
+    esp32_rmt_led_strip: INFO
+    debug: INFO
+    web_server: INFO
+    light: INFO
+    api: INFO
+    improv_serial: VERBOSE
+    json: INFO
+    esp32.preferences: DEBUG
+    "": ERROR

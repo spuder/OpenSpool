@@ -15,9 +15,9 @@ text_sensor:
   - platform: template
     name: "Current Time"
     id: time_sensor
+    state_topic:
     icon: "mdi:clock"
     update_interval: 10s
-    state_topic:
     lambda: |-
       auto time = id(ntp_time).now();
       char str[20];

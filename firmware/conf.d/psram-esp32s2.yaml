@@ -39,9 +39,6 @@ psram:
   # speed: 40MHz
   speed: 80MHz
 
-# logger:
-#   level: VERY_VERBOSE
-
 # I (30) boot: ESP-IDF 5.3.1 2nd stage bootloader
 # I (30) boot: compile time Nov 10 2024 08:16:30
 # I (30) boot: chip revision: v0.0

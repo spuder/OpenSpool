@@ -4,6 +4,7 @@ select:
   - platform: template
     name: Printer Model
     id: bambu_model
+    state_topic:
     options:
       - "A1Mini"
       - "A1"
@@ -11,7 +12,6 @@ select:
       - "X1C/X1E"
     optimistic: true
     restore_value: true
-    state_topic:
     icon: mdi:printer-3d
     web_server:
       sorting_group_id: sorting_group_printer_settings
@@ -39,9 +39,9 @@ text_sensor:
       return {"bambulab://"};
 text:
   - platform: template
+    name: Printer Serial Number
     id: bambu_serial_number
     state_topic:
-    name: Printer Serial Number
     optimistic: true
     mode: text
     restore_value: true

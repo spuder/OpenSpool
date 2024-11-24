@@ -287,10 +287,3 @@ button:
               - lambda: |-
                   ESP_LOGI("rfid", "NFC Tag not present");
 
-# logger:
-#   level: DEBUG
-#   logs:
-#     pn532: DEBUG
-#     nfc: DEBUG
-#     i2c: DEBUG
-#     # "": NONE

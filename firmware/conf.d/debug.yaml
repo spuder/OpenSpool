@@ -3,10 +3,7 @@
 # This feels like a bug, but not sure why
 debug:
   update_interval: 5s
-logger:
-  level: debug
-  logs:
-    sensor: WARN
+
 text_sensor:
   # Note that this only returns the esphome compiled version
   # It does not return esphome.platform.version, as that value is only available through the api
