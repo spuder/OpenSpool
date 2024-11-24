@@ -46,8 +46,12 @@ mqtt:
     Rs6d8SCU89xyrwzQ0PR853irHas3WrHVqab3P+qNwR0YirL0Qk7Xt/q3O1griNg2
     Blbjg3obpHo9
     -----END CERTIFICATE-----
-  # clean_session: true
-  # enable_on_boot: false
+  clean_session: true
+  enable_on_boot: false
+  on_connect:
+    - logger.log: "Connected to printer!"
+  on_disconnect:
+    - logger.log: "Disconnected from printer!"
 
 # text_sensor:
 #   - platform: mqtt_subscribe
@@ -86,13 +90,20 @@ mqtt:
 # #     #   then:
 # #     #     - lambda: |-
 binary_sensor:
-  - platform: status
+  # Note platform.status won't turn on if 'api' is enabled (yet disconnected)
+  # api is required for dashboard_import, which is required for made-for-esphome program
+  # api isn't actually used
+  # - platform: status
+  - platform: template
     name: "MQTT Connection"
     id: mqtt_connected
     state_topic: # Don't post update to MQTT
     icon: mdi:lan-connect
     web_server:
       sorting_group_id: sorting_group_printer_settings
+    device_class: connectivity #TODO: use this class
+    lambda: |-
+      return id(bambu_mqtt)->is_connected();
 
 # sensor:
 #   - platform: mqtt_subscribe

@@ -48,8 +48,23 @@ text:
     icon: mdi:barcode
     web_server:
       sorting_group_id: sorting_group_printer_settings
-    # on_value:
-    #   then:
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: |-
+                return !id(bambu_lan_access_code).state.empty() &&
+                      !id(bambu_ip_address).state.empty() &&
+                      !id(bambu_serial_number).state.empty();
+            then:
+              - logger.log: "Connecting to Bambu printer"
+              - mqtt.enable: 
+                  id: bambu_mqtt
+            else:
+              - logger.log: "Missing Bambu Credentials, skipping mqtt connect"
+              - mqtt.disable:
+                  id: bambu_mqtt
+
     #       - script.execute: check_mqtt_creds #TODO: Enable once this is merged: https://github.com/esphome/esphome/pull/7716
     #     lambda: |-
     #       id(bambu_printer_status).topic = "device/" + x + "/report";
@@ -65,9 +80,22 @@ text:
       sorting_group_id: sorting_group_printer_settings
     on_value:
       then:
-        lambda: |-
-          id(bambu_mqtt).set_password(x.c_str());
-  #     - script.execute: check_mqtt_creds #TODO: Enable once this is merged: https://github.com/esphome/esphome/pull/7716
+        - lambda: |-
+            id(bambu_mqtt).set_password(x.c_str());
+        - if:
+            condition:
+              lambda: |-
+                return !id(bambu_lan_access_code).state.empty() &&
+                      !id(bambu_ip_address).state.empty() &&
+                      !id(bambu_serial_number).state.empty();
+            then:
+              - logger.log: "Connecting to Bambu printer"
+              - mqtt.enable: 
+                  id: bambu_mqtt
+            else:
+              - logger.log: "Missing Bambu Credentials, skipping mqtt connect"
+              - mqtt.disable:
+                  id: bambu_mqtt
   - platform: template
     name: Printer IP Address
     id: bambu_ip_address
@@ -80,9 +108,23 @@ text:
       sorting_group_id: sorting_group_printer_settings
     on_value:
       then:
-        lambda: |-
-          id(bambu_mqtt).set_broker_address(x.c_str());
-  #       - script.execute: check_mqtt_creds #TODO: Enable once this is merged: https://github.com/esphome/esphome/pull/7716
+        - lambda: |-
+            id(bambu_mqtt).set_broker_address(x.c_str());
+        - if:
+            condition:
+              lambda: |-
+                return !id(bambu_lan_access_code).state.empty() &&
+                      !id(bambu_ip_address).state.empty() &&
+                      !id(bambu_serial_number).state.empty();
+            then:
+              - logger.log:  "Connecting to Bambu printer"
+              - mqtt.enable: 
+                  id: bambu_mqtt
+            else:
+              - logger.log:  "Missing Bambu Credentials, skipping mqtt connect"
+              - mqtt.disable:
+                  id: bambu_mqtt
+
 
 button:
   - platform: restart
