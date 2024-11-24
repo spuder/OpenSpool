@@ -26,4 +26,5 @@ logger:
     improv_serial: VERBOSE
     json: INFO
     esp32.preferences: DEBUG
+    esp-idf: DEBUG
     "": ERROR

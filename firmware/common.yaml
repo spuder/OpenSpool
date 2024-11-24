@@ -98,3 +98,4 @@ packages:
   led-external: !include conf.d/led-external.yaml
   ota: !include conf.d/ota.yaml
   #update: !include conf.d/update.yaml
+  logger: !include conf.d/logger.yaml
