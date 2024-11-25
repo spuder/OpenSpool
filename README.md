@@ -42,13 +42,13 @@ Almost as seamlessly as if you were using Bambu filament with an AMS.
 ## 🖨️ Protocol
 
 
-| RFID Tag Brand | Read | Write | Type | 
+| Protocol | Read | Write | Type | 
 |----------------|------|-------|-------|
 | Bambu           | ✅    | ❌     | MiFare Classic | 
 | OpenSpool  | ✅    | ✅     | NTAG 215/216 | 
 | OpenSourceRFID | ✅    | ✅     | TBD: Either MiFare or NTAG | 
 | Creality       | ❓    | ❓     | ❓ | 
-
+| PrusaRFID      |❓    | ❓     | ❓ |
 
 ### 🧬 OpenSpool Protocol
 
