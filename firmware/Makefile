@@ -8,9 +8,9 @@ USB_ADDRESS ?= $(error USB_ADDRESS is not set)
 all: build upload dashboard logs
 
 # Preserve backwards compatabliity in documentation
-run-usb: run-usb-breadboard-solo
-run-usb-pcb: run-usb-pcb-solo
-build-pcb-solo: build-esp32s2-solo
+run-usb: run-usb-breadboard-mini
+run-usb-pcb: run-usb-pcb-mini
+build-pcb-mini: build-esp32s2-mini
 build-pcb-ams: build-esp32s2-ams
 
 clean:
@@ -21,7 +21,7 @@ clean:
 build-esp32:
 	esphome config config-esp32.yaml
 	esphome compile config-esp32.yaml
-build-esp32s2-solo:
+build-esp32s2-mini:
 	esphome config openspool-mini.yaml
 	esphome compile openspool-mini.yaml
 build-esp32s2-ams:
@@ -44,18 +44,18 @@ build-d1-mini-s2-breadboard:
 		-s rfid0_ss_pin "GPIO33" \
 		-s spi2_type "any" \
 		compile config-esp32s2.yaml
-upload-solo:
+upload-mini:
 	@echo "Uploading to $(USB_ADDRESS)"
 	esphome upload openspool-mini.yaml --device $(USB_ADDRESS)
 upload-ams:
 	@echo "Uploading to $(USB_ADDRESS)"
 	esphome upload openspool-ams.yaml --device $(USB_ADDRESS)
-logs-solo:
+logs-mini:
 	@echo "Uploading to $(USB_ADDRESS)"
 	esphome logs config-esp32s2.yaml --device $(USB_ADDRESS)
 dashboard:
 	esphome dashboard . --open-ui --address 127.0.0.1 --port 6053
-run-usb-breadboard-solo:
+run-usb-breadboard-mini:
 	esphome \
 		-s spi2_miso_pin "GPIO39" \
 		-s spi2_clk_pin "GPIO36" \
@@ -63,7 +63,7 @@ run-usb-breadboard-solo:
 		-s rfid0_ss_pin "GPIO33" \
 		-s spi2_type "any" \
 		run openspool-mini.yaml --device $(USB_ADDRESS)
-run-usb-pcb-solo:
+run-usb-pcb-mini:
 	esphome \
 		run openspool-mini.yaml --device $(USB_ADDRESS)
 run-usb-pcb-ams:

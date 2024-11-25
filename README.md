@@ -169,7 +169,7 @@ ls /dev/cu*
 Upload firmware and restart
 
 ```bash
-USB_ADDRESS=/dev/cu.usbmodemXXXXX make run-usb-pcb-solo
+USB_ADDRESS=/dev/cu.usbmodemXXXXX make run-usb-pcb-mini
 ```
 
 ## 🛜 First Time Configuration
