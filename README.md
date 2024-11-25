@@ -44,9 +44,9 @@ Almost as seamlessly as if you were using Bambu filament with an AMS.
 
 | Protocol | Read | Write | Type | 
 |----------------|------|-------|-------|
-| Bambu           | ✅    | ❌     | MiFare Classic | 
+| Bambu         | 🚧 In progress       | ❌     | MiFare Classic | 
 | OpenSpool  | ✅    | ✅     | NTAG 215/216 | 
-| OpenSourceRFID | ✅    | ✅     | TBD: Either MiFare or NTAG | 
+| OpenSourceRFID | 🚧 In progress  | 🚧 In Progress    | TBD: Either MiFare or NTAG | 
 | Creality       | ❓    | ❓     | ❓ | 
 | PrusaRFID      |❓    | ❓     | ❓ |
 
