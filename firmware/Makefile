@@ -18,9 +18,6 @@ clean:
 	esphome clean openspool-ams.yaml
 	rm -rf .esphome/idedata/*
 	rm -rf ~/.platformio/penv
-build-esp32:
-	esphome config config-esp32.yaml
-	esphome compile config-esp32.yaml
 build-esp32s2-mini:
 	esphome config openspool-mini.yaml
 	esphome compile openspool-mini.yaml
@@ -35,7 +32,7 @@ build-d1-mini-s2-breadboard:
 		-s spi2_mosi_pin "GPIO35" \
 		-s rfid0_ss_pin "GPIO33" \
 		-s spi2_type "any" \
-		config config-esp32s2.yaml
+		config openspool-mini.yaml
 	esphome \
 		-s version dev \ 
 		-s spi2_miso_pin "GPIO39" \
@@ -43,7 +40,7 @@ build-d1-mini-s2-breadboard:
 		-s spi2_mosi_pin "GPIO35" \
 		-s rfid0_ss_pin "GPIO33" \
 		-s spi2_type "any" \
-		compile config-esp32s2.yaml
+		compile openspool-mini.yaml
 upload-mini:
 	@echo "Uploading to $(USB_ADDRESS)"
 	esphome upload openspool-mini.yaml --device $(USB_ADDRESS)
@@ -52,7 +49,7 @@ upload-ams:
 	esphome upload openspool-ams.yaml --device $(USB_ADDRESS)
 logs-mini:
 	@echo "Uploading to $(USB_ADDRESS)"
-	esphome logs config-esp32s2.yaml --device $(USB_ADDRESS)
+	esphome logs openspool-mini.yaml --device $(USB_ADDRESS)
 dashboard:
 	esphome dashboard . --open-ui --address 127.0.0.1 --port 6053
 run-usb-breadboard-mini:
