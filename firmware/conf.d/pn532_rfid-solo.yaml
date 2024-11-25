@@ -258,8 +258,8 @@ button:
                   url += "&min_temp=" + std::to_string(static_cast<int>(id(filament_min_temp).state));
                   url += "&max_temp=" + std::to_string(static_cast<int>(id(filament_max_temp).state));
                   url += "&brand=" + std::string(id(filament_brand).state);
-                  url += "protocol" + std::string("openspool");
-                  url += "version" + std::string("1.0");
+                  url += "&protocol" + std::string("openspool");
+                  url += "&version" + std::string("1.0");
                   ESP_LOGI("rfid", "NDEF Record URL: %s", url.c_str());
                   message->add_uri_record(url);
 
