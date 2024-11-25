@@ -22,6 +22,9 @@ packages:
   button: !include conf.d/button.yaml
   improv-serial: !include conf.d/improv-serial.yaml
 
+wifi:
+  output_power: 10 # https://github.com/esphome/issues/issues/3988#issuecomment-1449954758
+  
 api: 
   reboot_timeout: 0s #reboot_timeout must be 0 if api and mqtt are defined
   id: api_openspool

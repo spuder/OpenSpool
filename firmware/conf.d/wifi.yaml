@@ -1,10 +1,8 @@
 ---
 wifi:
-  output_power: 10 # https://github.com/esphome/issues/issues/3988#issuecomment-1449954758
   ap:
     ssid: "OpenSpool"
   reboot_timeout: 0s # This must stay at 0s if api and mqtt are enabled, otherwise it will reboot every 15 minutes
-  power_save_mode: none
   #TODO: if it is in ap mode, then pulse blue
   # on_connect:
   #   then:
