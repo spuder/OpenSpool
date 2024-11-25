@@ -41,25 +41,18 @@ Almost as seamlessly as if you were using Bambu filament with an AMS.
 
 ## 🖨️ Protocol
 
-OpenSpool supports 2 protocols
 
-- OpenSpool  
-- [OpenSourceRFID](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/blob/main/OpenSourceRfid.md)  #Pending 
+| RFID Tag Brand | Read | Write | Type | 
+|----------------|------|-------|-------|
+| Bambu           | ✅    | ❌     | MiFare Classic | 
+| OpenSpool  | ✅    | ✅     | NTAG 215/216 | 
+| OpenSourceRFID | ✅    | ✅     | TBD: Either MiFare or NTAG | 
+| Creality       | ❓    | ❓     | ❓ | 
 
 
 ### 🧬 OpenSpool Protocol
 
 OpenSpool aims to use the simplest possible protocol for RFID tags. All you need is a [13.56Mhz RFID tag](https://a.co/d/5ojDUNk) that supports NDEF records (NFC Tags) and has atleast 500 bytes of memory. NTAG 215/216 are a great choice. Purchasing links provided below. 
-
-### 🧬 OpenSourceRFID Protocol
-
-The OpenSourceRFID protocol is still pending finalization, o OpenSourceRFID has momentium from suppliers [PolarFilament](https://polarfilament.com) and [3D-fuel](https://www.3dfuel.com)
-
-Follow [this github page](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/blob/main/OpenSourceRfid.md) for updates to OpenSourceRFID
-
-### 🧬 Creality
-
-Creality has announced their plans to add RFID tags to their filament starting with the k2 line. Support for creality tags is still being evaluated. 
 
 #### NDEF Record
 

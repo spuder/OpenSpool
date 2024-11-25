@@ -50,11 +50,15 @@ esphome:
                     !id(bambu_ip_address).state.empty() &&
                     !id(bambu_serial_number).state.empty();
           then:
-            - logger.log: "Connecting to Bambu printer"
+            - logger.log: 
+                level: info
+                format: "Connecting to Bambu printer"
             - mqtt.enable: 
                 id: bambu_mqtt
           else:
-            - logger.log: "Missing Bambu Credentials, skipping mqtt connect"
+            - logger.log: 
+                level: info
+                format: "Missing Bambu Credentials, skipping mqtt connect"
             - mqtt.disable:
                 id: bambu_mqtt
         # - script.execute: set_all_leds_white
