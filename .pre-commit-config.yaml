@@ -7,17 +7,17 @@ repos:
   #     - id: yamlfmt
   - repo: local
     hooks:
-      - id: esphome-config-solo
+      - id: esphome-openspool-mini
         name: ESPHome Validate Solo Config
-        # entry: bash -c 'podman run -v "$(pwd)/firmware:/data" --rm ghcr.io/esphome/esphome:2024.11.0 config /data/config-solo.yaml'
-        entry: esphome config firmware/config-solo.yaml
+        # entry: bash -c 'podman run -v "$(pwd)/firmware:/data" --rm ghcr.io/esphome/esphome:2024.11.0 config /data/openspool-mini.yaml'
+        entry: esphome config firmware/openspool-mini.yaml
         language: system
         pass_filenames: false
         files: ^firmware/
-      - id: esphome-config-ams
+      - id: esphome-openspool-ams
         name: ESPHome Validate AMS Config
-        # entry: bash -c 'podman run -v "$(pwd)/firmware:/data" --rm ghcr.io/esphome/esphome:2024.11.0 config /data/config-ams.yaml'
-        entry: esphome config firmware/config-ams.yaml
+        # entry: bash -c 'podman run -v "$(pwd)/firmware:/data" --rm ghcr.io/esphome/esphome:2024.11.0 config /data/openspool-ams.yaml'
+        entry: esphome config firmware/openspool-ams.yaml
         language: system
         pass_filenames: false
         files: ^firmware/

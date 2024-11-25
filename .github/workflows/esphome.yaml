@@ -72,7 +72,7 @@ jobs:
       - name: Build OpenSpool-Mini firmware
         uses: esphome/build-action@v4.0.2
         with:
-          yaml-file: ${{ github.workspace }}/firmware/config-solo.yaml
+          yaml-file: ${{ github.workspace }}/firmware/openspool-mini.yaml
           release-summary: ${{ env.RELEASE_SUMMARY }}
           release-url: https://openspool.io/firmware
           complete-manifest: false
@@ -81,7 +81,7 @@ jobs:
       - name: Build OpenSpool-AMS firmware
         uses: esphome/build-action@v4.0.2
         with:
-          yaml-file: ${{ github.workspace }}/firmware/config-ams.yaml
+          yaml-file: ${{ github.workspace }}/firmware/openspool-ams.yaml
           release-summary: ${{ env.RELEASE_SUMMARY }}
           release-url: https://openspool.io/firmware
           complete-manifest: false

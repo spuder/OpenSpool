@@ -14,19 +14,19 @@ build-pcb-solo: build-esp32s2-solo
 build-pcb-ams: build-esp32s2-ams
 
 clean:
-	esphome clean config-solo.yaml
-	esphome clean config-ams.yaml
+	esphome clean openspool-mini.yaml
+	esphome clean openspool-ams.yaml
 	rm -rf .esphome/idedata/*
 	rm -rf ~/.platformio/penv
 build-esp32:
 	esphome config config-esp32.yaml
 	esphome compile config-esp32.yaml
 build-esp32s2-solo:
-	esphome config config-solo.yaml
-	esphome compile config-solo.yaml
+	esphome config openspool-mini.yaml
+	esphome compile openspool-mini.yaml
 build-esp32s2-ams:
-	esphome config config-ams.yaml
-	esphome compile config-ams.yaml
+	esphome config openspool-ams.yaml
+	esphome compile openspool-ams.yaml
 build-d1-mini-s2-breadboard:
 	esphome \
 		-s version dev \ 
@@ -46,10 +46,10 @@ build-d1-mini-s2-breadboard:
 		compile config-esp32s2.yaml
 upload-solo:
 	@echo "Uploading to $(USB_ADDRESS)"
-	esphome upload config-solo.yaml --device $(USB_ADDRESS)
+	esphome upload openspool-mini.yaml --device $(USB_ADDRESS)
 upload-ams:
 	@echo "Uploading to $(USB_ADDRESS)"
-	esphome upload config-ams.yaml --device $(USB_ADDRESS)
+	esphome upload openspool-ams.yaml --device $(USB_ADDRESS)
 logs-solo:
 	@echo "Uploading to $(USB_ADDRESS)"
 	esphome logs config-esp32s2.yaml --device $(USB_ADDRESS)
@@ -62,10 +62,10 @@ run-usb-breadboard-solo:
 		-s spi2_mosi_pin "GPIO35" \
 		-s rfid0_ss_pin "GPIO33" \
 		-s spi2_type "any" \
-		run config-solo.yaml --device $(USB_ADDRESS)
+		run openspool-mini.yaml --device $(USB_ADDRESS)
 run-usb-pcb-solo:
 	esphome \
-		run config-solo.yaml --device $(USB_ADDRESS)
+		run openspool-mini.yaml --device $(USB_ADDRESS)
 run-usb-pcb-ams:
 	esphome \
-		run config-ams.yaml --device $(USB_ADDRESS)
+		run openspool-ams.yaml --device $(USB_ADDRESS)
