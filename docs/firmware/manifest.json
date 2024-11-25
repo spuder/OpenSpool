@@ -1,13 +1,13 @@
 {
   "name": "OpenSpool",
-  "version": "1.5.5",
+  "version": "1.6.0",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "58c08c61b1df6a42bfe3eca7afdec6ac",
-        "summary": "Fix mqtt enabled icon",
+        "md5": "0bac1191350bf9799514387305465f87",
+        "summary": "Refactor name from config-solo to openspool-mini",
         "release_url": "https://openspool.io/firmware"
       },
       "parts": [
@@ -21,8 +21,8 @@
       "chipFamily": "ESP32-S3",
       "ota": {
         "path": "openspool-esp32s3.ota.bin",
-        "md5": "2396e032727edca2312f240aa388e4dc",
-        "summary": "Fix mqtt enabled icon",
+        "md5": "46d7bd4427a676d7bd7126fabffa838c",
+        "summary": "Refactor name from config-solo to openspool-mini",
         "release_url": "https://openspool.io/firmware"
       },
       "parts": [
