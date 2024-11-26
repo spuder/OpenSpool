@@ -135,7 +135,7 @@ If you do find a cheaper price and have verified reliablity, please let us know.
 # Wiring Diagram
 
 
-<img src="./images/OpenSpoolMiniWiringDiagram.png" width="500">
+<img src="./images/OpenSpoolMiniWiringDiagram2.png" width="500">
 
 Be sure to put the PN532 into `SPI` mode (not `i2c` or `UART`)
 
