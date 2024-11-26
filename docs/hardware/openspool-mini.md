@@ -21,7 +21,7 @@ nav_order: 1
 
 ## Wiring Diagram
 
-![](../images/OpenSpoolMiniWiringDiagram.png)
+![](../images/OpenSpoolMiniWiringDiagram2.png)
 
 ![](https://www.wemos.cc/en/latest/_images/s2_mini_v1.0.0_4_16x9.jpg)
 
