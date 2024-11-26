@@ -7,7 +7,7 @@
 # OpenSpool
 **Your filament wants to be free**
 
-![](https://img.shields.io/badge/openspool-1.6.1-magenta)
+![](https://img.shields.io/badge/openspool-1.7.0-magenta)
 ![](https://github.com/spuder/openspool/actions/workflows/esphome.yaml/badge.svg)
 ![](https://github.com/spuder/openspool/actions/workflows/pages.yaml/badge.svg)
 [![](https://dcbadge.limes.pink/api/server/4EaXHu9CEj)](https://discord.gg/4EaXHu9CEj)
