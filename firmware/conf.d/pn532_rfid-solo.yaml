@@ -234,7 +234,7 @@ button:
                     }
             then:
               - lambda: |-
-                  constexpr size_t json_capacity = 512;
+                  constexpr size_t json_capacity = 1024;
 
                   StaticJsonDocument<json_capacity> doc;
 
@@ -248,20 +248,24 @@ button:
 
                   char json_buffer[json_capacity];
                   size_t json_length = serializeJson(doc, json_buffer, sizeof(json_buffer));
+                  if (json_length >= json_capacity) {
+                    ESP_LOGE("rfid", "JSON serialization failed: buffer too small");
+                    return;
+                  }
 
                   auto message = new nfc::NdefMessage();
 
                   //Create openspool.io/tag_info uri
-                  std::string url = "https://openspool.io/tag_info?";
-                  url += "color_hex=" + std::string(id(filament_color_hex).state);
-                  url += "&type=" + std::string(id(filament_type).state);
-                  url += "&min_temp=" + std::to_string(static_cast<int>(id(filament_min_temp).state));
-                  url += "&max_temp=" + std::to_string(static_cast<int>(id(filament_max_temp).state));
-                  url += "&brand=" + std::string(id(filament_brand).state);
-                  url += "&protocol" + std::string("openspool");
-                  url += "&version" + std::string("1.0");
-                  ESP_LOGI("rfid", "NDEF Record URL: %s", url.c_str());
-                  message->add_uri_record(url);
+                  //std::string url = "https://openspool.io/tag_info?";
+                  //url += "color_hex=" + std::string(id(filament_color_hex).state);
+                  //url += "&type=" + std::string(id(filament_type).state);
+                  //url += "&min_temp=" + std::to_string(static_cast<int>(id(filament_min_temp).state));
+                  //url += "&max_temp=" + std::to_string(static_cast<int>(id(filament_max_temp).state));
+                  //url += "&brand=" + std::string(id(filament_brand).state);
+                  //url += "&protocol" + std::string("openspool");
+                  //url += "&version" + std::string("1.0");
+                  //ESP_LOGI("rfid", "NDEF Record URL: %s", url.c_str());
+                  //message->add_uri_record(url);
 
                   ESP_LOGI("rfid", "JSON content to be written: %s", json_buffer);
 
