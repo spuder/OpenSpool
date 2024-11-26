@@ -82,7 +82,7 @@ pn532_spi:
                 ESP_LOGW("NFC", "No application/json record found");
               }
             } else {
-              ESP_LOGD("NFC", "Tag found without NDEF message");
+              ESP_LOGI("NFC", "Tag found without NDEF message");
             }
 
             // Update states
