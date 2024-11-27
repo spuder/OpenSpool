@@ -35,4 +35,6 @@ logger:
     nfc.ndef_message: DEBUG
     select: INFO
     number: INFO
+    pn532.mifare_ultralight: VERBOSE
+    #TODO: What are other pn532 protocol types? 
     "": ERROR

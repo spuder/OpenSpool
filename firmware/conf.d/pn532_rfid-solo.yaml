@@ -234,51 +234,69 @@ button:
                     }
             then:
               - lambda: |-
-                  constexpr size_t json_capacity = 1024;
-
-                  StaticJsonDocument<json_capacity> doc;
-
-                  doc["version"] = "1.0";
-                  doc["protocol"] = "openspool";
-                  doc["color_hex"] = id(filament_color_hex).state;
-                  doc["type"] = id(filament_type).state;
-                  doc["min_temp"] = id(filament_min_temp).state;
-                  doc["max_temp"] = id(filament_max_temp).state;
-                  doc["brand"] = id(filament_brand).state;
-
-                  char json_buffer[json_capacity];
-                  size_t json_length = serializeJson(doc, json_buffer, sizeof(json_buffer));
-                  if (json_length >= json_capacity) {
-                    ESP_LOGE("rfid", "JSON serialization failed: buffer too small");
-                    return;
-                  }
-
                   auto message = new nfc::NdefMessage();
 
-                  //Create openspool.io/tag_info uri
-                  std::string url = "https://openspool.io/tag_info?";
-                  url += "color_hex=" + std::string(id(filament_color_hex).state);
-                  url += "&type=" + std::string(id(filament_type).state);
-                  url += "&min_temp=" + std::to_string(static_cast<int>(id(filament_min_temp).state));
-                  url += "&max_temp=" + std::to_string(static_cast<int>(id(filament_max_temp).state));
-                  url += "&brand=" + std::string(id(filament_brand).state);
-                  url += "&protocol=" + std::string("openspool");
-                  url += "&version=" + std::string("1.0");
-                  ESP_LOGI("rfid", "NDEF Record URL: %s", url.c_str());
-                  message->add_uri_record(url);
+                  //TODO: uncomment once esphome suppports messages nless than 255 bytes
+                  // URI NDEF record
+                  // esphome fails if this is more than 255 bytes
+                  //auto uri_record = std::make_unique<nfc::NdefRecordUri>();
+                  //std::string url = "https://openspool.io/tag?";
+                  //url.append("protocol=").append("openspool");
+                  //url.append("version=").append("1.0");
+                  //url.append("&color_hex=").append(id(filament_color_hex).state);
+                  //url.append("&type=").append(id(filament_type).state);
+                  //url.append("&min_temp=").append(std::to_string(static_cast<uint16_t>(id(filament_min_temp).state)));
+                  //url.append("&max_temp=").append(std::to_string(static_cast<uint16_t>(id(filament_max_temp).state)));
+                  //url.append("&brand=").append(id(filament_brand).state);
 
-                  ESP_LOGI("rfid", "JSON content to be written: %s", json_buffer);
+                  // Warn if the url is more than 255 bytes
+                  // While NFC allows messages longer than 255, you have to set the tnf_byte which esphome doesn't allow yet
+                  //if (url.length() > 255) {
+                  //  ESP_LOGE("NFC", "URL longer than 255 bytes: %s", url.c_str());
+                  //  return;
+                  //}
+                  //ESP_LOGD("NFC", "Adding NDEF Record URI: %s", url.c_str());
+                  //message->add_uri_record(url);
 
-                  auto tag_data_record = std::make_unique<nfc::NdefRecord>();
-                  tag_data_record->set_tnf(nfc::TNF_WELL_KNOWN);
-                  tag_data_record->set_type("application/json");
-                  tag_data_record->set_payload(std::string(json_buffer, json_length));
+                  // Application/Json NDEF record
+                  auto json_record = std::make_unique<nfc::NdefRecord>();
+                  json_record->set_tnf(nfc::TNF_MIME_MEDIA);
+                  json_record->set_type("application/json");
 
-                  message->add_record(std::move(tag_data_record));
+                  DynamicJsonDocument doc(256);  // Adjust size as needed
+                  JsonObject root = doc.to<JsonObject>();
+                  root["version"] = "1.0";
+                  root["protocol"] = "openspool";
+                  root["color_hex"] = id(filament_color_hex).state;
+                  root["type"] = id(filament_type).state;
+                  root["min_temp"] = id(filament_min_temp).state;
+                  root["max_temp"] = id(filament_max_temp).state;
+                  root["brand"] = id(filament_brand).state;
+
+                  std::string json_string;
+                  serializeJson(root, json_string);
+                  if (json_string.empty()) {
+                    ESP_LOGE("rfid", "Failed to serialize JSON");
+                    return;
+                  }
+                  ESP_LOGI("rfid", "JSON content to be written: %s", json_string.c_str());
+                  json_record->set_payload(json_string);
+                  message->add_record(std::move(json_record));
+
+                  std::vector<uint8_t> encoded_message = message->encode();
+                  size_t message_size = encoded_message.size();
+                  ESP_LOGI("rfid", "NDEF message size: %zu bytes", message_size);
+
+                  // TODO: make dynamic for NTAG215 (544) or NTAG216 (888)
+                  // TODO: 544 bytes is actuall 496 usable according to logs
+                  //const size_t MAX_MESSAGE_SIZE = 496;
+                  //if (message_size > MAX_MESSAGE_SIZE) {
+                  //    ESP_LOGE("rfid", "Error: NDEF message size (%zu bytes) exceeds maximum allowed size (%zu bytes)", message_size, MAX_MESSAGE_SIZE);
+                      //return;  // Exit the function or throw an exception, depending on your error handling strategy
+                  //}
 
                   id(rfid_reader_spi_0).write_mode(message);
                   ESP_LOGI("rfid", "Writing JSON NDEF message to tag");
-                  //TODO: GPT says there is a memory leak here, yet when I use 'delete' or std::make_unique<> I get crashes
               - wait_until:
                   not:
                     pn532.is_writing:
