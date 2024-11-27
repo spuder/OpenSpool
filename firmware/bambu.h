@@ -4,6 +4,20 @@
 
 #include <unordered_map>
 #include <string>
+#include "esp_idf_version.h"
+// #include <mbedtls/hkdf.h>
+// #include <mbedtls/md.h>
+// #include <limits.h>
+
+//#include <limits.h>
+#include "mbedtls/hkdf.h"
+#include "mbedtls/md.h"
+
+//#include "esp_system.h"
+//#include "esp_hmac.h"
+
+//#define TAG "RFID_KEYS"
+
 
 namespace bambulabs
 {
@@ -126,6 +140,40 @@ namespace bambulabs
         }
 
         ESP_LOGI("mqtt", "Publishing %s", result.c_str());
+        return result;
+    }
+
+    // Fill array with FFFFFF
+    inline std::vector<int> generate_keys() {
+        uint8_t uid[] = {0x02, 0x3b, 0x44, 0x75};
+        size_t uid_len = sizeof(uid);
+    
+        // Master key
+        uint8_t master[] = {
+            0x9a, 0x75, 0x9c, 0xf2, 0xc4, 0xf7, 0xca, 0xff,
+            0x22, 0x2c, 0xb9, 0x76, 0x9b, 0x41, 0xbc, 0x96
+        };
+        size_t master_len = sizeof(master);
+    
+        // Output buffer
+        uint8_t output[16];
+    
+        // Context
+        const unsigned char context[] = {'R', 'F', 'I', 'D', '-', 'A', '\0'};
+        size_t context_len = sizeof(context) - 1;
+
+        // Perform HKDF
+        mbedtls_hkdf(mbedtls_md_info_from_type(MBEDTLS_MD_SHA256),
+                    uid, uid_len,
+                    master, master_len,
+                    context, context_len,
+                    output, sizeof(output));
+
+        std::vector<int> result;
+        for (int i = 0; i < 16; i++) {
+            result.push_back(output[i]);
+        }
+        
         return result;
     }
 
