@@ -74,7 +74,6 @@ select:
       sorting_group_id: sorting_group_filament_settings
     optimistic: true
     options:
-      - ""
       - "white"
       - "yellow"
       - "grass_green"
@@ -238,6 +237,7 @@ text_sensor:
   - platform: template
     name: "Filament Color Hex Bambu"
     id: filament_color_hex_bambu
+    internal: true #TODO: probabaly can get rid of this resource entirely
     state_topic:
     icon: mdi:hexagon-outline
     web_server:

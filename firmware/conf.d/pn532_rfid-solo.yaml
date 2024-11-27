@@ -177,7 +177,7 @@ button:
     state_topic:
     icon: mdi:nfc-tap
     web_server:
-      sorting_group_id: sorting_group_rfid
+      sorting_group_id: sorting_group_filament_settings
     on_press:
       then:
         - if:

@@ -9,11 +9,11 @@ web_server:
     - id: sorting_group_filament_settings
       name: "Filament Settings"
       sorting_weight: -50
-    - id: sorting_group_printer_settings
-      name: "Printer Settings"
-      sorting_weight: -40
     - id: sorting_group_rfid
       name: "RFID Programming"
+      sorting_weight: -40
+    - id: sorting_group_printer_settings
+      name: "Printer Settings"
       sorting_weight: -30
     - id: sorting_group_info
       name: "Information"
@@ -21,4 +21,3 @@ web_server:
     - id: sorting_group_extra
       name: "Extra"
       sorting_weight: -10
-  # TODO: add auth
