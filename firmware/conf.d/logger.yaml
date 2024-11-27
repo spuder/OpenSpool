@@ -25,11 +25,14 @@ logger:
     api: INFO
     improv_serial: VERBOSE
     json: INFO
-    esp32.preferences: DEBUG
+    esp32.preferences: INFO
     esp-idf: DEBUG
     component: VERBOSE
-    binary_sensor: VERBOSE
+    binary_sensor: INFO
     template.text: DEBUG
     text: DEBUG
     spi_device: ERROR
+    nfc.ndef_message: DEBUG
+    select: INFO
+    number: INFO
     "": ERROR
