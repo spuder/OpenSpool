@@ -1,13 +1,13 @@
 {
   "name": "OpenSpool",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "d22c69bad1d46406f8b42c5fc0ea9c58",
-        "summary": "Fix typos in readme",
+        "md5": "cd6acbd943e442b8853577bcba467351",
+        "summary": "Fix writing NDEF messages",
         "release_url": "https://openspool.io/firmware"
       },
       "parts": [
@@ -21,8 +21,8 @@
       "chipFamily": "ESP32-S3",
       "ota": {
         "path": "openspool-esp32s3.ota.bin",
-        "md5": "8800d509f3cfc23e8a4414293d38199b",
-        "summary": "Fix typos in readme",
+        "md5": "d49860e08b46eea8311bad281b5870de",
+        "summary": "Fix writing NDEF messages",
         "release_url": "https://openspool.io/firmware"
       },
       "parts": [
