@@ -8,12 +8,41 @@ namespace pn532 {
 
 static const char *const TAG = "pn532.mifare_classic";
 
+//Backdoor key only works with an offset
+static const uint8_t BACKDOOR_KEY[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; //TODO: Remove
+static const uint8_t KEY1[6] =   {(uint8_t)0x63, (uint8_t)0xe5, (uint8_t)0xaf, (uint8_t)0x2c, (uint8_t)0x1d, (uint8_t)0x75};
+
+
 std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t> &uid) {
   uint8_t current_block = 4;
   uint8_t message_start_index = 0;
   uint32_t message_length = 0;
 
-  if (this->auth_mifare_classic_block_(uid, current_block, nfc::MIFARE_CMD_AUTH_A, nfc::NDEF_KEY)) {
+  if (this->auth_mifare_classic_block_(uid, 1, nfc::MIFARE_CMD_AUTH_A, KEY1)) {
+    ESP_LOGI(TAG, "Authed with key1!!!!!");
+    std::vector<uint8_t> data;
+    if (this->read_mifare_classic_block_(1, data)) {
+      // Print the decrypted data from the block
+          ESP_LOGI(TAG, "Hex data: ");
+    for (uint8_t byte : data) {
+        ESP_LOGI(TAG, "%02X ", byte);
+    }
+
+    // Print ASCII representation
+    ESP_LOGI(TAG, "ASCII data: ");
+    for (uint8_t byte : data) {
+        if (isprint(byte)) {
+            ESP_LOGI(TAG, "%c", byte);
+        } else {
+            ESP_LOGI(TAG, ".");
+        }
+    }
+
+    } else {
+      ESP_LOGE(TAG, "Failed to read block %d", 1);
+      return make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC);
+    }
+  } else if (this->auth_mifare_classic_block_(uid, current_block, nfc::MIFARE_CMD_AUTH_A, nfc::NDEF_KEY)) {
     std::vector<uint8_t> data;
     if (this->read_mifare_classic_block_(current_block, data)) {
       if (!nfc::decode_mifare_classic_tlv(data, message_length, message_start_index)) {
@@ -23,6 +52,8 @@ std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t
       ESP_LOGE(TAG, "Failed to read block %d", current_block);
       return make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC);
     }
+  } else if (this->auth_mifare_classic_block_(uid, current_block, nfc::MIFARE_CMD_AUTH_A, BACKDOOR_KEY)) {
+    ESP_LOGI(TAG, "Authed with backdoor key!!!!!");
   } else {
     ESP_LOGV(TAG, "Tag is not NDEF formatted");
     return make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC);
