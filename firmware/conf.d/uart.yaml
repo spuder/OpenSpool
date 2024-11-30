@@ -1,0 +1,35 @@
+# s3
+# uart 0 | GPIO 43	GPIO 44 (can't be changed)
+# uart 1 | GPIO 17 GPIO 18 (changeable)
+# uart 2 | any pins
+
+# TODO: 
+# how does this impact improv? 
+# how does this affect logging, is there another way to get logs to computer? 
+# is there a way to send logs and uart messages together? maybe disableing logger? 
+# How do OTA updates work if serial port is in use? 
+# Is there a connect/disconnect event?
+uart:
+  id: usb_uart
+  tx_pin: GPIO44
+  rx_pin: GPIO43
+  baud_rate: 115200
+
+logger:
+  baud_rate: 0
+
+# Create a dummy button for testing
+button:
+  - platform: template
+    name: "Test"
+    id: test
+    state_topic:
+    icon: mdi:circle-double
+    web_server:
+      sorting_group_id: sorting_group_rfid
+    on_press:
+      - logger.log: ESP_LOGI("main", "Test button pressed");
+      - uart.write:
+          id: usb_uart
+          data: "Hello World"
+      
