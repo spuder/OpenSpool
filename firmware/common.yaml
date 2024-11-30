@@ -34,15 +34,16 @@ esphome:
       - light.turn_on:
           id: neopixel_light
           effect: none
-      - delay: 100ms
-      - light.addressable_set:
-          id: neopixel_light
-          color_brightness: 50%
-          range_from: 0
-          range_to: ${led_count}
-          red: 100%
-          green: 100%
-          blue: 100%
+          brightness: 50%
+      # - delay: 100ms
+      # - light.addressable_set:
+      #     id: neopixel_light
+      #     color_brightness: 50%
+      #     range_from: 0
+      #     range_to: ${led_count}
+      #     red: 50%
+      #     green: 50%
+      #     blue: 50%
       - if:
           condition:
             lambda: |-
@@ -78,6 +79,9 @@ esp32:
     type: esp-idf
     version: 5.3.1
     platform_version: 6.9.0 # https://github.com/platformio/platform-espressif32/releases/
+    sdkconfig_options: 
+      CONFIG_MBEDTLS_HKDF_C: y # Needed for bambu KDF
+      CONFIG_MBEDTLS_MD_C: y   # Needed for bambu KDF
     # version: recommended
     # sdkconfig_options:
     # MBEDTLS_CERTIFICATE_BUNDLE: y
