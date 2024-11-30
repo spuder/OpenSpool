@@ -1,13 +1,13 @@
 {
   "name": "OpenSpool",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "cd6acbd943e442b8853577bcba467351",
-        "summary": "Fix writing NDEF messages",
+        "md5": "31910f07e681c2df491b00d5b8164536",
+        "summary": "Reduce brightness of white to reduce heat",
         "release_url": "https://openspool.io/firmware"
       },
       "parts": [
@@ -21,8 +21,8 @@
       "chipFamily": "ESP32-S3",
       "ota": {
         "path": "openspool-esp32s3.ota.bin",
-        "md5": "d49860e08b46eea8311bad281b5870de",
-        "summary": "Fix writing NDEF messages",
+        "md5": "75234ced978aaa9a6461721f062c455c",
+        "summary": "Reduce brightness of white to reduce heat",
         "release_url": "https://openspool.io/firmware"
       },
       "parts": [

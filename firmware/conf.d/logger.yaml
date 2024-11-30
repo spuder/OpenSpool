@@ -36,5 +36,7 @@ logger:
     select: INFO
     number: INFO
     pn532.mifare_ultralight: VERBOSE
-    #TODO: What are other pn532 protocol types? 
+    pn532.mifare_classic: VERBOSE
+    TAG: VERBOSE
+    NFC: VERBOSE
     "": ERROR
