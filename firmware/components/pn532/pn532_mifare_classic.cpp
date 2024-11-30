@@ -8,10 +8,7 @@ namespace pn532 {
 
 static const char *const TAG = "pn532.mifare_classic";
 
-//Backdoor key only works with an offset
-// Keys definitions - remove duplicates and add BACKDOOR_KEY
-//TODO: Don't hard code keys, instead let user provide KDF_SALT as parameter 
-static const uint8_t BACKDOOR_KEY[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; // Default manufacturer key
+static const uint8_t BACKDOOR_KEY[6] = {0xA3,0x96,0xEF,0xA4,0xE2,0x4F};
 static const uint8_t KEY0[6] = {0x63, 0xe5, 0xaf, 0x2c, 0x1d, 0x75};
 static const uint8_t KEY1[6] = {0x40, 0xd1, 0x46, 0xce, 0x6e, 0x01};
 static const uint8_t KEY2[6] = {0x6a, 0x66, 0x95, 0x7d, 0xcc, 0x91};
@@ -28,68 +25,84 @@ static const uint8_t KEY12[6] = {0x8b, 0x49, 0x5d, 0x5a, 0x0b, 0x44};
 static const uint8_t KEY13[6] = {0x7e, 0xbe, 0xf1, 0xcb, 0x3e, 0x94};
 static const uint8_t KEY14[6] = {0x46, 0x85, 0x79, 0x0c, 0x6e, 0x01};
 static const uint8_t KEY15[6] = {0x3f, 0x00, 0x14, 0x4c, 0x7b, 0x4a};
-    static const std::array<const uint8_t*, 16> KEYS = {{
-        KEY0, KEY1, KEY2, KEY3, KEY4, KEY5, KEY6, KEY7, 
-        KEY8, KEY9, KEY10, KEY11, KEY12, KEY13, KEY14, KEY15
-    }};
+static const std::array<const uint8_t*, 16> KEYS = {{
+    KEY0, KEY1, KEY2, KEY3, KEY4, KEY5, KEY6, KEY7, 
+    KEY8, KEY9, KEY10, KEY11, KEY12, KEY13, KEY14, KEY15
+}};
 
 std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t> &uid) {
-    std::vector<uint8_t> full_tag_data;
-    bool is_ndef = false;
+  uint8_t current_block = 0;
+  uint8_t message_start_index = 0;
+  uint32_t message_length = 0;
+  bool is_ndef = false; //TOOD: there might be a more native way to check if ndef
 
-    // Try to read first sector with NDEF key
-    // if (this->auth_mifare_classic_block_(uid, 0, nfc::MIFARE_CMD_AUTH_A, nfc::NDEF_KEY)) {
-    //     std::vector<uint8_t> block_data;
-    //     if (this->read_mifare_classic_block_(1, block_data)) {
-    //         uint32_t message_length = 0;
-    //         uint8_t message_start_index = 0;
-    //         if (nfc::decode_mifare_classic_tlv(block_data, message_length, message_start_index)) {
-    //             is_ndef = true;
-    //         }
-    //     }
-    // }
 
-    // Read all sectors with appropriate key
-    for (uint8_t sector = 0; sector < 16; ++sector) {
-        uint8_t first_block_in_sector = sector * 4;
-        const uint8_t* key = is_ndef ? nfc::NDEF_KEY : KEYS[sector];
-        
-        if (this->auth_mifare_classic_block_(uid, first_block_in_sector, nfc::MIFARE_CMD_AUTH_A, key)) {
-            ESP_LOGD(TAG, "Authentication succeeded for sector %d", sector);
-            for (uint8_t block = first_block_in_sector; block < first_block_in_sector + 3; ++block) {
-                std::vector<uint8_t> block_data;
-                if (this->read_mifare_classic_block_(block, block_data)) {
-                    full_tag_data.insert(full_tag_data.end(), block_data.begin(), block_data.end());
-                }
-            }
-        } else {
-            ESP_LOGD(TAG, "Authentication failed for sector %d", sector);
-        }
-    }
-
-    if (is_ndef && !full_tag_data.empty()) {
-        uint32_t message_length = 0;
-        uint8_t message_start_index = 0;
-        if (nfc::decode_mifare_classic_tlv(full_tag_data, message_length, message_start_index)) {
-            if (message_start_index < full_tag_data.size()) {
-                full_tag_data.erase(full_tag_data.begin(), full_tag_data.begin() + message_start_index);
-                full_tag_data.resize(std::min(static_cast<size_t>(message_length), full_tag_data.size()));
-            }
-        }
-    }
-
-  //TODO: Remove this debugging
-  // ESP_LOGI(TAG, "ASCII data: ");
-  // for (uint8_t byte : full_tag_data) {
-  //     if (isprint(byte)) {
-  //         ESP_LOGI(TAG, "%c", byte);
-  //     } else {
-  //         ESP_LOGI(TAG, ".");
+  // Note: If the first auth fails, you can't immediatly try and auth again
+  // https://community.nxp.com/t5/NFC/NXP-NFC-Reader-Library-Authentication-with-two-three-possible-A/td-p/1377179
+  // Most likely this will require implmenting `PICC_CMD_WUPA = 0x52,` 
+  // if (this->auth_mifare_classic_block_(uid, current_block, nfc::MIFARE_CMD_AUTH_A, nfc::NDEF_KEY)) {
+  //   is_ndef = true;
+  //   std::vector<uint8_t> data;
+  //   if (this->read_mifare_classic_block_(current_block, data)) {
+  //     if (!nfc::decode_mifare_classic_tlv(data, message_length, message_start_index)) {
+  //       return make_unique<nfc::NfcTag>(uid, nfc::ERROR);
   //     }
+  //   } else {
+  //     ESP_LOGE(TAG, "Failed to read block %d", current_block);
+  //     return make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC);
+  //   }
+  // } 
+  // else {
+  //   ESP_LOGV(TAG, "Tag is not NDEF formatted");
+  //   return make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC);
   // }
-    return full_tag_data.empty() 
-        ? std::make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC)
-        : std::make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC, full_tag_data);
+
+  auto trailer_block_number = (current_block / 4) * 4 + 3;
+  uint8_t sector_first_block = (current_block / 4) * 4;
+
+  ESP_LOGD(TAG, "Authenticating block %d using auth against block %d", current_block, sector_first_block);
+  if (this->auth_mifare_classic_block_(uid, sector_first_block, nfc::MIFARE_CMD_AUTH_A, BACKDOOR_KEY)) {
+    ESP_LOGD(TAG, "Block %d authenticated", sector_first_block);
+    std::vector<uint8_t> data;
+  }
+
+
+  uint32_t index = 0;
+  uint32_t buffer_size = nfc::get_mifare_classic_buffer_size(message_length);
+  std::vector<uint8_t> buffer;
+
+  while (index < buffer_size) {
+    if (nfc::mifare_classic_is_first_block(current_block)) {
+      auto current_sector = current_block / 4; 
+      auto trailer_block_number = (current_block / 4) * 4 + 3;
+      auto sector_first_block = (current_block / 4) * 4;
+      if (!this->auth_mifare_classic_block_(uid, trailer_block_number, nfc::MIFARE_CMD_AUTH_A, BACKDOOR_KEY)) {
+        ESP_LOGE(TAG, "Error, Block authentication failed for %d", current_block);
+      }
+
+    }
+    std::vector<uint8_t> block_data;
+    if (this->read_mifare_classic_block_(current_block, block_data)) {
+      buffer.insert(buffer.end(), block_data.begin(), block_data.end());
+    } else {
+      ESP_LOGE(TAG, "Error reading block %d", current_block);
+    }
+
+    index += nfc::MIFARE_CLASSIC_BLOCK_SIZE;
+    current_block++;
+
+    if (nfc::mifare_classic_is_trailer_block(current_block)) {
+      current_block++;
+    }
+  }
+
+  if (buffer.begin() + message_start_index < buffer.end()) {
+    buffer.erase(buffer.begin(), buffer.begin() + message_start_index);
+  } else {
+    return make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC);
+  }
+
+  return make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC, buffer);
 }
 
 bool PN532::read_mifare_classic_block_(uint8_t block_num, std::vector<uint8_t> &data) {
