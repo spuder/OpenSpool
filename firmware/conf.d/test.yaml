@@ -32,6 +32,12 @@ esphome:
 #   - source: github://espressif/esp-idf
 #     components: [mbedtls]
 
+external_components:
+  - source: 
+      type: local
+      path: components
+    components: [pn532]
+
 text_sensor:
   - platform: template
     name: "HKDF Output"
