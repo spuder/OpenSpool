@@ -78,6 +78,15 @@ std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t
         }
     }
 
+  //TODO: Remove this debugging
+  // ESP_LOGI(TAG, "ASCII data: ");
+  // for (uint8_t byte : full_tag_data) {
+  //     if (isprint(byte)) {
+  //         ESP_LOGI(TAG, "%c", byte);
+  //     } else {
+  //         ESP_LOGI(TAG, ".");
+  //     }
+  // }
     return full_tag_data.empty() 
         ? std::make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC)
         : std::make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC, full_tag_data);
