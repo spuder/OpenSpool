@@ -44,6 +44,12 @@ pn532_spi:
             id: nfc_tag_present0
             state: ON
         - lambda: |-
+            //if is mifare clssic tag
+            if (tag.get_tag_type() == nfc::TAG_TYPE_MIFARE_CLASSIC) {
+
+            }
+
+        - lambda: |-
             bool is_valid_openspool = false;
             std::string payload;
 
