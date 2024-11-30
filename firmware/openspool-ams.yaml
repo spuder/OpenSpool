@@ -69,6 +69,7 @@ packages:
   pn_532_rfid-ams: !include conf.d/pn532_rfid-ams.yaml
   improv-serial: !include conf.d/improv-serial.yaml
   improv-bluetooth: !include conf.d/improv-bluetooth.yaml
+  uart: !include conf.d/uart.yaml
 
 api: 
   reboot_timeout: 0s #reboot_timeout must be 0 if api and mqtt are defined
