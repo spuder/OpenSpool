@@ -31,7 +31,7 @@ static const std::array<const uint8_t*, 16> KEYS = {{
 }};
 
 std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t> &uid) {
-  uint8_t current_block = 0;
+  uint8_t current_block = 4;
   uint8_t message_start_index = 0;
   uint32_t message_length = 0;
   bool is_ndef = false; //TOOD: there might be a more native way to check if ndef
@@ -60,10 +60,16 @@ std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t
   auto trailer_block_number = (current_block / 4) * 4 + 3;
   uint8_t sector_first_block = (current_block / 4) * 4;
 
-  ESP_LOGD(TAG, "Authenticating block %d using auth against block %d", current_block, sector_first_block);
-  if (this->auth_mifare_classic_block_(uid, sector_first_block, nfc::MIFARE_CMD_AUTH_A, BACKDOOR_KEY)) {
+// This code works `this->auth_mifare_classic_block_(uid, current_block, 0x60, KEY0)`
+// This code fails `this->auth_mifare_classic_block_(uid, current_block, 0x64, BACKDOOR_KEY)`
+// Both using current_block for auth (block 0)
+
+  ESP_LOGD(TAG, "Authenticating block %d using %d", current_block, 0x64);
+  if (this->auth_mifare_classic_block_(uid, current_block, 0x64, BACKDOOR_KEY)) {
     ESP_LOGD(TAG, "Block %d authenticated", sector_first_block);
     std::vector<uint8_t> data;
+  } else {
+    ESP_LOGE(TAG, "Error, Block authentication failed for 1 %d", current_block);
   }
 
 
@@ -76,8 +82,10 @@ std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t
       auto current_sector = current_block / 4; 
       auto trailer_block_number = (current_block / 4) * 4 + 3;
       auto sector_first_block = (current_block / 4) * 4;
-      if (!this->auth_mifare_classic_block_(uid, trailer_block_number, nfc::MIFARE_CMD_AUTH_A, BACKDOOR_KEY)) {
+      if (!this->auth_mifare_classic_block_(uid, current_block, 0x64, BACKDOOR_KEY)) {
         ESP_LOGE(TAG, "Error, Block authentication failed for %d", current_block);
+      } else {
+        ESP_LOGD(TAG, "Block %d authenticated", current_block);
       }
 
     }
