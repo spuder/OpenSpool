@@ -49,9 +49,13 @@ mqtt:
   clean_session: true
   enable_on_boot: false
   on_connect:
-    - logger.log: "Connected to printer!"
+    - logger.log: 
+        level: info
+        format: "Connected to printer over MQTT!"
   on_disconnect:
-    - logger.log: "Disconnected from printer!"
+    - logger.log:
+        level: info
+        format: "Disconnected from printer!"
 
 # text_sensor:
 #   - platform: mqtt_subscribe
