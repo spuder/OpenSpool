@@ -34,7 +34,7 @@ nav_order: 1
 </div>
 
 {: .caution }
-If the above step fails, see the [README on github](https://github.com/spuder/OpenSpool) to upload manually with command `make run-usb-pcb`. 
+If the above step fails, see the [README on github](https://github.com/spuder/OpenSpool) to upload manually with command `make lolin_s2_mini` or `make lolin_s3_mini`. 
 
 # 🛠️ Configuration
 
