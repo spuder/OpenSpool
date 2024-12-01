@@ -102,12 +102,12 @@ Currently OpenSpool works with Bambu printers over mqtt. Other integrations are 
 
 ## 🔧 Hardware
 
-OpenSpool requires an ESP32-S2 and PN532 NFC Reader (SPI Mode).
+OpenSpool requires an ESP32-S3 and PN532 NFC Reader (SPI Mode).
 
 
 | | Hardware | Link 1 | Link 2| 
 | --- | --- | --- | --- | 
-| ![](./images/wemos-d1mini.png)| Wemos D1 Mini S2 (Beware of Fakes!)| [Amazon](https://amzn.to/4fqq9m7) | [Aliexpress](https://www.aliexpress.us/item/3256802958877264.html)|
+| ![](./images/wemos-d1minis3.png) | Wemos D1 Mini s3 | | [Aliexpress](https://www.aliexpress.us/item/3256805262904443.html?gatewayAdapt=glo2usa) | 
 | ![](./images/pn532-large.png) |  PN532 (Large) (Beware of Fakes!) | [Amazon](https://amzn.to/40CVE7R) | [Aliexpress](https://www.aliexpress.us/item/3256806348384449.html)|
 | ![](./images/pn532-small.png) |  PN532 (Small) | [Amazon](https://amzn.to/4eoBz8s) | [Aliexpress](https://www.aliexpress.us/item/3256805787598774.html)| 
 | ![](./images/NFC.png) | NTAG 215/216 (13.56Mhz NFC Tags >500 bytes) | [Amazon](https://amzn.to/4epJzpO) | | 
@@ -115,6 +115,13 @@ OpenSpool requires an ESP32-S2 and PN532 NFC Reader (SPI Mode).
 | ![](./images/Headers1.png) | 2.54mm Headers | [Amazon](https://amzn.to/4en6138) | | 
 | ![](./images/LLC1.png) | 3.3v - 5v Logic Level Converter | [Amazon](https://amzn.to/3UMfMkp) | | 
 | ![](./images/jumper1.png) | female-female jumper wire) | [Amazon](https://amzn.to/3AMwRDM) | | 
+
+If you are unable to find a Wemos D1 Mini `s3`, you can stil buy an `s2`, as it is pin compatable. However be advised the `s2` has less memory and may expierence occassional disconnects from the printer
+
+| | Hardware | Link 1 | Link 2| 
+| --- | --- | --- | --- | 
+| ![](./images/wemos-d1mini.png)| Wemos D1 Mini S2 (Beware of Fakes!)| [Amazon](https://amzn.to/4fqq9m7) | [Aliexpress](https://www.aliexpress.us/item/3256802958877264.html)|
+
 
 | Tag | Bytes | Supported |  
 | --- | --- | --- |  
