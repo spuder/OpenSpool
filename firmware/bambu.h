@@ -10,13 +10,15 @@
 // #include <limits.h>
 
 //#include <limits.h>
-#include "mbedtls/hkdf.h"
-#include "mbedtls/md.h"
 
 //#include "esp_system.h"
 //#include "esp_hmac.h"
 
 //#define TAG "RFID_KEYS"
+
+
+#include "mbedtls/hkdf.h"
+#include "mbedtls/md.h"
 
 
 namespace bambulabs
@@ -145,7 +147,7 @@ namespace bambulabs
 
     // Fill array with FFFFFF
     inline std::vector<int> generate_keys() {
-        uint8_t uid[] = {0x02, 0x3b, 0x44, 0x75};
+        uint8_t uid[] = {0x5a, 0xc9, 0x00, 0xa6};
         size_t uid_len = sizeof(uid);
     
         // Master key

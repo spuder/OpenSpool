@@ -52,6 +52,7 @@ static const char *const ERROR = "Error";
 static const uint8_t DEFAULT_KEY[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 static const uint8_t NDEF_KEY[6] = {0xD3, 0xF7, 0xD3, 0xF7, 0xD3, 0xF7};
 static const uint8_t MAD_KEY[6] = {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5};
+static const uint8_t BAMBU_SALT[16] = {0x9a, 0x75, 0x9c, 0xf2, 0xc4, 0xf7, 0xca, 0xff,0x22, 0x2c, 0xb9, 0x76, 0x9b, 0x41, 0xbc, 0x96};
 
 std::string format_uid(std::vector<uint8_t> &uid);
 std::string format_bytes(std::vector<uint8_t> &bytes);
@@ -65,6 +66,11 @@ bool mifare_classic_is_first_block(uint8_t block_num);
 bool mifare_classic_is_trailer_block(uint8_t block_num);
 
 uint32_t get_mifare_ultralight_buffer_size(uint32_t message_length);
+
+// std::array<std::array<uint8_t, 6>, 16> generate_keys(const std::vector<uint8_t>& uid, const uint8_t* salt, size_t salt_size);
+// std::array<std::array<uint8_t, 6>, 16> generate_keys(const std::vector<uint8_t>& uid);
+// std::vector<int> generate_keys();
+std::vector<std::vector<uint8_t>> generate_keys();
 
 class NfcTagListener {
  public:

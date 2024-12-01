@@ -36,7 +36,7 @@ external_components:
   - source: 
       type: local
       path: components
-    components: [pn532]
+    components: [pn532, nfc]
 
 text_sensor:
   - platform: template

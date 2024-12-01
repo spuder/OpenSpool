@@ -67,8 +67,9 @@ packages:
   psram: !include conf.d/psram-esp32s3.yaml
   led-internal: !include conf.d/led-internal.yaml
   pn_532_rfid-ams: !include conf.d/pn532_rfid-ams.yaml
-  improv-serial: !include conf.d/improv-serial.yaml
-  improv-bluetooth: !include conf.d/improv-bluetooth.yaml
+  # improv-serial: !include conf.d/improv-serial.yaml
+  # improv-bluetooth: !include conf.d/improv-bluetooth.yaml
+  test: !include conf.d/test.yaml
 
 api: 
   reboot_timeout: 0s #reboot_timeout must be 0 if api and mqtt are defined
