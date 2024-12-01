@@ -16,3 +16,4 @@ substitutions:
 packages: 
   openspool-mini: !include openspool-mini.yaml
   led-internal: !include conf.d/led-internal.yaml
+  improv-bluetooth: !include conf.d/improv-bluetooth.yaml

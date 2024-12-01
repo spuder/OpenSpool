@@ -8,10 +8,10 @@ USB_ADDRESS ?= $(error USB_ADDRESS is not set)
 all: build upload dashboard logs
 
 # Preserve backwards compatabliity in documentation
-run-usb: run-usb-breadboard-mini
-run-usb-pcb: run-usb-pcb-mini
-build-pcb-mini: build-esp32s2-mini
-build-pcb-ams: build-esp32s2-ams
+# run-usb: run-usb-breadboard-mini
+# run-usb-pcb: run-usb-pcb-mini
+# build-pcb-mini: build-esp32s2-mini
+# build-pcb-ams: build-esp32s2-ams
 
 clean:
 	esphome clean lolin_s2_mini.yaml
@@ -61,10 +61,10 @@ dashboard:
 # 		-s rfid0_ss_pin "GPIO33" \
 # 		-s spi2_type "any" \
 # 		run openspool-mini.yaml --device $(USB_ADDRESS)
-run-usb-pcb-mini:
+lolin_s2_mini:
 	esphome \
 		run lolin_s2_mini.yaml --device $(USB_ADDRESS)
-run-usb-pcb-ams:
+lolin_s3_mini:
 	esphome \
 		run lolin_s3_mini.yaml --device $(USB_ADDRESS)
 devkit:
