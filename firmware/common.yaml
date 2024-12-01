@@ -102,3 +102,5 @@ packages:
   ota: !include conf.d/ota.yaml
   #update: !include conf.d/update.yaml
   logger: !include conf.d/logger.yaml
+  uart: !include conf.d/uart.yaml
+  # improv-serial: !include conf.d/improv-serial.yaml

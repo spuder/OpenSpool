@@ -18,6 +18,9 @@ binary_sensor:
             id: button_press_duration
             value: "0"
         - script.execute: start_timer
+        - uart.write:
+            id: usb_uart
+            data: "Hello World usb_uart\n"
     on_release:
       then:
         - script.execute:

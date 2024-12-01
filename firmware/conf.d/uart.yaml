@@ -1,3 +1,5 @@
+# https://esphome.io/components/logger.html#default-uart-gpio-pins
+
 # s3
 # uart 0 | GPIO 43	GPIO 44 (can't be changed)
 # uart 1 | GPIO 17 GPIO 18 (changeable)
@@ -11,14 +13,38 @@
 # Is there a connect/disconnect event?
 uart:
   id: usb_uart
-  tx_pin: GPIO44
-  rx_pin: GPIO43
+  # tx_pin: GPIO44
+  # rx_pin: GPIO43
+#   # tx_pin: GPIO19
+#   # rx_pin: GPIO20
+#   # tx_pin: GPIO43
+#   # rx_pin: GPIO44
+#   # tx_pin: GPIO20
+#   # rx_pin: GPIO19
+#   #TODO: s2 boards have TX/RX pins defined https://github.com/esphome/esphome/blob/30477c764d9353381ef6e8bf186bae703cffbc7f/esphome/components/esp32/boards.py#L865-L866
+  # tx_pin: RX
+  # rx_pin: TX
+  # tx_pin: GPIO43
+  # rx_pin: GPIO44
+  tx_pin: TX
+  rx_pin: RX
   baud_rate: 115200
+  debug: 
+    direction: BOTH
+    dummy_receiver: false
+    after:
+      delimiter: "\n"
+    sequence:
+      - lambda: UARTDebug::log_string(direction, bytes);
 
-logger:
-  baud_rate: 0
+# logger:
+# #   # level: DEBUG
+# #   # baud_rate: 115200
+#   baud_rate: 0
 
-# Create a dummy button for testing
+#   # hardware_uart: USB_CDC
+
+# # Create a dummy button for testing
 button:
   - platform: template
     name: "Test"
@@ -28,8 +54,18 @@ button:
     web_server:
       sorting_group_id: sorting_group_rfid
     on_press:
-      - logger.log: ESP_LOGI("main", "Test button pressed");
-      - uart.write:
-          id: usb_uart
-          data: "Hello World"
-      
+      - logger.log: "Button Pressed"
+      # - logger.log:
+      #     format: "%s"
+      #     args: ["Hello World"]
+      # - uart.write:
+      #     id: usb_uart
+      #     data: "Hello World usb_uart\n"
+      # - uart.write:
+      #     id: uart0
+      #     data: "Hello World uart0"
+
+# globals:
+#   - id: log_message
+#     type: std::string
+#     initial_value: '"Hello World"'
