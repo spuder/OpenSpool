@@ -13,7 +13,6 @@ substitutions:
   rfid0_ss_pin: GPIO34
   neopixel_pin: '47'
 
-
 packages: 
   openspool-mini: !include openspool-mini.yaml
   led-internal: !include conf.d/led-internal.yaml

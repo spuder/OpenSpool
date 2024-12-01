@@ -15,7 +15,7 @@
 - [x] Add breathing animation
 - [x] Add rainbow breathing
 - [ ] Add magenta blinking
-- [ ] Increase all 512 json docs to 1024 in prep for OpenRFID standard
+- [ ] Increase all 512 json docs to 1024 in prep for OpenTag standard
 - [ ] MQTT reboots afeter x minutes if not connected
 - [x] Add esp32-s3 support to manifest.json
 
@@ -48,7 +48,14 @@
 
 # Features
 
+- [ ] Add nominal diameter to protocol
 - [ ] Add 'weight' data to nfc tag
 - [ ] Read bambu tags
 - [ ] Read creality tags
 - [ ] Support simultanious RFID tags on pn532
+
+# Misc
+- [ ] Enable status LED on s3 boards when mqtt connected
+- [ ] Bambu support
+- [ ] Octoprint support
+- [ ] Klipper support
