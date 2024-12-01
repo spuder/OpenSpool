@@ -1,31 +1,10 @@
----
-substitutions:
-  hide_ams_sensors: 'true'
-  led_pin: GPIO16
-  spi2_type: SPI2 #SPI2,SPI3,any,hardware
-  spi2_clk_pin: GPIO36
-  spi2_miso_pin: GPIO37
-  spi2_mosi_pin: GPIO35
-  rfid0_spi_interface: SPI2
-  rfid0_ss_pin: GPIO34
-  #rfid1_spi_interface: SPI2
-  #rfid1_clk_pin: GPIO21
-  ## rfid1_spi_interface: SPI2
-  ## rfid1_clk_pin: GPIO08
-esp32:
-  board: lolin_s2_mini
-  framework:
-    type: esp-idf
+
 packages:
   base: !include common.yaml
   status_led: !include conf.d/status_led.yaml
   button: !include conf.d/button.yaml
   improv-serial: !include conf.d/improv-serial.yaml
 
-# D1 Mini S2 Boards will reboot when doing tasks like writing to PN532 unless wifi power is reduced
-wifi:
-  output_power: 10 # https://github.com/esphome/issues/issues/3988#issuecomment-1449954758
-  
 api: 
   reboot_timeout: 0s #reboot_timeout must be 0 if api and mqtt are defined
   id: api_openspool

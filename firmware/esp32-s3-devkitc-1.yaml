@@ -1,0 +1,45 @@
+esp32:
+  board: esp32-s3-devkitc-1
+
+substitutions:
+  hide_ams_sensors: 'false'
+  led_pin: GPIO21
+  spi2_type: SPI2
+  spi2_clk_pin: GPIO12
+  spi2_miso_pin: GPIO13
+  spi2_mosi_pin: GPIO11
+
+  rfid0_spi_interface: SPI2
+  rfid0_ss_pin: GPIO04
+
+  rfid1_spi_interface: SPI2
+  rfid1_clk_pin: GPIO05
+
+  rfid2_spi_interface: SPI2
+  rfid2_clk_pin: GPIO06
+
+  rfid3_spi_interface: SPI2
+  rfid3_clk_pin: GPIO07
+
+  # rfid4_spi_interface: SPI2
+  # rfid4_clk_pin: GPIO05
+
+  # rfid5_spi_interface: SPI2
+  # rfid5_clk_pin: GPIO04
+
+  # spi3_type: SPI3
+  # spi3_clk_pin: GPIO18
+  # spi3_miso_pin: GPIO17
+  # spi3_mosi_pin: GPIO16
+
+  # rfid6_spi_interface: SPI3
+  # rfid6_clk_pin: GPIO15
+
+  # rfid7_spi_interface: SPI3
+  # rfid7_clk_pin: GPIO9
+
+  # rfid8_spi_interface: SPI3
+  # rfid8_clk_pin: GPI14 # TODO: Verify this is compatible
+
+packages: 
+  openspool-ams: !include openspool-ams.yaml

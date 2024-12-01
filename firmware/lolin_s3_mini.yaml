@@ -1,0 +1,18 @@
+esp32:
+  board: lolin_s3_mini
+  variant: esp32s3 #TOOD: add support upstream for lolin_s3_mini
+
+substitutions:
+  hide_ams_sensors: 'true'
+  led_pin: GPIO16
+  spi2_type: SPI2 #SPI2,SPI3,any,hardware #TODO: should this be hardware? 
+  spi2_clk_pin: GPIO38
+  spi2_miso_pin: GPIO44
+  spi2_mosi_pin: GPIO36
+  rfid0_spi_interface: SPI2
+  rfid0_ss_pin: GPIO34
+  #TODO: neopixel on 47
+
+
+packages: 
+  openspool-mini: !include openspool-mini.yaml
