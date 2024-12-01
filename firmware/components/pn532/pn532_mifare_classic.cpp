@@ -41,7 +41,6 @@ std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t
   // https://community.nxp.com/t5/NFC/NXP-NFC-Reader-Library-Authentication-with-two-three-possible-A/td-p/1377179
   // Most likely this will require implmenting `PICC_CMD_WUPA = 0x52,` 
   // if (this->auth_mifare_classic_block_(uid, current_block, nfc::MIFARE_CMD_AUTH_A, nfc::NDEF_KEY)) {
-  //   is_ndef = true;
   //   std::vector<uint8_t> data;
   //   if (this->read_mifare_classic_block_(current_block, data)) {
   //     if (!nfc::decode_mifare_classic_tlv(data, message_length, message_start_index)) {
@@ -51,8 +50,7 @@ std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t
   //     ESP_LOGE(TAG, "Failed to read block %d", current_block);
   //     return make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC);
   //   }
-  // } 
-  // else {
+  // } else {
   //   ESP_LOGV(TAG, "Tag is not NDEF formatted");
   //   return make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC);
   // }
