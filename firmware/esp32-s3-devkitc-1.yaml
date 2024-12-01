@@ -4,6 +4,7 @@ esp32:
 substitutions:
   hide_ams_sensors: 'false'
   led_pin: GPIO21
+  neopixel_pin: '48' #some boards have this on pin 38
   spi2_type: SPI2
   spi2_clk_pin: GPIO12
   spi2_miso_pin: GPIO13
@@ -43,3 +44,6 @@ substitutions:
 
 packages: 
   openspool-ams: !include openspool-ams.yaml
+  improv-serial: !include conf.d/improv-serial.yaml
+  improv-bluetooth: !include conf.d/improv-bluetooth.yaml
+  led-internal: !include conf.d/led-internal.yaml
