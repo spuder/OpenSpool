@@ -4,7 +4,7 @@ light:
     name: "Internal LED"
     id: internal_led
     state_topic:
-    pin: 48 #some boards have this on pin 38
+    pin: ${neopixel_pin}
     chipset: WS2812
     rmt_channel: 1
     rgb_order: GRB

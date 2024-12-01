@@ -72,7 +72,7 @@ jobs:
       - name: Build OpenSpool-Mini firmware
         uses: esphome/build-action@v4.0.2
         with:
-          yaml-file: ${{ github.workspace }}/firmware/openspool-mini.yaml
+          yaml-file: ${{ github.workspace }}/firmware/lolin_s2_mini.yaml
           release-summary: ${{ env.RELEASE_SUMMARY }}
           release-url: https://openspool.io/firmware
           complete-manifest: false
@@ -81,7 +81,7 @@ jobs:
       - name: Build OpenSpool-AMS firmware
         uses: esphome/build-action@v4.0.2
         with:
-          yaml-file: ${{ github.workspace }}/firmware/openspool-ams.yaml
+          yaml-file: ${{ github.workspace }}/firmware/lolin_s3_mini.yaml
           release-summary: ${{ env.RELEASE_SUMMARY }}
           release-url: https://openspool.io/firmware
           complete-manifest: false
