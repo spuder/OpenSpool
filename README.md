@@ -94,15 +94,17 @@ Currently OpenSpool works with Bambu printers over mqtt. Other integrations are 
 | Integration | Supported |
 | --- | --- |
 | Bambu | ✅ |
+| OctoPrint | 🚧 In Progress |
+| Prusa Connect | 🗓️ Planned |
+| SpoolMan | 🗓️ Planned |
+| Klipper / Moonraker | 🗓️ Planned |
 | Anker | ❔ | 
-| Prusa Connect | ❔ |
-| OctoPrint | ❔ |
-| SpoolMan | ❔ |
-| Klipper / Moonraker | ❔ |
 
 ## 🔧 Hardware
 
 OpenSpool requires an ESP32-S3 and PN532 NFC Reader (SPI Mode).
+
+[Buy a kit on tindie.com](https://www.tindie.com/products/36746/)
 
 
 | | Hardware | Link 1 | Link 2| 
@@ -270,6 +272,20 @@ mqttx sub -t 'device/$SERIAL_NUMBER/report' -u -P $LAN_ACCESS_CODE --mqtt-versio
 <!-- readme: contributors -end -->
 
 # 🪪 License
+
+## Hardware
+
+See [./LICENSE-Hardware.txt](./LICENSE-Hardware.txt)
+
+## Software
+
+See [./LICENSE-Software.txt](./LICENSE-Software.txt)
+
+
+## Documentation
+
+See [./LICENSE-Documentation.txt](./LICENSE-Documentation.txt)
+
 
 
 <p xmlns:cc="http://creativecommons.org/ns#" >Software, Hardware and 3d models are released under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
