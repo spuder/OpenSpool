@@ -189,8 +189,8 @@ namespace bambulabs
 
         // Perform HKDF
         mbedtls_hkdf(mbedtls_md_info_from_type(MBEDTLS_MD_SHA256),
-                    uid, uid_len,
-                    master, master_len,
+                    master, master_len,  // Use master as salt
+                    uid, uid_len,        // Use UID as IKM
                     context, context_len,
                     output, sizeof(output));
 
