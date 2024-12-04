@@ -47,3 +47,4 @@ packages:
   improv-serial: !include conf.d/improv-serial.yaml
   improv-bluetooth: !include conf.d/improv-bluetooth.yaml
   led-internal: !include conf.d/led-internal.yaml
+  extra: !include conf.d/extra.yaml

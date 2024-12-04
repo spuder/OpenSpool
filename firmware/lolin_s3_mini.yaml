@@ -17,3 +17,4 @@ packages:
   openspool-mini: !include openspool-mini.yaml
   led-internal: !include conf.d/led-internal.yaml
   improv-bluetooth: !include conf.d/improv-bluetooth.yaml
+  extra: !include conf.d/extra.yaml
