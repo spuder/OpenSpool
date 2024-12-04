@@ -154,6 +154,23 @@ namespace bambulabs
     // Fill array with FFFFFF
     inline std::vector<int> generate_keys() {
         uint8_t uid[] = {0x5a, 0xc9, 0x00, 0xa6};
+        // 5a-c9-00-a6 should produce the following 16 keys
+        // 63e5af2c1d75
+        // 40d146ce6e01
+        // 6a66957dcc91
+        // 15e7041f68d9
+        // 7ee1ac7fa75f
+        // 55cbbad18673
+        // ce5901af9416
+        // a223a193e6a3
+        // 24f4d022f402
+        // 7df999dd836b
+        // b0dac4a48903
+        // b026ab566f11
+        // 8b495d5a0b44
+        // 7ebef1cb3e94
+        // 4685790c6e01
+        // 3f00144c7b4a
         size_t uid_len = sizeof(uid);
     
         // Master key
@@ -179,6 +196,8 @@ namespace bambulabs
 
         std::vector<int> result;
         for (int i = 0; i < 16; i++) {
+            //TODO: figure out why this logger is wrong, it should be printing out the entire key
+            ESP_LOGD("bambu", "Key %d: %02x", i, output[i]);
             result.push_back(output[i]);
         }
         
