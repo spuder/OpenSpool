@@ -181,7 +181,7 @@ namespace bambulabs
         size_t master_len = sizeof(master);
     
         // Output buffer
-        uint8_t output[16];
+        uint8_t output[96];
     
         // Context
         const unsigned char context[] = {'R', 'F', 'I', 'D', '-', 'A', '\0'};
@@ -196,11 +196,13 @@ namespace bambulabs
 
         std::vector<int> result;
         for (int i = 0; i < 16; i++) {
-            //TODO: figure out why this logger is wrong, it should be printing out the entire key
-            ESP_LOGD("bambu", "Key %d: %02x", i, output[i]);
-            result.push_back(output[i]);
+            ESP_LOGD("bambu", "Key %d: %02x%02x%02x%02x%02x%02x", i,
+                    output[i*6], output[i*6+1], output[i*6+2],
+                    output[i*6+3], output[i*6+4], output[i*6+5]);
+            for (int j = 0; j < 6; j++) {
+                result.push_back(output[i*6 + j]);
+            }
         }
-        
         return result;
     }
 
