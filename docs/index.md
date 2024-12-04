@@ -6,7 +6,7 @@ nav_order: 1
 
 # 📟 OpenSpool Firmware Installation
 
-![](https://img.shields.io/badge/openspool-1.8.0-magenta)
+![](https://img.shields.io/badge/openspool-1.10.0-magenta)
 
 <div class="install-container">
     <script type="module" src="https://unpkg.com/esp-web-tools@8.0.6/dist/web/install-button.js"></script>
@@ -34,7 +34,7 @@ nav_order: 1
 </div>
 
 {: .caution }
-If the above step fails, see the [README on github](https://github.com/spuder/OpenSpool) to upload manually with command `make run-usb-pcb`. 
+If the above step fails, see the [README on github](https://github.com/spuder/OpenSpool) to upload manually with command `make lolin_s2_mini` or `make lolin_s3_mini`. 
 
 # 🛠️ Configuration
 

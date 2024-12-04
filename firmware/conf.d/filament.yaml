@@ -227,23 +227,6 @@ text_sensor:
       sorting_group_id: sorting_group_filament_settings
     on_value:
       then:
-        - lambda: |-
-            if (x != "") {
-              id(filament_color_hex_bambu).publish_state(x + "FF");
-            } else {
-              id(filament_color_hex_bambu).publish_state("");
-            }
-        - script.execute: preview_rfid_data
-  - platform: template
-    name: "Filament Color Hex Bambu"
-    id: filament_color_hex_bambu
-    internal: true #TODO: probabaly can get rid of this resource entirely
-    state_topic:
-    icon: mdi:hexagon-outline
-    web_server:
-      sorting_group_id: sorting_group_filament_settings
-    on_value:
-      then:
         - script.execute: preview_rfid_data
   - platform: template
     name: Filament Sub Brand

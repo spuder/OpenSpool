@@ -7,7 +7,7 @@
 # OpenSpool
 **Your filament wants to be free**
 
-![](https://img.shields.io/badge/openspool-1.8.0-magenta)
+![](https://img.shields.io/badge/openspool-1.10.0-magenta)
 ![](https://github.com/spuder/openspool/actions/workflows/esphome.yaml/badge.svg)
 ![](https://github.com/spuder/openspool/actions/workflows/pages.yaml/badge.svg)
 [![](https://dcbadge.limes.pink/api/server/4EaXHu9CEj)](https://discord.gg/4EaXHu9CEj)
@@ -45,9 +45,9 @@ Almost as seamlessly as if you were using Bambu filament with an AMS.
 | Protocol | Read | Write | Type | 
 |----------------|------|-------|-------|
 | OpenSpool  | ✅    | ✅     | NTAG 215/216 | 
-| Bambu         | 🚧 In progress       | ❌     | MiFare Classic | 
+| Bambu         | 🚧 In progress       | ❌     | MiFare Classic 1k | 
 | OpenTag  | 🚧 In progress  | 🚧 In progress    | TBD: Either MiFare or NTAG | 
-| Creality       | ❓    | ❓     | ❓ | 
+| Creality       | 🗓️ Planned    | 🗓️ Planned    | MiFare Classic 1k | 
 | PrusaRFID      |❓    | ❓     | ❓ |
 
 ### 🧬 OpenSpool Protocol
@@ -94,20 +94,22 @@ Currently OpenSpool works with Bambu printers over mqtt. Other integrations are 
 | Integration | Supported |
 | --- | --- |
 | Bambu | ✅ |
+| OctoPrint | 🚧 In Progress |
+| Prusa Connect | 🗓️ Planned |
+| SpoolMan | 🗓️ Planned |
+| Klipper / Moonraker | 🗓️ Planned |
 | Anker | ❔ | 
-| Prusa Connect | ❔ |
-| OctoPrint | ❔ |
-| SpoolMan | ❔ |
-| Klipper / Moonraker | ❔ |
 
 ## 🔧 Hardware
 
-OpenSpool requires an ESP32-S2 and PN532 NFC Reader (SPI Mode).
+OpenSpool requires an ESP32-S3 and PN532 NFC Reader (SPI Mode).
+
+[Buy a kit on tindie.com](https://www.tindie.com/products/36746/)
 
 
 | | Hardware | Link 1 | Link 2| 
 | --- | --- | --- | --- | 
-| ![](./images/wemos-d1mini.png)| Wemos D1 Mini S2 (Beware of Fakes!)| [Amazon](https://amzn.to/4fqq9m7) | [Aliexpress](https://www.aliexpress.us/item/3256802958877264.html)|
+| ![](./images/wemos-d1minis3.png) | Wemos D1 Mini s3 | | [Aliexpress](https://www.aliexpress.us/item/3256805262904443.html?gatewayAdapt=glo2usa) | 
 | ![](./images/pn532-large.png) |  PN532 (Large) (Beware of Fakes!) | [Amazon](https://amzn.to/40CVE7R) | [Aliexpress](https://www.aliexpress.us/item/3256806348384449.html)|
 | ![](./images/pn532-small.png) |  PN532 (Small) | [Amazon](https://amzn.to/4eoBz8s) | [Aliexpress](https://www.aliexpress.us/item/3256805787598774.html)| 
 | ![](./images/NFC.png) | NTAG 215/216 (13.56Mhz NFC Tags >500 bytes) | [Amazon](https://amzn.to/4epJzpO) | | 
@@ -115,6 +117,13 @@ OpenSpool requires an ESP32-S2 and PN532 NFC Reader (SPI Mode).
 | ![](./images/Headers1.png) | 2.54mm Headers | [Amazon](https://amzn.to/4en6138) | | 
 | ![](./images/LLC1.png) | 3.3v - 5v Logic Level Converter | [Amazon](https://amzn.to/3UMfMkp) | | 
 | ![](./images/jumper1.png) | female-female jumper wire) | [Amazon](https://amzn.to/3AMwRDM) | | 
+
+If you are unable to find a Wemos D1 Mini `s3`, you can stil buy an `s2`, as it is pin compatable. However be advised the `s2` has less memory and may expierence occassional disconnects from the printer
+
+| | Hardware | Link 1 | Link 2| 
+| --- | --- | --- | --- | 
+| ![](./images/wemos-d1mini.png)| Wemos D1 Mini S2 (Beware of Fakes!)| [Amazon](https://amzn.to/4fqq9m7) | [Aliexpress](https://www.aliexpress.us/item/3256802958877264.html)|
+
 
 | Tag | Bytes | Supported |  
 | --- | --- | --- |  
@@ -263,6 +272,20 @@ mqttx sub -t 'device/$SERIAL_NUMBER/report' -u -P $LAN_ACCESS_CODE --mqtt-versio
 <!-- readme: contributors -end -->
 
 # 🪪 License
+
+## Hardware
+
+See [./LICENSE-Hardware.txt](./LICENSE-Hardware.txt)
+
+## Software
+
+See [./LICENSE-Software.txt](./LICENSE-Software.txt)
+
+
+## Documentation
+
+See [./LICENSE-Documentation.txt](./LICENSE-Documentation.txt)
+
 
 
 <p xmlns:cc="http://creativecommons.org/ns#" >Software, Hardware and 3d models are released under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>

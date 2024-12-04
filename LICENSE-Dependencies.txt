@@ -1,0 +1,8 @@
+# Dependencies
+
+- esphome
+- esp-if
+- just-the-docs
+- fritzing
+- easyeda
+- fusion360
