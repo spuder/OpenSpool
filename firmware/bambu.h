@@ -185,9 +185,10 @@ namespace bambulabs
     
         // Context
         const unsigned char context[] = {'R', 'F', 'I', 'D', '-', 'A', '\0'};
-        size_t context_len = sizeof(context) - 1;
+        size_t context_len = sizeof(context);
 
         // Perform HKDF
+        // https://mbed-tls.readthedocs.io/projects/api/en/development/api/file/hkdf_8h/
         mbedtls_hkdf(mbedtls_md_info_from_type(MBEDTLS_MD_SHA256),
                     master, master_len,  // Use master as salt
                     uid, uid_len,        // Use UID as IKM
