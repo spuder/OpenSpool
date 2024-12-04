@@ -70,3 +70,5 @@ lolin_s3_mini:
 devkit:
 	esphome \
 		run esp32-s3-devkitc-1.yaml --device $(USB_ADDRESS)
+host:
+	esphome run host.yaml

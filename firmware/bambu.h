@@ -4,7 +4,17 @@
 
 #include <unordered_map>
 #include <string>
+
+#ifdef ESP_PLATFORM
 #include "esp_idf_version.h"
+#include "mbedtls/hkdf.h"
+#include "mbedtls/md.h"
+#else
+#include <mbedtls/hkdf.h>
+#include <mbedtls/md.h>
+#include <ArduinoJson.h>
+#endif
+
 // #include <mbedtls/hkdf.h>
 // #include <mbedtls/md.h>
 // #include <limits.h>
@@ -15,10 +25,6 @@
 //#include "esp_hmac.h"
 
 //#define TAG "RFID_KEYS"
-
-
-#include "mbedtls/hkdf.h"
-#include "mbedtls/md.h"
 
 
 namespace bambulabs

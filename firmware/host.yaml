@@ -1,0 +1,40 @@
+# Host.yaml is a dummy file that allows for quick compiling and testing without an esp32
+
+# Setup
+# brew install mbedtls
+
+esphome:
+  name: host_device
+  friendly_name: Host Device
+  includes:
+    - bambu.h
+  platformio_options:
+    lib_deps:
+      - bblanchon/ArduinoJson @ ^6.21.5
+    build_flags:
+     # - -DMBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\"
+      - "-I/opt/homebrew/include"
+      - "-L/opt/homebrew/lib"
+      - "-lmbedtls"
+      - "-lmbedcrypto"
+      - "-lmbedx509"
+      - "-DMBEDTLS_CONFIG_FILE=\\\"mbedtls/mbedtls_config.h\\\""
+
+host:
+  mac_address: "DE:AD:BE:EF:c0:FE"
+
+logger:
+  level: DEBUG
+
+# Text sensor to say hello world
+text_sensor:
+  - platform: template
+    name: "Hello World"
+    id: hello_world
+    lambda: |-
+      return {"Hello World"};
+    on_value:
+      then:
+        - logger.log:
+            format: "Hello World sensor value: %s"
+            args: ["x.c_str()"]
