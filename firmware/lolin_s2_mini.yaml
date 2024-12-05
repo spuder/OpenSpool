@@ -23,3 +23,4 @@ packages:
   openspool-mini: !include openspool-mini.yaml
   improv-serial: !include conf.d/improv-serial.yaml
   extra: !include conf.d/extra.yaml
+  button: !include conf.d/button.yaml
