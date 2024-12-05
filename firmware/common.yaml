@@ -77,8 +77,8 @@ esphome:
 esp32:
   framework:
     type: esp-idf
-    version: 5.3.1
-    platform_version: 6.9.0 # https://github.com/platformio/platform-espressif32/releases/
+    # version: 5.3.1
+    # platform_version: 6.9.0 # https://github.com/platformio/platform-espressif32/releases/
     sdkconfig_options: 
       CONFIG_MBEDTLS_HKDF_C: y # Needed for bambu KDF
       CONFIG_MBEDTLS_MD_C: y   # Needed for bambu KDF
