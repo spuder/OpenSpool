@@ -1,7 +1,3 @@
 
 packages:
   base: !include common.yaml
-
-api: 
-  reboot_timeout: 0s #reboot_timeout must be 0 if api and mqtt are defined
-  id: api_openspool

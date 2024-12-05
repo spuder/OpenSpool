@@ -3,7 +3,3 @@ packages:
   base: !include common.yaml
   psram: !include conf.d/psram-esp32s3.yaml
   pn_532_rfid-ams: !include conf.d/pn532_rfid-ams.yaml
-
-api: 
-  reboot_timeout: 0s #reboot_timeout must be 0 if api and mqtt are defined
-  id: api_openspool
