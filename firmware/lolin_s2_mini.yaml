@@ -22,13 +22,4 @@ wifi:
 packages: 
   openspool-mini: !include openspool-mini.yaml
   improv-serial: !include conf.d/improv-serial.yaml
-
-# The s2 is pushing the limits of its cpu,
-# Especially the fake clones without PSRAM
-# Remove components to improve performance
-# sensor: 
-#   - id: !remove loop_time
-#   - id: !remove openspool_wifi_signal
-#   - id: !remove openspool_ssid
-#   - id: !remove openspool_ip_address
-#   - id: !remove free_psram
+  extra: !include conf.d/extra.yaml
