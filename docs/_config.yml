@@ -7,7 +7,7 @@ aux_links:
   "Edit this page on Github":
     - https://github.com/spuder/openspool
 logo: "images/OpenSpoolLogoMedium1.png"
-favicon: "images/favicon.ico"
+favicon_ico: "favicon.ico"
 color_scheme: dark
 plugins:
   - jekyll-default-layout
