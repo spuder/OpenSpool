@@ -8,6 +8,7 @@ namespace pn532 {
 
 static const char *const TAG = "pn532.mifare_classic";
 
+//TODO: remove backdoor key and these hardcoded uids
 static const uint8_t BACKDOOR_KEY[6] = {0xA3,0x96,0xEF,0xA4,0xE2,0x4F};
 static const uint8_t KEY0[6] = {0x63, 0xe5, 0xaf, 0x2c, 0x1d, 0x75};
 static const uint8_t KEY1[6] = {0x40, 0xd1, 0x46, 0xce, 0x6e, 0x01};
@@ -30,6 +31,9 @@ static const std::array<const uint8_t*, 16> KEYS = {{
     KEY8, KEY9, KEY10, KEY11, KEY12, KEY13, KEY14, KEY15
 }};
 
+//TODO: refactor read_mifare_classic_tag_ so that it takes in an array of keys
+//For bambu tags this will always be 16 keys, however for mifare classic 4k it might be different
+//Ideally this should not break the existing mifare classic ndef parsing so this could be contributed back upstream to esphome
 std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t> &uid) {
   uint8_t current_block = 4;
   uint8_t message_start_index = 0;

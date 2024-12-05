@@ -151,7 +151,8 @@ namespace bambulabs
         return result;
     }
 
-    // Fill array with FFFFFF
+    //TODO: refactor so generate_keys takes a string (uid) as a parameter
+    // esphome's nfc object creates tags with a string in this format: 'aa-bb-cc-dd' or 'aa-bb-cc-dd-ee-ff-gg'
     inline std::vector<int> generate_keys() {
         uint8_t uid[] = {0x5a, 0xc9, 0x00, 0xa6};
         // 5a-c9-00-a6 should produce the following 16 keys
