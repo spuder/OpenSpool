@@ -4,7 +4,7 @@ esp32:
 substitutions:
   hide_ams_sensors: 'true'
   led_pin: GPIO16
-  spi2_type: SPI2 #SPI2,SPI3,any,hardware #TODO: should this be hardware? 
+  spi2_type: SPI2 #SPI2,SPI3,any,hardware
   spi2_clk_pin: GPIO36
   spi2_miso_pin: GPIO37
   spi2_mosi_pin: GPIO35
@@ -21,5 +21,10 @@ wifi:
   
 packages: 
   openspool-mini: !include openspool-mini.yaml
-  improv-serial: !include conf.d/improv-serial.yaml
+  #improv-serial: !include conf.d/improv-serial.yaml
   extra: !include conf.d/extra.yaml
+  button: !include conf.d/button.yaml
+
+dashboard_import:
+  package_import_url: github://spuder/openspool/firmware/lolin_s2_mini.yaml@main
+  import_full_config: false

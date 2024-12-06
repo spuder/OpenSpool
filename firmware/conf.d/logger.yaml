@@ -20,7 +20,7 @@ logger:
     text_sensor: INFO
     esp32_rmt_led_strip: INFO
     debug: INFO
-    web_server: INFO
+    web_server: DEBUG
     light: INFO
     api: INFO
     improv_serial: VERBOSE

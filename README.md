@@ -7,7 +7,7 @@
 # OpenSpool
 **Your filament wants to be free**
 
-![](https://img.shields.io/badge/openspool-1.10.0-magenta)
+![](https://img.shields.io/badge/openspool-1.11.2-magenta)
 ![](https://github.com/spuder/openspool/actions/workflows/esphome.yaml/badge.svg)
 ![](https://github.com/spuder/openspool/actions/workflows/pages.yaml/badge.svg)
 [![](https://dcbadge.limes.pink/api/server/4EaXHu9CEj)](https://discord.gg/4EaXHu9CEj)
@@ -134,8 +134,9 @@ If you are unable to find a Wemos D1 Mini `s3`, you can stil buy an `s2`, as it 
 ### Caution of Fakes
 
 There is a plethora of fake D1 Mini S2 microcontrollers and PN532 RFID readers in the market. 
-For the D1 Mini microcontroller, you need the `ESP32-S2FN4R2` not the `ESP32-S2FH4`. 
+For the D1 Mini microcontroller, you need the `ESP32-S2FN4R2` not the `ESP32-S2FH4`
 For the PN532 RFID reader, you need the model that contains the silkscreen. 
+
 
 While temping to buy a fake/clone esp32 or PN5432 at a lower cost, they inevitibly cause headaches as they are less reliable at reading NFC tags. 
 Purchasing at reputable vendors is highly recomended. 

@@ -37,7 +37,7 @@ sensor:
       name: "Heap Max Block"
       id: heap_max_block
       state_topic:
-    loop_time:
-      name: "Loop Time"
-      id: loop_time
-      state_topic:
+    # loop_time:
+    #   name: "Loop Time"
+    #   id: loop_time
+    #   state_topic:

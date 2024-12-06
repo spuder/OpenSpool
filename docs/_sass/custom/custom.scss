@@ -1,9 +1,38 @@
 esp-web-install-button {
     display: block;
     margin: 20px 0;
-  }
-  
-  .code-example {
-    text-align: center;
-    padding: 2rem;
-  }
+}
+
+.code-example {
+  text-align: center;
+  padding: 2rem;
+}
+
+.site-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.footer-links ul,
+.footer-links ul li {
+  list-style-type: none !important;
+  list-style-image: none !important;
+  padding-left: 0 !important;
+}
+
+.footer-links li::before {
+  content: none !important;
+  display: none !important;
+}
+
+.footer-links li {
+  margin-right: 20px;
+  display: inline-block;
+}
+
+.footer-badge img {
+  max-width: 100px;
+  height: auto;
+}

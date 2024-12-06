@@ -106,7 +106,7 @@ namespace bambulabs
         }
 
         // Check if 'version' key exists and its value is 1.0
-        if (!doc_in.containsKey("version") || std::string(doc_in["version"]) != "1.0")
+        if (!doc_in.containsKey("version") || doc_in["version"].as<std::string>() != "1.0")
         {
             ESP_LOGE("bambu", "Invalid or missing version. Expected version '1.0'");
             return {}; // skip publishing
@@ -123,7 +123,10 @@ namespace bambulabs
             }
         }
 
-        // TODO: verify color_hex is 6 digit code, not 8 digit
+        if (doc_in["color_hex"].as<std::string>().length() != 6) {
+            ESP_LOGE("bambu", "Invalid color_hex length (expected 6 characters)");
+            return {};
+        }
 
         JsonObject print = doc_out.createNestedObject("print");
         print["sequence_id"] = "0";
