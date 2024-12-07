@@ -39,6 +39,8 @@ class NfcTag {
     tag_type_ = rhs.tag_type_;
     if (rhs.ndef_message_ != nullptr)
       ndef_message_ = make_unique<NdefMessage>(*rhs.ndef_message_);
+    is_raw_data_ = rhs.is_raw_data_;
+    raw_data_ = rhs.raw_data_;
   }
 
   NfcTag(std::vector<uint8_t> &uid, const std::string &tag_type, std::vector<uint8_t> &raw_data, bool is_raw_data) {

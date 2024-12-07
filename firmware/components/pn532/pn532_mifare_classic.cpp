@@ -57,6 +57,7 @@ std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t
   }
 
   // Use the new constructor, specifying that this is raw data
+  ESP_LOGV(TAG, "Creating tag with raw data");
   return std::make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC, tag_data, true);
 }
 //TODO: refactor read_mifare_classic_tag_ so that it takes in an array of keys
