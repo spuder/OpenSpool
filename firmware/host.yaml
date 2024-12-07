@@ -20,6 +20,13 @@ esphome:
       - "-lmbedx509"
       - "-DMBEDTLS_CONFIG_FILE=\\\"mbedtls/mbedtls_config.h\\\""
 
+external_components:
+  - source: 
+      type: local
+      path: components
+    components: [pn532, nfc]
+    #components: [nfc]
+
 host:
   mac_address: "DE:AD:BE:EF:c0:FE"
 
@@ -54,7 +61,7 @@ text_sensor:
             ESP_LOGD("host", "--------");
             bambulabs::generate_keys("75-88-6B-1D");
             ESP_LOGD("host", "--------");
-            //std::vector<uint8_t> uid = {0x04, 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB};
+            //std::vector<uint8_t> uid = {0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x11};
             //esphome::nfc::NfcTag new_tag(uid, "Mifare Classic");
             //bambulabs::generate_keys(new_tag.get_uid());
 
