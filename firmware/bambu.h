@@ -31,6 +31,9 @@
 
 namespace bambulabs
 {
+    struct FilamentInfo {
+        std::string color_code;
+    };
     const std::unordered_map<std::string, std::string> filament_mappings = {
         {"TPU", "GFU99"},
         {"PLA", "GFL99"},
@@ -208,7 +211,8 @@ namespace bambulabs
         return result;
     }
 
-    inline void parse_tag_data(const std::vector<uint8_t>& tag_data) {
+    inline FilamentInfo parse_tag_data(const std::vector<uint8_t>& tag_data) {
+        FilamentInfo info;
         const int block_size = 16;
         ESP_LOGD("bambu", "Parsing tag data");
 
@@ -234,8 +238,9 @@ namespace bambulabs
                     ESP_LOGV("bambu", "Detailed Filament Type: %s", format_hex(block_data, 16).c_str());
                     break;
                 case 5:
-                    ESP_LOGV("bambu", "Spool Weight: %s", format_hex(block_data, 4).c_str());
-                    ESP_LOGV("bambu", "Color Code: %s", format_hex(block_data + 4, 4).c_str());
+                    ESP_LOGV("bambu", "Color Code: %s", format_hex(block_data, 4).c_str());
+                    info.color_code = format_hex(block_data, 4);
+                    ESP_LOGV("bambu", "Spool Weight: %s", format_hex(block_data + 4, 2).c_str());
                     ESP_LOGV("bambu", "Filament Diameter: %s", format_hex(block_data + 8, 4).c_str());
                     break;
                 case 6:
@@ -270,6 +275,7 @@ namespace bambulabs
                 ESP_LOGV("bambu", "Block %d Data: %s", block, format_hex(block_data, block_size).c_str());
             }
         }
+        return info;
     }
 
 }

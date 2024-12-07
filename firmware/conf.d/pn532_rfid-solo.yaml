@@ -51,7 +51,11 @@ pn532_spi:
               if (!data.empty()) {
                 std::string hex_data = format_hex_pretty(data);
                 ESP_LOGD("NFC", "Raw data: %s", hex_data.c_str());
-                bambulabs::parse_tag_data(data);
+                //TODO: how to determine if bambu labs tag
+                auto bambu_tag = bambulabs::parse_tag_data(data);
+                auto color = bambu_tag.color_code.substr(0, 6); // Only publish first 6 characters, drop FF
+                ESP_LOGV("NFC", "Color: %s", color.c_str());
+                id(filament_color_hex).publish_state(color);
               } else {
                 ESP_LOGD("NFC", "Raw data vector is empty");
               }
