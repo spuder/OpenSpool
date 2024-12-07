@@ -42,6 +42,8 @@ class NfcTag {
   }
 
   NfcTag(std::vector<uint8_t> &uid, const std::string &tag_type, std::vector<uint8_t> &raw_data, bool is_raw_data) {
+    //TODO: this probably could be merged with `std::vector<uint8_t> &uid, const std::string &tag_type, std::vector<uint8_t> &ndef_data`
+    // but instead of making an ndef_message we just store the raw data
     this->uid_ = uid;
     this->tag_type_ = tag_type;
     this->raw_data_ = raw_data;
@@ -53,6 +55,8 @@ class NfcTag {
   bool has_ndef_message() { return this->ndef_message_ != nullptr; };
   const std::shared_ptr<NdefMessage> &get_ndef_message() { return this->ndef_message_; };
   void set_ndef_message(std::unique_ptr<NdefMessage> ndef_message) { this->ndef_message_ = std::move(ndef_message); };
+  bool has_raw_data() { return this->is_raw_data_; };
+  const std::vector<uint8_t> &get_raw_data() { return this->raw_data_; };
 
  protected:
   std::vector<uint8_t> uid_;

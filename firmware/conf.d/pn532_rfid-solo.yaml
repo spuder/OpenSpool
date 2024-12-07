@@ -44,10 +44,12 @@ pn532_spi:
             id: nfc_tag_present0
             state: ON
         - lambda: |-
-            //if is mifare clssic tag
-            //if (tag.get_tag_type() == nfc::TAG_TYPE_MIFARE_CLASSIC) {
-
-            //}
+            ESP_LOGV("NFC", "Checking tag for raw data");
+            if (tag.has_raw_data()) {
+              auto data = tag.get_raw_data();
+              std::string hex_data = format_hex_pretty(data);
+              ESP_LOGD("NFC", "Raw data: %s", hex_data.c_str());
+            }
 
         - lambda: |-
             bool is_valid_openspool = false;
