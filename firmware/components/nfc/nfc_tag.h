@@ -41,6 +41,13 @@ class NfcTag {
       ndef_message_ = make_unique<NdefMessage>(*rhs.ndef_message_);
   }
 
+  NfcTag(std::vector<uint8_t> &uid, const std::string &tag_type, std::vector<uint8_t> &raw_data, bool is_raw_data) {
+    this->uid_ = uid;
+    this->tag_type_ = tag_type;
+    this->raw_data_ = raw_data;
+    this->is_raw_data_ = is_raw_data;
+  }
+
   std::vector<uint8_t> &get_uid() { return this->uid_; };
   const std::string &get_tag_type() { return this->tag_type_; };
   bool has_ndef_message() { return this->ndef_message_ != nullptr; };
@@ -51,6 +58,8 @@ class NfcTag {
   std::vector<uint8_t> uid_;
   std::string tag_type_;
   std::shared_ptr<NdefMessage> ndef_message_;
+  std::vector<uint8_t> raw_data_;
+  bool is_raw_data_ = false;
 };
 
 }  // namespace nfc
