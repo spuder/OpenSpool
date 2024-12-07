@@ -49,8 +49,14 @@ text_sensor:
         - lambda: |-
             //bambulabs::generate_keys();
             //TODO: refactor so genreate_keys takes a string
+            ESP_LOGD("host", "--------");
             bambulabs::generate_keys("5a-c9-00-a6");
-            //bambulabs::generate_keys(tag.get_uid());
+            ESP_LOGD("host", "--------");
+            bambulabs::generate_keys("75-88-6B-1D");
+            ESP_LOGD("host", "--------");
+            //std::vector<uint8_t> uid = {0x04, 0x12, 0x34, 0x56, 0x78, 0x90, 0xAB};
+            //esphome::nfc::NfcTag new_tag(uid, "Mifare Classic");
+            //bambulabs::generate_keys(new_tag.get_uid());
 
 # calling bambulabs::generate_keys() with the hard coded uid 5a-c9-00-a6
 # should return the following keys
@@ -70,3 +76,21 @@ text_sensor:
 # 7ebef1cb3e94
 # 4685790c6e01
 # 3f00144c7b4a
+
+# 75-88-6B-1D should return this
+# 6e5b0ec6ef7c
+# 4ce96076285f
+# 0b0373be835b
+# 906b2736c958
+# 0a7c3aa6e3cb
+# 9c357ba6842b
+# 6712858e9196
+# 4b3199aea656
+# 6637239e0019
+# b440e6ca11c0
+# 89914a92bdf8
+# 9cb8e022d296
+# e82816da2cf9
+# d48fed336320
+# 5e6ca668ccc5
+# d9805eec7045
