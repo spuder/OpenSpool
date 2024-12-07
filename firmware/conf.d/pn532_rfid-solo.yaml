@@ -51,6 +51,7 @@ pn532_spi:
               if (!data.empty()) {
                 std::string hex_data = format_hex_pretty(data);
                 ESP_LOGD("NFC", "Raw data: %s", hex_data.c_str());
+                bambulabs::parse_tag_data(data);
               } else {
                 ESP_LOGD("NFC", "Raw data vector is empty");
               }
