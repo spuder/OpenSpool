@@ -46,9 +46,12 @@ pn532_spi:
         - lambda: |-
             ESP_LOGV("NFC", "Checking tag for raw data");
             if (tag.has_raw_data()) {
+              ESP_LOGD("NFC", "Tag has raw data");
               auto data = tag.get_raw_data();
               std::string hex_data = format_hex_pretty(data);
               ESP_LOGD("NFC", "Raw data: %s", hex_data.c_str());
+            } else {
+              ESP_LOGD("NFC", "Tag has no raw data");
             }
 
         - lambda: |-
