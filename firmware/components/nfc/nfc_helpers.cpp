@@ -46,52 +46,6 @@ std::string get_random_ha_tag_ndef() {
   return uri;
 }
 
-
-//TODO: remove
-// std::vector<uint8_t> hmac_sha256(const std::vector<uint8_t>& key, const std::vector<uint8_t>& data) {
-//     std::vector<uint8_t> output(32);
-//     mbedtls_md_context_t ctx;
-//     mbedtls_md_init(&ctx);
-//     mbedtls_md_setup(&ctx, mbedtls_md_info_from_type(MBEDTLS_MD_SHA256), 1);
-//     mbedtls_md_hmac_starts(&ctx, key.data(), key.size());
-//     mbedtls_md_hmac_update(&ctx, data.data(), data.size());
-//     mbedtls_md_hmac_finish(&ctx, output.data());
-//     mbedtls_md_free(&ctx);
-//     return output;
-// }
-
-// std::array<const uint8_t*, 16> generate_keys() {
-//     std::vector<uint8_t> uid = {0x5A, 0xC9, 0x00, 0xA6};
-//     std::vector<uint8_t> master = {
-//         0x9a, 0x75, 0x9c, 0xf2, 0xc4, 0xf7, 0xca, 0xff,
-//         0x22, 0x2c, 0xb9, 0x76, 0x9b, 0x41, 0xbc, 0x96
-//     };
-//     std::vector<uint8_t> context = {'R', 'F', 'I', 'D', '-', 'A', '\0'};
-    
-//     // Step 1: Extract with salt=uid, input=master
-//     std::vector<uint8_t> prk = hmac_sha256(uid, master);
-    
-//     // Step 2: Expand
-//     std::array<const uint8_t*, 16> keys;
-//     std::vector<uint8_t> prev_t;
-    
-//     for (uint8_t n = 1; n <= 16; ++n) {
-//         std::vector<uint8_t> info = prev_t;
-//         info.insert(info.end(), context.begin(), context.end());
-//         info.push_back(n);
-        
-//         std::vector<uint8_t> t = hmac_sha256(prk, info);
-//         uint8_t* key = new uint8_t[6];
-//         std::copy(t.begin(), t.begin() + 6, key);
-//         keys[n-1] = key;
-        
-//         prev_t = t;
-//     }
-    
-//     return keys;
-// }
-
-//TODO: should generate_keys() use pointers? 
 //TODO: should generate_keys() use a vector? 
 std::vector<std::vector<uint8_t>> generate_keys(std::vector<uint8_t>& uid) {
     // std::vector<uint8_t> uid = {0x5A, 0xC9, 0x00, 0xA6};
