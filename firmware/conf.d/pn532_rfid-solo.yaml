@@ -47,7 +47,7 @@ pn532_spi:
             ESP_LOGV("NFC", "Checking tag for raw data");
             if (tag.has_raw_data()) {
               ESP_LOGV("NFC", "Tag has raw data flag set");
-              auto data = tag.get_raw_data();
+              const auto& data = tag.get_raw_data();
               if (!data.empty()) {
                 std::string hex_data = format_hex_pretty(data);
                 ESP_LOGD("NFC", "Raw data: %s", hex_data.c_str());

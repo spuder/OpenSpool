@@ -71,13 +71,16 @@ std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t
     return make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC, buffer);
   } else {
     std::vector<uint8_t> tag_data;
+    bool read_success = true;
 
-    while (current_block < 64) { //TODO: add support for mifare 4k
+    while (current_block < 64 && read_success) { //TODO: add support for mifare 4k
       uint8_t current_sector = current_block / 4;
       
       if (nfc::mifare_classic_is_first_block(current_block)) {
         if (!this->auth_mifare_classic_block_(uid, current_block, nfc::MIFARE_CMD_AUTH_A, KEYS[current_sector].data())) {
           ESP_LOGE(TAG, "Error, Block authentication failed for %d", current_block);
+          read_success = false;
+          break;
         } else {
           ESP_LOGVV(TAG, "Block authentication succeeded for %d", current_block);
         }
@@ -88,14 +91,20 @@ std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t
         tag_data.insert(tag_data.end(), block_data.begin(), block_data.end());
       } else {
         ESP_LOGE(TAG, "Error reading block %d", current_block);
+        read_success = false;
+        break;
       }
 
       current_block++;
     }
 
-    // Use the new constructor, specifying that this is raw data
-    ESP_LOGV(TAG, "Creating tag with raw data");
-    return std::make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC, tag_data, true);
+    if (read_success) {
+      ESP_LOGV(TAG, "Creating tag with raw data");
+      return std::make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC, tag_data, true);
+    } else {
+      ESP_LOGE(TAG, "Tag reading aborted due to errors");
+      return make_unique<nfc::NfcTag>(uid, nfc::ERROR);
+    }
   }
 }
 
