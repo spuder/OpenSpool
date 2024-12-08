@@ -95,7 +95,8 @@ script:
                     print["command"] = "ams_filament_setting";
                     print["ams_id"] = 255; //TODO: support multiple AMS
                     print["tray_id"] = 254; //TODO: support multiple trays
-                    print["tray_color"] = (id(filament_color_hex).state + "FF").c_str();
+                    std::string color = id(filament_color_hex).state + "FF";
+                    print["tray_color"] = color;
                     print["nozzle_temp_min"] = int8_t(id(filament_min_temp).state);
                     print["nozzle_temp_max"] = int8_t(id(filament_max_temp).state);
                     print["tray_type"] = id(filament_type).state.c_str();
