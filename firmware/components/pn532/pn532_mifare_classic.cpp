@@ -8,35 +8,14 @@ namespace pn532 {
 
 static const char *const TAG = "pn532.mifare_classic";
 
-//TODO: remove backdoor key and these hardcoded uids
-// static const uint8_t BACKDOOR_KEY[6] = {0xA3,0x96,0xEF,0xA4,0xE2,0x4F};
-static const uint8_t KEY0[6] = {0x63, 0xe5, 0xaf, 0x2c, 0x1d, 0x75};
-static const uint8_t KEY1[6] = {0x40, 0xd1, 0x46, 0xce, 0x6e, 0x01};
-static const uint8_t KEY2[6] = {0x6a, 0x66, 0x95, 0x7d, 0xcc, 0x91};
-static const uint8_t KEY3[6] = {0x15, 0xe7, 0x04, 0x1f, 0x68, 0xd9};
-static const uint8_t KEY4[6] = {0x7e, 0xe1, 0xac, 0x7f, 0xa7, 0x5f};
-static const uint8_t KEY5[6] = {0x55, 0xcb, 0xba, 0xd1, 0x86, 0x73};
-static const uint8_t KEY6[6] = {0xce, 0x59, 0x01, 0xaf, 0x94, 0x16};
-static const uint8_t KEY7[6] = {0xa2, 0x23, 0xa1, 0x93, 0xe6, 0xa3};
-static const uint8_t KEY8[6] = {0x24, 0xf4, 0xd0, 0x22, 0xf4, 0x02};
-static const uint8_t KEY9[6] = {0x7d, 0xf9, 0x99, 0xdd, 0x83, 0x6b};
-static const uint8_t KEY10[6] = {0xb0, 0xda, 0xc4, 0xa4, 0x89, 0x03};
-static const uint8_t KEY11[6] = {0xb0, 0x26, 0xab, 0x56, 0x6f, 0x11};
-static const uint8_t KEY12[6] = {0x8b, 0x49, 0x5d, 0x5a, 0x0b, 0x44};
-static const uint8_t KEY13[6] = {0x7e, 0xbe, 0xf1, 0xcb, 0x3e, 0x94};
-static const uint8_t KEY14[6] = {0x46, 0x85, 0x79, 0x0c, 0x6e, 0x01};
-static const uint8_t KEY15[6] = {0x3f, 0x00, 0x14, 0x4c, 0x7b, 0x4a};
-static const std::array<const uint8_t*, 16> KEYS = {{
-    KEY0, KEY1, KEY2, KEY3, KEY4, KEY5, KEY6, KEY7, 
-    KEY8, KEY9, KEY10, KEY11, KEY12, KEY13, KEY14, KEY15
-}};
-
 
 std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t> &uid) {
   uint8_t current_block = 4;
   uint8_t message_start_index = 0;
   uint32_t message_length = 0;
   bool is_ndef = true;
+//  std::array<const uint8_t*, 16> KEYS = esphome::nfc::generate_keys();
+  std::vector<std::vector<uint8_t>> KEYS = esphome::nfc::generate_keys();
 
   // TODO: For some reason if using nfc::NDEF_KEY fails, all future reads also fail
   // temporarially commenting out the NDEF check until I can figure out why
@@ -97,7 +76,7 @@ std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t
       uint8_t current_sector = current_block / 4;
       
       if (nfc::mifare_classic_is_first_block(current_block)) {
-        if (!this->auth_mifare_classic_block_(uid, current_block, nfc::MIFARE_CMD_AUTH_A, KEYS[current_sector])) {
+        if (!this->auth_mifare_classic_block_(uid, current_block, nfc::MIFARE_CMD_AUTH_A, KEYS[current_sector].data())) {
           ESP_LOGE(TAG, "Error, Block authentication failed for %d", current_block);
         } else {
           ESP_LOGVV(TAG, "Block authentication succeeded for %d", current_block);
@@ -119,6 +98,38 @@ std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t
     return std::make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC, tag_data, true);
   }
 }
+
+// std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t> &uid, std::array<const uint8_t*, 16> keys) {
+//   uint8_t current_block = 4;
+//   uint8_t message_start_index = 0;
+//   uint32_t message_length = 0;
+//   std::vector<uint8_t> tag_data;
+
+//   while (current_block < 64) { //TODO: add support for mifare 4k
+//     uint8_t current_sector = current_block / 4;
+    
+//     if (nfc::mifare_classic_is_first_block(current_block)) {
+//       if (!this->auth_mifare_classic_block_(uid, current_block, nfc::MIFARE_CMD_AUTH_A, nfc::KEYS[current_sector])) {
+//         ESP_LOGE(TAG, "Error, Block authentication failed for %d", current_block);
+//       } else {
+//         ESP_LOGVV(TAG, "Block authentication succeeded for %d", current_block);
+//       }
+//     }
+
+//     std::vector<uint8_t> block_data;
+//     if (this->read_mifare_classic_block_(current_block, block_data)) {
+//       tag_data.insert(tag_data.end(), block_data.begin(), block_data.end());
+//     } else {
+//       ESP_LOGE(TAG, "Error reading block %d", current_block);
+//     }
+
+//     current_block++;
+//   }
+
+//   // Use the new constructor, specifying that this is raw data
+//   ESP_LOGV(TAG, "Creating tag with raw data");
+//   return std::make_unique<nfc::NfcTag>(uid, nfc::MIFARE_CLASSIC, tag_data, true);
+// }
 
 bool PN532::read_mifare_classic_block_(uint8_t block_num, std::vector<uint8_t> &data) {
   if (!this->write_command_({

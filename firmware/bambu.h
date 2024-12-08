@@ -162,55 +162,55 @@ namespace bambulabs
 
     //TODO: refactor so generate_keys takes a string (uid) as a parameter
     // esphome's nfc object creates tags with a string in this format: 'aa-bb-cc-dd' or 'aa-bb-cc-dd-ee-ff-gg'
-    inline std::vector<int> generate_keys(std::string uid) {
-        // Split uid string into a uint8_t array split by '-'
-        std::vector<std::string> uid_split;
-        std::stringstream ss(uid);
-        std::string token;
-        while (std::getline(ss, token, '-')) {
-            uid_split.push_back(token);
-        }
+    // inline std::vector<int> generate_keys(std::string uid) {
+    //     // Split uid string into a uint8_t array split by '-'
+    //     std::vector<std::string> uid_split;
+    //     std::stringstream ss(uid);
+    //     std::string token;
+    //     while (std::getline(ss, token, '-')) {
+    //         uid_split.push_back(token);
+    //     }
 
-        // Convert uid_split to uint8_t array
-        uint8_t uid_padded[7] = {0}; // Initialize to zeros
-        size_t actual_length = uid_split.size();
+    //     // Convert uid_split to uint8_t array
+    //     uint8_t uid_padded[7] = {0}; // Initialize to zeros
+    //     size_t actual_length = uid_split.size();
         
-        for (size_t i = 0; i < actual_length; i++) {
-            uid_padded[i] = std::stoi(uid_split[i], nullptr, 16);
-        }
+    //     for (size_t i = 0; i < actual_length; i++) {
+    //         uid_padded[i] = std::stoi(uid_split[i], nullptr, 16);
+    //     }
 
-        // Master key
-        uint8_t master[] = {
-            0x9a, 0x75, 0x9c, 0xf2, 0xc4, 0xf7, 0xca, 0xff,
-            0x22, 0x2c, 0xb9, 0x76, 0x9b, 0x41, 0xbc, 0x96
-        };
-        size_t master_len = sizeof(master);
+    //     // Master key
+    //     uint8_t master[] = {
+    //         0x9a, 0x75, 0x9c, 0xf2, 0xc4, 0xf7, 0xca, 0xff,
+    //         0x22, 0x2c, 0xb9, 0x76, 0x9b, 0x41, 0xbc, 0x96
+    //     };
+    //     size_t master_len = sizeof(master);
 
-        // Output buffer
-        uint8_t output[96];
+    //     // Output buffer
+    //     uint8_t output[96];
 
-        // Context
-        const unsigned char context[] = {'R', 'F', 'I', 'D', '-', 'A', '\0'};
-        size_t context_len = sizeof(context);
+    //     // Context
+    //     const unsigned char context[] = {'R', 'F', 'I', 'D', '-', 'A', '\0'};
+    //     size_t context_len = sizeof(context);
 
-        // Perform HKDF
-        mbedtls_hkdf(mbedtls_md_info_from_type(MBEDTLS_MD_SHA256),
-            master, master_len,  // Use master as salt
-            uid_padded, actual_length,
-            context, context_len,
-            output, sizeof(output));
+    //     // Perform HKDF
+    //     mbedtls_hkdf(mbedtls_md_info_from_type(MBEDTLS_MD_SHA256),
+    //         master, master_len,  // Use master as salt
+    //         uid_padded, actual_length,
+    //         context, context_len,
+    //         output, sizeof(output));
 
-        std::vector<int> result;
-        for (int i = 0; i < 16; i++) {
-            ESP_LOGD("bambu", "Key %d: %02x%02x%02x%02x%02x%02x", i,
-                output[i*6], output[i*6+1], output[i*6+2],
-                output[i*6+3], output[i*6+4], output[i*6+5]);
-            for (int j = 0; j < 6; j++) {
-                result.push_back(output[i*6 + j]);
-            }
-        }
-        return result;
-    }
+    //     std::vector<int> result;
+    //     for (int i = 0; i < 16; i++) {
+    //         ESP_LOGD("bambu", "Key %d: %02x%02x%02x%02x%02x%02x", i,
+    //             output[i*6], output[i*6+1], output[i*6+2],
+    //             output[i*6+3], output[i*6+4], output[i*6+5]);
+    //         for (int j = 0; j < 6; j++) {
+    //             result.push_back(output[i*6 + j]);
+    //         }
+    //     }
+    //     return result;
+    // }
 
     //TODO: move this to a utils file or find a more native esphome way to do this
     inline std::string hex_to_ascii(const std::string& hex) {

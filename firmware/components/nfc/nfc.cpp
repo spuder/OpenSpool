@@ -1,86 +1,11 @@
 #include "nfc.h"
 #include <cstdio>
 #include "esphome/core/log.h"
-#include "mbedtls/hkdf.h"
-#include "mbedtls/md.h"
 
 namespace esphome {
 namespace nfc {
 
 static const char *const TAG = "nfc";
-
-// Correct keys
-// 63e5af2c1d75
-// 40d146ce6e01
-// 6a66957dcc91
-// 15e7041f68d9
-// 7ee1ac7fa75f
-// 55cbbad18673
-// ce5901af9416
-// a223a193e6a3
-// 24f4d022f402
-// 7df999dd836b
-// b0dac4a48903
-// b026ab566f11
-// 8b495d5a0b44
-// 7ebef1cb3e94
-// 4685790c6e01
-// 3f00144c7b4a
-
-// std::array<std::array<uint8_t, 6>, 16> generate_keys(const std::vector<uint8_t>& uid) {
-// std::array<std::array<uint8_t, 6>, 16> generate_keys() {
-// std::vector<uint8_t> hmac_sha256(const std::vector<uint8_t>& key, const std::vector<uint8_t>& data) {
-//     std::vector<uint8_t> output(32);
-//     mbedtls_md_context_t ctx;
-//     mbedtls_md_init(&ctx);
-//     mbedtls_md_setup(&ctx, mbedtls_md_info_from_type(MBEDTLS_MD_SHA256), 1);
-//     mbedtls_md_hmac_starts(&ctx, key.data(), key.size());
-//     mbedtls_md_hmac_update(&ctx, data.data(), data.size());
-//     mbedtls_md_hmac_finish(&ctx, output.data());
-//     mbedtls_md_free(&ctx);
-//     return output;
-// }
-
-std::vector<uint8_t> hmac_sha256(const std::vector<uint8_t>& key, const std::vector<uint8_t>& data) {
-    std::vector<uint8_t> output(32);
-    mbedtls_md_context_t ctx;
-    mbedtls_md_init(&ctx);
-    mbedtls_md_setup(&ctx, mbedtls_md_info_from_type(MBEDTLS_MD_SHA256), 1);
-    mbedtls_md_hmac_starts(&ctx, key.data(), key.size());
-    mbedtls_md_hmac_update(&ctx, data.data(), data.size());
-    mbedtls_md_hmac_finish(&ctx, output.data());
-    mbedtls_md_free(&ctx);
-    return output;
-}
-
-std::vector<std::vector<uint8_t>> generate_keys() {
-    std::vector<uint8_t> uid = {0x5A, 0xC9, 0x00, 0xA6};
-    std::vector<uint8_t> master = {
-        0x9a, 0x75, 0x9c, 0xf2, 0xc4, 0xf7, 0xca, 0xff,
-        0x22, 0x2c, 0xb9, 0x76, 0x9b, 0x41, 0xbc, 0x96
-    };
-    std::vector<uint8_t> context = {'R', 'F', 'I', 'D', '-', 'A', '\0'};
-    
-    // Step 1: Extract with salt=uid, input=master
-    std::vector<uint8_t> prk = hmac_sha256(uid, master);
-    
-    // Step 2: Expand
-    std::vector<std::vector<uint8_t>> keys;
-    std::vector<uint8_t> prev_t;
-    
-    for (uint8_t n = 1; keys.size() < 16; ++n) {
-        std::vector<uint8_t> info = prev_t;
-        info.insert(info.end(), context.begin(), context.end());
-        info.push_back(n);
-        
-        std::vector<uint8_t> t = hmac_sha256(prk, info);
-        keys.push_back(std::vector<uint8_t>(t.begin(), t.begin() + 6));
-        
-        prev_t = t;
-    }
-    
-    return keys;
-}
 
 std::string format_uid(std::vector<uint8_t> &uid) {
   char buf[(uid.size() * 2) + uid.size() - 1];
