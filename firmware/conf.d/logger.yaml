@@ -5,7 +5,6 @@ logger:
     pn532: DEBUG
     pn532_spi: DEBUG
     spi: INFO
-    nfc: DEBUG
     i2c: INFO
     mqtt: DEBUG
     mqtt.component: DEBUG
@@ -39,4 +38,5 @@ logger:
     pn532.mifare_classic: VERBOSE
     TAG: VERBOSE
     NFC: VERBOSE
+    nfc: VERBOSE
     "": ERROR

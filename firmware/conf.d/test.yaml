@@ -1,0 +1,56 @@
+esp32:
+  framework:
+    sdkconfig_options: 
+      CONFIG_MBEDTLS_HKDF_C: y
+      CONFIG_MBEDTLS_MD_C: y
+
+esphome:
+  libraries:
+    #- mbedtls
+    # - limits
+    # - kochcodes/mbedtls@3.6.2
+    # - armmbed/mbedtls@2.23.0
+  includes: 
+    -  bambu.h
+    # - mbedtls/hkdf.h
+    # - mbedtls/md.h
+  platformio_options:
+    build_flags:
+      #- -lmbedtls
+      #- -lmbedcrypto
+      # - -lmbedx509
+      #- -DCHAR_BIT=8
+      #- -DUSE_ESP_IDF
+      #- -DESP_PLATFORM
+      # - -DMBEDTLS_HKDF_C
+      # - -DMBEDTLS_MD_C
+      - -DMBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\"
+      # - -UCONFIG_MBEDTLS_HKDF_C
+      # - -UCONFIG_MBEDTLS_MD_C
+
+# external_components:
+#   - source: github://espressif/esp-idf
+#     components: [mbedtls]
+
+external_components:
+  - source: 
+      type: local
+      path: components
+    components: [pn532, nfc]
+
+# text_sensor:
+#   - platform: template
+#     name: "HKDF Output"
+#     id: hkdf_output
+#     state_topic: 
+#     update_interval: 60s
+#     lambda: |-
+#       auto keys = bambulabs::generate_keys();
+#       std::string result = "[";
+#       for (size_t i = 0; i < keys.size(); ++i) {
+#         if (i > 0) result += ", ";
+#         result += std::to_string(keys[i]);
+#       }
+#       result += "]";
+#       return result;
+

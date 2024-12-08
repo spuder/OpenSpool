@@ -205,7 +205,7 @@ void PN532::loop() {
         for (const auto &record : records) {
           ESP_LOGD(TAG, "    %s - %s", record->get_type().c_str(), record->get_payload().c_str());
         }
-      }
+      }//TODO: elseif not ndef, but has raw data
     }
   } else if (next_task_ == CLEAN) {
     ESP_LOGD(TAG, "  Tag cleaning...");
@@ -363,6 +363,8 @@ std::unique_ptr<nfc::NfcTag> PN532::read_tag_(std::vector<uint8_t> &uid) {
   if (type == nfc::TAG_TYPE_MIFARE_CLASSIC) {
     ESP_LOGD(TAG, "Mifare classic");
     return this->read_mifare_classic_tag_(uid);
+    //TODO: figure out how to preserve backwards compatiblilyt with ndef tags without keys
+    // return this->read_mifare_classic_tag_(uid, nfc::KEYS); //TODO: should this be pointer?
   } else if (type == nfc::TAG_TYPE_2) {
     ESP_LOGD(TAG, "Mifare ultralight");
     return this->read_mifare_ultralight_tag_(uid);
