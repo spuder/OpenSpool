@@ -50,7 +50,7 @@ pn532_spi:
               const auto& data = tag.get_raw_data();
               if (!data.empty()) {
                 std::string hex_data = format_hex_pretty(data);
-                ESP_LOGD("NFC", "Raw data: %s", hex_data.c_str());
+                ESP_LOGV("NFC", "Raw data: %s", hex_data.c_str());
                 //TODO: how to determine if bambu labs tag (see permissions block 87-87-87-69)
                 auto bambu_tag = bambulabs::parse_tag_data(data);
                 auto color = bambu_tag.color_code.substr(0, 6); // Only publish first 6 characters, drop FF

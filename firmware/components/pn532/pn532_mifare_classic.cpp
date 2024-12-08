@@ -73,26 +73,26 @@ std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t
     std::vector<uint8_t> tag_data;
     bool read_success = true;
     int current_sector = -1;
-    //Intentionally skipping auth to sector 0
+    int current_block = 0;  // Start from block 0
 
     while (current_block < 64 && read_success) { // TODO: add support for mifare 4k
       int new_sector = current_block / 4;
       
       if (new_sector != current_sector) {
-        // Authenticate only when entering a new sector
+        // Authenticate when entering a new sector, including sector 0
         if (!this->auth_mifare_classic_block_(uid, current_block, nfc::MIFARE_CMD_AUTH_A, KEYS[new_sector].data())) {
-          ESP_LOGE(TAG, "Error, Sector authentication failed for sector %d", new_sector);
-          read_success = false;
-          break;
+          ESP_LOGW(TAG, "Warning: Sector authentication failed for sector %d", new_sector);
+          // Continue reading even if authentication fails
         } else {
-          ESP_LOGV(TAG, "Sector authentication succeeded for sector %d", new_sector);
-          current_sector = new_sector;
+          ESP_LOGVV(TAG, "Sector authentication succeeded for sector %d", new_sector);
         }
+        current_sector = new_sector;
       }
 
       std::vector<uint8_t> block_data;
       if (this->read_mifare_classic_block_(current_block, block_data)) {
         tag_data.insert(tag_data.end(), block_data.begin(), block_data.end());
+        ESP_LOGVV(TAG, "Read block %d: %s", current_block, esphome::format_hex_pretty(block_data).c_str());
       } else {
         ESP_LOGE(TAG, "Error reading block %d", current_block);
         read_success = false;

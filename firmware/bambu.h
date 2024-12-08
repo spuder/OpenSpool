@@ -147,13 +147,15 @@ namespace bambulabs
     }
 
     //TODO: move this to a utils file or find a more native esphome way to convert to ascii
-    inline std::string hex_to_ascii(const std::string& hex) {
-        std::vector<uint8_t> bytes;
-        if (esphome::parse_hex(hex, bytes, hex.length() / 2)) {
-            return std::string(bytes.begin(), bytes.end());
-        }
-        return "";
-    }
+    // inline std::string hex_to_ascii(const std::string& hex) {
+    //     std::string ascii;
+    //     for (size_t i = 0; i < hex.length(); i += 2) {
+    //         std::string byte = hex.substr(i, 2);
+    //         char chr = static_cast<char>(std::stoi(byte, nullptr, 16));
+    //         ascii.push_back(chr);
+    //     }
+    //     return ascii;
+    // }
 
     inline FilamentInfo parse_tag_data(const std::vector<uint8_t>& tag_data) {
         FilamentInfo info;
@@ -176,8 +178,9 @@ namespace bambulabs
                     ESP_LOGV("bambu", "Unique Material Type: %s", format_hex(block_data + 8, 8).c_str());
                     break;
                 case 2:
-                    ESP_LOGVV("bambu", "Filament Type: %s", format_hex(block_data, 16).c_str());
-                    info.type = hex_to_ascii(format_hex(block_data, 16));
+                    ESP_LOGV("bambu", "Filament Type: %s", format_hex(block_data, 16).c_str());
+                    // info.type = hex_to_ascii(format_hex(block_data, 16));
+                    info.type = std::string(reinterpret_cast<const char*>(block_data), 16);
                     ESP_LOGV("bambu", "Filament Type Ascii: %s", info.type.c_str());
                     break;
                 case 4:
