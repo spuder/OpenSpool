@@ -34,14 +34,6 @@ class NfcTag {
     this->tag_type_ = tag_type;
     this->ndef_message_ = make_unique<NdefMessage>(ndef_data);
   };
-  NfcTag(const NfcTag &rhs) {
-    uid_ = rhs.uid_;
-    tag_type_ = rhs.tag_type_;
-    if (rhs.ndef_message_ != nullptr)
-      ndef_message_ = make_unique<NdefMessage>(*rhs.ndef_message_);
-    is_raw_data_ = rhs.is_raw_data_;
-    raw_data_ = rhs.raw_data_;
-  }
 
   NfcTag(std::vector<uint8_t> &uid, const std::string &tag_type, std::vector<uint8_t> &raw_data, bool is_raw_data) {
     //TODO: this probably could be merged with `std::vector<uint8_t> &uid, const std::string &tag_type, std::vector<uint8_t> &ndef_data`
@@ -50,6 +42,15 @@ class NfcTag {
     this->tag_type_ = tag_type;
     this->raw_data_ = raw_data;
     this->is_raw_data_ = is_raw_data;
+  }
+  NfcTag(const NfcTag &rhs) {
+    uid_ = rhs.uid_;
+    tag_type_ = rhs.tag_type_;
+    if (rhs.ndef_message_ != nullptr)
+      ndef_message_ = make_unique<NdefMessage>(*rhs.ndef_message_);
+    if (!rhs.raw_data_.empty())
+      raw_data_ = rhs.raw_data_;
+    is_raw_data_ = rhs.is_raw_data_;
   }
 
   std::vector<uint8_t> &get_uid() { return this->uid_; };

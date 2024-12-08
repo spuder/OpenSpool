@@ -33,6 +33,7 @@ namespace bambulabs
 {
     struct FilamentInfo {
         std::string color_code;
+        std::string type;
     };
     const std::unordered_map<std::string, std::string> filament_mappings = {
         {"TPU", "GFU99"},
@@ -211,6 +212,15 @@ namespace bambulabs
         return result;
     }
 
+    //TODO: move this to a utils file or find a more native esphome way to do this
+    inline std::string hex_to_ascii(const std::string& hex) {
+        std::vector<uint8_t> bytes;
+        if (esphome::parse_hex(hex, bytes, hex.length() / 2)) {
+            return std::string(bytes.begin(), bytes.end());
+        }
+        return "";
+    }
+
     inline FilamentInfo parse_tag_data(const std::vector<uint8_t>& tag_data) {
         FilamentInfo info;
         const int block_size = 16;
@@ -232,7 +242,9 @@ namespace bambulabs
                     ESP_LOGV("bambu", "Unique Material Type: %s", format_hex(block_data + 8, 8).c_str());
                     break;
                 case 2:
-                    ESP_LOGV("bambu", "Filament Type: %s", format_hex(block_data, 16).c_str());
+                    ESP_LOGVV("bambu", "Filament Type: %s", format_hex(block_data, 16).c_str());
+                    info.type = hex_to_ascii(format_hex(block_data, 16));
+                    ESP_LOGV("bambu", "Filament Type Ascii: %s", info.type.c_str());
                     break;
                 case 4:
                     ESP_LOGV("bambu", "Detailed Filament Type: %s", format_hex(block_data, 16).c_str());
