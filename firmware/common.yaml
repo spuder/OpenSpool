@@ -12,6 +12,7 @@ esphome:
     build_unflags: -std=gnu++11
     build_flags:
       - -std=gnu++14
+      - -DMBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\"
   on_boot:
     then:
       #TODO: breahting blue studders a little bit
@@ -86,6 +87,14 @@ esp32:
     # sdkconfig_options:
     # MBEDTLS_CERTIFICATE_BUNDLE: y
     # MBEDTLS_CERTIFICATE_BUNDLE_DEFAULT_FULL: y
+
+#TODO: uncomment when ready for bambu support
+# external_components:
+#   - source: 
+#       type: local
+#       path: components
+#     components: [pn532, nfc]
+
 packages:
   version: !include conf.d/version.yaml
   uptime: !include conf.d/uptime.yaml

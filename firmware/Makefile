@@ -61,6 +61,8 @@ dashboard:
 # 		-s rfid0_ss_pin "GPIO33" \
 # 		-s spi2_type "any" \
 # 		run openspool-mini.yaml --device $(USB_ADDRESS)
+esp32-s3-devkitc-1: 
+	esphome run esp32-s3-devkitc-1.yaml --device $(USB_ADDRESS)
 lolin_s2_mini:
 	esphome \
 		run lolin_s2_mini.yaml --device $(USB_ADDRESS)

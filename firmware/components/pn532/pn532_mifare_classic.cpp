@@ -8,7 +8,6 @@ namespace pn532 {
 
 static const char *const TAG = "pn532.mifare_classic";
 
-
 std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t> &uid) {
   uint8_t current_block = 4;
   uint8_t message_start_index = 0;
