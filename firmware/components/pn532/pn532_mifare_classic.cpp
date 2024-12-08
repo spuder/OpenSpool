@@ -14,7 +14,8 @@ std::unique_ptr<nfc::NfcTag> PN532::read_mifare_classic_tag_(std::vector<uint8_t
   uint32_t message_length = 0;
   bool is_ndef = true;
 //  std::array<const uint8_t*, 16> KEYS = esphome::nfc::generate_keys();
-  std::vector<std::vector<uint8_t>> KEYS = esphome::nfc::generate_keys(uid);
+  // std::vector<std::vector<uint8_t>> KEYS = esphome::nfc::generate_keys(uid);
+  std::array<std::array<uint8_t, 6>, 16> KEYS = esphome::nfc::generate_keys(uid);
 
   // TODO: For some reason if using nfc::NDEF_KEY fails, all future reads also fail
   // temporarially commenting out the NDEF check until I can figure out why
