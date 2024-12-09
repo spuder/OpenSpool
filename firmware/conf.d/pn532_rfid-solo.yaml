@@ -242,7 +242,7 @@ button:
                   //auto uri_record = std::make_unique<nfc::NdefRecordUri>();
                   //std::string url = "https://openspool.io/tag?";
                   //url.append("protocol=").append("openspool");
-                  //url.append("version=").append("1.0");
+                  //url.append("&version=").append("1.0");
                   //url.append("&color_hex=").append(id(filament_color_hex).state);
                   //url.append("&type=").append(id(filament_type).state);
                   //url.append("&min_temp=").append(std::to_string(static_cast<uint16_t>(id(filament_min_temp).state)));
