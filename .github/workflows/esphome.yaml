@@ -5,6 +5,10 @@ on:
     tags:
       - '[0-9]+.[0-9]+.[0-9]+*'
 
+# Prevent parallel runs if accidentially pushing multiple tags in quick succession
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.ref }}
+
 permissions:
   contents: write
   actions: read
