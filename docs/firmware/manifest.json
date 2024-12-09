@@ -1,13 +1,13 @@
 {
   "name": "OpenSpool",
-  "version": "1.11.4",
+  "version": "1.11.5",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "cad3f7ad81a8ae34591fe1c9d9e48784",
-        "summary": "Fix missing color when uploading using button",
+        "md5": "637db9b7d9d5acf31fe55fbdbaaf4200",
+        "summary": "Fix button.yaml on lolin_s3",
         "release_url": "https://openspool.io/firmware"
       },
       "parts": [
@@ -21,8 +21,8 @@
       "chipFamily": "ESP32-S3",
       "ota": {
         "path": "openspool-esp32s3.ota.bin",
-        "md5": "17445667886fc6530b043391b4da26d0",
-        "summary": "Fix missing color when uploading using button",
+        "md5": "696d84c9903974a64251478b30f6c42d",
+        "summary": "Fix button.yaml on lolin_s3",
         "release_url": "https://openspool.io/firmware"
       },
       "parts": [
