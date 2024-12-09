@@ -18,6 +18,7 @@ packages:
   led-internal: !include conf.d/led-internal.yaml
   #improv-bluetooth: !include conf.d/improv-bluetooth.yaml
   extra: !include conf.d/extra.yaml
+  button: !include conf.d/button.yaml
 
 dashboard_import:
   package_import_url: github://spuder/openspool/firmware/lolin_s3_mini.yaml@main
