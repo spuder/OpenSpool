@@ -11,3 +11,4 @@ light:
     num_leds: 1
     entity_category: diagnostic
     restore_mode: ALWAYS_OFF
+    icon: mdi:led-strip
