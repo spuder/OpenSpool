@@ -1,13 +1,13 @@
 {
   "name": "OpenSpool",
-  "version": "1.12.0",
+  "version": "1.13.1",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "b8b554629af666678fb2cc06d31e2f9e",
-        "summary": "Trim out extras for few more bytes",
+        "md5": "765dc9c9d1176f005c1583def8cec594",
+        "summary": "Update manifest.json",
         "release_url": "https://openspool.io/firmware"
       },
       "parts": [
@@ -21,8 +21,8 @@
       "chipFamily": "ESP32-S3",
       "ota": {
         "path": "openspool-esp32s3.ota.bin",
-        "md5": "b2ac766f4f27c0f418940d44ce03f194",
-        "summary": "Trim out extras for few more bytes",
+        "md5": "6c0a1dfa9304c3e08c5deeaca8291776",
+        "summary": "Update manifest.json",
         "release_url": "https://openspool.io/firmware"
       },
       "parts": [
