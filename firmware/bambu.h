@@ -10,6 +10,8 @@ namespace bambulabs
     const std::unordered_map<std::string, std::string> filament_mappings = {
         {"TPU", "GFU99"},
         {"PLA", "GFL99"},
+        {"PLA High Speed", "GFL95"},
+        {"PLA Silk", "GFL96"},
         {"PETG", "GFG99"},
         {"PET-CF", "GFG99"},
         {"ASA", "GFB98"},
@@ -19,16 +21,31 @@ namespace bambulabs
         {"PA-CF", "GFN98"},
         {"PLA-CF", "GFL98"},
         {"PVA", "GFS99"},
+        {"BVOH", "GFS97"},
+        {"EVA", "GFR99"},
+        {"HIPS", "GFS98"},
+        {"PC", "GFC99"},
+        {"PCTG", "GFG97"},
+        {"PE", "GFP99"},
+        {"PE-CF", "GFP98"},
+        {"PHA", "GFR98"},
+        {"PP", "GFP97"},
+        {"PP-CF", "GFP96"},
+        {"PP-GF", "GFP95"},
+        {"PPA-CF", "GFN97"},
+        {"PPA-GF", "GFN96"},
         {"Support", "GFS00"}};
 
     // Special cases for brand-specific codes
     const std::unordered_map<std::string, std::unordered_map<std::string, std::string>> brand_specific_codes = {
         {"PLA", {{"Bambu", "GFA00"}, {"PolyTerra", "GFL01"}, {"PolyLite", "GFL00"}}},
         {"TPU", {{"Bambu", "GFU01"}}},
-        {"ABS", {{"Bambu", "GFB00"}}},
+        {"ABS", {{"Bambu", "GFB00"}, {"PolyLite", "GFB60"}}},
+        {"ASA", {{"Bambu", "GFB01"}, {"PolyLite", "GFB61"}}},
         {"PC", {{"Bambu", "GFC00"}}},
         {"PA-CF", {{"Bambu", "GFN03"}}},
-        {"PET-CF", {{"Bambu", "GFT00"}}}};
+        {"PET-CF", {{"Bambu", "GFT00"}}},
+        {"PETG", {{"Bambu", "GFG00"}, {"PolyLite", "GFG60"}}}};
 
     // Function with two parameters
     inline std::string get_bambu_code(const std::string &type, const std::string &brand = "")
