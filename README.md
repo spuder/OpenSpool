@@ -17,7 +17,7 @@
 
 # 📖 [OpenSpool.io](https://openspool.io)
 
-Checkout the ofifical documentation on [https://openspool.io](https://openspool.io) 👈
+Checkout the official documentation on [https://openspool.io](https://openspool.io) 👈
 
 ---
 
@@ -52,7 +52,7 @@ Almost as seamlessly as if you were using Bambu filament with an AMS.
 
 ### 🧬 OpenSpool Protocol
 
-OpenSpool aims to use the simplest possible protocol for RFID tags. All you need is a [13.56Mhz RFID tag](https://a.co/d/5ojDUNk) that supports NDEF records (NFC Tags) and has atleast 500 bytes of memory. NTAG 215/216 are a great choice. Purchasing links provided below. 
+OpenSpool aims to use the simplest possible protocol for RFID tags. All you need is a [13.56Mhz RFID tag](https://a.co/d/5ojDUNk) that supports NDEF records (NFC Tags) and has at least 500 bytes of memory. NTAG 215/216 are a great choice. Purchasing links provided below. 
 
 #### NDEF Record
 
