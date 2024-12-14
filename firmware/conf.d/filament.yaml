@@ -12,14 +12,30 @@ select:
     web_server:
       sorting_group_id: sorting_group_filament_settings
     options:
-      - PLA
-      - PETG
-      - TPU
       - ABS
-      - PLA-CF
+      - ASA
+      - BVOH
+      - EVA
+      - HIPS
+      - PA
       - PA-CF
+      - PC
+      - PCTG
+      - PE
+      - PE-CF
+      - PETG
+      - PET-CF
+      - PLA
+      - PLA High Speed
+      - PLA Silk
+      - PLA-CF
+      - PP
+      - PP-CF
+      - PP-GF
+      - PPA-CF
+      - PPA-GF
       - PVA
-      - PET-CF #TODO: double check it is PET-CF and not PETCF as I think I've seen both in wolfwithsword code
+      - TPU
     on_value:
       then:
         - script.execute: generate_filament_brand_code
@@ -74,29 +90,29 @@ select:
       sorting_group_id: sorting_group_filament_settings
     optimistic: true
     options:
-      - "white"
-      - "yellow"
+      - "beige"
+      - "black"
+      - "blue"
+      - "dark_blue"
+      - "ice_blue"
+      - "brown"
+      - "dark_brown"
+      - "cyan"
+      - "desert_tan"
       - "grass_green"
       - "bambu_green"
       - "missletoe_green"
-      - "dark_blue"
       - "glow_green"
-      - "ice_blue"
-      - "cyan"
-      - "blue"
-      - "iris_purple"
-      - "magenta"
-      - "sakura_pink"
-      - "pink"
-      - "red"
-      - "dark_brown"
-      - "orange"
-      - "beige"
-      - "desert_tan"
-      - "brown"
       - "ash_grey"
       - "grey"
-      - "black"
+      - "magenta"
+      - "orange"
+      - "pink"
+      - "sakura_pink"
+      - "iris_purple"
+      - "red"
+      - "white"
+      - "yellow"
       - "Unknown"
     on_value:
       then:
