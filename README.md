@@ -247,7 +247,7 @@ Use the [MQTTX client](https://mqttx.app) to observe the messages that OpenSpool
 mqttx sub -t 'device/$SERIAL_NUMBER/report' -u -P $LAN_ACCESS_CODE --mqtt-version 3.1.1 -h $IP_ADDRESS -p 8883 -l mqtts --insecure
 ```
 
-### Contributors
+# 👥 Contributors
 
 <!-- readme: contributors -start -->
 <table>
@@ -283,7 +283,13 @@ mqttx sub -t 'device/$SERIAL_NUMBER/report' -u -P $LAN_ACCESS_CODE --mqtt-versio
 
 <p align="center">
     <a href="https://certification.oshwa.org/us002704.html">
-        <img src="./images/certification-mark-US002704-stacked.svg" width="400" style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 10px; margin-bottom: 5px;">
+        <img src="./images/oshw-logo.svg" width="200" 
+        style="border: 1px solid #ffffff; border-radius: 25px; padding: 10px; margin-bottom: 5px;">
+    </a>
+</p>
+<p align="center">
+    <a href="https://certification.oshwa.org/us002704.html">
+        <img src="./images/certification-mark-US002704-wide.svg" width="300" style="border: 1px solid #ffffff; border-radius: 25px; padding: 10px; margin-bottom: 5px;">
     </a>
 </p>
 <p align="center">
@@ -292,7 +298,7 @@ mqttx sub -t 'device/$SERIAL_NUMBER/report' -u -P $LAN_ACCESS_CODE --mqtt-versio
 
 <p align="center">
     <a href="https://devices.esphome.io/devices/OpenSpool">
-        <img src="./images/made-for-esphome-white-on-black.svg" width="400" style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 10px; margin-top: 15px; margin-bottom: 5px;">
+        <img src="./images/made-for-esphome-white-on-black.svg" width="400" >
     </a>
 </p>
 <p align="center">
