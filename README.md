@@ -21,22 +21,18 @@ Checkout the official documentation on [https://openspool.io](https://openspool.
 
 ---
 
+
+<p align="center"> 
+    <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWxoemp6bTdmNm02c2t5cnF4MGU3M2Znb3d3MWQ1c2E5NnF6YTBkZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/BmAJiIJ0wcBnsKGBBL/giphy.gif" alt="Centered GIF"> 
+</p>
+
+
 Adhere NFC stickers on all your filament. Build an ESP32 OpenSpool reader and place it next to your printer. 
 Touching the filament to the reader will automatically update your Bambu Printer filament settings. 
 Almost as seamlessly as if you were using Bambu filament with an AMS. 
 
-## Objectives
 
-- Make it so easy to put RFID stickers on filament spools that your grandma could do it. 
-- 100% programable using just a modern iphone/android (no RFID programmer or scripting).
-- Change filament in 10 seconds using 1 hand. 
-- 100% reliability so that filament can be changed with your eyes closed. 
 
-## 🎥 Demo
-
-[![](https://img.youtube.com/vi/ah7dm-dtQ5w/0.jpg)](https://youtube.com/watch?v=ah7dm-dtQ5w)
-[![](https://img.youtube.com/vi/pWnvJc-8KLI/0.jpg)](https://youtube.com/shorts/pWnvJc-8KLI?si=9-C1rhqrvL1i5CpR)
-[![](https://img.youtube.com/vi/kvVpRKFNU9k/0.jpg)](https://www.youtube.com/shorts/kvVpRKFNU9k)
 
 
 ## 🖨️ Protocol
@@ -52,8 +48,7 @@ Almost as seamlessly as if you were using Bambu filament with an AMS.
 
 ### 🧬 OpenSpool Protocol
 
-OpenSpool aims to use the simplest possible protocol for RFID tags. All you need is a [13.56Mhz RFID tag](https://a.co/d/5ojDUNk) that supports NDEF records (NFC Tags) and has at least 500 bytes of memory. NTAG 215/216 are a great choice. Purchasing links provided below. 
-
+OpenSpool aims to use the simplest possible protocol for RFID tags. All you need is a [NTAG215/216](https://a.co/d/5ojDUNk) 
 #### NDEF Record
 
 Example record stored on NFC tag. 
@@ -73,14 +68,20 @@ payload =
 }
 ```
 
-<img src="./images/phone2.png" width="300">
+
+<p align=center>
+    <img src="./imagesphone2.png" width="200">
+</p>
 
 
 #### Web Preview
 
-By touching your phone to a spool tag, you can see information about the spool. 
+Spool information can be seen using your phone.
 
-![](./images/NFC2.png)
+<p align=center>
+    <img src="./images/NFC2.png" width="200">
+</p>
+
 
 ```
 https://openspool.io/tag_info?color_hex=FFAABB&type=PLA&brand=Generic&min_temp=220&max_temp=240&protocol=openspool&version=1.0
@@ -110,7 +111,6 @@ OpenSpool requires an ESP32-S3 and PN532 NFC Reader (SPI Mode).
 | | Hardware | Link 1 | Link 2| 
 | --- | --- | --- | --- | 
 | ![](./images/wemos-d1minis3.png) | Wemos D1 Mini s3 | | [Aliexpress](https://www.aliexpress.us/item/3256805262904443.html?gatewayAdapt=glo2usa) | 
-| ![](./images/pn532-large.png) |  PN532 (Large) (Beware of Fakes!) | [Amazon](https://amzn.to/40CVE7R) | [Aliexpress](https://www.aliexpress.us/item/3256806348384449.html)|
 | ![](./images/pn532-small.png) |  PN532 (Small) | [Amazon](https://amzn.to/4eoBz8s) | [Aliexpress](https://www.aliexpress.us/item/3256805787598774.html)| 
 | ![](./images/NFC.png) | NTAG 215/216 (13.56Mhz NFC Tags >500 bytes) | [Amazon](https://amzn.to/4epJzpO) | | 
 | ![](./images/LED1.png) | WS2812B LED | [Amazon](https://amzn.to/40FFOt5) | |
@@ -131,16 +131,6 @@ If you are unable to find a Wemos D1 Mini `s3`, you can stil buy an `s2`, as it 
 | NTAG 215 | 504 bytes | ✅ |  
 | NTAG 216 | 888 bytes | ✅ |   
 
-### Caution of Fakes
-
-There is a plethora of fake D1 Mini S2 microcontrollers and PN532 RFID readers in the market. 
-For the D1 Mini microcontroller, you need the `ESP32-S2FN4R2` not the `ESP32-S2FH4`
-For the PN532 RFID reader, you need the model that contains the silkscreen. 
-
-
-While temping to buy a fake/clone esp32 or PN5432 at a lower cost, they inevitibly cause headaches as they are less reliable at reading NFC tags. 
-Purchasing at reputable vendors is highly recomended. 
-If you do find a cheaper price and have verified reliablity, please let us know. 
 
 # Wiring Diagram
 
@@ -179,7 +169,13 @@ ls /dev/cu*
 Upload firmware and restart
 
 ```bash
-USB_ADDRESS=/dev/cu.usbmodemXXXXX make run-usb-pcb-mini
+USB_ADDRESS=/dev/cu.usbmodemXXXXX make lolin_s2_mini
+```
+
+or
+
+```bash
+USB_ADDRESS=/dev/cu.usbmodemXXXXX make lolin_s3_mini
 ```
 
 ## 🛜 First Time Configuration
@@ -198,7 +194,7 @@ Do not put your printer into LAN Only Mode, it is not required.
 ![](./images/PrinterSettings.png)
 
 After changing these 3 settings, you will need to reboot the ESP32. 
-Upon successful connection to the 3d printer, you will observe a checkmark next to MQTT in the web interface, and a blue LED will illuminate next to the USB port. 
+Upon successful connection to the 3d printer, you will observe a checkmark next to MQTT in the web interface.
 
 ![](./images/WebInterface1.png)
 
@@ -206,7 +202,7 @@ Upon successful connection to the 3d printer, you will observe a checkmark next 
 ## Factory Reset
 
 Press and hold the D0 button for 10 seconds. 
-This will erase wifi credentials and bambu access credentials from OpenSpool. 
+This will erase wifi credentials and bambu access credentials from esp32. 
 
 # 🔧 Troubleshooting
 
@@ -246,6 +242,13 @@ Use the [MQTTX client](https://mqttx.app) to observe the messages that OpenSpool
 ```bash
 mqttx sub -t 'device/$SERIAL_NUMBER/report' -u -P $LAN_ACCESS_CODE --mqtt-version 3.1.1 -h $IP_ADDRESS -p 8883 -l mqtts --insecure
 ```
+
+## 🎥 Demo
+
+[![](https://img.youtube.com/vi/ah7dm-dtQ5w/0.jpg)](https://youtube.com/watch?v=ah7dm-dtQ5w)
+[![](https://img.youtube.com/vi/pWnvJc-8KLI/0.jpg)](https://youtube.com/shorts/pWnvJc-8KLI?si=9-C1rhqrvL1i5CpR)
+[![](https://img.youtube.com/vi/kvVpRKFNU9k/0.jpg)](https://www.youtube.com/shorts/kvVpRKFNU9k)
+
 
 # 👥 Contributors
 
