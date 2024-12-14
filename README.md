@@ -261,6 +261,13 @@ mqttx sub -t 'device/$SERIAL_NUMBER/report' -u -P $LAN_ACCESS_CODE --mqtt-versio
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/thijstriemstra">
+                    <img src="https://avatars.githubusercontent.com/u/305679?v=4" width="100;" alt="thijstriemstra"/>
+                    <br />
+                    <sub><b>Thijs Triemstra</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/thomasjpatterson">
                     <img src="https://avatars.githubusercontent.com/u/8883279?v=4" width="100;" alt="thomasjpatterson"/>
                     <br />
