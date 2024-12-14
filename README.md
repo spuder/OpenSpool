@@ -70,7 +70,7 @@ payload =
 
 
 <p align=center>
-    <img src="./imagesphone2.png" width="200">
+    <img src="./images/phone2.png" width="200">
 </p>
 
 
