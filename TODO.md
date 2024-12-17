@@ -45,6 +45,7 @@
   - 0.1.36 ✅ (with and without mqtt)
     note: it did take a couple of tries and the tag needed to be on the reader when pushing the write button
   - 0.1.42 ❌ broken because I started trying to pass object into script
+  - Upgrade esp-web-tool to latest once this is fixed: https://github.com/esphome/esp-web-tools/issues/515#issuecomment-2525463852
 
 # Features
 
