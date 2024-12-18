@@ -1,0 +1,103 @@
+# Host.yaml is a dummy file that allows for quick compiling and testing without an esp32
+
+# Setup
+# brew install mbedtls
+
+esphome:
+  name: host_device
+  friendly_name: Host Device
+  includes:
+    - bambu.h
+  platformio_options:
+    lib_deps:
+      - bblanchon/ArduinoJson @ ^6.21.5
+    build_flags:
+     # - -DMBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\"
+      - "-I/opt/homebrew/include"
+      - "-L/opt/homebrew/lib"
+      - "-lmbedtls"
+      - "-lmbedcrypto"
+      - "-lmbedx509"
+      - "-DMBEDTLS_CONFIG_FILE=\\\"mbedtls/mbedtls_config.h\\\""
+
+external_components:
+  - source: 
+      type: local
+      path: components
+    components: [pn532, nfc]
+    #components: [nfc]
+
+host:
+  mac_address: "DE:AD:BE:EF:c0:FE"
+
+logger:
+  level: DEBUG
+
+# Text sensor to say hello world
+text_sensor:
+  - platform: template
+    name: "Hello World"
+    id: hello_world
+    lambda: |-
+      return {"Hello World"};
+    on_value:
+      then:
+        - logger.log:
+            format: "Hello World sensor value: %s"
+            args: ["x.c_str()"]
+
+  - platform: template
+    name: "keys"
+    id: generate_keys
+    lambda: |-
+      return {"Hello World 2"};
+    on_value:
+      then:
+        - lambda: |-
+            //bambulabs::generate_keys();
+            //TODO: refactor so genreate_keys takes a string
+            ESP_LOGD("host", "--------");
+            bambulabs::generate_keys("5a-c9-00-a6");
+            ESP_LOGD("host", "--------");
+            bambulabs::generate_keys("75-88-6B-1D");
+            ESP_LOGD("host", "--------");
+            //std::vector<uint8_t> uid = {0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF, 0x11};
+            //esphome::nfc::NfcTag new_tag(uid, "Mifare Classic");
+            //bambulabs::generate_keys(new_tag.get_uid());
+
+# calling bambulabs::generate_keys() with the hard coded uid 5a-c9-00-a6
+# should return the following keys
+# 63e5af2c1d75
+# 40d146ce6e01
+# 6a66957dcc91
+# 15e7041f68d9
+# 7ee1ac7fa75f
+# 55cbbad18673
+# ce5901af9416
+# a223a193e6a3
+# 24f4d022f402
+# 7df999dd836b
+# b0dac4a48903
+# b026ab566f11
+# 8b495d5a0b44
+# 7ebef1cb3e94
+# 4685790c6e01
+# 3f00144c7b4a
+
+# 75-88-6B-1D should return this
+# 6e5b0ec6ef7c
+# 4ce96076285f
+# 0b0373be835b
+# 906b2736c958
+# 0a7c3aa6e3cb
+# 9c357ba6842b
+# 6712858e9196
+# 4b3199aea656
+# 6637239e0019
+# b440e6ca11c0
+# 89914a92bdf8
+# 9cb8e022d296
+# e82816da2cf9
+# d48fed336320
+# 5e6ca668ccc5
+# d9805eec7045
