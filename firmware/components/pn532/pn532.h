@@ -6,6 +6,7 @@
 #include "esphome/components/nfc/nfc_tag.h"
 #include "esphome/components/nfc/nfc.h"
 #include "esphome/components/nfc/automation.h"
+#include "esphome/components/nfc/nfc_helpers.h" //TODO: is this the best way to add generaet_keys() dep?
 
 #include <cinttypes>
 #include <vector>
@@ -76,6 +77,7 @@ class PN532 : public PollingComponent {
   bool write_tag_(std::vector<uint8_t> &uid, nfc::NdefMessage *message);
 
   std::unique_ptr<nfc::NfcTag> read_mifare_classic_tag_(std::vector<uint8_t> &uid);
+  std::unique_ptr<nfc::NfcTag> read_mifare_classic_tag_(std::vector<uint8_t> &uid, std::array<const uint8_t*, 16> keys); //todo should this be *keys
   bool read_mifare_classic_block_(uint8_t block_num, std::vector<uint8_t> &data);
   bool write_mifare_classic_block_(uint8_t block_num, std::vector<uint8_t> &data);
   bool auth_mifare_classic_block_(std::vector<uint8_t> &uid, uint8_t block_num, uint8_t key_num, const uint8_t *key);
