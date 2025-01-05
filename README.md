@@ -244,7 +244,7 @@ Use the [MQTTX client](https://mqttx.app) to observe the messages that OpenSpool
 
 
 ```bash
-mqttx sub -t 'device/$SERIAL_NUMBER/report' -u -P $LAN_ACCESS_CODE --mqtt-version 3.1.1 -h $IP_ADDRESS -p 8883 -l mqtts --insecure
+mqttx sub -t 'device/$SERIAL_NUMBER/report' -u bblp -P $LAN_ACCESS_CODE --mqtt-version 3.1.1 -h $IP_ADDRESS -p 8883 -l mqtts --insecure
 ```
 
 ## 🎥 Demo
