@@ -58,6 +58,8 @@ button:
             // id(rfid_reader_spi_0).write_mode(message);
             // delete message; 
 
+            // even though it seems wrong to use 'new' without a 'delete'
+            // this is the only code that doesn't crash. 
             std::string url = id(openspool_url).state;
             ESP_LOGD("NFC", "Writing URL: %s", url.c_str());
             auto message = new nfc::NdefMessage();
