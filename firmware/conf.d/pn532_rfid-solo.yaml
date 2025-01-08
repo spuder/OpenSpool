@@ -44,6 +44,26 @@ pn532_spi:
             id: nfc_tag_present0
             state: ON
         - lambda: |-
+            ESP_LOGV("NFC", "Checking tag for raw data");
+            if (tag.has_raw_data()) {
+              ESP_LOGV("NFC", "Tag has raw data flag set");
+              const auto& data = tag.get_raw_data();
+              if (!data.empty()) {
+                std::string hex_data = format_hex_pretty(data);
+                ESP_LOGV("NFC", "Raw data: %s", hex_data.c_str());
+                //TODO: how to determine if bambu labs tag (see permissions block 87-87-87-69)
+                auto bambu_tag = bambulabs::parse_tag_data(data);
+                auto color = bambu_tag.color_code.substr(0, 6); // Only publish first 6 characters, drop FF
+                id(filament_color_hex).publish_state(color);
+                id(filament_type).state = bambu_tag.type;
+              } else {
+                ESP_LOGV("NFC", "Raw data vector is empty");
+              }
+            } else {
+              ESP_LOGV("NFC", "Tag has no raw data flag set");
+            }
+
+        - lambda: |-
             bool is_valid_openspool = false;
             std::string payload;
 

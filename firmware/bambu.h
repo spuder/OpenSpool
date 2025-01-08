@@ -5,8 +5,22 @@
 #include <unordered_map>
 #include <string>
 
+#ifdef ESP_PLATFORM
+#include "esp_idf_version.h"
+#include "mbedtls/hkdf.h"
+#include "mbedtls/md.h"
+#else
+#include <mbedtls/hkdf.h>
+#include <mbedtls/md.h>
+#include <ArduinoJson.h>
+#endif
+
 namespace bambulabs
 {
+    struct FilamentInfo {
+        std::string color_code;
+        std::string type;
+    };
     const std::unordered_map<std::string, std::string> filament_mappings = {
         {"TPU", "GFU99"},
         {"PLA", "GFL99"},
@@ -147,6 +161,87 @@ namespace bambulabs
 
         ESP_LOGI("mqtt", "Publishing %s", result.c_str());
         return result;
+    }
+
+    //TODO: move this to a utils file or find a more native esphome way to convert to ascii
+    // inline std::string hex_to_ascii(const std::string& hex) {
+    //     std::string ascii;
+    //     for (size_t i = 0; i < hex.length(); i += 2) {
+    //         std::string byte = hex.substr(i, 2);
+    //         char chr = static_cast<char>(std::stoi(byte, nullptr, 16));
+    //         ascii.push_back(chr);
+    //     }
+    //     return ascii;
+    // }
+
+    inline FilamentInfo parse_tag_data(const std::vector<uint8_t>& tag_data) {
+        FilamentInfo info;
+        const int block_size = 16;
+        ESP_LOGD("bambu", "Parsing tag data");
+
+        for (int block = 0; block < 16; ++block) {
+            if (block * block_size >= tag_data.size()) {
+                break;
+            }
+
+            const uint8_t* block_data = tag_data.data() + (block * block_size);
+
+            switch (block) {
+                case 0:
+                    ESP_LOGV("bambu", "UID: %s", format_hex(block_data, 4).c_str());
+                    break;
+                case 1:
+                    ESP_LOGV("bambu", "Material Variant: %s", format_hex(block_data, 8).c_str());
+                    ESP_LOGV("bambu", "Unique Material Type: %s", format_hex(block_data + 8, 8).c_str());
+                    break;
+                case 2:
+                    ESP_LOGV("bambu", "Filament Type: %s", format_hex(block_data, 16).c_str());
+                    // info.type = hex_to_ascii(format_hex(block_data, 16));
+                    info.type = std::string(reinterpret_cast<const char*>(block_data), 16);
+                    ESP_LOGV("bambu", "Filament Type Ascii: %s", info.type.c_str());
+                    break;
+                case 4:
+                    ESP_LOGV("bambu", "Detailed Filament Type: %s", format_hex(block_data, 16).c_str());
+                    break;
+                case 5:
+                    ESP_LOGV("bambu", "Color Code: %s", format_hex(block_data, 4).c_str());
+                    info.color_code = format_hex(block_data, 4);
+                    ESP_LOGV("bambu", "Spool Weight: %s", format_hex(block_data + 4, 2).c_str());
+                    ESP_LOGV("bambu", "Filament Diameter: %s", format_hex(block_data + 8, 4).c_str());
+                    break;
+                case 6:
+                    ESP_LOGV("bambu", "Temperatures: %s", format_hex(block_data, 8).c_str());
+                    ESP_LOGV("bambu", "Drying Info: %s", format_hex(block_data + 8, 8).c_str());
+                    break;
+                case 8:
+                    ESP_LOGV("bambu", "X Cam Info: %s", format_hex(block_data, 8).c_str());
+                    ESP_LOGV("bambu", "Nozzle Diameter: %s", format_hex(block_data + 8, 8).c_str());
+                    break;
+                case 9:
+                    ESP_LOGV("bambu", "Tray UID: %s", format_hex(block_data, 16).c_str());
+                    break;
+                case 10:
+                    ESP_LOGV("bambu", "Spool Width: %s", format_hex(block_data, 16).c_str());
+                    break;
+                case 12:
+                    ESP_LOGV("bambu", "Production Date/Time: %s", format_hex(block_data, 16).c_str());
+                    break;
+                case 13:
+                    ESP_LOGV("bambu", "Short Production Date/Time: %s", format_hex(block_data, 16).c_str());
+                    break;
+                case 14:
+                    ESP_LOGV("bambu", "Filament Length: %s", format_hex(block_data, 16).c_str());
+                    break;
+                case 16:
+                    ESP_LOGV("bambu", "Extra Color Info: %s", format_hex(block_data, 16).c_str());
+                    break;
+            }
+
+            if (block != 0 && block != 1 && block !=2 && block != 3 && block != 7 && block != 11 && block != 15) {
+                ESP_LOGV("bambu", "Block %d Data: %s", block, format_hex(block_data, block_size).c_str());
+            }
+        }
+        return info;
     }
 
 }

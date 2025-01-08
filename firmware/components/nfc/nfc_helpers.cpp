@@ -1,4 +1,7 @@
 #include "nfc_helpers.h"
+#include "mbedtls/hkdf.h"
+#include "mbedtls/md.h"
+
 
 namespace esphome {
 namespace nfc {
@@ -41,6 +44,33 @@ std::string get_random_ha_tag_ndef() {
   }
   ESP_LOGD("pn7160", "Payload to be written: %s", uri.c_str());
   return uri;
+}
+
+// TODO: should this use unique_ptr for better memory management?
+std::array<std::array<uint8_t, 6>, 16> generate_keys(const std::vector<uint8_t>& uid) {
+    
+    // Output buffer
+    static uint8_t output[96];
+    
+    // Context
+    const unsigned char context[] = {'R', 'F', 'I', 'D', '-', 'A', '\0'};
+    
+    // Perform HKDF
+    mbedtls_hkdf(mbedtls_md_info_from_type(MBEDTLS_MD_SHA256),
+        nfc::BAMBU_SALT.data(), nfc::BAMBU_SALT.size(),
+        uid.data(), uid.size(),
+        context, sizeof(context),
+        output, sizeof(output));
+    
+    //TODO: should this use std::unique_ptr for better memory management? 
+    std::array<std::array<uint8_t, 6>, 16> result;
+    for (int i = 0; i < 16; i++) {
+        std::copy_n(output + i*6, 6, result[i].begin());
+        ESP_LOGD("bambu", "Key %d: %02x%02x%02x%02x%02x%02x", i,
+            result[i][0], result[i][1], result[i][2],
+            result[i][3], result[i][4], result[i][5]);
+    }
+    return result;
 }
 
 }  // namespace nfc
