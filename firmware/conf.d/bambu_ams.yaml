@@ -1,0 +1,37 @@
+select:
+- platform: template
+  name: "AMS Number"
+  id: ams_number
+  optimistic: true
+  restore_value: true
+  icon: mdi:printer-3d-nozzle
+  options:
+  - "1"
+  - "2"
+  - "3"
+  - "4"
+  initial_option: "1"
+  set_action:
+    then:
+    - lambda: |-
+        if (id(bambu_model).state == "A1Mini" || id(bambu_model).state == "A1") {
+          id(ams_number).publish_state("1");
+        } else if (id(bambu_model).state == "P1P/P1S" || id(bambu_model).state == "X1C/X1E") {
+          if (x == "1" || x == "2" || x == "3" || x == "4") {
+            id(ams_number).publish_state(x);
+          } else {
+            id(ams_number).publish_state("1");
+          }
+        } else {
+          id(ams_number).publish_state("1");
+        }
+  lambda: |-
+    if (id(bambu_model).state == "A1Mini" || id(bambu_model).state == "A1") {
+      return {"1"};
+    } else if (id(bambu_model).state == "P1P/P1S" || id(bambu_model).state == "X1C/X1E") {
+      return {"1", "2", "3", "4"};
+    } else {
+      return {"1"};
+    }
+  web_server:
+    sorting_group_id: sorting_group_ams

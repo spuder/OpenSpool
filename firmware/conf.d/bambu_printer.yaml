@@ -1,125 +1,123 @@
 ---
 select:
-  #TODO: printer model is currently unused, but will be needed for setting AMS type
-  - platform: template
-    name: Printer Model
-    id: bambu_model
-    state_topic:
-    options:
-      - "A1Mini"
-      - "A1"
-      - "P1P/P1S"
-      - "X1C/X1E"
-    optimistic: true
-    restore_value: true
-    icon: mdi:printer-3d
-    web_server:
-      sorting_group_id: sorting_group_printer_settings
+- platform: template
+  name: Printer Model
+  id: bambu_model
+  state_topic:
+  options:
+  - "A1Mini"
+  - "A1"
+  - "P1P/P1S"
+  - "X1C/X1E"
+  optimistic: true
+  restore_value: true
+  icon: mdi:printer-3d
+  web_server:
+    sorting_group_id: sorting_group_printer_settings
 
 text:
-  - platform: template
-    name: Printer Serial Number
-    id: bambu_serial_number
-    state_topic:
-    optimistic: true
-    mode: text
-    restore_value: true
-    icon: mdi:barcode
-    web_server:
-      sorting_group_id: sorting_group_printer_settings
-    on_value:
-      then:
-        - if:
-            condition:
-              lambda: |-
-                return !id(bambu_lan_access_code).state.empty() &&
-                      !id(bambu_ip_address).state.empty() &&
-                      !id(bambu_serial_number).state.empty();
-            then:
-              - logger.log: 
-                  level: info
-                  format: "Connecting to Bambu printer"
-              - mqtt.enable: 
-                  id: bambu_mqtt
-            else:
-              - logger.log: 
-                  level: info
-                  format: "Missing Bambu Credentials, skipping mqtt connect"
-              - mqtt.disable:
-                  id: bambu_mqtt
-
-    #       - script.execute: check_mqtt_creds #TODO: Enable once this is merged: https://github.com/esphome/esphome/pull/7716
-    #     lambda: |-
-    #       id(bambu_printer_status).topic = "device/" + x + "/report";
-  - platform: template
-    name: Printer Lan Access Code
-    id: bambu_lan_access_code
-    state_topic:
-    optimistic: true
-    mode: password
-    restore_value: true
-    icon: mdi:lock
-    web_server:
-      sorting_group_id: sorting_group_printer_settings
-    on_value:
-      then:
-        - lambda: |-
-            id(bambu_mqtt).set_password(x.c_str());
-        - if:
-            condition:
-              lambda: |-
-                return !id(bambu_lan_access_code).state.empty() &&
-                      !id(bambu_ip_address).state.empty() &&
-                      !id(bambu_serial_number).state.empty();
-            then:
-              - logger.log: 
-                  level: info
-                  format: "Connecting to Bambu printer"
-              - mqtt.enable: 
-                  id: bambu_mqtt
-            else:
-              - logger.log: 
-                  level: info
-                  format: "Missing Bambu Credentials, skipping mqtt connect"
-              - mqtt.disable:
-                  id: bambu_mqtt
-  - platform: template
-    name: Printer IP Address
-    id: bambu_ip_address
-    state_topic:
-    optimistic: true
-    mode: text
-    restore_value: true
-    icon: mdi:ip
-    web_server:
-      sorting_group_id: sorting_group_printer_settings
-    on_value:
-      then:
-        - lambda: |-
-            id(bambu_mqtt).set_broker_address(x.c_str());
-        - if:
-            condition:
-              lambda: |-
-                return !id(bambu_lan_access_code).state.empty() &&
-                      !id(bambu_ip_address).state.empty() &&
-                      !id(bambu_serial_number).state.empty();
-            then:
-              - logger.log:
-                  level: info
-                  format: "Connecting to Bambu printer"
-              - mqtt.enable: 
-                  id: bambu_mqtt
-            else:
-              - logger.log:  "Missing Bambu Credentials, skipping mqtt connect"
-              - mqtt.disable:
-                  id: bambu_mqtt
+- platform: template
+  name: Printer Serial Number
+  id: bambu_serial_number
+  state_topic:
+  optimistic: true
+  mode: text
+  restore_value: true
+  icon: mdi:barcode
+  web_server:
+    sorting_group_id: sorting_group_printer_settings
+  on_value:
+    then:
+    - if:
+        condition:
+          lambda: |-
+            return !id(bambu_lan_access_code).state.empty() &&
+                  !id(bambu_ip_address).state.empty() &&
+                  !id(bambu_serial_number).state.empty();
+        then:
+        - logger.log:
+            level: info
+            format: "Connecting to Bambu printer"
+        - mqtt.enable:
+            id: bambu_mqtt
+        else:
+        - logger.log:
+            level: info
+            format: "Missing Bambu Credentials, skipping mqtt connect"
+        - mqtt.disable:
+            id: bambu_mqtt
+  #       - script.execute: check_mqtt_creds #TODO: Enable once this is merged: https://github.com/esphome/esphome/pull/7716
+  #     lambda: |-
+  #       id(bambu_printer_status).topic = "device/" + x + "/report";
+- platform: template
+  name: Printer Lan Access Code
+  id: bambu_lan_access_code
+  state_topic:
+  optimistic: true
+  mode: password
+  restore_value: true
+  icon: mdi:lock
+  web_server:
+    sorting_group_id: sorting_group_printer_settings
+  on_value:
+    then:
+    - lambda: |-
+        id(bambu_mqtt).set_password(x.c_str());
+    - if:
+        condition:
+          lambda: |-
+            return !id(bambu_lan_access_code).state.empty() &&
+                  !id(bambu_ip_address).state.empty() &&
+                  !id(bambu_serial_number).state.empty();
+        then:
+        - logger.log:
+            level: info
+            format: "Connecting to Bambu printer"
+        - mqtt.enable:
+            id: bambu_mqtt
+        else:
+        - logger.log:
+            level: info
+            format: "Missing Bambu Credentials, skipping mqtt connect"
+        - mqtt.disable:
+            id: bambu_mqtt
+- platform: template
+  name: Printer IP Address
+  id: bambu_ip_address
+  state_topic:
+  optimistic: true
+  mode: text
+  restore_value: true
+  icon: mdi:ip
+  web_server:
+    sorting_group_id: sorting_group_printer_settings
+  on_value:
+    then:
+    - lambda: |-
+        id(bambu_mqtt).set_broker_address(x.c_str());
+    - if:
+        condition:
+          lambda: |-
+            return !id(bambu_lan_access_code).state.empty() &&
+                  !id(bambu_ip_address).state.empty() &&
+                  !id(bambu_serial_number).state.empty();
+        then:
+        - logger.log:
+            level: info
+            format: "Connecting to Bambu printer"
+        - mqtt.enable:
+            id: bambu_mqtt
+        else:
+        - logger.log: "Missing Bambu Credentials, skipping mqtt connect"
+        - mqtt.disable:
+            id: bambu_mqtt
 
 button:
-  - platform: restart
-    name: "Restart OpenSpool"
-    id: restart_openspool
-    state_topic:
-    entity_category: diagnostic
+- platform: restart
+  name: "Restart OpenSpool"
+  id: restart_openspool
+  state_topic:
+  entity_category: diagnostic
 
 #TODO: Show the current state of the printer
 
