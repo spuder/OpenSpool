@@ -20,9 +20,10 @@ mqtt:
     payload: # Dont post update to MQTT
   will_message:
     topic: # Dont post update to MQTT
-    payload: # Dont post update to MQTT
-  # keepalive: 15s
-  # idf_send_async: true
+    payload:
+      # Dont post update to MQTT
+      # keepalive: 15s
+      # idf_send_async: true
   skip_cert_cn_check: true
   certificate_authority: |
     -----BEGIN CERTIFICATE-----
@@ -49,66 +50,66 @@ mqtt:
   clean_session: true
   enable_on_boot: false
   on_connect:
-    - logger.log: 
-        level: info
-        format: "Connected to printer over MQTT!"
+  - logger.log:
+      level: info
+      format: "Connected to printer over MQTT!"
   on_disconnect:
-    - logger.log:
-        level: info
-        format: "Disconnected from printer!"
+  - logger.log:
+      level: info
+      format: "Disconnected from printer!"
   #TODO: enable status led on s2, set neopixel blue on s3
 
-# text_sensor:
-#   - platform: mqtt_subscribe
-#     name: "Bambu Printer Status"
-#     id: bambu_printer_status
-#     topic: "" # Set by text.bambu_serial_number
-#     state_topic:
-#     # internal: true
-#     # web_server:
-#     #   sorting_group_id: sorting_group_printer_settings
-#     filters:
-#       - lambda: |-
-#           DynamicJsonDocument doc(4096);
-#           deserializeJson(doc, x);
+  # text_sensor:
+  #   - platform: mqtt_subscribe
+  #     name: "Bambu Printer Status"
+  #     id: bambu_printer_status
+  #     topic: "" # Set by text.bambu_serial_number
+  #     state_topic:
+  #     # internal: true
+  #     # web_server:
+  #     #   sorting_group_id: sorting_group_printer_settings
+  #     filters:
+  #       - lambda: |-
+  #           DynamicJsonDocument doc(4096);
+  #           deserializeJson(doc, x);
 
-#           if (doc["print"]["wifi_signal"]) {
-#             return {};
-#           }
-#           if (doc["print"]["command"] == "push_status") {
-#             return {};
-#           }
-#           if (doc["info"]["command"] == "get_version") {
-#             return {};
-#           }
-#           if (doc["system"]["command"] == "get_access_code") {
-#             return {};
-#           }
-#           if (doc["system"]["upgrade_state"]) {
-#             return {};
-#           }
-#           if (doc["print"]["ipcam"]) {
-#             return {};
-#           }
-#           return x;
-# #     # on_value:
-# #     #   then:
-# #     #     - lambda: |-
+  #           if (doc["print"]["wifi_signal"]) {
+  #             return {};
+  #           }
+  #           if (doc["print"]["command"] == "push_status") {
+  #             return {};
+  #           }
+  #           if (doc["info"]["command"] == "get_version") {
+  #             return {};
+  #           }
+  #           if (doc["system"]["command"] == "get_access_code") {
+  #             return {};
+  #           }
+  #           if (doc["system"]["upgrade_state"]) {
+  #             return {};
+  #           }
+  #           if (doc["print"]["ipcam"]) {
+  #             return {};
+  #           }
+  #           return x;
+  # #     # on_value:
+  # #     #   then:
+  # #     #     - lambda: |-
 binary_sensor:
-  # Note platform.status won't turn on if 'api' is enabled (yet disconnected)
-  # api is required for dashboard_import, which is required for made-for-esphome program
-  # api isn't actually used
-  # - platform: status
-  - platform: template
-    name: "MQTT Connection"
-    id: mqtt_connected
-    state_topic: # Don't post update to MQTT
-    icon: mdi:lan-connect
-    web_server:
-      sorting_group_id: sorting_group_printer_settings
-    device_class: connectivity #TODO: use this class
-    lambda: |-
-      return id(bambu_mqtt)->is_connected();
+# Note platform.status won't turn on if 'api' is enabled (yet disconnected)
+# api is required for dashboard_import, which is required for made-for-esphome program
+# api isn't actually used
+# - platform: status
+- platform: template
+  name: "MQTT Connection"
+  id: mqtt_connected
+  state_topic: # Don't post update to MQTT
+  icon: mdi:lan-connect
+  web_server:
+    sorting_group_id: sorting_group_printer_settings
+  device_class: connectivity #TODO: use this class
+  lambda: |-
+    return id(bambu_mqtt)->is_connected();
 
 # sensor:
 #   - platform: mqtt_subscribe

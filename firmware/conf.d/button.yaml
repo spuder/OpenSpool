@@ -1,64 +1,64 @@
 ---
 binary_sensor:
-  - platform: gpio
-    name: "Button"
-    id: physical_button
-    state_topic:
-    internal: true
-    pin:
-      number: 0
-      mode: INPUT_PULLUP
-      inverted: true
-    on_press:
-      then:
-        - script.execute:
-            id: set_led_red
-            led_number: -1
-        - globals.set:
-            id: button_press_duration
-            value: "0"
-        - script.execute: start_timer
-    on_release:
-      then:
-        - script.execute:
-            id: set_led_white
-            led_number: -1
-        - script.stop: timer_script
-        - if:
-            condition:
-              lambda: "return id(button_press_duration) >= 10;"
-            then:
-              - logger.log: "Erasing WiFi credentials and restarting..."
-              - button.press: factory_reset_openspool
-            else:
-              - logger.log: "Button released before 10 seconds, not performing factory reset."
+- platform: gpio
+  name: "Button"
+  id: physical_button
+  state_topic:
+  internal: true
+  pin:
+    number: 0
+    mode: INPUT_PULLUP
+    inverted: true
+  on_press:
+    then:
+    - script.execute:
+        id: set_led_red
+        led_number: -1
+    - globals.set:
+        id: button_press_duration
+        value: "0"
+    - script.execute: start_timer
+  on_release:
+    then:
+    - script.execute:
+        id: set_led_white
+        led_number: -1
+    - script.stop: timer_script
+    - if:
+        condition:
+          lambda: "return id(button_press_duration) >= 10;"
+        then:
+        - logger.log: "Erasing WiFi credentials and restarting..."
+        - button.press: factory_reset_openspool
+        else:
+        - logger.log: "Button released before 10 seconds, not performing factory reset."
 globals:
-  - id: my_counter
-    type: int
-    initial_value: "0"
-  - id: button_press_duration
-    type: int
-    initial_value: "0"
+- id: my_counter
+  type: int
+  initial_value: "0"
+- id: button_press_duration
+  type: int
+  initial_value: "0"
 script:
-  - id: timer_script
-    then:
-      - while:
-          condition:
-            binary_sensor.is_on: physical_button
-          then:
-            - globals.set:
-                id: button_press_duration
-                value: !lambda "return id(button_press_duration) + 1;"
-            - delay: 1s
-  - id: start_timer
-    then:
+- id: timer_script
+  then:
+  - while:
+      condition:
+        binary_sensor.is_on: physical_button
+      then:
       - globals.set:
           id: button_press_duration
-          value: "0"
-      - script.execute: timer_script
+          value: !lambda "return id(button_press_duration) + 1;"
+      - delay: 1s
+- id: start_timer
+  then:
+  - globals.set:
+      id: button_press_duration
+      value: "0"
+  - script.execute: timer_script
 button:
-  - platform: factory_reset
-    name: "Factory Reset"
-    id: factory_reset_openspool
-    state_topic:
-    internal: true
+- platform: factory_reset
+  name: "Factory Reset"
+  id: factory_reset_openspool
+  state_topic:
+  internal: true

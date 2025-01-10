@@ -3,265 +3,265 @@
 # Credit to WolfWithSword for figuring all these out
 # https://gist.github.com/WolfwithSword/e3e4dc4f00629cc047b7cefd70d7b350#file-bambu_mqtt-json-L314
 select:
-  - platform: template
-    name: "Filament Type"
-    id: filament_type
-    state_topic:
-    optimistic: true
-    icon: mdi:movie-roll
-    web_server:
-      sorting_group_id: sorting_group_filament_settings
-    options:
-      - ABS
-      - ASA
-      - BVOH
-      - EVA
-      - HIPS
-      - PA
-      - PA-CF
-      - PC
-      - PCTG
-      - PE
-      - PE-CF
-      - PETG
-      - PET-CF
-      - PLA
-      - PLA High Speed
-      - PLA Silk
-      - PLA-CF
-      - PP
-      - PP-CF
-      - PP-GF
-      - PPA-CF
-      - PPA-GF
-      - PVA
-      - TPU
-    on_value:
-      then:
-        - script.execute: generate_filament_brand_code
-        - script.execute: generate_filament_temperatures
-        - script.execute: preview_rfid_data
-  - platform: template
-    name: "Filament Variant"
-    id: filament_variant
-    state_topic:
-    optimistic: true
-    icon: mdi:label
-    web_server:
-      sorting_group_id: sorting_group_filament_settings
-    options:
-      - Basic
-      - Matte
-      - Metal
-      - Impact
-      - G
-      - W
-      # TODO: add the rest of the options
-    on_value:
-      then:
-        - script.execute: generate_filament_brand_code
-        - script.execute: preview_rfid_data
-        - script.execute: generate_filament_temperatures #TODO: not fully implemented for variants yet
-  - platform: template
-    name: "Filament Brand"
-    id: filament_brand
-    state_topic:
-    optimistic: true
-    icon: mdi:alpha-f-circle
-    web_server:
-      sorting_group_id: sorting_group_filament_settings
-    options:
-      - Generic
-      - Bambu # Adding bambu even though you should never add a openspool tag to a bambu spool or you might get conflicts on RFID
-      - Overture
-      - PolyTerra
-      - PolyLite
-    on_value:
-      then:
-        - script.execute: generate_filament_brand_code
-        - script.execute: generate_filament_temperatures
-        - script.execute: preview_rfid_data
-  - platform: template
-    name: "Filament Color"
-    id: filament_color
-    state_topic:
-    icon: mdi:palette-outline
-    web_server:
-      sorting_group_id: sorting_group_filament_settings
-    optimistic: true
-    options:
-      - "beige"
-      - "black"
-      - "blue"
-      - "dark_blue"
-      - "ice_blue"
-      - "brown"
-      - "dark_brown"
-      - "cyan"
-      - "desert_tan"
-      - "grass_green"
-      - "bambu_green"
-      - "missletoe_green"
-      - "glow_green"
-      - "ash_grey"
-      - "grey"
-      - "magenta"
-      - "orange"
-      - "pink"
-      - "sakura_pink"
-      - "iris_purple"
-      - "red"
-      - "white"
-      - "yellow"
-      - "Unknown"
-    on_value:
-      then:
-        # TODO: instead of doing a mapping for all these colors
-        # Do a traditional hex value lookup
-        # These are defined in bambustudio
-        # https://github.com/bambulab/BambuStudio/blob/733531b1c68e755da991c9503a09c2206c2e4984/src/slic3r/GUI/AMSMaterialsSetting.cpp#L1398-L1425
-        - text_sensor.template.publish:
-            id: filament_color_hex
-            state: !lambda |-
-              ESP_LOGD("main", "Color %s", id(filament_color).state.c_str());
-              if ( x == "white") {
-                return "FFFFFF";
-              } else if ( x == "yellow") {
-                return "FFF144";
-              } else if ( x == "grass_green") {
-                return "DCF478";
-              } else if ( x == "bambu_green") {
-                return "0ACC38";
-              } else if ( x == "missletoe_green") {
-                return "057748";
-              } else if ( x == "dark_blue") {
-                return "0D6284";
-              } else if ( x == "glow_green") {
-                return "0EE2A0";
-              } else if ( x == "ice_blue") {
-                return "76D9F4";
-              } else if ( x == "cyan") {
-                return "46A8F9";
-              } else if ( x == "blue") {
-                return "2850E0";
-              } else if ( x == "iris_purple") {
-                return "443089";
-              } else if ( x == "purple") {
-                return "A03CF7";
-              } else if ( x == "magenta") {
-                return "F330F9";
-              } else if ( x == "sakura_pink") {
-                return "D4B1DD";
-              } else if ( x == "pink") {
-                return "F95D73";
-              } else if ( x == "red") {
-                return "F72323";
-              } else if ( x == "dark_brown") {
-                return "7C4B00";
-              } else if ( x == "orange") {
-                return "F98C36";
-              } else if ( x == "beige") {
-                return "FCECD6";
-              } else if ( x == "desert_tan") {
-                return  "D3C5A3";
-              } else if ( x == "brown") {
-                return "AF7933";
-              } else if ( x == "ash_grey") {
-                return "898989";
-              } else if ( x == "grey") {
-                return "BCBCBC";
-              } else if ( x == "black") {
-                return "161616";
-              } else {
-                ESP_LOGE("main", "Unknown filament_color_hex: %s", x.c_str());
-                return "";
-              }
-        - script.execute: preview_rfid_data
+- platform: template
+  name: "Filament Type"
+  id: filament_type
+  state_topic:
+  optimistic: true
+  icon: mdi:movie-roll
+  web_server:
+    sorting_group_id: sorting_group_filament_settings
+  options:
+  - ABS
+  - ASA
+  - BVOH
+  - EVA
+  - HIPS
+  - PA
+  - PA-CF
+  - PC
+  - PCTG
+  - PE
+  - PE-CF
+  - PETG
+  - PET-CF
+  - PLA
+  - PLA High Speed
+  - PLA Silk
+  - PLA-CF
+  - PP
+  - PP-CF
+  - PP-GF
+  - PPA-CF
+  - PPA-GF
+  - PVA
+  - TPU
+  on_value:
+    then:
+    - script.execute: generate_filament_brand_code
+    - script.execute: generate_filament_temperatures
+    - script.execute: preview_rfid_data
+- platform: template
+  name: "Filament Variant"
+  id: filament_variant
+  state_topic:
+  optimistic: true
+  icon: mdi:label
+  web_server:
+    sorting_group_id: sorting_group_filament_settings
+  options:
+  - Basic
+  - Matte
+  - Metal
+  - Impact
+  - G
+  - W
+  # TODO: add the rest of the options
+  on_value:
+    then:
+    - script.execute: generate_filament_brand_code
+    - script.execute: preview_rfid_data
+    - script.execute: generate_filament_temperatures #TODO: not fully implemented for variants yet
+- platform: template
+  name: "Filament Brand"
+  id: filament_brand
+  state_topic:
+  optimistic: true
+  icon: mdi:alpha-f-circle
+  web_server:
+    sorting_group_id: sorting_group_filament_settings
+  options:
+  - Generic
+  - Bambu # Adding bambu even though you should never add a openspool tag to a bambu spool or you might get conflicts on RFID
+  - Overture
+  - PolyTerra
+  - PolyLite
+  on_value:
+    then:
+    - script.execute: generate_filament_brand_code
+    - script.execute: generate_filament_temperatures
+    - script.execute: preview_rfid_data
+- platform: template
+  name: "Filament Color"
+  id: filament_color
+  state_topic:
+  icon: mdi:palette-outline
+  web_server:
+    sorting_group_id: sorting_group_filament_settings
+  optimistic: true
+  options:
+  - "beige"
+  - "black"
+  - "blue"
+  - "dark_blue"
+  - "ice_blue"
+  - "brown"
+  - "dark_brown"
+  - "cyan"
+  - "desert_tan"
+  - "grass_green"
+  - "bambu_green"
+  - "missletoe_green"
+  - "glow_green"
+  - "ash_grey"
+  - "grey"
+  - "magenta"
+  - "orange"
+  - "pink"
+  - "sakura_pink"
+  - "iris_purple"
+  - "red"
+  - "white"
+  - "yellow"
+  - "Unknown"
+  on_value:
+    then:
+    # TODO: instead of doing a mapping for all these colors
+    # Do a traditional hex value lookup
+    # These are defined in bambustudio
+    # https://github.com/bambulab/BambuStudio/blob/733531b1c68e755da991c9503a09c2206c2e4984/src/slic3r/GUI/AMSMaterialsSetting.cpp#L1398-L1425
+    - text_sensor.template.publish:
+        id: filament_color_hex
+        state: !lambda |-
+          ESP_LOGD("main", "Color %s", id(filament_color).state.c_str());
+          if ( x == "white") {
+            return "FFFFFF";
+          } else if ( x == "yellow") {
+            return "FFF144";
+          } else if ( x == "grass_green") {
+            return "DCF478";
+          } else if ( x == "bambu_green") {
+            return "0ACC38";
+          } else if ( x == "missletoe_green") {
+            return "057748";
+          } else if ( x == "dark_blue") {
+            return "0D6284";
+          } else if ( x == "glow_green") {
+            return "0EE2A0";
+          } else if ( x == "ice_blue") {
+            return "76D9F4";
+          } else if ( x == "cyan") {
+            return "46A8F9";
+          } else if ( x == "blue") {
+            return "2850E0";
+          } else if ( x == "iris_purple") {
+            return "443089";
+          } else if ( x == "purple") {
+            return "A03CF7";
+          } else if ( x == "magenta") {
+            return "F330F9";
+          } else if ( x == "sakura_pink") {
+            return "D4B1DD";
+          } else if ( x == "pink") {
+            return "F95D73";
+          } else if ( x == "red") {
+            return "F72323";
+          } else if ( x == "dark_brown") {
+            return "7C4B00";
+          } else if ( x == "orange") {
+            return "F98C36";
+          } else if ( x == "beige") {
+            return "FCECD6";
+          } else if ( x == "desert_tan") {
+            return  "D3C5A3";
+          } else if ( x == "brown") {
+            return "AF7933";
+          } else if ( x == "ash_grey") {
+            return "898989";
+          } else if ( x == "grey") {
+            return "BCBCBC";
+          } else if ( x == "black") {
+            return "161616";
+          } else {
+            ESP_LOGE("main", "Unknown filament_color_hex: %s", x.c_str());
+            return "";
+          }
+    - script.execute: preview_rfid_data
 number:
-  - platform: template
-    name: "Filament Min Temp"
-    id: filament_min_temp
-    state_topic:
-    min_value: 150
-    max_value: 300
-    unit_of_measurement: °C
-    step: 5
-    icon: mdi:thermometer-low
-    optimistic: true
-    web_server:
-      sorting_group_id: sorting_group_filament_settings
-    set_action:
-      then:
-        - lambda: |-
-            id(filament_min_temp).publish_state(int(round(x)));
-            if (id(filament_min_temp).state > id(filament_max_temp).state) {
-              id(filament_max_temp).publish_state(id(filament_min_temp).state);
-            }
-    on_value:
-      then:
-        - script.execute: preview_rfid_data
-  - platform: template
-    name: "Filament Max Temp"
-    id: filament_max_temp
-    state_topic:
-    min_value: 150
-    max_value: 300
-    initial_value: 300
-    unit_of_measurement: °C
-    step: 5
-    icon: mdi:thermometer-high
-    optimistic: true
-    web_server:
-      sorting_group_id: sorting_group_filament_settings
-    set_action:
-      then:
-        - lambda: |-
-            id(filament_max_temp).publish_state(int(round(x)));
-            if (id(filament_max_temp).state < id(filament_min_temp).state) {
-              id(filament_min_temp).publish_state(id(filament_max_temp).state);
-            }
-    on_value:
-      then:
-        - script.execute: preview_rfid_data
+- platform: template
+  name: "Filament Min Temp"
+  id: filament_min_temp
+  state_topic:
+  min_value: 150
+  max_value: 300
+  unit_of_measurement: °C
+  step: 5
+  icon: mdi:thermometer-low
+  optimistic: true
+  web_server:
+    sorting_group_id: sorting_group_filament_settings
+  set_action:
+    then:
+    - lambda: |-
+        id(filament_min_temp).publish_state(int(round(x)));
+        if (id(filament_min_temp).state > id(filament_max_temp).state) {
+          id(filament_max_temp).publish_state(id(filament_min_temp).state);
+        }
+  on_value:
+    then:
+    - script.execute: preview_rfid_data
+- platform: template
+  name: "Filament Max Temp"
+  id: filament_max_temp
+  state_topic:
+  min_value: 150
+  max_value: 300
+  initial_value: 300
+  unit_of_measurement: °C
+  step: 5
+  icon: mdi:thermometer-high
+  optimistic: true
+  web_server:
+    sorting_group_id: sorting_group_filament_settings
+  set_action:
+    then:
+    - lambda: |-
+        id(filament_max_temp).publish_state(int(round(x)));
+        if (id(filament_max_temp).state < id(filament_min_temp).state) {
+          id(filament_min_temp).publish_state(id(filament_max_temp).state);
+        }
+  on_value:
+    then:
+    - script.execute: preview_rfid_data
 text_sensor:
-  - platform: template
-    name: "Filament Brand Code"
-    id: filament_brand_code
-    state_topic:
-    icon: mdi:code-brackets
-    web_server:
-      sorting_group_id: sorting_group_filament_settings
-    on_value:
-      then:
-        - script.execute: preview_rfid_data
-  - platform: template
-    name: "Filament Color Hex"
-    id: filament_color_hex
-    state_topic:
-    icon: mdi:hexagon-outline
-    web_server:
-      sorting_group_id: sorting_group_filament_settings
-    on_value:
-      then:
-        - script.execute: preview_rfid_data
-  - platform: template
-    name: Filament Sub Brand
-    id: filament_sub_brand
-    state_topic:
-    icon: mdi:label
-    web_server:
-      sorting_group_id: sorting_group_filament_settings
-    on_value:
-      then:
-        - script.execute: preview_rfid_data
+- platform: template
+  name: "Filament Brand Code"
+  id: filament_brand_code
+  state_topic:
+  icon: mdi:code-brackets
+  web_server:
+    sorting_group_id: sorting_group_filament_settings
+  on_value:
+    then:
+    - script.execute: preview_rfid_data
+- platform: template
+  name: "Filament Color Hex"
+  id: filament_color_hex
+  state_topic:
+  icon: mdi:hexagon-outline
+  web_server:
+    sorting_group_id: sorting_group_filament_settings
+  on_value:
+    then:
+    - script.execute: preview_rfid_data
+- platform: template
+  name: Filament Sub Brand
+  id: filament_sub_brand
+  state_topic:
+  icon: mdi:label
+  web_server:
+    sorting_group_id: sorting_group_filament_settings
+  on_value:
+    then:
+    - script.execute: preview_rfid_data
 button:
-  - platform: template
-    name: Upload Settings
-    id: upload_filament_settings
-    state_topic:
-    icon: mdi:upload
-    web_server:
-      sorting_group_id: sorting_group_filament_settings
-    on_press:
-      then:
-        - script.execute: publish_filament_setting
+- platform: template
+  name: Upload Settings
+  id: upload_filament_settings
+  state_topic:
+  icon: mdi:upload
+  web_server:
+    sorting_group_id: sorting_group_filament_settings
+  on_press:
+    then:
+    - script.execute: publish_filament_setting

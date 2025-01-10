@@ -1,28 +1,28 @@
 ---
 time:
-  - platform: sntp
-    id: ntp_time
-    servers:
-      - "time.nist.gov"
-      - "pool.ntp.org"
-    timezone: "America/Denver" # Change this to your timezone
-    on_time:
-      - seconds: /10
-        then:
-          - component.update: time_sensor
+- platform: sntp
+  id: ntp_time
+  servers:
+  - "time.nist.gov"
+  - "pool.ntp.org"
+  timezone: "America/Denver" # Change this to your timezone
+  on_time:
+  - seconds: /10
+    then:
+    - component.update: time_sensor
 # Sensor to hold formatted time string
 text_sensor:
-  - platform: template
-    name: "Current Time"
-    id: time_sensor
-    state_topic:
-    icon: "mdi:clock"
-    update_interval: 10s
-    lambda: |-
-      auto time = id(ntp_time).now();
-      char str[20];
-      sprintf(str, "%02d:%02d:%02d", time.hour, time.minute, time.second);
-      return {str};
+- platform: template
+  name: "Current Time"
+  id: time_sensor
+  state_topic:
+  icon: "mdi:clock"
+  update_interval: 10s
+  lambda: |-
+    auto time = id(ntp_time).now();
+    char str[20];
+    sprintf(str, "%02d:%02d:%02d", time.hour, time.minute, time.second);
+    return {str};
 
 # # Sensors for individual time components
 # sensor:

@@ -2,162 +2,162 @@
 substitutions:
   led_count: '9'
 light:
-  - platform: esp32_rmt_led_strip
-    name: LEDs
-    id: neopixel_light
-    state_topic:
-    pin: ${led_pin}
-    num_leds: ${led_count}
-    rgb_order: GRB
-    chipset: WS2812
-    rmt_channel: 0
-    default_transition_length: 0.4s
-    restore_mode: RESTORE_DEFAULT_ON
-    entity_category: diagnostic
-    icon: mdi:led-strip
-    effects:
-      - addressable_rainbow:
-          name: Rainbow
-          speed: 25
-          width: 15
-      - addressable_lambda:
-          name: Breathing Blue
-          update_interval: 10ms
-          lambda: |-
-            static float b = 0;
-            b = (sin(millis() / 500.0) + 1.0) / 2.0 * 0.6 + 0.4;
-            auto color = esphome::light::ESPColor(0, 0, uint8_t(255 * b));
-            it.all() = color;
-      - addressable_lambda:
-          name: Apple Breathing
-          update_interval: 10ms
-          lambda: |-
-            const float PI = 3.14159265359;
-            //TODO: 42.546 should be replaced by 83.333
-            float t = millis() / 2000.0;
-            float brightness_float = (exp(sin(t * PI)) - 0.368) * 42.546;
-            uint8_t brightness = uint8_t(brightness_float);
-            auto color = esphome::light::ESPColor(brightness, 0, 0);
-            for (int i = 0; i < it.size(); ++i) {
-              it[i] = color;
-            }
-          #   - strobe:
-          #       name: "Data Upload"
-          #       colors:
-          #         - state: TRUE
-          #           brightness: 100%
-          #           duration: 50ms
-          #           red: 0%
-          #           green: 100%
-          #           blue: 0%
-          #         - state: FALSE
-          #           duration: 50ms
+- platform: esp32_rmt_led_strip
+  name: LEDs
+  id: neopixel_light
+  state_topic:
+  pin: ${led_pin}
+  num_leds: ${led_count}
+  rgb_order: GRB
+  chipset: WS2812
+  rmt_channel: 0
+  default_transition_length: 0.4s
+  restore_mode: RESTORE_DEFAULT_ON
+  entity_category: diagnostic
+  icon: mdi:led-strip
+  effects:
+  - addressable_rainbow:
+      name: Rainbow
+      speed: 25
+      width: 15
+  - addressable_lambda:
+      name: Breathing Blue
+      update_interval: 10ms
+      lambda: |-
+        static float b = 0;
+        b = (sin(millis() / 500.0) + 1.0) / 2.0 * 0.6 + 0.4;
+        auto color = esphome::light::ESPColor(0, 0, uint8_t(255 * b));
+        it.all() = color;
+  - addressable_lambda:
+      name: Apple Breathing
+      update_interval: 10ms
+      lambda: |-
+        const float PI = 3.14159265359;
+        //TODO: 42.546 should be replaced by 83.333
+        float t = millis() / 2000.0;
+        float brightness_float = (exp(sin(t * PI)) - 0.368) * 42.546;
+        uint8_t brightness = uint8_t(brightness_float);
+        auto color = esphome::light::ESPColor(brightness, 0, 0);
+        for (int i = 0; i < it.size(); ++i) {
+          it[i] = color;
+        }
+      #   - strobe:
+      #       name: "Data Upload"
+      #       colors:
+      #         - state: TRUE
+      #           brightness: 100%
+      #           duration: 50ms
+      #           red: 0%
+      #           green: 100%
+      #           blue: 0%
+      #         - state: FALSE
+      #           duration: 50ms
 script:
-  - id: set_led_red
-    parameters:
-      led_number: int8_t
-    then:
-      - light.addressable_set:
-          id: neopixel_light
-          color_brightness: 100%
-          range_from: !lambda "return led_number < 0 ? 0 : led_number;"
-          range_to: !lambda "return led_number < 0 ? ${led_count} : led_number;"
-          red: 100%
-          green: 0%
-          blue: 0%
-  - id: set_led_green
-    parameters:
-      led_number: int8_t
-    then:
-      - light.addressable_set:
-          id: neopixel_light
-          color_brightness: 100%
-          range_from: !lambda "return led_number < 0 ? 0 : led_number;"
-          range_to: !lambda "return led_number < 0 ? ${led_count} : led_number;"
-          red: 0%
-          green: 100%
-          blue: 0%
-  - id: set_led_blue
-    parameters:
-      led_number: int8_t
-    then:
-      - light.addressable_set:
-          id: neopixel_light
-          color_brightness: 100%
-          range_from: !lambda "return led_number < 0 ? 0 : led_number;"
-          range_to: !lambda "return led_number < 0 ? ${led_count} : led_number;"
-          red: 0%
-          green: 0%
-          blue: 100%
-  - id: set_led_yellow
-    parameters:
-      led_number: int8_t
-    then:
-      - light.addressable_set:
-          id: neopixel_light
-          color_brightness: 100%
-          range_from: !lambda "return led_number < 0 ? 0 : led_number;"
-          range_to: !lambda "return led_number < 0 ? ${led_count} : led_number;"
-          red: 100%
-          green: 100%
-          blue: 0%
-  - id: set_led_white
-    parameters:
-      led_number: int8_t
-    then:
-      - light.addressable_set:
-          id: neopixel_light
-          color_brightness: 50%
-          range_from: !lambda "return led_number < 0 ? 0 : led_number;"
-          range_to: !lambda "return led_number < 0 ? ${led_count} : led_number;"
-          red: 100%
-          green: 100%
-          blue: 100%
-  - id: set_all_leds_white
-    then:
-      - light.turn_on:
-          id: neopixel_light
-          effect: none
-          brightness: 50%
-          red: 100%
-          green: 100%
-          blue: 100%
-  - id: set_led_off
-    then:
-      - light.turn_on:
-          id: neopixel_light
-          brightness: 0%
-          red: 0%
-          green: 0%
-          blue: 0%
-          effect: none
-      - delay: 50ms
-      - light.turn_off:
-          id: neopixel_light
-          transition_length: 0s
-  - id: set_led_rainbow
-    then:
-      - light.turn_on:
-          id: neopixel_light
-          effect: Rainbow
-  - id: set_led_breathing_blue
-    then:
-      - light.turn_on:
-          id: neopixel_light
-          effect: none
-      - light.turn_on:
-          id: neopixel_light
-          effect: Breathing Blue
-          brightness: 100%
-  - id: set_led_breathing_green
-    then:
-      - light.turn_on:
-          id: neopixel_light
-          effect: Breathing Green
-          brightness: 100%
-  - id: set_led_apple_breathing
-    then:
-      - light.turn_on:
-          id: neopixel_light
-          effect: Apple Breathing
-          brightness: 100%
+- id: set_led_red
+  parameters:
+    led_number: int8_t
+  then:
+  - light.addressable_set:
+      id: neopixel_light
+      color_brightness: 100%
+      range_from: !lambda "return led_number < 0 ? 0 : led_number;"
+      range_to: !lambda "return led_number < 0 ? ${led_count} : led_number;"
+      red: 100%
+      green: 0%
+      blue: 0%
+- id: set_led_green
+  parameters:
+    led_number: int8_t
+  then:
+  - light.addressable_set:
+      id: neopixel_light
+      color_brightness: 100%
+      range_from: !lambda "return led_number < 0 ? 0 : led_number;"
+      range_to: !lambda "return led_number < 0 ? ${led_count} : led_number;"
+      red: 0%
+      green: 100%
+      blue: 0%
+- id: set_led_blue
+  parameters:
+    led_number: int8_t
+  then:
+  - light.addressable_set:
+      id: neopixel_light
+      color_brightness: 100%
+      range_from: !lambda "return led_number < 0 ? 0 : led_number;"
+      range_to: !lambda "return led_number < 0 ? ${led_count} : led_number;"
+      red: 0%
+      green: 0%
+      blue: 100%
+- id: set_led_yellow
+  parameters:
+    led_number: int8_t
+  then:
+  - light.addressable_set:
+      id: neopixel_light
+      color_brightness: 100%
+      range_from: !lambda "return led_number < 0 ? 0 : led_number;"
+      range_to: !lambda "return led_number < 0 ? ${led_count} : led_number;"
+      red: 100%
+      green: 100%
+      blue: 0%
+- id: set_led_white
+  parameters:
+    led_number: int8_t
+  then:
+  - light.addressable_set:
+      id: neopixel_light
+      color_brightness: 50%
+      range_from: !lambda "return led_number < 0 ? 0 : led_number;"
+      range_to: !lambda "return led_number < 0 ? ${led_count} : led_number;"
+      red: 100%
+      green: 100%
+      blue: 100%
+- id: set_all_leds_white
+  then:
+  - light.turn_on:
+      id: neopixel_light
+      effect: none
+      brightness: 50%
+      red: 100%
+      green: 100%
+      blue: 100%
+- id: set_led_off
+  then:
+  - light.turn_on:
+      id: neopixel_light
+      brightness: 0%
+      red: 0%
+      green: 0%
+      blue: 0%
+      effect: none
+  - delay: 50ms
+  - light.turn_off:
+      id: neopixel_light
+      transition_length: 0s
+- id: set_led_rainbow
+  then:
+  - light.turn_on:
+      id: neopixel_light
+      effect: Rainbow
+- id: set_led_breathing_blue
+  then:
+  - light.turn_on:
+      id: neopixel_light
+      effect: none
+  - light.turn_on:
+      id: neopixel_light
+      effect: Breathing Blue
+      brightness: 100%
+- id: set_led_breathing_green
+  then:
+  - light.turn_on:
+      id: neopixel_light
+      effect: Breathing Green
+      brightness: 100%
+- id: set_led_apple_breathing
+  then:
+  - light.turn_on:
+      id: neopixel_light
+      effect: Apple Breathing
+      brightness: 100%

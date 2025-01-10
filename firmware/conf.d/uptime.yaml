@@ -1,6 +1,6 @@
 ---
 sensor:
-  - platform: uptime
-    name: Uptime
-    id: openspool_uptime
-    state_topic:
+- platform: uptime
+  name: Uptime
+  id: openspool_uptime
+  state_topic:

@@ -1,4 +1,4 @@
 ---
 ota:
-  - platform: esphome
-    id: esphome_ota
+- platform: esphome
+  id: esphome_ota

@@ -11,28 +11,28 @@ wifi:
   #         id: set_led_white
   #         led_number: -1
   #     - script.stop: set_led_white
-# sensor:
-#   - platform: wifi_signal
-#     name: "WiFi Signal Sensor"
-#     id: openspool_wifi_signal
-#     state_topic:
-#     update_interval: 60s
-#     icon: mdi:wifi-strength-outline
+  # sensor:
+  #   - platform: wifi_signal
+  #     name: "WiFi Signal Sensor"
+  #     id: openspool_wifi_signal
+  #     state_topic:
+  #     update_interval: 60s
+  #     icon: mdi:wifi-strength-outline
 text_sensor:
-  - platform: wifi_info
-    mac_address:
-      name: Mac Address
-      id: mac_address
-      state_topic:
-      icon: mdi:network
-  # - platform: wifi_info
-  #   ip_address:
-  #     name: IP Address
-  #     id: openspool_ip_address
-  #     state_topic:
-  #     icon: mdi:lan
-  #   ssid:
-  #     name: Wifi Network
-  #     id: openspool_ssid
-  #     state_topic:
-  #     icon: mdi:wifi
+- platform: wifi_info
+  mac_address:
+    name: Mac Address
+    id: mac_address
+    state_topic:
+    icon: mdi:network
+# - platform: wifi_info
+#   ip_address:
+#     name: IP Address
+#     id: openspool_ip_address
+#     state_topic:
+#     icon: mdi:lan
+#   ssid:
+#     name: Wifi Network
+#     id: openspool_ssid
+#     state_topic:
+#     icon: mdi:wifi

@@ -1,8 +1,8 @@
 ---
 psram:
 sensor:
-  - platform: debug
-    psram:
-      name: "Free PSRAM"
-      id: free_psram
-      state_topic:
+- platform: debug
+  psram:
+    name: "Free PSRAM"
+    id: free_psram
+    state_topic:

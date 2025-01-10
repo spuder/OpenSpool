@@ -1,95 +1,95 @@
 text_sensor:
-  - platform: template
-    name: "OpenSpool URL"
-    id: openspool_url
-    state_topic:
-    icon: mdi:web
-    web_server:
-      sorting_group_id: sorting_group_extra
-    lambda: |-
-      std::string mac = id(mac_address).state;
-      // Extract just the last 6 characters (3 pairs of hex digits)
-      std::string last_6 = mac.substr(9, 2) + mac.substr(12, 2) + mac.substr(15, 2);
-      return {"http://openspool-" + last_6 + ".local"};
-  - platform: template
-    name: "BambuHandy URL"
-    id: bambuhandy_url
-    state_topic:
-    icon: mdi:cellphone
-    web_server:
-      sorting_group_id: sorting_group_extra
-    lambda: |-
-      return {"bambulab://"};
+- platform: template
+  name: "OpenSpool URL"
+  id: openspool_url
+  state_topic:
+  icon: mdi:web
+  web_server:
+    sorting_group_id: sorting_group_extra
+  lambda: |-
+    std::string mac = id(mac_address).state;
+    // Extract just the last 6 characters (3 pairs of hex digits)
+    std::string last_6 = mac.substr(9, 2) + mac.substr(12, 2) + mac.substr(15, 2);
+    return {"http://openspool-" + last_6 + ".local"};
+- platform: template
+  name: "BambuHandy URL"
+  id: bambuhandy_url
+  state_topic:
+  icon: mdi:cellphone
+  web_server:
+    sorting_group_id: sorting_group_extra
+  lambda: |-
+    return {"bambulab://"};
 
 button:
-  - platform: template
-    name: "OpenSpool Create Tag"
-    id: write_url_button
-    state_topic:
-    icon: mdi:web
-    web_server:
-      sorting_group_id: sorting_group_extra
-    on_press:
-      then: 
-        # TODO: binary sensor that shows reader write_mode? 
-        # TODO: blink lights when light mode changes
-        - logger.log: "Writing tag" #TODO: change log namespace
-        - lambda: |-
-            // This causes esp32 to lockup, stackoverflow perhaps? 
-            // Leaving this code here as an example of what not to do
+- platform: template
+  name: "OpenSpool Create Tag"
+  id: write_url_button
+  state_topic:
+  icon: mdi:web
+  web_server:
+    sorting_group_id: sorting_group_extra
+  on_press:
+    then:
+    # TODO: binary sensor that shows reader write_mode? 
+    # TODO: blink lights when light mode changes
+    - logger.log: "Writing tag" #TODO: change log namespace
+    - lambda: |-
+        // This causes esp32 to lockup, stackoverflow perhaps? 
+        // Leaving this code here as an example of what not to do
 
-            // std::string url = id(openspool_url).state;
-            // nfc::NdefMessage message;
-            // message.add_uri_record(url);
-            //id(rfid_reader_spi_0).write_mode(&message);
+        // std::string url = id(openspool_url).state;
+        // nfc::NdefMessage message;
+        // message.add_uri_record(url);
+        //id(rfid_reader_spi_0).write_mode(&message);
 
-            // This also causes it to lockup
+        // This also causes it to lockup
 
-            // std::string url = id(openspool_url).state;
-            // auto message = std::make_unique<nfc::NdefMessage>();
-            // message->add_uri_record(url);
-            // id(rfid_reader_spi_0).write_mode(message.get());
+        // std::string url = id(openspool_url).state;
+        // auto message = std::make_unique<nfc::NdefMessage>();
+        // message->add_uri_record(url);
+        // id(rfid_reader_spi_0).write_mode(message.get());
 
-            // deleting the message also causes a lockup
+        // deleting the message also causes a lockup
 
-            // std::string url = id(openspool_url).state;
-            // auto message = new nfc::NdefMessage();
-            // message->add_uri_record(url);
-            // id(rfid_reader_spi_0).write_mode(message);
-            // delete message; 
+        // std::string url = id(openspool_url).state;
+        // auto message = new nfc::NdefMessage();
+        // message->add_uri_record(url);
+        // id(rfid_reader_spi_0).write_mode(message);
+        // delete message; 
 
-            // even though it seems wrong to use 'new' without a 'delete'
-            // this is the only code that doesn't crash. 
-            std::string url = id(openspool_url).state;
-            ESP_LOGD("NFC", "Writing URL: %s", url.c_str());
-            auto message = new nfc::NdefMessage();
-            message->add_uri_record(url);
-            id(rfid_reader_spi_0).write_mode(message);
-        - wait_until:
-            not: 
-              pn532.is_writing:
-                id: rfid_reader_spi_0
-        - logger.log: "Finished writing tag" #TODO: change log namespace
-  - platform: template
-    name: "BambuHandy Create Tag"
-    id: write_bambuhandy_url_button
-    state_topic:
-    icon: mdi:cellphone
-    web_server:
-      sorting_group_id: sorting_group_extra
-    on_press:
-      then: 
-        # TODO: binary sensor that shows reader write_mode? 
-        # TODO: blink lights when light mode changes
-        - logger.log: "Writing tag" #TODO: change log namespace
-        - lambda: |-
-            std::string url = id(bambuhandy_url).state;
-            ESP_LOGD("NFC", "Writing URL: %s", url.c_str());
-            auto message = new nfc::NdefMessage();
-            message->add_uri_record(url);
-            id(rfid_reader_spi_0).write_mode(message);
-        - wait_until:
-            not: 
-              pn532.is_writing:
-                id: rfid_reader_spi_0
-        - logger.log: "Finished writing tag" #TODO: change log namespace   
+        // even though it seems wrong to use 'new' without a 'delete'
+        // this is the only code that doesn't crash. 
+        std::string url = id(openspool_url).state;
+        ESP_LOGD("NFC", "Writing URL: %s", url.c_str());
+        auto message = new nfc::NdefMessage();
+        message->add_uri_record(url);
+        id(rfid_reader_spi_0).write_mode(message);
+    - wait_until:
+        not:
+          pn532.is_writing:
+            id: rfid_reader_spi_0
+    - logger.log: "Finished writing tag" #TODO: change log namespace
+- platform: template
+  name: "BambuHandy Create Tag"
+  id: write_bambuhandy_url_button
+  state_topic:
+  icon: mdi:cellphone
+  web_server:
+    sorting_group_id: sorting_group_extra
+  on_press:
+    then:
+    # TODO: binary sensor that shows reader write_mode? 
+    # TODO: blink lights when light mode changes
+    - logger.log: "Writing tag" #TODO: change log namespace
+    - lambda: |-
+        std::string url = id(bambuhandy_url).state;
+        ESP_LOGD("NFC", "Writing URL: %s", url.c_str());
+        auto message = new nfc::NdefMessage();
+        message->add_uri_record(url);
+        id(rfid_reader_spi_0).write_mode(message);
+    - wait_until:
+        not:
+          pn532.is_writing:
+            id: rfid_reader_spi_0
+    - logger.log: "Finished writing tag" #TODO: change log namespace   
