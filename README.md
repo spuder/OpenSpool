@@ -109,7 +109,15 @@ Currently OpenSpool works with Bambu printers over mqtt. Other integrations are 
 
 OpenSpool requires an ESP32-S3 and PN532 NFC Reader (SPI Mode).
 
-[Buy a kit on tindie.com](https://www.tindie.com/products/36746/)
+The openspool schematics will always be free. If you don't want to source the parts yourself, you can 
+[buy a kit on tindie.com](https://www.tindie.com/products/36746/)
+
+<a href="https://www.tindie.com/stores/spuder/?ref=offsite_badges&utm_source=sellers_spuder&utm_medium=badges&utm_campaign=badge_small"><img src="https://d2ss6ovg47m0r5.cloudfront.net/badges/tindie-smalls.png" alt="I sell on Tindie" width="200" height="55"></a>
+
+
+![](./images/tindie/IMG_6125.png)
+![](./images/tindie/IMG_6120.png)
+
 
 
 | | Hardware | Link 1 | Link 2| 
@@ -342,3 +350,6 @@ All contributions to the project are welcome. Skills needed:
 You can also donate to support research and development costs
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/openspool)
+
+
+https://oshwlab.com/owenspencer/openspool-mini
