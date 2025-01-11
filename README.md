@@ -11,7 +11,7 @@
 ![](https://github.com/spuder/openspool/actions/workflows/esphome.yaml/badge.svg)
 ![](https://github.com/spuder/openspool/actions/workflows/pages.yaml/badge.svg)
 [![](https://dcbadge.limes.pink/api/server/4EaXHu9CEj)](https://discord.gg/4EaXHu9CEj)
-
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/openspool)
 ---
 
 
@@ -327,3 +327,18 @@ mqttx sub -t 'device/$SERIAL_NUMBER/report' -u bblp -P $LAN_ACCESS_CODE --mqtt-v
     </a>
 </p>
 
+
+# Donations
+
+All contributions to the project are welcome. Skills needed:
+
+- Sofware Development
+- Photography
+- Videography
+- Documentation
+- Eletrical Design
+- Testing/Integration
+
+You can also donate to support research and development costs
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/openspool)
