@@ -178,6 +178,7 @@ button:
   icon: mdi:nfc-tap
   web_server:
     sorting_group_id: sorting_group_filament_settings
+    sorting_weight: 210
   on_press:
     then:
     - if:
