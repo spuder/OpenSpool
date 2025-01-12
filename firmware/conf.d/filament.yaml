@@ -11,6 +11,7 @@ select:
   icon: mdi:movie-roll
   web_server:
     sorting_group_id: sorting_group_filament_settings
+    sorting_weight: 30
   options:
   - ABS
   - ASA
@@ -49,6 +50,7 @@ select:
   icon: mdi:label
   web_server:
     sorting_group_id: sorting_group_filament_settings
+    sorting_weight: 40
   options:
   - Basic
   - Matte
@@ -70,6 +72,7 @@ select:
   icon: mdi:alpha-f-circle
   web_server:
     sorting_group_id: sorting_group_filament_settings
+    sorting_weight: 10
   options:
   - Generic
   - Bambu # Adding bambu even though you should never add a openspool tag to a bambu spool or you might get conflicts on RFID
@@ -88,6 +91,7 @@ select:
   icon: mdi:palette-outline
   web_server:
     sorting_group_id: sorting_group_filament_settings
+    sorting_weight: 20
   optimistic: true
   options:
   - "beige"
@@ -190,6 +194,7 @@ number:
   optimistic: true
   web_server:
     sorting_group_id: sorting_group_filament_settings
+    sorting_weight: 50
   set_action:
     then:
     - lambda: |-
@@ -213,6 +218,7 @@ number:
   optimistic: true
   web_server:
     sorting_group_id: sorting_group_filament_settings
+    sorting_weight: 60
   set_action:
     then:
     - lambda: |-
@@ -231,6 +237,7 @@ text_sensor:
   icon: mdi:code-brackets
   web_server:
     sorting_group_id: sorting_group_filament_settings
+    sorting_weight: 110
   on_value:
     then:
     - script.execute: preview_rfid_data
@@ -241,6 +248,7 @@ text_sensor:
   icon: mdi:hexagon-outline
   web_server:
     sorting_group_id: sorting_group_filament_settings
+    sorting_weight: 100
   on_value:
     then:
     - script.execute: preview_rfid_data
@@ -251,6 +259,7 @@ text_sensor:
   icon: mdi:label
   web_server:
     sorting_group_id: sorting_group_filament_settings
+    sorting_weight: 120
   on_value:
     then:
     - script.execute: preview_rfid_data
@@ -262,6 +271,7 @@ button:
   icon: mdi:upload
   web_server:
     sorting_group_id: sorting_group_filament_settings
+    sorting_weight: 200
   on_press:
     then:
     - script.execute: publish_filament_setting
