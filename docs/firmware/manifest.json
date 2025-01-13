@@ -1,13 +1,13 @@
 {
   "name": "OpenSpool",
-  "version": "1.15.0",
+  "version": "1.16.0",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "7b67ddd75a59dabacb400901cf811f8b",
-        "summary": "Merge pull request #22 from raihei/main%0A%0AAdded sorting_weight to filament settings for web server.",
+        "md5": "6defc7546fb072f4792d8b446f1f6cdd",
+        "summary": "docs(contributor): contrib-readme-action has updated readme",
         "release_url": "https://openspool.io/firmware"
       },
       "parts": [
@@ -21,8 +21,8 @@
       "chipFamily": "ESP32-S3",
       "ota": {
         "path": "openspool-esp32s3.ota.bin",
-        "md5": "585cbcc5d4d9ee6134cef170988d09e9",
-        "summary": "Merge pull request #22 from raihei/main%0A%0AAdded sorting_weight to filament settings for web server.",
+        "md5": "55cf23dbeaa3eac9f64f73253d8bc0b6",
+        "summary": "docs(contributor): contrib-readme-action has updated readme",
         "release_url": "https://openspool.io/firmware"
       },
       "parts": [
