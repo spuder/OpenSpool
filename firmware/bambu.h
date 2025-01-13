@@ -8,6 +8,8 @@
 namespace bambulabs
 {
     const std::unordered_map<std::string, std::string> filament_mappings = {
+        {"TPU for AMS", "GFU02"},
+        {"TPU High Speed", "GFU00"},
         {"TPU", "GFU99"},
         {"PLA", "GFL99"},
         {"PLA High Speed", "GFL95"},

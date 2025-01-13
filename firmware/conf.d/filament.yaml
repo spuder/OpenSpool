@@ -37,6 +37,8 @@ select:
   - PPA-GF
   - PVA
   - TPU
+  - TPU High Speed
+  - TPU for AMS
   on_value:
     then:
     - script.execute: generate_filament_brand_code
