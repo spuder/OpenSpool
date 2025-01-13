@@ -275,6 +275,13 @@ mqttx sub -t 'device/$SERIAL_NUMBER/report' -u bblp -P $LAN_ACCESS_CODE --mqtt-v
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/raihei">
+                    <img src="https://avatars.githubusercontent.com/u/34209267?v=4" width="100;" alt="raihei"/>
+                    <br />
+                    <sub><b>raihei</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/phillipthelen">
                     <img src="https://avatars.githubusercontent.com/u/298062?v=4" width="100;" alt="phillipthelen"/>
                     <br />
@@ -286,13 +293,6 @@ mqttx sub -t 'device/$SERIAL_NUMBER/report' -u bblp -P $LAN_ACCESS_CODE --mqtt-v
                     <img src="https://avatars.githubusercontent.com/u/305679?v=4" width="100;" alt="thijstriemstra"/>
                     <br />
                     <sub><b>Thijs Triemstra</b></sub>
-                </a>
-            </td>
-            <td align="center">
-                <a href="https://github.com/raihei">
-                    <img src="https://avatars.githubusercontent.com/u/34209267?v=4" width="100;" alt="raihei"/>
-                    <br />
-                    <sub><b>raihei</b></sub>
                 </a>
             </td>
             <td align="center">
