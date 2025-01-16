@@ -14,19 +14,19 @@ substitutions:
   rfid0_ss_pin: GPIO04
 
   rfid1_spi_interface: SPI2
-  rfid1_clk_pin: GPIO05
+  rfid1_ss_pin: GPIO05
 
   rfid2_spi_interface: SPI2
-  rfid2_clk_pin: GPIO06
+  rfid2_ss_pin: GPIO06
 
   rfid3_spi_interface: SPI2
-  rfid3_clk_pin: GPIO07
+  rfid3_ss_pin: GPIO07
 
   # rfid4_spi_interface: SPI2
-  # rfid4_clk_pin: GPIO05
+  # rfid4_ss_pin: GPIO05
 
   # rfid5_spi_interface: SPI2
-  # rfid5_clk_pin: GPIO04
+  # rfid5_ss_pin: GPIO04
 
   # spi3_type: SPI3
   # spi3_clk_pin: GPIO18
@@ -34,19 +34,19 @@ substitutions:
   # spi3_mosi_pin: GPIO16
 
   # rfid6_spi_interface: SPI3
-  # rfid6_clk_pin: GPIO15
+  # rfid6_ss_pin: GPIO15
 
   # rfid7_spi_interface: SPI3
-  # rfid7_clk_pin: GPIO9
+  # rfid7_ss_pin: GPIO9
 
   # rfid8_spi_interface: SPI3
-  # rfid8_clk_pin: GPI14 # TODO: Verify this is compatible
+  # rfid8_ss_pin: GPI14 # TODO: Verify this is compatible
 
 packages: 
   openspool-ams: !include openspool-ams.yaml
   improv-serial: !include conf.d/improv-serial.yaml
   #improv-bluetooth: !include conf.d/improv-bluetooth.yaml
-  led-internal: !include conf.d/led-internal.yaml
+  #led-internal: !include conf.d/led-internal.yaml
   extra: !include conf.d/extra.yaml
 
 dashboard_import:
