@@ -120,8 +120,8 @@ namespace bambulabs
             }
         }
 
-        if (doc_in["color_hex"].as<std::string>().length() != 6) {
-            ESP_LOGE("bambu", "Invalid color_hex length (expected 6 characters)");
+        if (doc_in["color_hex"].as<std::string>().length() != 6 && doc_in["color_hex"].as<std::string>().length() != 8) {
+            ESP_LOGE("bambu", "Invalid color_hex length (expected 6 or 8 characters)");
             return {};
         }
 
@@ -130,7 +130,12 @@ namespace bambulabs
         print["command"] = "ams_filament_setting";
         print["ams_id"] = ams_id;
         print["tray_id"] = ams_tray;
-        print["tray_color"] = doc_in["color_hex"].as<std::string>() + "FF";
+        if (doc_in["color_hex"].as<std::string>().length() == 6) {
+            print["tray_color"] = doc_in["color_hex"].as<std::string>() + "FF";
+        }
+        else{
+            print["tray_color"] = doc_in["color_hex"].as<std::string>();
+        }
         print["nozzle_temp_min"] = uint16_t(doc_in["min_temp"]); // if not string or int, will fall back to 0
         print["nozzle_temp_max"] = uint16_t(doc_in["max_temp"]); // if not string or int, will fall back to 0
         print["tray_type"] = doc_in["type"];
