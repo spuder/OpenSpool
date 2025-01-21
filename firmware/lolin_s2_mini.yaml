@@ -11,9 +11,9 @@ substitutions:
   rfid0_spi_interface: SPI2
   rfid0_ss_pin: GPIO34
   #rfid1_spi_interface: SPI2
-  #rfid1_clk_pin: GPIO21
+  #rfid1_ss_pin: GPIO21
   ## rfid1_spi_interface: SPI2
-  ## rfid1_clk_pin: GPIO08
+  ## rfid1_ss_pin: GPIO08
 
 # D1 Mini S2 Boards will reboot when doing tasks like writing to PN532 unless wifi power is reduced
 wifi:

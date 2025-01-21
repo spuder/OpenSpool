@@ -1,6 +1,6 @@
 pn532_spi:
 - id: rfid_reader_spi_1
-  cs_pin: ${rfid1_clk_pin}
+  cs_pin: ${rfid1_ss_pin}
   spi_id: ${rfid1_spi_interface}
   data_rate: ${spi_data_rate}
   update_interval: ${update_interval}
@@ -76,7 +76,7 @@ pn532_spi:
             payload: !lambda "return bambulabs::generate_mqtt_payload( id(filament_raw_data1).state, 0, 0 );"
 
 - id: rfid_reader_spi_2
-  cs_pin: ${rfid2_clk_pin}
+  cs_pin: ${rfid2_ss_pin}
   spi_id: ${rfid2_spi_interface}
   data_rate: ${spi_data_rate}
   update_interval: ${update_interval}
