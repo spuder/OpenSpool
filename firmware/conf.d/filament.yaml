@@ -265,15 +265,3 @@ text_sensor:
   on_value:
     then:
     - script.execute: preview_rfid_data
-button:
-- platform: template
-  name: Upload Settings
-  id: upload_filament_settings
-  state_topic:
-  icon: mdi:upload
-  web_server:
-    sorting_group_id: sorting_group_filament_settings
-    sorting_weight: 200
-  on_press:
-    then:
-    - script.execute: publish_filament_setting
