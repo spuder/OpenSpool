@@ -1,4 +1,4 @@
 ---
 # Do not modify, github actions will update the number on each new release
 substitutions:
-  version: "1.17.0"
+  version: "1.18.0"
