@@ -41,12 +41,15 @@ namespace bambulabs
     // Special cases for brand-specific codes
     const std::unordered_map<std::string, std::unordered_map<std::string, std::string>> brand_specific_codes = {
         {"PLA", {{"Bambu", "GFA00"}, {"PolyTerra", "GFL01"}, {"PolyLite", "GFL00"}}},
+        {"PLA Aero", {{"Bambu", "GFG01"}}},
         {"TPU", {{"Bambu", "GFU01"}}},
         {"ABS", {{"Bambu", "GFB00"}, {"PolyLite", "GFB60"}}},
         {"ASA", {{"Bambu", "GFB01"}, {"PolyLite", "GFB61"}}},
         {"PC", {{"Bambu", "GFC00"}}},
         {"PA-CF", {{"Bambu", "GFN03"}}},
         {"PET-CF", {{"Bambu", "GFT00"}}},
+        {"PETG HF", {{"Bambu", "GFG02"}}},
+        {"PETG Translucent", {{"Bambu", "GFG01"}}},
         {"PETG", {{"Bambu", "GFG00"}, {"PolyLite", "GFG60"}}}};
 
     // Function with two parameters
