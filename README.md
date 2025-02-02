@@ -7,7 +7,7 @@
 # OpenSpool
 **Your filament wants to be free**
 
-![](https://img.shields.io/badge/openspool-1.17.0-magenta)
+![](https://img.shields.io/badge/openspool-1.18.0-magenta)
 [![Discord](https://img.shields.io/discord/1298381115706576907?logo=discord)](https://discord.gg/4EaXHu9CEj) [![Reddit](https://img.shields.io/badge/reddit-join-orange?logo=reddit)](https://www.reddit.com/r/openspool)  
 
 ---
