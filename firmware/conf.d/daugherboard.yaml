@@ -1,0 +1,121 @@
+# Define the select component
+select:
+  - platform: template
+    name: "Active Slot"
+    id: active_slot_select
+    options:
+      - "Slot 1"
+      - "Slot 2"
+      - "Slot 3"
+      - "Slot 4"
+    initial_option: "Slot 1"
+    optimistic: true
+    on_value:
+      then:
+        - script.execute: select_slot
+
+# Modify the script to use the select value
+script:
+  - id: select_slot
+    then:
+      - switch.turn_off: slot_1_switch
+      - switch.turn_off: slot_2_switch
+      - switch.turn_off: slot_3_switch
+      - switch.turn_off: slot_4_switch
+      - lambda: |-
+          auto current_option = id(active_slot_select).state;
+          int slot = 0;
+          if (current_option == "Slot 1") slot = 1;
+          else if (current_option == "Slot 2") slot = 2;
+          else if (current_option == "Slot 3") slot = 3;
+          else if (current_option == "Slot 4") slot = 4;
+          
+          switch (slot) {
+            case 1: id(slot_1_switch).turn_on(); break;
+            case 2: id(slot_2_switch).turn_on(); break;
+            case 3: id(slot_3_switch).turn_on(); break;
+            case 4: id(slot_4_switch).turn_on(); break;
+          }
+
+switch:
+  - platform: template
+    name: "Slot 1 Switch"
+    id: slot_1_switch
+    internal: true
+    optimistic: true
+  - platform: template
+    name: "Slot 2 Switch"
+    id: slot_2_switch
+    internal: true
+    optimistic: true
+  - platform: template
+    name: "Slot 3 Switch"
+    id: slot_3_switch
+    internal: true
+    optimistic: true
+  - platform: template
+    name: "Slot 4 Switch"
+    id: slot_4_switch
+    internal: true
+    optimistic: true
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO6
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "Slot 1 Button"
+    filters:
+      - delayed_on: 20ms
+      - delayed_off: 20ms
+    on_press:
+      then:
+        - select.set:
+            id: active_slot_select
+            option: "Slot 1"
+
+  - platform: gpio
+    pin:
+      number: GPIO7
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "Slot 2 Button"
+    filters:
+      - delayed_on: 20ms
+      - delayed_off: 20ms
+    on_press:
+      then:
+        - select.set:
+            id: active_slot_select
+            option: "Slot 2"
+
+  - platform: gpio
+    pin:
+      number: GPIO8
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "Slot 3 Button"
+    filters:
+      - delayed_on: 20ms
+      - delayed_off: 20ms
+    on_press:
+      then:
+        - select.set:
+            id: active_slot_select
+            option: "Slot 3"
+
+  - platform: gpio
+    pin:
+      number: GPIO9
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "Slot 4 Button"
+    filters:
+      - delayed_on: 20ms
+      - delayed_off: 20ms
+    on_press:
+      then:
+        - select.set:
+            id: active_slot_select
+            option: "Slot 4"
