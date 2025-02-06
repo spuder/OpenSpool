@@ -1,3 +1,8 @@
+globals:
+  - id: active_slot
+    type: int
+    initial_value: '254'  # 254 represents "External"
+
 # Define the select component
 select:
   - platform: template
@@ -11,11 +16,20 @@ select:
       - "4"
     initial_option: "External"
     optimistic: true
-    on_value:
+    set_action:
       then:
+        - lambda: |-
+            if (x == "External") id(active_slot) = 254;
+            else if (x == "1") id(active_slot) = 0;
+            else if (x == "2") id(active_slot) = 1;
+            else if (x == "3") id(active_slot) = 2;
+            else if (x == "4") id(active_slot) = 3;
         - script.execute: select_slot
+    state_topic: null
+    web_server:
+      sorting_group_id: sorting_group_filament_settings
+      sorting_weight: 190
 
-# Modify the script to use the select value
 script:
   - id: select_slot
     then:
@@ -24,19 +38,12 @@ script:
       - switch.turn_off: slot_3_switch
       - switch.turn_off: slot_4_switch
       - lambda: |-
-          auto current_option = id(active_slot_select).state;
-          int slot = 0;
-          if (current_option == "1") slot = 1;
-          else if (current_option == "2") slot = 2;
-          else if (current_option == "3") slot = 3;
-          else if (current_option == "4") slot = 4;
-          // No action needed for "External" as all switches are already off
-          
-          switch (slot) {
-            case 1: id(slot_1_switch).turn_on(); break;
-            case 2: id(slot_2_switch).turn_on(); break;
-            case 3: id(slot_3_switch).turn_on(); break;
-            case 4: id(slot_4_switch).turn_on(); break;
+          switch (id(active_slot)) {
+            case 0: id(slot_1_switch).turn_on(); break;
+            case 1: id(slot_2_switch).turn_on(); break;
+            case 2: id(slot_3_switch).turn_on(); break;
+            case 3: id(slot_4_switch).turn_on(); break;
+            // No action needed for 254 (External) as all switches are already off
           }
 
 switch:
@@ -45,21 +52,25 @@ switch:
     id: slot_1_switch
     internal: true
     optimistic: true
+    state_topic: null
   - platform: template
     name: "Slot 2 Switch"
     id: slot_2_switch
     internal: true
     optimistic: true
+    state_topic: null
   - platform: template
     name: "Slot 3 Switch"
     id: slot_3_switch
     internal: true
     optimistic: true
+    state_topic: null
   - platform: template
     name: "Slot 4 Switch"
     id: slot_4_switch
     internal: true
     optimistic: true
+    state_topic: null
 
 binary_sensor:
   - platform: gpio
@@ -75,11 +86,14 @@ binary_sensor:
     on_press:
       then:
         - lambda: |-
-            if (id(active_slot_select).state == "1") {
+            if (id(active_slot) == 0) {
+              id(active_slot) = 254;
               id(active_slot_select).publish_state("External");
             } else {
+              id(active_slot) = 0;
               id(active_slot_select).publish_state("1");
             }
+        - script.execute: select_slot
 
   - platform: gpio
     pin:
@@ -94,11 +108,14 @@ binary_sensor:
     on_press:
       then:
         - lambda: |-
-            if (id(active_slot_select).state == "2") {
+            if (id(active_slot) == 1) {
+              id(active_slot) = 254;
               id(active_slot_select).publish_state("External");
             } else {
+              id(active_slot) = 1;
               id(active_slot_select).publish_state("2");
             }
+        - script.execute: select_slot
 
   - platform: gpio
     pin:
@@ -113,11 +130,15 @@ binary_sensor:
     on_press:
       then:
         - lambda: |-
-            if (id(active_slot_select).state == "3") {
+            if (id(active_slot) == 2) {
+              id(active_slot) = 254;
               id(active_slot_select).publish_state("External");
             } else {
+              id(active_slot) = 2;
               id(active_slot_select).publish_state("3");
             }
+        - script.execute: select_slot
+
 
   - platform: gpio
     pin:
@@ -132,8 +153,11 @@ binary_sensor:
     on_press:
       then:
         - lambda: |-
-            if (id(active_slot_select).state == "4") {
+            if (id(active_slot) == 3) {
+              id(active_slot) = 254;
               id(active_slot_select).publish_state("External");
             } else {
+              id(active_slot) = 3;
               id(active_slot_select).publish_state("4");
             }
+        - script.execute: select_slot
