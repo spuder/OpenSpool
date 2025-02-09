@@ -36,17 +36,17 @@ Almost as seamlessly as if you were using Bambu filament with an AMS.
 ## 🖨️ Protocol
 
 
-| Protocol | Read | Write | Type | 
-|----------------|------|-------|-------|
-| OpenSpool  | ✅    | ✅     | NTAG 215/216 | 
-| Bambu         | 🚧 In progress       | ❌     | MiFare Classic 1k | 
-| OpenTag  | 🚧 In progress  | 🚧 In progress    | NTAG 216 | 
-| Creality       | 🗓️ Planned    | 🗓️ Planned    | MiFare Classic 1k | 
-| PrusaRFID      |❓    | ❓     | ❓ |
+| Protocol  | Read          | Write         | Type              |
+| --------- | ------------- | ------------- | ----------------- |
+| OpenSpool | ✅             | ✅             | NTAG 215/216      |
+| Bambu     | 🚧 In progress | ❌             | MiFare Classic 1k |
+| OpenTag   | 🚧 In progress | 🚧 In progress | NTAG 216          |
+| Creality  | 🗓️ Planned     | 🗓️ Planned     | MiFare Classic 1k |
+| PrusaRFID | ❓             | ❓             | ❓                 |
 
 ### 🧬 OpenTag Protocol
 
-Many 3d printer fillament companies are uniting around a open standared called `OpenTag`. It planned to be finalized in early-mid 2025. OpenSpool will support OpenTag formatted tags as soon as it is finalized. See [here](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/blob/main/OpenSourceRfid.md) for more information.
+Many 3d printer filament companies are uniting around an open standard called `OpenTag`. It planned to be finalized in early-mid 2025. OpenSpool will support OpenTag formatted tags as soon as it is finalized. See [here](https://github.com/Bambu-Research-Group/RFID-Tag-Guide/blob/main/OpenTag.md) for more information.
 
 ### 🧬 OpenSpool Protocol
 
@@ -55,10 +55,9 @@ OpenSpool aims to use the simplest possible protocol for RFID tags. All you need
 
 Example record stored on NFC tag. 
 
+```
 type = `application/json`  
 payload = 
-
-```json
 {
     "protocol": "openspool",
     "version": "1.0",
@@ -92,22 +91,22 @@ https://openspool.io/tag_info?color_hex=FFAABB&type=PLA&brand=Generic&min_temp=2
 
 ## 🐼 Integrations
 
-Currently OpenSpool works with Bambu printers over mqtt. Other integrations are planned. Pull Requests welcome
+Currently, OpenSpool works with Bambu printers over MQTT. Other integrations are planned. Pull Requests welcome
 
-| Integration | Supported |
-| --- | --- |
-| Bambu | ✅ |
-| OctoPrint | 🚧 In Progress |
-| Prusa Connect | 🗓️ Planned |
-| SpoolMan | 🗓️ Planned |
-| Klipper / Moonraker | 🗓️ Planned |
-| Anker | ❔ | 
+| Integration         | Supported     |
+| ------------------- | ------------- |
+| Bambu               | ✅             |
+| OctoPrint           | 🚧 In Progress |
+| Prusa Connect       | 🗓️ Planned     |
+| SpoolMan            | 🗓️ Planned     |
+| Klipper / Moonraker | 🗓️ Planned     |
+| Anker               | ❔             |
 
 ## 🔧 Hardware
 
 OpenSpool requires an ESP32-S3 and PN532 NFC Reader (SPI Mode).
 
-The openspool schematics will always be free. If you don't want to source the parts yourself, you can 
+The OpenSpool schematics will always be free. If you don't want to source the parts yourself, you can 
 [buy a kit on tindie.com](https://www.tindie.com/products/36746/)
 
 <a href="https://www.tindie.com/stores/spuder/?ref=offsite_badges&utm_source=sellers_spuder&utm_medium=badges&utm_campaign=badge_small"><img src="https://d2ss6ovg47m0r5.cloudfront.net/badges/tindie-smalls.png" alt="I sell on Tindie" width="200" height="55"></a>
@@ -118,28 +117,28 @@ The openspool schematics will always be free. If you don't want to source the pa
 
 
 
-| | Hardware | Link 1 | Link 2| 
-| --- | --- | --- | --- | 
-| ![](./images/wemos-d1minis3.png) | Wemos D1 Mini s3 | | [Aliexpress](https://www.aliexpress.us/item/3256805262904443.html?gatewayAdapt=glo2usa) | 
-| ![](./images/pn532-small.png) |  PN532 (Small) | [Amazon](https://amzn.to/4eoBz8s) | [Aliexpress](https://www.aliexpress.us/item/3256805787598774.html)| 
-| ![](./images/NFC.png) | NTAG 215/216 (13.56Mhz NFC Tags >500 bytes) | [Amazon](https://amzn.to/4epJzpO) | | 
-| ![](./images/LED1.png) | WS2812B LED | [Amazon](https://amzn.to/40FFOt5) | |
-| ![](./images/Headers1.png) | 2.54mm Headers | [Amazon](https://amzn.to/4en6138) | | 
-| ![](./images/LLC1.png) | 3.3v - 5v Logic Level Converter | [Amazon](https://amzn.to/3UMfMkp) | | 
-| ![](./images/jumper1.png) | female-female jumper wire) | [Amazon](https://amzn.to/3AMwRDM) | | 
+| Image                                                                 | Hardware                                    | Link 1                            | Link 2                                                                                  |
+| --------------------------------------------------------------------- | ------------------------------------------- | --------------------------------- | --------------------------------------------------------------------------------------- |
+| <img src="./images/wemos-d1minis3.png" alt="D1 Mini s3" height="200"> | Wemos D1 Mini s3                            |                                   | [AliExpress](https://www.aliexpress.us/item/3256805262904443.html?gatewayAdapt=glo2usa) |
+| <img src="./images/pn532-small.png" alt="D1 Mini s3" height="200">    | PN532 (Small)                               | [Amazon](https://amzn.to/4eoBz8s) | [AliExpress](https://www.aliexpress.us/item/3256805787598774.html)                      |
+| <img src="./images/NFC.png" alt="D1 Mini s3" height="200">            | NTAG 215/216 (13.56Mhz NFC Tags >500 bytes) | [Amazon](https://amzn.to/4epJzpO) |                                                                                         |
+| <img src="./images/LED1.png" alt="D1 Mini s3" height="200">           | WS2812B LED                                 | [Amazon](https://amzn.to/40FFOt5) |                                                                                         |
+| <img src="./images/Headers1.png" alt="D1 Mini s3" height="200">       | 2.54mm Headers                              | [Amazon](https://amzn.to/4en6138) |                                                                                         |
+| <img src="./images/LLC1.png" alt="D1 Mini s3" height="200">           | 3.3v - 5v Logic Level Converter             | [Amazon](https://amzn.to/3UMfMkp) |                                                                                         |
+| <img src="./images/jumper1.png" alt="D1 Mini s3" height="200">        | female-female jumper wire                   | [Amazon](https://amzn.to/3AMwRDM) |                                                                                         |
 
-If you are unable to find a Wemos D1 Mini `s3`, you can stil buy an `s2`, as it is pin compatable. However be advised the `s2` has less memory and may expierence occassional disconnects from the printer
+If you are unable to find a Wemos D1 Mini `s3`, you can still buy an `s2`, as it is pin compatable. However, be advised the `s2` has less memory and may experience occasional disconnects from the printer
 
-| | Hardware | Link 1 | Link 2| 
-| --- | --- | --- | --- | 
-| ![](./images/wemos-d1mini.png)| Wemos D1 Mini S2 (Beware of Fakes!)| [Amazon](https://amzn.to/4fqq9m7) | [Aliexpress](https://www.aliexpress.us/item/3256802958877264.html)|
+| Image                                                               | Hardware                            | Link 1                            | Link 2                                                             |
+| ------------------------------------------------------------------- | ----------------------------------- | --------------------------------- | ------------------------------------------------------------------ |
+| <img src="./images/wemos-d1mini.png" alt="D1 Mini s3" height="200"> | Wemos D1 Mini S2 (Beware of Fakes!) | [Amazon](https://amzn.to/4fqq9m7) | [AliExpress](https://www.aliexpress.us/item/3256802958877264.html) |
 
 
-| Tag | Bytes | Supported |  
-| --- | --- | --- |  
-| NTAG 213 | 144 bytes | ❌ | 
-| NTAG 215 | 504 bytes | ✅ |  
-| NTAG 216 | 888 bytes | ✅ |   
+| Tag      | Bytes     | Supported |
+| -------- | --------- | --------- |
+| NTAG 213 | 144 bytes | ❌         |
+| NTAG 215 | 504 bytes | ✅         |
+| NTAG 216 | 888 bytes | ✅         |
 
 
 # Wiring Diagram
@@ -156,9 +155,9 @@ Be sure to put the PN532 into `SPI` mode (not `i2c` or `UART`)
 
 ## 🤖 Firmware
 
-The recomended method to install firmware is by navigating to [openspool.io](https://openspool.io) in Chrome/Edge and using the web based programming tool. 
+The recommended method to install firmware is by navigating to [openspool.io](https://openspool.io) in Chrome/Edge and using the web based programming tool. 
 
-Alternativly the firmware can be installed with `make` commands as shown below. 
+Alternatively the firmware can be installed with `make` commands as shown below. 
 
 ### OSX/Linux
 
@@ -170,7 +169,7 @@ cd OpenSpool/firmware
 ```
 
 Press and hold the D0 button while pressing the reset button on the Wemos D1 Mini.  
-A new usb serial device will appear. 
+A new USB serial device will appear. 
 
 ```bash
 ls /dev/cu*
@@ -190,14 +189,14 @@ USB_ADDRESS=/dev/cu.usbmodemXXXXX make lolin_s3_mini
 
 ## 🛜 First Time Configuration
 
-A new wifi network will appear called `OpenSpool`, join the network, navigate to [192.168.4.1](http://192.168.4.1),  insert your wifi credentials and reboot. 
+A new Wi-Fi network will appear called `OpenSpool`, join the network, navigate to [192.168.4.1](http://192.168.4.1), insert your Wi-Fi credentials and reboot. 
 
-You can then navigate to the web interface at `openspool-xxxxxx.local` or ip address. 
+You can then navigate to the web interface at `openspool-xxxxxx.local` or IP address. 
 
 
 ## 🎛️ Configuration
 
-On first boot, you will need to specify your 3d printer IP Address, Serial Number and Lan Access Code. 
+On first boot, you will need to specify your 3d printer IP Address, Serial Number and LAN Access Code. 
 
 Do not put your printer into LAN Only Mode, it is not required. 
 
@@ -212,15 +211,15 @@ Upon successful connection to the 3d printer, you will observe a checkmark next 
 ## Factory Reset
 
 Press and hold the D0 button for 10 seconds. 
-This will erase wifi credentials and bambu access credentials from esp32. 
+This will erase Wi-Fi credentials and Bambu access credentials from esp32. 
 
 # 🔧 Troubleshooting
 
 ### LED is breathing blue
-This means the OpenSpool is hosting a wireless access point called 'OpenSpool'. Connect to it then navigate to [192.168.4.1](http://192.168.4.1) to configure wifi. 
+This means the OpenSpool is hosting a wireless access point called 'OpenSpool'. Connect to it then navigate to [192.168.4.1](http://192.168.4.1) to configure Wi-Fi. 
 
 ### LED is solid white
-OpenSpool has succesfully joined the wifi network and is ready to scan for RFID tags
+OpenSpool has successfully joined the Wi-Fi network and is ready to scan for RFID tags
 
 
 ### NFC Tags aren't reading reliably
@@ -229,19 +228,19 @@ If using the red NP5332 reader (smaller model), it detects tags best on the corn
 
 If using the blue PN532 reader (larger model), it detects tags best directly in the center of the antenna.   
 
-Be sure you aren't using a [counterfit PN532](https://forum.dangerousthings.com/t/success-pn532-is-not-easy-to-work-with/1108/10)
+Be sure you aren't using a [counterfeit PN532](https://forum.dangerousthings.com/t/success-pn532-is-not-easy-to-work-with/1108/10)
 
 ### MQTT Disconnects
 
 The A1/P1 have a limit of 4 mqtt connections. If more than 4 connections are reached clients may be asked to disconnect. 
 
 If a client attempts to write invalid data any mqtt topic, the printer will ask the client to disconnect. 
-All esphome resources must use `state_topic:` with a null value to prevent esphome from broadcasting on any topic. 
+All ESPhome resources must use `state_topic:` with a null value to prevent ESPhome from broadcasting on any topic. 
 
 
 ### TLS Errors
 
-Reach out to the discord for help verifying that the Root Certificate is correct. 
+Reach out to the discord for help to verify that the Root Certificate is correct. 
 
 
 ### Advanced Troubleshooting
@@ -345,11 +344,11 @@ mqttx sub -t 'device/$SERIAL_NUMBER/report' -u bblp -P $LAN_ACCESS_CODE --mqtt-v
 
 All contributions to the project are welcome. Skills needed:
 
-- Sofware Development
+- Software Development
 - Photography
 - Videography
 - Documentation
-- Eletrical Design
+- Electrical Design
 - Testing/Integration
 
 You can also donate to support research and development costs
