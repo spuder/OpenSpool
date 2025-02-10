@@ -280,6 +280,13 @@ mqttx sub -t 'device/$SERIAL_NUMBER/report' -u bblp -P $LAN_ACCESS_CODE --mqtt-v
                 </a>
             </td>
             <td align="center">
+                <a href="https://github.com/Tnthr">
+                    <img src="https://avatars.githubusercontent.com/u/131608369?v=4" width="100;" alt="Tnthr"/>
+                    <br />
+                    <sub><b>Tnthr</b></sub>
+                </a>
+            </td>
+            <td align="center">
                 <a href="https://github.com/phillipthelen">
                     <img src="https://avatars.githubusercontent.com/u/298062?v=4" width="100;" alt="phillipthelen"/>
                     <br />
