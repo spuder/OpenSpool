@@ -39,10 +39,34 @@ script:
       - switch.turn_off: slot_4_switch
       - lambda: |-
           switch (id(active_slot)) {
-            case 0: id(slot_1_switch).turn_on(); break;
-            case 1: id(slot_2_switch).turn_on(); break;
-            case 2: id(slot_3_switch).turn_on(); break;
-            case 3: id(slot_4_switch).turn_on(); break;
+            case 0: 
+              id(slot_1_switch).turn_on(); 
+              id(set_led_white).execute(0);
+              id(set_led_off).execute(1);
+              id(set_led_off).execute(2);
+              id(set_led_off).execute(3);
+              break;
+            case 1: 
+              id(slot_2_switch).turn_on(); 
+              id(set_led_white).execute(1);
+              id(set_led_off).execute(0);
+              id(set_led_off).execute(2);
+              id(set_led_off).execute(3);
+              break;
+            case 2: 
+              id(slot_3_switch).turn_on(); 
+              id(set_led_white).execute(2);
+              id(set_led_off).execute(0);
+              id(set_led_off).execute(1);
+              id(set_led_off).execute(3);
+              break;
+            case 3: 
+              id(slot_4_switch).turn_on(); 
+              id(set_led_white).execute(3);
+              id(set_led_off).execute(0);
+              id(set_led_off).execute(1);
+              id(set_led_off).execute(2);
+              break;
             // No action needed for 254 (External) as all switches are already off
           }
 
