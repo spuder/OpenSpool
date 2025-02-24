@@ -1,5 +1,6 @@
 ---
 wifi:
+  id: openspool_wifi
   ap:
     ssid: "OpenSpool"
     password: "OpenSpool"

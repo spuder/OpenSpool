@@ -1,5 +1,5 @@
 logger:
-  level: INFO
+  level: DEBUG
   logs:
     sensor: WARN
     pn532: INFO
@@ -10,7 +10,7 @@ logger:
     mqtt: INFO
     mqtt.component: INFO
     mqtt.client: INFO
-    wifi: VERBOSE
+    wifi: DEBUG
     wifi_esp32: WARN
     esp-tls: WARN
     esp-tls-mbedtls: WARN

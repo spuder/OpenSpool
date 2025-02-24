@@ -6,7 +6,7 @@ esphome:
     platform_packages:
       - framework-arduinopico @ https://github.com/earlephilhower/arduino-pico.git
     board_build.filesystem_size: 0.5m
-    
+
 rp2040:
   board: rpipicow
   framework:
@@ -38,6 +38,15 @@ rp2040_mqtt:
   auth: true
   mqtt_user: bblp
   mqtt_pass: ""
+
+# I don't know why this part seems to be necessary for the device to retain the wifi credentials, but it does.
+globals:
+  - id: global_wifi_ssid
+    type: std::string
+    restore_value: yes
+  - id: global_wifi_password
+    type: std::string
+    restore_value: yes
 
 mqtt: !remove
 
