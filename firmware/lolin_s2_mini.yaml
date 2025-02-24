@@ -24,6 +24,8 @@ packages:
   #improv-serial: !include conf.d/improv-serial.yaml
   #extra: !include conf.d/extra.yaml
   button: !include conf.d/button.yaml
+  esp32-common: !include esp32_common.yaml
+
 
 dashboard_import:
   package_import_url: github://spuder/openspool/firmware/lolin_s2_mini.yaml@main

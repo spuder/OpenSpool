@@ -1,0 +1,58 @@
+esphome:
+  name: rpipicow
+  libraries:
+    - https://github.com/skilau/ESPAsyncWebServer.git
+  platformio_options:
+    platform_packages:
+      - framework-arduinopico @ https://github.com/earlephilhower/arduino-pico.git
+    board_build.filesystem_size: 0.5m
+    
+rp2040:
+  board: rpipicow
+  framework:
+    platform_version: https://github.com/maxgerhardt/platform-raspberrypi.git#develop
+
+substitutions:
+  hide_ams_sensors: 'true'
+  led_pin: GPIO15
+  spi2_type: spi
+  spi2_clk_pin: GPIO2
+  spi2_miso_pin: GPIO4
+  spi2_mosi_pin: GPIO3
+  rfid0_spi_interface: SPI2
+  rfid0_ss_pin: GPIO1
+  #neopixel_pin: '28'
+  mqtt: "rp2040_mqtt"
+
+external_components:
+  - source:
+      type: local
+      path: components
+    components: [ rp2040_mqtt ]
+
+rp2040_mqtt:
+  id: bambu_mqtt
+  secure: true
+  mqtt_host: ""
+  mqtt_port: 8883
+  auth: true
+  mqtt_user: bblp
+  mqtt_pass: ""
+
+mqtt: !remove
+
+packages:
+  improv-serial: !include conf.d/improv-serial.yaml
+  state-topic: !include conf.d/state_topic.yaml
+  openspool-mini: !include openspool-mini.yaml
+  led-external: !include conf.d/led-external_rp2040.yaml
+  extra: !include conf.d/extra.yaml
+  button: !include conf.d/button.yaml
+
+button:
+  - platform: factory_reset
+    name: Restart with Factory Default Settings
+
+
+
+

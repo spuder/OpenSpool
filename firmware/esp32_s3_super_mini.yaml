@@ -2,9 +2,9 @@ esp32:
   board: esp32-s3-devkitc-1
 
 substitutions:
-  hide_ams_sensors: 'false'
-  led_pin: GPIO21
-  neopixel_pin: '48' #some boards have this on pin 38
+  hide_ams_sensors: 'true'
+  led_pin: GPIO8
+  neopixel_pin: '21' #some boards have this on pin 38
   spi2_type: SPI2
   spi2_clk_pin: GPIO12
   spi2_miso_pin: GPIO13
@@ -13,14 +13,14 @@ substitutions:
   rfid0_spi_interface: SPI2
   rfid0_ss_pin: GPIO04
 
-  rfid1_spi_interface: SPI2
-  rfid1_ss_pin: GPIO05
+#  rfid1_spi_interface: SPI2
+#  rfid1_ss_pin: GPIO05
 
-  rfid2_spi_interface: SPI2
-  rfid2_ss_pin: GPIO06
+#  rfid2_spi_interface: SPI2
+#  rfid2_ss_pin: GPIO06
 
-  rfid3_spi_interface: SPI2
-  rfid3_ss_pin: GPIO07
+#  rfid3_spi_interface: SPI2
+#  rfid3_ss_pin: GPIO07
 
   # rfid4_spi_interface: SPI2
   # rfid4_ss_pin: GPIO05
@@ -43,14 +43,15 @@ substitutions:
   # rfid8_ss_pin: GPI14 # TODO: Verify this is compatible
 
 packages: 
-  openspool-ams: !include openspool-ams.yaml
+  #openspool-ams: !include openspool-ams.yaml
+  openspool-mini: !include openspool-mini.yaml
   improv-serial: !include conf.d/improv-serial.yaml
-  #improv-bluetooth: !include conf.d/improv-bluetooth.yaml
-  #led-internal: !include conf.d/led-internal.yaml
-  extra: !include conf.d/extra.yaml
   esp32-common: !include esp32_common.yaml
-
+  #improv-bluetooth: !include conf.d/improv-bluetooth.yaml
+  led-internal: !include conf.d/led-internal.yaml
+  extra: !include conf.d/extra.yaml
+  button: !include conf.d/button.yaml
 
 dashboard_import:
-  package_import_url: github://spuder/openspool/firmware/esp32-s3-devkitc-1.yaml@main
+  package_import_url: github://spuder/openspool/firmware/esp32_s3_super_mini.yaml@main
   import_full_config: false
