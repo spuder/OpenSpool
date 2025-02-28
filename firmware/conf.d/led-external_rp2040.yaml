@@ -1,6 +1,6 @@
 ---
 substitutions:
-  led_count: '9'
+  led_count: '4'
 light:
 - platform: rp2040_pio_led_strip
   name: LEDs
