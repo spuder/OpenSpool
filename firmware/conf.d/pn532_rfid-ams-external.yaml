@@ -1,9 +1,4 @@
 ---
-esphome:
-  on_boot:
-    then:
-      - component.suspend: tap_timer
-      
 substitutions:
   spi_data_rate: 200kHz
   # spi_data_rate: 1Mhz #TODO: decrease this to increase reliability for long cable runs
@@ -18,6 +13,10 @@ globals:
     type: int
     restore_value: no
     initial_value: '0'
+  - id: global_error
+    type: bool
+    restore_value: no
+    initial_value: 'false'
 
 interval:
   - id: tap_timer
@@ -81,14 +80,15 @@ pn532_spi:
     - delay: 500ms
     - lambda: |-
         id(tap_timer).setup();
-        if(id(global_tap_counter) == 5){
-          id(set_led_rainbow).execute();
-        } else{
-            for(int i = 0; i < id(global_tap_counter); i++) {
-              id(set_led_green).execute(i);
-            }
+        if(id(global_error) == false) {
+          if(id(global_tap_counter) == 5){
+            id(set_led_rainbow).execute();
+          } else{
+              for(int i = 0; i < id(global_tap_counter); i++) {
+                id(set_led_green).execute(i);
+              }
+          }
         }
-        
     - delay: 500ms
     - light.turn_on:
         id: neopixel_light
@@ -99,6 +99,7 @@ pn532_spi:
     - if:
         condition:
           and:
+          - lambda: 'return id(global_error) == false;'
           - lambda: 'return id(global_tap_counter) > 0;'
           - ${mqtt}.connected
           - lambda: 'return id(filament_raw_data0).state != "";'
@@ -113,6 +114,9 @@ pn532_spi:
             # payload: !lambda "return bambulabs::generate_mqtt_payload( id(filament_raw_data0).state, 255, 254 );"
             payload: !lambda "return bambulabs::generate_mqtt_payload( id(filament_raw_data0).state, id(global_tap_counter) == 5 ? 255 : 0, id(global_tap_counter) == 5 ? 254: id(global_tap_counter) - 1 );"
         - lambda: 'id(filament_raw_data0).publish_state("");'
+    - globals.set: 
+        id: global_error
+        value: 'false'
 
 
   on_tag:
@@ -122,6 +126,7 @@ pn532_spi:
         state: ON
     - lambda: |-
         bool is_valid_openspool = false;
+        id(global_error) = false;
         std::string payload;
 
         if (tag.has_ndef_message()) {
@@ -176,6 +181,7 @@ pn532_spi:
         } else {
           id(tap_timer).stop_poller();
           id(tap_timer).setup();
+          id(global_error) = true;
           for(int i = 0; i < 4; i++) {
             id(set_led_red).execute(i);
           }

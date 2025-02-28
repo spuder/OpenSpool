@@ -6,6 +6,9 @@ esphome:
     platform_packages:
       - framework-arduinopico @ https://github.com/earlephilhower/arduino-pico.git
     board_build.filesystem_size: 0.5m
+  on_boot:
+      then:
+        - component.suspend: tap_timer # Remove this if only using the spool holder; it's for AMS-external only
 
 rp2040:
   board: rpipicow

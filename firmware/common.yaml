@@ -132,8 +132,8 @@ packages:
   mqtt_bambu_lan: !include conf.d/mqtt_bambu_lan.yaml
   filament: !include conf.d/filament.yaml
   bambu_printer: !include conf.d/bambu_printer.yaml
-  pn532_rfid-solo: !include conf.d/pn532_rfid-solo.yaml # Comment if using an AMS with 4 LEDs; make sure you uncomment below also
-  # pn532_rfid-ams-external: !include conf.d/pn532_rfid-ams-external.yaml # Uncomment if using an AMS with 4 LEDs; make sure you comment above also
+  #pn532_rfid-solo: !include conf.d/pn532_rfid-solo.yaml # Comment if using an AMS with 4 LEDs; make sure you uncomment below also
+  pn532_rfid-ams-external: !include conf.d/pn532_rfid-ams-external.yaml # Uncomment if using an AMS with 4 LEDs; make sure you comment above also
   automation: !include conf.d/automation.yaml
   ota: !include conf.d/ota.yaml
   #update: !include conf.d/update.yaml

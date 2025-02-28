@@ -123,7 +123,7 @@ namespace bambulabs
             }
         }
 
-        if (doc_in["color_hex"].as<std::string>().length() != 6 && doc_in["color_hex"].as<std::string>().length() != 8) {
+        if (doc_in["color_hex"].as<std::string>().length() > 0 && doc_in["color_hex"].as<std::string>().length() != 6 && doc_in["color_hex"].as<std::string>().length() != 8) {
             ESP_LOGE("bambu", "Invalid color_hex length (expected 6 or 8 characters)");
             return {};
         }
@@ -133,7 +133,7 @@ namespace bambulabs
         print["command"] = "ams_filament_setting";
         print["ams_id"] = ams_id;
         print["tray_id"] = ams_tray;
-        if (doc_in["color_hex"].as<std::string>().length() == 6) {
+        if (doc_in["color_hex"].as<std::string>().length() > 0 && doc_in["color_hex"].as<std::string>().length() == 6) {
             print["tray_color"] = doc_in["color_hex"].as<std::string>() + "FF";
         }
         else{
