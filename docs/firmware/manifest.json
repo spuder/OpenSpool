@@ -1,13 +1,13 @@
 {
   "name": "OpenSpool",
-  "version": "1.18.0",
+  "version": "1.19.1",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "0617f2d5931811bbb77810a2b794cc72",
-        "summary": "Add PETG HF",
+        "md5": "7fb01acd9baa67eaded2ad43b291416e",
+        "summary": "Pin esphome version",
         "release_url": "https://openspool.io/firmware"
       },
       "parts": [
@@ -21,8 +21,8 @@
       "chipFamily": "ESP32-S3",
       "ota": {
         "path": "openspool-esp32s3.ota.bin",
-        "md5": "f4c66702ce689e97cf06d19ab8598708",
-        "summary": "Add PETG HF",
+        "md5": "ce2e7bda63b8f1dc7147363c7da5bd6f",
+        "summary": "Pin esphome version",
         "release_url": "https://openspool.io/firmware"
       },
       "parts": [
