@@ -1,0 +1,24 @@
+esp32:
+  board: esp32dev
+
+substitutions:
+  hide_ams_sensors: 'false'
+  led_pin: GPIO21
+  spi2_type: any
+  spi2_clk_pin: GPIO14
+  spi2_miso_pin: GPIO12
+  spi2_mosi_pin: GPIO13
+
+  rfid0_spi_interface: any
+  rfid0_ss_pin: GPIO15
+
+packages: 
+  openspool-mini: !include openspool-mini.yaml
+  #improv-serial: !include conf.d/improv-serial.yaml
+  #improv-bluetooth: !include conf.d/improv-bluetooth.yaml
+  #led-internal: !include conf.d/led-internal.yaml
+  extra: !include conf.d/extra.yaml
+
+dashboard_import:
+  package_import_url: github://spuder/openspool/firmware/esp32-32d.yaml@main
+  import_full_config: false
