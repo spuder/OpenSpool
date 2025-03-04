@@ -1,17 +1,22 @@
+esphome:
+  on_boot:
+      then:
+        - component.suspend: tap_timer # Remove this if only using the spool holder; it's for AMS-external only
+
 esp32:
   board: esp32-s3-devkitc-1
 
 substitutions:
   hide_ams_sensors: 'true'
-  led_pin: GPIO8
-  neopixel_pin: '21' #some boards have this on pin 38
+  led_pin: GPIO9
+  neopixel_pin: '48' #some boards have this on pin 38
   spi2_type: SPI2
-  spi2_clk_pin: GPIO12
-  spi2_miso_pin: GPIO13
-  spi2_mosi_pin: GPIO11
+  spi2_clk_pin: GPIO10
+  spi2_miso_pin: GPIO11
+  spi2_mosi_pin: GPIO12
 
   rfid0_spi_interface: SPI2
-  rfid0_ss_pin: GPIO04
+  rfid0_ss_pin: GPIO13
 
 #  rfid1_spi_interface: SPI2
 #  rfid1_ss_pin: GPIO05

@@ -1,6 +1,6 @@
 ---
 substitutions:
-  led_count: '9'
+  led_count: '4'
 light:
 - platform: esp32_rmt_led_strip
   name: LEDs
