@@ -74,18 +74,20 @@ jobs:
           cat firmware/conf.d/version.yaml
 
       - name: Build OpenSpool-Mini firmware
-        uses: esphome/build-action@v4.0.2
+        uses: esphome/build-action@v6.0.0
         with:
           yaml-file: ${{ github.workspace }}/firmware/lolin_s2_mini.yaml
+          version: 2024.12.4
           release-summary: ${{ env.RELEASE_SUMMARY }}
           release-url: https://openspool.io/firmware
           complete-manifest: false
         if: matrix.target == 'esp32s2'
 
       - name: Build OpenSpool-AMS firmware
-        uses: esphome/build-action@v4.0.2
+        uses: esphome/build-action@v6.0.0
         with:
           yaml-file: ${{ github.workspace }}/firmware/lolin_s3_mini.yaml
+          version: 2024.12.4
           release-summary: ${{ env.RELEASE_SUMMARY }}
           release-url: https://openspool.io/firmware
           complete-manifest: false
