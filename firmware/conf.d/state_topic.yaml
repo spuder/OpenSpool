@@ -1,0 +1,84 @@
+select:
+  - id: !extend filament_type
+    state_topic: !remove
+  - id: !extend bambu_model
+    state_topic: !remove
+  - id: !extend filament_variant
+    state_topic: !remove
+  - id: !extend filament_brand
+    state_topic: !remove
+  - id: !extend filament_color
+    state_topic: !remove
+
+sensor:
+  - id: !extend openspool_uptime
+    state_topic: !remove
+
+text:
+  - id: !extend bambu_serial_number
+    state_topic: !remove
+  - id: !extend bambu_lan_access_code
+    state_topic: !remove
+  - id: !extend bambu_ip_address
+    state_topic: !remove
+  
+text_sensor:
+  - id: !extend openspool_version
+    state_topic: !remove
+  - id: !extend openspool_url
+    state_topic: !remove
+  - id: !extend bambuhandy_url
+    state_topic: !remove
+  - id: !extend filament_brand_code
+    state_topic: !remove
+  - id: !extend filament_color_hex
+    state_topic: !remove
+  - id: !extend filament_color_hexaa
+    state_topic: !remove
+  - id: !extend filament_sub_brand
+    state_topic: !remove
+  - id: !extend filament_alpha
+    state_topic: !remove
+  - id: !extend filament_raw_data0
+    state_topic: !remove
+  - id: !extend nfc_preview
+    state_topic: !remove
+
+
+binary_sensor:
+  - id: !extend rfid_reader_spi_0_tag_parsed
+    state_topic: !remove
+  - id: !extend rfid_reader_spi_0_tag_is_openspool
+    state_topic: !remove
+  - id: !extend physical_button
+    state_topic: !remove
+  - id: !extend mqtt_connected
+    state_topic: !remove
+  - id: !extend nfc_tag_present0
+    state_topic: !remove
+
+button: 
+  - id: !extend restart_openspool
+    state_topic: !remove
+  - id: !extend factory_reset_openspool
+    state_topic: !remove
+  - id: !extend write_url_button
+    state_topic: !remove
+  - id: !extend write_bambuhandy_url_button
+    state_topic: !remove
+  - id: !extend upload_filament_settings
+    state_topic: !remove
+  - id: !extend write_nfc
+    state_topic: !remove
+
+switch:
+  - id: !extend filament_include_alpha
+    state_topic: !remove
+
+number:
+  - id: !extend filament_min_temp
+    state_topic: !remove
+  - id: !extend filament_max_temp
+    state_topic: !remove
+  - id: !extend filament_alpha_int
+    state_topic: !remove

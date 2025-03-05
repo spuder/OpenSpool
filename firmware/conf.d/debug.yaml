@@ -26,18 +26,18 @@ text_sensor:
   reset_reason:
     name: "Reset Reason"
     id: reset_reason
-    state_topic:
+    #state_topic:
 sensor:
 - platform: debug
   free:
     name: "Heap Free"
     id: heap_free
-    state_topic:
+    #state_topic:
   block:
     name: "Heap Max Block"
     id: heap_max_block
-    state_topic:
-      # loop_time:
-      #   name: "Loop Time"
-      #   id: loop_time
-      #   state_topic:
+    # state_topic:
+    #   loop_time:
+    #     name: "Loop Time"
+    #     id: loop_time
+    #     state_topic:
