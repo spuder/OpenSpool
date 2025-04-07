@@ -141,6 +141,8 @@ script:
         } else if (id(filament_brand).state == "PolyLite") {
           id(filament_brand_code).publish_state("GFL00");
           id(filament_sub_brand).publish_state("PolyLite PLA");
+        } else if (id(filament_brand).state == "Sunlu") {
+          id(filament_brand_code).publish_state("GFSNL03"); 
         } else if (id(filament_brand).state == "Bambu") {
           // Check for Bambu PLA variants
           if (id(filament_variant).state == "Basic") {
@@ -170,6 +172,8 @@ script:
           // TODO: find overture PETG brand code
           id(filament_brand_code).publish_state("GFG99"); // Using generic for now
           id(filament_sub_brand).publish_state("PETG");
+        } else if (id(filament_brand).state == "Sunlu") {
+          id(filament_brand_code).publish_state("GFSNL08");  
         } else { // Generic
           id(filament_brand_code).publish_state("GFG99");
           id(filament_sub_brand).publish_state("PETG");
