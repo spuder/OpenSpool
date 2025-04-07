@@ -32,13 +32,13 @@ Almost as seamlessly as if you were using Bambu filament with an AMS.
 
 
 
-
 ## 🖨️ Protocol
 
 
 | Protocol  | Read          | Write         | Type              |
 | --------- | ------------- | ------------- | ----------------- |
 | OpenSpool | ✅             | ✅             | NTAG 215/216      |
+| TigerTag | 🚧 In progress | 🚧 In progress | NTAG 213 | 
 | Bambu     | 🚧 In progress | ❌             | MiFare Classic 1k |
 | OpenTag   | 🚧 In progress | 🚧 In progress | NTAG 216          |
 | Creality  | 🗓️ Planned     | 🗓️ Planned     | MiFare Classic 1k |
@@ -51,6 +51,7 @@ Many 3d printer filament companies are uniting around an open standard called `O
 ### 🧬 OpenSpool Protocol
 
 OpenSpool aims to use the simplest possible protocol for RFID tags. All you need is a [NTAG215/216](https://a.co/d/5ojDUNk) 
+
 #### NDEF Record
 
 Example record stored on NFC tag. 
@@ -101,6 +102,13 @@ Currently, OpenSpool works with Bambu printers over MQTT. Other integrations are
 | SpoolMan            | 🗓️ Planned     |
 | Klipper / Moonraker | 🗓️ Planned     |
 | Anker               | ❔             |
+
+
+**Bambu**
+Bambu X1C printers running `1.08.05.00` or newer must enable `LAN Mode` and `Developer Mode` for the OpenSpool reader to work. [Additional information](https://forum.bambulab.com/t/firmware-01-08-05-00-authorization-control-is-here/152239) on bambu's blog. 
+
+All other Bambu Printers and X1C printers running firmware older than `1.08.05.xx` do not need to enable Developer Mode. 
+
 
 ## 🔧 Hardware
 
