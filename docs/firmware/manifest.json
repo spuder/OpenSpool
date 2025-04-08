@@ -1,13 +1,13 @@
 {
   "name": "OpenSpool",
-  "version": "1.19.1",
+  "version": "1.20.0",
   "builds": [
     {
       "chipFamily": "ESP32-S2",
       "ota": {
         "path": "openspool-esp32s2.ota.bin",
-        "md5": "7fb01acd9baa67eaded2ad43b291416e",
-        "summary": "Pin esphome version",
+        "md5": "c655020654c1f8896785503b2ee867a5",
+        "summary": "Merge pull request #58 from raihei/main%0A%0AFixed Sunlu filaments and created LED feedback for write tag finished",
         "release_url": "https://openspool.io/firmware"
       },
       "parts": [
@@ -21,8 +21,8 @@
       "chipFamily": "ESP32-S3",
       "ota": {
         "path": "openspool-esp32s3.ota.bin",
-        "md5": "ce2e7bda63b8f1dc7147363c7da5bd6f",
-        "summary": "Pin esphome version",
+        "md5": "5e39e32f026390e7095ca37ab5de19bd",
+        "summary": "Merge pull request #58 from raihei/main%0A%0AFixed Sunlu filaments and created LED feedback for write tag finished",
         "release_url": "https://openspool.io/firmware"
       },
       "parts": [
