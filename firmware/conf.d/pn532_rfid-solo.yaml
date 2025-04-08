@@ -311,6 +311,8 @@ button:
             tag: "rfid"
             format: "Finished writing tag"
             level: INFO
+        - lambda: |-
+            id(set_led_green).execute(0);
         else:
         - lambda: |-
             ESP_LOGI("rfid", "NFC Tag not present");
