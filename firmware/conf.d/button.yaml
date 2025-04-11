@@ -11,18 +11,18 @@ binary_sensor:
     inverted: true
   on_press:
     then:
-    - script.execute:
-        id: set_led_red
-        led_number: -1
+    # - script.execute:
+    #     id: set_led_red
+    #     led_number: -1
     - globals.set:
         id: button_press_duration
         value: "0"
     - script.execute: start_timer
   on_release:
     then:
-    - script.execute:
-        id: set_led_white
-        led_number: -1
+    # - script.execute:
+    #     id: set_led_white
+    #     led_number: -1
     - script.stop: timer_script
     - if:
         condition:

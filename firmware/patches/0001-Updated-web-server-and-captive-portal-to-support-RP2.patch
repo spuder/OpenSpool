@@ -1,0 +1,129 @@
+From 99adf9169a58ced761f055b563f4f61c7188ee02 Mon Sep 17 00:00:00 2001
+From: Drew Green <agreenbhm@gmail.com>
+Date: Sun, 23 Feb 2025 18:13:39 -0500
+Subject: [PATCH] Updated web server and captive portal to support RP2040
+
+---
+ async_tcp/__init__.py             |  6 ++++++-
+ captive_portal/__init__.py        |  7 ++++++-
+ web_server/__init__.py            |  4 +++-
+ web_server_base/__init__.py       |  8 +++++--
+ web_server_base/web_server_base.h |  1 +
+ 6 files changed, 30 insertions(+), 33 deletions(-)
+
+diff --git a/async_tcp/__init__.py b/async_tcp/__init__.py
+index 99e250b..8ccc4d1 100644
+--- a/async_tcp/__init__.py
++++ b/async_tcp/__init__.py
+@@ -6,6 +6,7 @@ from esphome.const import (
+     PLATFORM_ESP32,
+     PLATFORM_ESP8266,
+     PLATFORM_RTL87XX,
++    PLATFORM_RP2040
+ )
+ from esphome.core import CORE, coroutine_with_priority
+ 
+@@ -14,7 +15,7 @@ CODEOWNERS = ["@OttoWinter"]
+ CONFIG_SCHEMA = cv.All(
+     cv.Schema({}),
+     cv.only_with_arduino,
+-    cv.only_on([PLATFORM_ESP32, PLATFORM_ESP8266, PLATFORM_BK72XX, PLATFORM_RTL87XX]),
++    cv.only_on([PLATFORM_ESP32, PLATFORM_ESP8266, PLATFORM_BK72XX, PLATFORM_RTL87XX, PLATFORM_RP2040]),
+ )
+ 
+ 
+@@ -26,3 +27,6 @@ async def to_code(config):
+     elif CORE.is_esp8266:
+         # https://github.com/esphome/ESPAsyncTCP
+         cg.add_library("esphome/ESPAsyncTCP-esphome", "2.0.0")
++    elif CORE.is_rp2040:
++        # https://github.com/khoih-prog/AsyncTCP_RP2040W.git
++        cg.add_library("https://github.com/khoih-prog/AsyncTCP_RP2040W.git", None)
+diff --git a/captive_portal/__init__.py b/captive_portal/__init__.py
+index a90ea14..4583e1b 100644
+--- a/captive_portal/__init__.py
++++ b/captive_portal/__init__.py
+@@ -8,6 +8,7 @@ from esphome.const import (
+     PLATFORM_ESP8266,
+     PLATFORM_BK72XX,
+     PLATFORM_RTL87XX,
++    PLATFORM_RP2040
+ )
+ from esphome.core import coroutine_with_priority, CORE
+ 
+@@ -27,7 +28,7 @@ CONFIG_SCHEMA = cv.All(
+             ),
+         }
+     ).extend(cv.COMPONENT_SCHEMA),
+-    cv.only_on([PLATFORM_ESP32, PLATFORM_ESP8266, PLATFORM_BK72XX, PLATFORM_RTL87XX]),
++    cv.only_on([PLATFORM_ESP32, PLATFORM_ESP8266, PLATFORM_BK72XX, PLATFORM_RTL87XX, PLATFORM_RP2040]),
+ )
+ 
+ 
+@@ -47,3 +48,7 @@ async def to_code(config):
+             cg.add_library("DNSServer", None)
+         if CORE.is_libretiny:
+             cg.add_library("DNSServer", None)
++        if CORE.is_rp2040:
++            cg.add_library("DNSServer", None)
++            cg.add_library("WiFi", None)
++
+diff --git a/web_server/__init__.py b/web_server/__init__.py
+index d846a34..71a842f 100644
+--- a/web_server/__init__.py
++++ b/web_server/__init__.py
+@@ -29,6 +29,7 @@ from esphome.const import (
+     PLATFORM_ESP32,
+     PLATFORM_ESP8266,
+     PLATFORM_RTL87XX,
++    PLATFORM_RP2040
+ )
+ from esphome.core import CORE, coroutine_with_priority
+ import esphome.final_validate as fv
+@@ -181,13 +182,14 @@ CONFIG_SCHEMA = cv.All(
+                 esp32_idf=False,
+                 bk72xx=True,
+                 rtl87xx=True,
++                rp2040=True
+             ): cv.boolean,
+             cv.Optional(CONF_LOG, default=True): cv.boolean,
+             cv.Optional(CONF_LOCAL): cv.boolean,
+             cv.Optional(CONF_SORTING_GROUPS): cv.ensure_list(sorting_group),
+         }
+     ).extend(cv.COMPONENT_SCHEMA),
+-    cv.only_on([PLATFORM_ESP32, PLATFORM_ESP8266, PLATFORM_BK72XX, PLATFORM_RTL87XX]),
++    cv.only_on([PLATFORM_ESP32, PLATFORM_ESP8266, PLATFORM_BK72XX, PLATFORM_RTL87XX, PLATFORM_RP2040]),
+     default_url,
+     validate_local,
+     validate_ota,
+diff --git a/web_server_base/__init__.py b/web_server_base/__init__.py
+index 4f89461..d54a8fc 100644
+--- a/web_server_base/__init__.py
++++ b/web_server_base/__init__.py
+@@ -36,5 +36,9 @@ async def to_code(config):
+             cg.add_library("WiFi", None)
+             cg.add_library("FS", None)
+             cg.add_library("Update", None)
+-        # https://github.com/esphome/ESPAsyncWebServer/blob/master/library.json
+-        cg.add_library("esphome/ESPAsyncWebServer-esphome", "3.2.2")
++        if CORE.is_rp2040:
++            cg.add_library("https://github.com/skilau/ESPAsyncWebServer.git", None)
++            cg.add_library("WiFi", None)
++        else:
++            # https://github.com/esphome/ESPAsyncWebServer/blob/master/library.json
++            cg.add_library("esphome/ESPAsyncWebServer-esphome", "3.2.2")
+diff --git a/web_server_base/web_server_base.h b/web_server_base/web_server_base.h
+index f876d16..c580897 100644
+--- a/web_server_base/web_server_base.h
++++ b/web_server_base/web_server_base.h
+@@ -8,6 +8,7 @@
+ #include "esphome/core/component.h"
+ 
+ #ifdef USE_ARDUINO
++#include <WiFi.h>
+ #include <ESPAsyncWebServer.h>
+ #elif USE_ESP_IDF
+ #include "esphome/core/hal.h"
+-- 
+2.39.5 (Apple Git-154)
+

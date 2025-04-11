@@ -1,0 +1,302 @@
+diff --git a/firmware/Makefile b/firmware/Makefile
+index b45fa23..d91a013 100644
+--- a/firmware/Makefile
++++ b/firmware/Makefile
+@@ -17,6 +17,7 @@ clean:
+ 	esphome clean lolin_s2_mini.yaml
+ 	esphome clean lolin_s3_mini.yaml
+ 	esphome clean esp32-s3-devkitc-1.yaml
++	esphome clean rpipicow.yaml
+ 	rm -rf .esphome/idedata/*
+ 	rm -rf ~/.platformio/penv
+ # build-esp32s2-mini:
+@@ -69,6 +70,9 @@ lolin_s2_mini:
+ lolin_s3_mini:
+ 	esphome \
+ 		run lolin_s3_mini.yaml --device $(USB_ADDRESS)
++rpipicow:
++	esphome \
++		run rpipicow.yaml --device $(USB_ADDRESS)
+ devkit:
+ 	esphome \
+-		run esp32-s3-devkitc-1.yaml --device $(USB_ADDRESS)
+\ No newline at end of file
++		run esp32-s3-devkitc-1.yaml --device $(USB_ADDRESS)
+diff --git a/firmware/common.yaml b/firmware/common.yaml
+index abf9f48..a7a8db5 100644
+--- a/firmware/common.yaml
++++ b/firmware/common.yaml
+@@ -12,39 +12,39 @@ esphome:
+     build_unflags: -std=gnu++11
+     build_flags:
+       - -std=gnu++14
+-      - -DMBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\"
++      #- -DMBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\"
+   on_boot:
+     then:
+       #TODO: breahting blue studders a little bit
+-      - light.turn_on:
+-          id: neopixel_light
+-          effect: Breathing Blue
+-          brightness: 100%
++      # - light.turn_on:
++      #     id: neopixel_light
++      #     effect: Breathing Blue
++      #     brightness: 100%
+       - wait_until:
+           condition:
+             wifi.connected:
+       - delay: 100ms
+-      - light.turn_on:
+-          id: neopixel_light
+-          effect: none
+-      - delay: 100ms
+-      - light.turn_on:
+-          id: neopixel_light
+-          effect: Rainbow
+-      - delay: 4s
+-      - light.turn_on:
+-          id: neopixel_light
+-          effect: none
+-          brightness: 50%
++      # - light.turn_on:
++      #     id: neopixel_light
++      #     effect: none
+       # - delay: 100ms
+-      # - light.addressable_set:
++      # - light.turn_on:
+       #     id: neopixel_light
+-      #     color_brightness: 50%
+-      #     range_from: 0
+-      #     range_to: ${led_count}
+-      #     red: 50%
+-      #     green: 50%
+-      #     blue: 50%
++      #     effect: Rainbow
++      # - delay: 4s
++      # - light.turn_on:
++      #     id: neopixel_light
++      #     effect: none
++      #     brightness: 50%
++            # # - delay: 100ms
++            # - light.addressable_set:
++            #     id: neopixel_light
++            #     color_brightness: 50%
++            #     range_from: 0
++            #     range_to: ${led_count}
++            #     red: 50%
++            #     green: 50%
++            #     blue: 50%
+       - if:
+           condition:
+             lambda: |-
+@@ -72,17 +72,17 @@ esphome:
+         #     }
+         # - lambda: |-
+         #     id(my_ota).set_auth_password("New password");
+-  on_shutdown:
+-    then:
+-      - script.execute: set_led_off
+-esp32:
+-  framework:
+-    type: esp-idf
+-    version: 5.3.1
+-    platform_version: 6.9.0 # https://github.com/platformio/platform-espressif32/releases/
+-    sdkconfig_options: 
+-      CONFIG_MBEDTLS_HKDF_C: y # Needed for bambu KDF
+-      CONFIG_MBEDTLS_MD_C: y   # Needed for bambu KDF
++  # on_shutdown:
++  #   then:
++  #     - script.execute: set_led_off
++#esp32:
++#  framework:
++#    type: esp-idf
++#    version: 5.3.1
++#    platform_version: 6.9.0 # https://github.com/platformio/platform-espressif32/releases/
++#    sdkconfig_options: 
++#      CONFIG_MBEDTLS_HKDF_C: y # Needed for bambu KDF
++#      CONFIG_MBEDTLS_MD_C: y   # Needed for bambu KDF
+     # version: recommended
+     # sdkconfig_options:
+     # MBEDTLS_CERTIFICATE_BUNDLE: y
+@@ -107,7 +107,7 @@ packages:
+   bambu_printer: !include conf.d/bambu_printer.yaml
+   pn532_rfid-solo: !include conf.d/pn532_rfid-solo.yaml
+   automation: !include conf.d/automation.yaml
+-  led-external: !include conf.d/led-external.yaml
++  #led-external: !include conf.d/led-external.yaml
+   ota: !include conf.d/ota.yaml
+   #update: !include conf.d/update.yaml
+   api: !include conf.d/api.yaml
+diff --git a/firmware/conf.d/button.yaml b/firmware/conf.d/button.yaml
+index 048e5ae..b5f195c 100644
+--- a/firmware/conf.d/button.yaml
++++ b/firmware/conf.d/button.yaml
+@@ -10,19 +10,19 @@ binary_sensor:
+     mode: INPUT_PULLUP
+     inverted: true
+   on_press:
+-    then:
+-    - script.execute:
+-        id: set_led_red
+-        led_number: -1
++    # then:
++    # - script.execute:
++    #     id: set_led_red
++    #     led_number: -1
+     - globals.set:
+         id: button_press_duration
+         value: "0"
+     - script.execute: start_timer
+   on_release:
+     then:
+-    - script.execute:
+-        id: set_led_white
+-        led_number: -1
++    # - script.execute:
++    #     id: set_led_white
++    #     led_number: -1
+     - script.stop: timer_script
+     - if:
+         condition:
+diff --git a/firmware/conf.d/logger.yaml b/firmware/conf.d/logger.yaml
+index 27c1ca8..aba9ce0 100644
+--- a/firmware/conf.d/logger.yaml
++++ b/firmware/conf.d/logger.yaml
+@@ -10,10 +10,11 @@ logger:
+     mqtt: DEBUG
+     mqtt.component: DEBUG
+     mqtt.client: DEBUG
+-    wifi: INFO
++    #wifi: INFO
++    wifi: WARN
+     wifi_esp32: INFO
+     esp-tls: DEBUG
+-    esp-tls-mbedtls: DEBUG
++    #esp-tls-mbedtls: DEBUG
+     http_client: INFO
+     http_request: INFO
+     scheduler: INFO
+diff --git a/firmware/conf.d/mqtt_bambu_lan.yaml b/firmware/conf.d/mqtt_bambu_lan.yaml
+index 540d5f3..4709495 100644
+--- a/firmware/conf.d/mqtt_bambu_lan.yaml
++++ b/firmware/conf.d/mqtt_bambu_lan.yaml
+@@ -24,29 +24,29 @@ mqtt:
+       # Dont post update to MQTT
+       # keepalive: 15s
+       # idf_send_async: true
+-  skip_cert_cn_check: true
+-  certificate_authority: |
+-    -----BEGIN CERTIFICATE-----
+-    MIIDZTCCAk2gAwIBAgIUV1FckwXElyek1onFnQ9kL7Bk4N8wDQYJKoZIhvcNAQEL
+-    BQAwQjELMAkGA1UEBhMCQ04xIjAgBgNVBAoMGUJCTCBUZWNobm9sb2dpZXMgQ28u
+-    LCBMdGQxDzANBgNVBAMMBkJCTCBDQTAeFw0yMjA0MDQwMzQyMTFaFw0zMjA0MDEw
+-    MzQyMTFaMEIxCzAJBgNVBAYTAkNOMSIwIAYDVQQKDBlCQkwgVGVjaG5vbG9naWVz
+-    IENvLiwgTHRkMQ8wDQYDVQQDDAZCQkwgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IB
+-    DwAwggEKAoIBAQDL3pnDdxGOk5Z6vugiT4dpM0ju+3Xatxz09UY7mbj4tkIdby4H
+-    oeEdiYSZjc5LJngJuCHwtEbBJt1BriRdSVrF6M9D2UaBDyamEo0dxwSaVxZiDVWC
+-    eeCPdELpFZdEhSNTaT4O7zgvcnFsfHMa/0vMAkvE7i0qp3mjEzYLfz60axcDoJLk
+-    p7n6xKXI+cJbA4IlToFjpSldPmC+ynOo7YAOsXt7AYKY6Glz0BwUVzSJxU+/+VFy
+-    /QrmYGNwlrQtdREHeRi0SNK32x1+bOndfJP0sojuIrDjKsdCLye5CSZIvqnbowwW
+-    1jRwZgTBR29Zp2nzCoxJYcU9TSQp/4KZuWNVAgMBAAGjUzBRMB0GA1UdDgQWBBSP
+-    NEJo3GdOj8QinsV8SeWr3US+HjAfBgNVHSMEGDAWgBSPNEJo3GdOj8QinsV8SeWr
+-    3US+HjAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQABlBIT5ZeG
+-    fgcK1LOh1CN9sTzxMCLbtTPFF1NGGA13mApu6j1h5YELbSKcUqfXzMnVeAb06Htu
+-    3CoCoe+wj7LONTFO++vBm2/if6Jt/DUw1CAEcNyqeh6ES0NX8LJRVSe0qdTxPJuA
+-    BdOoo96iX89rRPoxeed1cpq5hZwbeka3+CJGV76itWp35Up5rmmUqrlyQOr/Wax6
+-    itosIzG0MfhgUzU51A2P/hSnD3NDMXv+wUY/AvqgIL7u7fbDKnku1GzEKIkfH8hm
+-    Rs6d8SCU89xyrwzQ0PR853irHas3WrHVqab3P+qNwR0YirL0Qk7Xt/q3O1griNg2
+-    Blbjg3obpHo9
+-    -----END CERTIFICATE-----
++  # skip_cert_cn_check: true
++  # certificate_authority: |
++  #   -----BEGIN CERTIFICATE-----
++  #   MIIDZTCCAk2gAwIBAgIUV1FckwXElyek1onFnQ9kL7Bk4N8wDQYJKoZIhvcNAQEL
++  #   BQAwQjELMAkGA1UEBhMCQ04xIjAgBgNVBAoMGUJCTCBUZWNobm9sb2dpZXMgQ28u
++  #   LCBMdGQxDzANBgNVBAMMBkJCTCBDQTAeFw0yMjA0MDQwMzQyMTFaFw0zMjA0MDEw
++  #   MzQyMTFaMEIxCzAJBgNVBAYTAkNOMSIwIAYDVQQKDBlCQkwgVGVjaG5vbG9naWVz
++  #   IENvLiwgTHRkMQ8wDQYDVQQDDAZCQkwgQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IB
++  #   DwAwggEKAoIBAQDL3pnDdxGOk5Z6vugiT4dpM0ju+3Xatxz09UY7mbj4tkIdby4H
++  #   oeEdiYSZjc5LJngJuCHwtEbBJt1BriRdSVrF6M9D2UaBDyamEo0dxwSaVxZiDVWC
++  #   eeCPdELpFZdEhSNTaT4O7zgvcnFsfHMa/0vMAkvE7i0qp3mjEzYLfz60axcDoJLk
++  #   p7n6xKXI+cJbA4IlToFjpSldPmC+ynOo7YAOsXt7AYKY6Glz0BwUVzSJxU+/+VFy
++  #   /QrmYGNwlrQtdREHeRi0SNK32x1+bOndfJP0sojuIrDjKsdCLye5CSZIvqnbowwW
++  #   1jRwZgTBR29Zp2nzCoxJYcU9TSQp/4KZuWNVAgMBAAGjUzBRMB0GA1UdDgQWBBSP
++  #   NEJo3GdOj8QinsV8SeWr3US+HjAfBgNVHSMEGDAWgBSPNEJo3GdOj8QinsV8SeWr
++  #   3US+HjAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQABlBIT5ZeG
++  #   fgcK1LOh1CN9sTzxMCLbtTPFF1NGGA13mApu6j1h5YELbSKcUqfXzMnVeAb06Htu
++  #   3CoCoe+wj7LONTFO++vBm2/if6Jt/DUw1CAEcNyqeh6ES0NX8LJRVSe0qdTxPJuA
++  #   BdOoo96iX89rRPoxeed1cpq5hZwbeka3+CJGV76itWp35Up5rmmUqrlyQOr/Wax6
++  #   itosIzG0MfhgUzU51A2P/hSnD3NDMXv+wUY/AvqgIL7u7fbDKnku1GzEKIkfH8hm
++  #   Rs6d8SCU89xyrwzQ0PR853irHas3WrHVqab3P+qNwR0YirL0Qk7Xt/q3O1griNg2
++  #   Blbjg3obpHo9
++  #   -----END CERTIFICATE-----
+   clean_session: true
+   enable_on_boot: false
+   on_connect:
+diff --git a/firmware/conf.d/pn532_rfid-solo.yaml b/firmware/conf.d/pn532_rfid-solo.yaml
+index 4a11a4a..f527749 100644
+--- a/firmware/conf.d/pn532_rfid-solo.yaml
++++ b/firmware/conf.d/pn532_rfid-solo.yaml
+@@ -30,9 +30,9 @@ pn532_spi:
+   update_interval: ${update_interval}
+   on_tag_removed:
+     then:
+-    - script.execute:
+-        id: set_led_white
+-        led_number: 0
++    # - script.execute:
++    #     id: set_led_white
++    #     led_number: 0
+     - binary_sensor.template.publish:
+         id: nfc_tag_present0
+         state: OFF
+@@ -90,14 +90,14 @@ pn532_spi:
+         id(rfid_reader_spi_0_tag_is_openspool).publish_state(is_valid_openspool);
+ 
+         // Set LED color
+-        if (is_valid_openspool) {
++        /*if (is_valid_openspool) {
+           id(set_led_green).execute(0);
+           //TODO: Generate and send MQTT message here
+           if (!payload.empty()) {
+           }
+         } else {
+           id(set_led_red).execute(0);
+-        }
++        }*/
+     - if:
+         condition:
+           and:
+diff --git a/firmware/conf.d/status_led.yaml b/firmware/conf.d/status_led.yaml
+index 3c575fe..37c2a5c 100644
+--- a/firmware/conf.d/status_led.yaml
++++ b/firmware/conf.d/status_led.yaml
+@@ -2,5 +2,5 @@
+ output:
+ - id: onboard_led
+   platform: gpio
+-  pin: 15
++  pin: 0
+   inverted: false
+diff --git a/firmware/conf.d/wifi.yaml b/firmware/conf.d/wifi.yaml
+index 1a9ccf1..b7e9c24 100644
+--- a/firmware/conf.d/wifi.yaml
++++ b/firmware/conf.d/wifi.yaml
+@@ -1,7 +1,14 @@
+ ---
+ wifi:
+-  ap:
+-    ssid: "OpenSpool"
++#  ap:
++#    ssid: "OpenSpool"
++#    password: "OpenSpool"
++  ssid: "<your_ssid>"
++  password: "<your_password>"
++  manual_ip:
++    static_ip: <your_ip>
++    gateway: <your_gateway>
++    subnet: <your_subnet>
+   reboot_timeout: 0s # This must stay at 0s if api and mqtt are enabled, otherwise it will reboot every 15 minutes
+   #TODO: if it is in ap mode, then pulse blue
+   # on_connect:

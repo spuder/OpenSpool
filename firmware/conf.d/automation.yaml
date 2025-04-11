@@ -55,19 +55,26 @@ script:
               return true;
             }
         - lambda: |-
-            if (id(filament_max_temp).state >= 300) {
-              ESP_LOGE("main", "Filament Min Temp must be less than 300");
+            if (id(filament_max_temp).state > 300) {
+              ESP_LOGE("main", "Filament Max Temp must be less than 300");
               return false;
             } else {
               return true;
             }
         - lambda: |-
-            if (id(filament_min_temp).state <= 150) {
-              ESP_LOGE("main", "Filament Max Temp must be greater than 150");
+            if (id(filament_min_temp).state < 150) {
+              ESP_LOGE("main", "Filament Min Temp must be greater than 150");
               return false;
             } else {
               return true;
             }
+        - lambda: |-
+              if (id(filament_min_temp).state > id(filament_max_temp).state) {
+                ESP_LOGE("main", "Filament Min Temp must be less than Filament Max Temp");
+                return false;
+              } else {
+                return true;
+              }
         - lambda: |-
             if (id(filament_type).state == "") {
               ESP_LOGE("main", "Filament Type cannot be empty");
@@ -91,7 +98,7 @@ script:
             }
           # TODO: Check if mqtt is enabled once this is merged: https://github.com/esphome/esphome/pull/7716
       then:
-      - mqtt.publish:
+      - ${mqtt}.publish:
           # topic: device/${bambu_serial_number}/request
           topic: !lambda 'return "device/" + id(bambu_serial_number).state + "/request";'
           payload: !lambda |-

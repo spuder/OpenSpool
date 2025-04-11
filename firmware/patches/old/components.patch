@@ -1,0 +1,292 @@
+diff -urN --exclude=__pycache__ components/async_tcp/__init__.py components/async_tcp/__init__.py
+--- components/async_tcp/__init__.py	2025-02-11 14:27:54
++++ components/async_tcp/__init__.py	2025-02-11 12:21:50
+@@ -6,6 +6,7 @@
+     PLATFORM_ESP32,
+     PLATFORM_ESP8266,
+     PLATFORM_RTL87XX,
++    PLATFORM_RP2040
+ )
+ from esphome.core import CORE, coroutine_with_priority
+ 
+@@ -14,7 +15,7 @@
+ CONFIG_SCHEMA = cv.All(
+     cv.Schema({}),
+     cv.only_with_arduino,
+-    cv.only_on([PLATFORM_ESP32, PLATFORM_ESP8266, PLATFORM_BK72XX, PLATFORM_RTL87XX]),
++    cv.only_on([PLATFORM_ESP32, PLATFORM_ESP8266, PLATFORM_BK72XX, PLATFORM_RTL87XX, PLATFORM_RP2040]),
+ )
+ 
+ 
+@@ -26,3 +27,6 @@
+     elif CORE.is_esp8266:
+         # https://github.com/esphome/ESPAsyncTCP
+         cg.add_library("esphome/ESPAsyncTCP-esphome", "2.0.0")
++    elif CORE.is_rp2040:
++        # https://github.com/khoih-prog/AsyncTCP_RP2040W.git
++        cg.add_library("khoih-prog/AsyncTCP_RP2040W", None)
+diff -urN --exclude=__pycache__ components/captive_portal/__init__.py components/captive_portal/__init__.py
+--- components/captive_portal/__init__.py	2025-02-11 14:27:54
++++ components/captive_portal/__init__.py	2025-02-11 10:28:43
+@@ -8,6 +8,7 @@
+     PLATFORM_ESP8266,
+     PLATFORM_BK72XX,
+     PLATFORM_RTL87XX,
++    PLATFORM_RP2040
+ )
+ from esphome.core import coroutine_with_priority, CORE
+ 
+@@ -27,7 +28,7 @@
+             ),
+         }
+     ).extend(cv.COMPONENT_SCHEMA),
+-    cv.only_on([PLATFORM_ESP32, PLATFORM_ESP8266, PLATFORM_BK72XX, PLATFORM_RTL87XX]),
++    cv.only_on([PLATFORM_ESP32, PLATFORM_ESP8266, PLATFORM_BK72XX, PLATFORM_RTL87XX, PLATFORM_RP2040]),
+ )
+ 
+ 
+diff -urN --exclude=__pycache__ components/mqtt/__init__.py components/mqtt/__init__.py
+--- components/mqtt/__init__.py	2025-02-11 14:27:54
++++ components/mqtt/__init__.py	2025-02-11 14:46:30
+@@ -53,6 +53,7 @@
+     PLATFORM_BK72XX,
+     PLATFORM_ESP32,
+     PLATFORM_ESP8266,
++    PLATFORM_RP2040
+ )
+ from esphome.core import CORE, coroutine_with_priority
+ 
+@@ -60,7 +61,7 @@
+ 
+ 
+ def AUTO_LOAD():
+-    if CORE.is_esp8266 or CORE.is_libretiny:
++    if CORE.is_esp8266 or CORE.is_libretiny or CORE.is_rp2040:
+         return ["async_tcp", "json"]
+     return ["json"]
+ 
+@@ -301,7 +302,7 @@
+         }
+     ),
+     validate_config,
+-    cv.only_on([PLATFORM_ESP32, PLATFORM_ESP8266, PLATFORM_BK72XX]),
++    cv.only_on([PLATFORM_ESP32, PLATFORM_ESP8266, PLATFORM_BK72XX, PLATFORM_RP2040]),
+ )
+ 
+ 
+@@ -326,7 +327,8 @@
+     if CORE.is_esp8266 or CORE.is_libretiny:
+         # https://github.com/heman/async-mqtt-client/blob/master/library.json
+         cg.add_library("heman/AsyncMqttClient-esphome", "2.0.0")
+-
++    elif CORE.is_rp2040:
++        cg.add_library("https://github.com/skilau/async-mqtt-client.git", None)
+     cg.add_define("USE_MQTT")
+     cg.add_global(mqtt_ns.using)
+ 
+diff -urN --exclude=__pycache__ components/mqtt/mqtt_backend_rp2040.h components/mqtt/mqtt_backend_rp2040.h
+--- components/mqtt/mqtt_backend_rp2040.h	1969-12-31 19:00:00
++++ components/mqtt/mqtt_backend_rp2040.h	2025-02-11 13:16:57
+@@ -0,0 +1,103 @@
++#pragma once
++
++#ifdef USE_RP2040
++
++#include "mqtt_backend.h"
++#include <AsyncMqttClient.h>
++#include <queue>
++#include "esphome/components/network/ip_address.h"
++#include "esphome/core/helpers.h"
++
++namespace esphome {
++namespace mqtt {
++
++class MQTTBackendRP2040 final : public MQTTBackend {
++ public:
++  void set_keep_alive(uint16_t keep_alive) final { this->keep_alive_ = keep_alive; }
++  void set_client_id(const char *client_id) final { this->client_id_ = client_id; }
++  void set_clean_session(bool clean_session) final { this->clean_session_ = clean_session; }
++
++  void set_credentials(const char *username, const char *password) final {
++    if (username)
++      this->username_ = username;
++    if (password)
++      this->password_ = password;
++  }
++  void set_will(const char *topic, uint8_t qos, bool retain, const char *payload) final {
++    if (topic)
++      this->lwt_topic_ = topic;
++    this->lwt_qos_ = qos;
++    if (payload)
++      this->lwt_message_ = payload;
++    this->lwt_retain_ = retain;
++  }
++  void set_server(network::IPAddress ip, uint16_t port) final {
++    this->host_ = ip.str();
++    this->port_ = port;
++  }
++  void set_server(const char *host, uint16_t port) final {
++    this->host_ = host;
++    this->port_ = port;
++  }
++
++  void set_on_connect(std::function<on_connect_callback_t> &&callback) final {
++    this->on_connect_.add(std::move(callback));
++  }
++  void set_on_disconnect(std::function<on_disconnect_callback_t> &&callback) final {
++    this->on_disconnect_.add(std::move(callback));
++  }
++  void set_on_subscribe(std::function<on_subscribe_callback_t> &&callback) final {
++    this->on_subscribe_.add(std::move(callback));
++  }
++  void set_on_unsubscribe(std::function<on_unsubscribe_callback_t> &&callback) final {
++    this->on_unsubscribe_.add(std::move(callback));
++  }
++  void set_on_message(std::function<on_message_callback_t> &&callback) final {
++    this->on_message_.add(std::move(callback));
++  }
++  void set_on_publish(std::function<on_publish_user_callback_t> &&callback) final {
++    this->on_publish_.add(std::move(callback));
++  }
++
++  bool connected() const final { return mqtt_client_.connected(); }
++  void connect() final { mqtt_client_.connect(); }
++  void disconnect() final { mqtt_client_.disconnect(true); }
++  
++  bool subscribe(const char *topic, uint8_t qos) final {
++    return mqtt_client_.subscribe(topic, qos) != 0;
++  }
++  bool unsubscribe(const char *topic) final {
++    return mqtt_client_.unsubscribe(topic) != 0;
++  }
++  bool publish(const char *topic, const char *payload, size_t length, uint8_t qos, bool retain) final {
++    return mqtt_client_.publish(topic, qos, retain, payload, length, false, 0) != 0;
++  }
++  using MQTTBackend::publish;
++
++ protected:
++  AsyncMqttClient mqtt_client_;
++
++  std::string host_;
++  uint16_t port_;
++  std::string username_;
++  std::string password_;
++  std::string lwt_topic_;
++  std::string lwt_message_;
++  uint8_t lwt_qos_;
++  bool lwt_retain_;
++  std::string client_id_;
++  uint16_t keep_alive_;
++  bool clean_session_;
++
++  CallbackManager<on_connect_callback_t> on_connect_;
++  CallbackManager<on_disconnect_callback_t> on_disconnect_;
++  CallbackManager<on_subscribe_callback_t> on_subscribe_;
++  CallbackManager<on_unsubscribe_callback_t> on_unsubscribe_;
++  CallbackManager<on_message_callback_t> on_message_;
++  CallbackManager<on_publish_user_callback_t> on_publish_;
++};
++
++}  // namespace mqtt
++}  // namespace esphome
++
++#endif  // defined(USE_RP2040)
+diff -urN --exclude=__pycache__ components/mqtt/mqtt_client.cpp components/mqtt/mqtt_client.cpp
+--- components/mqtt/mqtt_client.cpp	2025-02-11 14:27:54
++++ components/mqtt/mqtt_client.cpp	2025-02-11 12:28:16
+@@ -117,6 +117,9 @@
+ #ifdef USE_ESP32
+         root["platform"] = "ESP32";
+ #endif
++#ifdef USE_RP2040
++        root["platform"] = "RP2040";
++#endif
+ #ifdef USE_LIBRETINY
+         root["platform"] = lt_cpu_get_model_name();
+ #endif
+diff -urN --exclude=__pycache__ components/mqtt/mqtt_client.h components/mqtt/mqtt_client.h
+--- components/mqtt/mqtt_client.h	2025-02-11 14:27:54
++++ components/mqtt/mqtt_client.h	2025-02-11 12:29:29
+@@ -15,6 +15,8 @@
+ #include "mqtt_backend_esp8266.h"
+ #elif defined(USE_LIBRETINY)
+ #include "mqtt_backend_libretiny.h"
++#elif defined(USE_RP2040)
++#include "mqtt_backend_rp2040.h"
+ #endif
+ #include "lwip/ip_addr.h"
+ 
+@@ -320,6 +322,8 @@
+   MQTTBackendESP8266 mqtt_backend_;
+ #elif defined(USE_LIBRETINY)
+   MQTTBackendLibreTiny mqtt_backend_;
++#elif defined(USE_RP2040)
++  MQTTBackendRP2040 mqtt_backend_;
+ #endif
+ 
+   MQTTClientState state_{MQTT_CLIENT_DISABLED};
+diff -urN --exclude=__pycache__ components/web_server/__init__.py components/web_server/__init__.py
+--- components/web_server/__init__.py	2025-02-11 14:27:54
++++ components/web_server/__init__.py	2025-02-11 10:32:54
+@@ -29,6 +29,7 @@
+     PLATFORM_ESP32,
+     PLATFORM_ESP8266,
+     PLATFORM_RTL87XX,
++    PLATFORM_RP2040
+ )
+ from esphome.core import CORE, coroutine_with_priority
+ import esphome.final_validate as fv
+@@ -181,13 +182,14 @@
+                 esp32_idf=False,
+                 bk72xx=True,
+                 rtl87xx=True,
++                rp2040=True
+             ): cv.boolean,
+             cv.Optional(CONF_LOG, default=True): cv.boolean,
+             cv.Optional(CONF_LOCAL): cv.boolean,
+             cv.Optional(CONF_SORTING_GROUPS): cv.ensure_list(sorting_group),
+         }
+     ).extend(cv.COMPONENT_SCHEMA),
+-    cv.only_on([PLATFORM_ESP32, PLATFORM_ESP8266, PLATFORM_BK72XX, PLATFORM_RTL87XX]),
++    cv.only_on([PLATFORM_ESP32, PLATFORM_ESP8266, PLATFORM_BK72XX, PLATFORM_RTL87XX, PLATFORM_RP2040]),
+     default_url,
+     validate_local,
+     validate_ota,
+diff -urN --exclude=__pycache__ components/web_server/web_server.cpp components/web_server/web_server.cpp
+--- components/web_server/web_server.cpp	2025-02-11 14:27:54
++++ components/web_server/web_server.cpp	2025-02-11 14:48:23
+@@ -172,7 +172,7 @@
+ 
+ #ifdef USE_WEBSERVER_PRIVATE_NETWORK_ACCESS
+ void WebServer::handle_pna_cors_request(AsyncWebServerRequest *request) {
+-  AsyncWebServerResponse *response = request->beginResponse(200, "");
++  AsyncWebServerResponse *response = request->beginResponse(200, String(), String());
+   response->addHeader(HEADER_CORS_ALLOW_PNA, "true");
+   response->addHeader(HEADER_PNA_NAME, App.get_name().c_str());
+   std::string mac = get_mac_address_pretty();
+diff -urN --exclude=__pycache__ components/web_server_base/__init__.py components/web_server_base/__init__.py
+--- components/web_server_base/__init__.py	2025-02-11 14:27:54
++++ components/web_server_base/__init__.py	2025-02-11 14:44:20
+@@ -36,5 +36,9 @@
+             cg.add_library("WiFi", None)
+             cg.add_library("FS", None)
+             cg.add_library("Update", None)
+-        # https://github.com/esphome/ESPAsyncWebServer/blob/master/library.json
+-        cg.add_library("esphome/ESPAsyncWebServer-esphome", "3.2.2")
++        if CORE.is_rp2040:
++            cg.add_library("https://github.com/skilau/ESPAsyncWebServer.git", None)
++            cg.add_library("WiFi", None)
++        else:
++            # https://github.com/esphome/ESPAsyncWebServer/blob/master/library.json
++            cg.add_library("esphome/ESPAsyncWebServer-esphome", "3.2.2")
+diff -urN --exclude=__pycache__ components/web_server_base/web_server_base.h components/web_server_base/web_server_base.h
+--- components/web_server_base/web_server_base.h	2025-02-11 14:27:54
++++ components/web_server_base/web_server_base.h	2025-02-11 12:36:10
+@@ -8,6 +8,7 @@
+ #include "esphome/core/component.h"
+ 
+ #ifdef USE_ARDUINO
++#include <WiFi.h>
+ #include <ESPAsyncWebServer.h>
+ #elif USE_ESP_IDF
+ #include "esphome/core/hal.h"

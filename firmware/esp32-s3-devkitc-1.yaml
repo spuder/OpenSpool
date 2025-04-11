@@ -48,6 +48,8 @@ packages:
   #improv-bluetooth: !include conf.d/improv-bluetooth.yaml
   #led-internal: !include conf.d/led-internal.yaml
   extra: !include conf.d/extra.yaml
+  esp32-common: !include esp32_common.yaml
+
 
 dashboard_import:
   package_import_url: github://spuder/openspool/firmware/esp32-s3-devkitc-1.yaml@main

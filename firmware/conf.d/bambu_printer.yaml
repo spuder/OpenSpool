@@ -29,6 +29,10 @@ text:
     sorting_group_id: sorting_group_printer_settings
   on_value:
     then:
+    - globals.set:
+        id: global_bambu_serial
+        value: !lambda |-
+          return x.c_str();
     - if:
         condition:
           lambda: |-
@@ -39,13 +43,13 @@ text:
         - logger.log:
             level: info
             format: "Connecting to Bambu printer"
-        - mqtt.enable:
+        - ${mqtt}.enable:
             id: bambu_mqtt
         else:
         - logger.log:
             level: info
             format: "Missing Bambu Credentials, skipping mqtt connect"
-        - mqtt.disable:
+        - ${mqtt}.disable:
             id: bambu_mqtt
   #       - script.execute: check_mqtt_creds #TODO: Enable once this is merged: https://github.com/esphome/esphome/pull/7716
   #     lambda: |-
@@ -64,6 +68,10 @@ text:
     then:
     - lambda: |-
         id(bambu_mqtt).set_password(x.c_str());
+    - globals.set:
+        id: global_lan_access_code
+        value: !lambda |-
+          return x.c_str();
     - if:
         condition:
           lambda: |-
@@ -74,13 +82,13 @@ text:
         - logger.log:
             level: info
             format: "Connecting to Bambu printer"
-        - mqtt.enable:
+        - ${mqtt}.enable:
             id: bambu_mqtt
         else:
         - logger.log:
             level: info
             format: "Missing Bambu Credentials, skipping mqtt connect"
-        - mqtt.disable:
+        - ${mqtt}.disable:
             id: bambu_mqtt
 - platform: template
   name: Printer IP Address
@@ -96,6 +104,10 @@ text:
     then:
     - lambda: |-
         id(bambu_mqtt).set_broker_address(x.c_str());
+    - globals.set:
+        id: global_bambu_ip
+        value: !lambda |-
+          return x.c_str();
     - if:
         condition:
           lambda: |-
@@ -106,11 +118,11 @@ text:
         - logger.log:
             level: info
             format: "Connecting to Bambu printer"
-        - mqtt.enable:
+        - ${mqtt}.enable:
             id: bambu_mqtt
         else:
         - logger.log: "Missing Bambu Credentials, skipping mqtt connect"
-        - mqtt.disable:
+        - ${mqtt}.disable:
             id: bambu_mqtt
 
 button:

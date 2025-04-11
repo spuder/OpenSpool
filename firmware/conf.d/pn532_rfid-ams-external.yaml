@@ -7,6 +7,43 @@ substitutions:
   # update_interval: "1s"
   # update_interval: "1500ms"
   update_interval: "750ms"
+
+globals:
+  - id: global_tap_counter
+    type: int
+    restore_value: no
+    initial_value: '0'
+  - id: global_error
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+
+interval:
+  - id: tap_timer
+    interval: 1500ms
+    startup_delay: 3s
+    then:
+      - lambda: |-
+          if(id(global_tap_counter) == 5) {
+            auto disable_rainbow = id(neopixel_light).turn_on();
+            disable_rainbow.set_effect("none");
+            disable_rainbow.perform();
+          } else{
+            id(set_led_green).execute(id(global_tap_counter));
+          }
+          
+          id(global_tap_counter) += 1;
+          if(id(global_tap_counter) == 5) {
+            id(set_led_rainbow).execute();
+          }
+          if (id(global_tap_counter) > 5) {
+            id(global_tap_counter) = 0;  // Reset to 0 (all white LEDs)
+            for(int i = 0; i < 4; i++) {
+              id(set_led_white).execute(i);
+            }
+          }
+          ESP_LOGD("NFC", "Counter incremented: %d", id(global_tap_counter));
+
 binary_sensor:
 - platform: template
   name: "NFC Tag Present"
@@ -30,14 +67,58 @@ pn532_spi:
   update_interval: ${update_interval}
   on_tag_removed:
     then:
-    - script.execute:
-        id: set_led_white
-        led_number: 0
+    - component.suspend: tap_timer
     - binary_sensor.template.publish:
         id: nfc_tag_present0
         state: OFF
+    - light.turn_on:
+        id: neopixel_light
+        effect: none
+    # - script.execute:
+    #     id: set_led_white
+    #     led_number: -1
+    - delay: 500ms
     - lambda: |-
-        id(filament_raw_data0).publish_state("");
+        id(tap_timer).setup();
+        if(id(global_error) == false) {
+          if(id(global_tap_counter) == 5){
+            id(set_led_rainbow).execute();
+          } else{
+              for(int i = 0; i < id(global_tap_counter); i++) {
+                id(set_led_green).execute(i);
+              }
+          }
+        }
+    - delay: 500ms
+    - light.turn_on:
+        id: neopixel_light
+        effect: none
+    - script.execute:
+        id: set_led_white
+        led_number: -1
+    - if:
+        condition:
+          and:
+          - lambda: 'return id(global_error) == false;'
+          - lambda: 'return id(global_tap_counter) > 0;'
+          - ${mqtt}.connected
+          - lambda: 'return id(filament_raw_data0).state != "";'
+          - lambda: 'return id(filament_raw_data0).state != "{}";'
+          - binary_sensor.is_on: rfid_reader_spi_0_tag_is_openspool
+          - binary_sensor.is_on: rfid_reader_spi_0_tag_parsed
+        then:
+        - ${mqtt}.publish:
+            topic: !lambda 'return "device/" + id(bambu_serial_number).state + "/request";'
+            # 255 = external ams, TODO: A1,P1,X1 might use different values for AMS
+            # 254 = external tray, first filament slot is tray 0
+            # payload: !lambda "return bambulabs::generate_mqtt_payload( id(filament_raw_data0).state, 255, 254 );"
+            payload: !lambda "return bambulabs::generate_mqtt_payload( id(filament_raw_data0).state, id(global_tap_counter) == 5 ? 255 : 0, id(global_tap_counter) == 5 ? 254: id(global_tap_counter) - 1 );"
+        - lambda: 'id(filament_raw_data0).publish_state("");'
+    - globals.set: 
+        id: global_error
+        value: 'false'
+
+
   on_tag:
     then:
     - binary_sensor.template.publish:
@@ -45,6 +126,7 @@ pn532_spi:
         state: ON
     - lambda: |-
         bool is_valid_openspool = false;
+        id(global_error) = false;
         std::string payload;
 
         if (tag.has_ndef_message()) {
@@ -91,27 +173,33 @@ pn532_spi:
 
         // Set LED color
         if (is_valid_openspool) {
-          id(set_led_green).execute(0);
+          id(tap_timer).start_poller();
+          id(global_tap_counter) = 0;
           //TODO: Generate and send MQTT message here
           if (!payload.empty()) {
           }
         } else {
-          id(set_led_red).execute(0);
+          id(tap_timer).stop_poller();
+          id(tap_timer).setup();
+          id(global_error) = true;
+          for(int i = 0; i < 4; i++) {
+            id(set_led_red).execute(i);
+          }
         }
-    - if:
-        condition:
-          and:
-          - ${mqtt}.connected
-          - lambda: 'return id(filament_raw_data0).state != "";'
-          - lambda: 'return id(filament_raw_data0).state != "{}";'
-          - binary_sensor.is_on: rfid_reader_spi_0_tag_is_openspool
-          - binary_sensor.is_on: rfid_reader_spi_0_tag_parsed
-        then:
-        - ${mqtt}.publish:
-            topic: !lambda 'return "device/" + id(bambu_serial_number).state + "/request";'
-            # 255 = external ams, TODO: A1,P1,X1 might use different values for AMS
-            # 254 = external tray, first filament slot is tray 0
-            payload: !lambda "return bambulabs::generate_mqtt_payload( id(filament_raw_data0).state, 255, 254 );"
+    # - if:
+    #     condition:
+    #       and:
+    #       - ${mqtt}.connected
+    #       - lambda: 'return id(filament_raw_data0).state != "";'
+    #       - lambda: 'return id(filament_raw_data0).state != "{}";'
+    #       - binary_sensor.is_on: rfid_reader_spi_0_tag_is_openspool
+    #       - binary_sensor.is_on: rfid_reader_spi_0_tag_parsed
+    #     then:
+    #     - ${mqtt}.publish:
+    #         topic: !lambda 'return "device/" + id(bambu_serial_number).state + "/request";'
+    #         # 255 = external ams, TODO: A1,P1,X1 might use different values for AMS
+    #         # 254 = external tray, first filament slot is tray 0
+    #         payload: !lambda "return bambulabs::generate_mqtt_payload( id(filament_raw_data0).state, 255, 254 );"
 text_sensor:
 - platform: template
   name: "NFC Raw Data"
@@ -318,8 +406,6 @@ button:
             tag: "rfid"
             format: "Finished writing tag"
             level: INFO
-        - lambda: |-
-            id(set_led_green).execute(0);
         else:
         - lambda: |-
             ESP_LOGI("rfid", "NFC Tag not present");
