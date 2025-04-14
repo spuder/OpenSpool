@@ -185,6 +185,12 @@ script:
           id(filament_sub_brand).publish_state("PLA");
         }
       }
+      // PLA High Speed
+      else if (id(filament_type).state == "PLA High Speed") {
+        // Generic
+        id(filament_brand_code).publish_state("GFL95");
+        id(filament_sub_brand).publish_state("PLA High Speed");
+      }
       // PETG
       else if (id(filament_type).state == "PETG") {
         if (id(filament_brand).state == "Overture") {
@@ -303,7 +309,7 @@ script:
               id(filament_max_temp).publish_state(250);
             }
           }
-          else if (id(filament_type).state == "PLA") {
+          else if (id(filament_type).state == "PLA" || id(filament_type).state == "PLA High Speed") {
             if (id(filament_brand).state == "Generic") {
               id(filament_min_temp).publish_state(190);
               id(filament_max_temp).publish_state(240);
