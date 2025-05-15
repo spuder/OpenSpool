@@ -2,6 +2,7 @@
 title: Maker Chip
 layout: default
 permalink: /makerchip
+nav_exclude: true
 ---
 
 ## 🎉 Congratulations! 🎊 
