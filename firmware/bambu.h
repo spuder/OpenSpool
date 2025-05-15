@@ -76,7 +76,7 @@ namespace bambulabs
         return ""; // Unknown type
     }
 
-    // Function with three parameters (for Bambu PLA subtypes)
+    // Function with three parameters (for Bambu & Sunlu PLA subtypes)
     inline std::string get_bambu_code(const std::string &type, const std::string &brand, const std::string &subtype)
     {
         if (type == "PLA" && brand == "Bambu")
@@ -88,6 +88,18 @@ namespace bambulabs
             if (subtype == "Impact")
                 return "GFA03";
             return "GFA00"; // Default to Basic for unknown subtypes
+        }
+        else if (type == "PLA" && brand == "Sunlu")
+        {
+            if (subtype == "Matte")
+                return "GFSNL02";
+            if (subtype == "Silk")
+                return "GFSNL05";
+            if (subtype == "Marble")
+                return "GFSNL06";
+            if (subtype == "Wood")
+                return "GFSNL06";
+            return "GFSNL03"; // Default to Basic for unknown subtypes
         }
         return get_bambu_code(type, brand);
     }
