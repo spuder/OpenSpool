@@ -1,8 +1,12 @@
 ---
 wifi:
+  id: openspool_wifi
   ap:
     ssid: "OpenSpool"
+    password: "OpenSpool"
   reboot_timeout: 0s # This must stay at 0s if api and mqtt are enabled, otherwise it will reboot every 15 minutes
+  # ssid: !secret ssid
+  # password: !secret password
   #TODO: if it is in ap mode, then pulse blue
   # on_connect:
   #   then:
@@ -23,7 +27,7 @@ text_sensor:
   mac_address:
     name: Mac Address
     id: mac_address
-    state_topic:
+    #state_topic:
     icon: mdi:network
 # - platform: wifi_info
 #   ip_address:

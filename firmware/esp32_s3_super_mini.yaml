@@ -1,0 +1,62 @@
+esphome:
+  on_boot:
+      then:
+        - component.suspend: tap_timer # Remove this if only using the spool holder; it's for AMS-external only
+
+esp32:
+  board: esp32-s3-devkitc-1
+
+substitutions:
+  hide_ams_sensors: 'true'
+  led_pin: GPIO9
+  neopixel_pin: '48' #some boards have this on pin 38
+  spi2_type: SPI2
+  spi2_clk_pin: GPIO10
+  spi2_miso_pin: GPIO11
+  spi2_mosi_pin: GPIO12
+
+  rfid0_spi_interface: SPI2
+  rfid0_ss_pin: GPIO13
+
+#  rfid1_spi_interface: SPI2
+#  rfid1_ss_pin: GPIO05
+
+#  rfid2_spi_interface: SPI2
+#  rfid2_ss_pin: GPIO06
+
+#  rfid3_spi_interface: SPI2
+#  rfid3_ss_pin: GPIO07
+
+  # rfid4_spi_interface: SPI2
+  # rfid4_ss_pin: GPIO05
+
+  # rfid5_spi_interface: SPI2
+  # rfid5_ss_pin: GPIO04
+
+  # spi3_type: SPI3
+  # spi3_clk_pin: GPIO18
+  # spi3_miso_pin: GPIO17
+  # spi3_mosi_pin: GPIO16
+
+  # rfid6_spi_interface: SPI3
+  # rfid6_ss_pin: GPIO15
+
+  # rfid7_spi_interface: SPI3
+  # rfid7_ss_pin: GPIO9
+
+  # rfid8_spi_interface: SPI3
+  # rfid8_ss_pin: GPI14 # TODO: Verify this is compatible
+
+packages: 
+  #openspool-ams: !include openspool-ams.yaml
+  openspool-mini: !include openspool-mini.yaml
+  improv-serial: !include conf.d/improv-serial.yaml
+  esp32-common: !include esp32_common.yaml
+  #improv-bluetooth: !include conf.d/improv-bluetooth.yaml
+  led-internal: !include conf.d/led-internal.yaml
+  extra: !include conf.d/extra.yaml
+  button: !include conf.d/button.yaml
+
+dashboard_import:
+  package_import_url: github://spuder/openspool/firmware/esp32_s3_super_mini.yaml@main
+  import_full_config: false

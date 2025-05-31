@@ -2,5 +2,5 @@
 output:
 - id: onboard_led
   platform: gpio
-  pin: 15
+  pin: 0
   inverted: false

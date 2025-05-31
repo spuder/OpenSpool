@@ -1,6 +1,18 @@
 ---
 substitutions:
   name: openspool
+
+globals:
+  - id: global_lan_access_code
+    type: std::string
+    restore_value: yes
+  - id: global_bambu_ip
+    type: std::string
+    restore_value: yes
+  - id: global_bambu_serial
+    type: std::string
+    restore_value: yes
+
 esphome:
   name: ${name}
   name_add_mac_suffix: true
@@ -13,6 +25,7 @@ esphome:
     build_flags:
       - -std=gnu++14
       - -DMBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\"
+      # - -DDISABLE_WATCHDOG=1
   on_boot:
     then:
       #TODO: breahting blue studders a little bit
@@ -36,15 +49,27 @@ esphome:
           id: neopixel_light
           effect: none
           brightness: 50%
-      # - delay: 100ms
-      # - light.addressable_set:
-      #     id: neopixel_light
-      #     color_brightness: 50%
-      #     range_from: 0
-      #     range_to: ${led_count}
-      #     red: 50%
-      #     green: 50%
-      #     blue: 50%
+            # # - delay: 100ms
+            # - light.addressable_set:
+            #     id: neopixel_light
+            #     color_brightness: 50%
+            #     range_from: 0
+            #     range_to: ${led_count}
+            #     red: 50%
+            #     green: 50%
+            #     blue: 50%
+      - text.set:
+          id: bambu_lan_access_code
+          value: !lambda |-
+            return id(global_lan_access_code);
+      - text.set:
+          id: bambu_ip_address
+          value: !lambda |-
+            return id(global_bambu_ip);
+      - text.set:
+          id: bambu_serial_number
+          value: !lambda |-
+            return id(global_bambu_serial);
       - if:
           condition:
             lambda: |-
@@ -55,13 +80,13 @@ esphome:
             - logger.log: 
                 level: info
                 format: "Connecting to Bambu printer"
-            - mqtt.enable: 
+            - ${mqtt}.enable: 
                 id: bambu_mqtt
           else:
             - logger.log: 
                 level: info
                 format: "Missing Bambu Credentials, skipping mqtt connect"
-            - mqtt.disable:
+            - ${mqtt}.disable:
                 id: bambu_mqtt
         # - script.execute: set_all_leds_white
         # - lambda: |-
@@ -75,14 +100,16 @@ esphome:
   on_shutdown:
     then:
       - script.execute: set_led_off
-esp32:
-  framework:
-    type: esp-idf
-    version: 5.3.1
-    platform_version: 6.9.0 # https://github.com/platformio/platform-espressif32/releases/
-    sdkconfig_options: 
-      CONFIG_MBEDTLS_HKDF_C: y # Needed for bambu KDF
-      CONFIG_MBEDTLS_MD_C: y   # Needed for bambu KDF
+
+  
+# esp32:
+#  framework:
+#    type: esp-idf
+#    version: 5.3.1
+#    platform_version: 6.9.0 # https://github.com/platformio/platform-espressif32/releases/
+#    sdkconfig_options: 
+#      CONFIG_MBEDTLS_HKDF_C: y # Needed for bambu KDF
+#      CONFIG_MBEDTLS_MD_C: y   # Needed for bambu KDF
     # version: recommended
     # sdkconfig_options:
     # MBEDTLS_CERTIFICATE_BUNDLE: y
@@ -105,9 +132,9 @@ packages:
   mqtt_bambu_lan: !include conf.d/mqtt_bambu_lan.yaml
   filament: !include conf.d/filament.yaml
   bambu_printer: !include conf.d/bambu_printer.yaml
-  pn532_rfid-solo: !include conf.d/pn532_rfid-solo.yaml
+  #pn532_rfid-solo: !include conf.d/pn532_rfid-solo.yaml # Comment if using an AMS with 4 LEDs; make sure you uncomment below also
+  pn532_rfid-ams-external: !include conf.d/pn532_rfid-ams-external.yaml # Uncomment if using an AMS with 4 LEDs; make sure you comment above also
   automation: !include conf.d/automation.yaml
-  led-external: !include conf.d/led-external.yaml
   ota: !include conf.d/ota.yaml
   #update: !include conf.d/update.yaml
   api: !include conf.d/api.yaml

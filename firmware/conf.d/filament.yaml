@@ -215,6 +215,7 @@ number:
   state_topic:
   min_value: 150
   max_value: 300
+  initial_value: 150
   unit_of_measurement: °C
   step: 5
   icon: mdi:thermometer-low
