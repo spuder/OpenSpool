@@ -6,7 +6,6 @@ light:
   state_topic:
   pin: ${neopixel_pin}
   chipset: WS2812
-  rmt_channel: 1
   rgb_order: GRB
   num_leds: 1
   entity_category: diagnostic
