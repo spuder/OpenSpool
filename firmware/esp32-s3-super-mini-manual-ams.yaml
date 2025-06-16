@@ -24,5 +24,5 @@ packages:
   button: !include conf.d/button.yaml
 
 dashboard_import:
-  package_import_url: github://spuder/openspool/firmware/esp32_s3_super_mini.yaml@main
+  package_import_url: github://spuder/openspool/firmware/esp32-s3-super-mini-manual-ams.yaml@main
   import_full_config: false
