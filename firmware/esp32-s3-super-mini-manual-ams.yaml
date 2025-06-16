@@ -1,0 +1,28 @@
+esp32:
+  board: esp32-s3-devkitc-1
+
+substitutions:
+  hide_ams_sensors: "true"
+  led_pin: GPIO9
+  neopixel_pin: "48" #some boards have this on pin 38
+  spi2_type: SPI2
+  spi2_clk_pin: GPIO10
+  spi2_miso_pin: GPIO11
+  spi2_mosi_pin: GPIO12
+  encoder_pin_a: GPIO6
+  encoder_pin_b: GPIO7
+
+  rfid0_spi_interface: SPI2
+  rfid0_ss_pin: GPIO13
+
+packages:
+  improv-serial: !include conf.d/improv-serial.yaml
+  bambu_ams: !include conf.d/bambu_ams.yaml
+  openspool-manual-ams: !include openspool-manual-ams.yaml
+  led-internal: !include conf.d/led-internal.yaml
+  extra: !include conf.d/extra.yaml
+  button: !include conf.d/button.yaml
+
+dashboard_import:
+  package_import_url: github://spuder/openspool/firmware/esp32_s3_super_mini.yaml@main
+  import_full_config: false

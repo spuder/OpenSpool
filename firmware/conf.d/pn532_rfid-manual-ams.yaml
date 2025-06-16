@@ -1,0 +1,399 @@
+---
+substitutions:
+  spi_data_rate: 200kHz
+  update_interval: "750ms"
+
+globals:
+  - id: selected_slot
+    type: int
+    restore_value: yes
+    initial_value: "0"
+
+script:
+  - id: update_leds
+    then:
+      - lambda: |-
+          auto ams_index = id(ams_number).active_index();
+          auto slot_index = id(slot_number).active_index();
+          for (int i = 0; i < ams_index.value() * slot_index.value(); i++) {
+            if (i == id(selected_slot)) {
+              id(set_led_blue).execute(i);
+            } else {
+              id(set_led_off).execute(i);
+            }
+          }
+  - id: publish_filament_data_to_mqtt
+    parameters:
+      payload_data: string
+    then:
+      - if:
+          condition:
+            and:
+              - mqtt.connected
+              - lambda: 'return payload_data != "";'
+              - lambda: 'return payload_data != "{}";'
+              - binary_sensor.is_on: rfid_reader_spi_0_tag_is_openspool
+              - binary_sensor.is_on: rfid_reader_spi_0_tag_parsed
+          then:
+            - mqtt.publish:
+                topic: !lambda 'return "device/" + id(bambu_serial_number).state + "/request";'
+                payload: !lambda |-
+                  // 255 = external ams, first ams is 0
+                  // 254 = external tray, first filament slot is tray 0
+                  uint16_t ams_id = 255;  // Default to external AMS
+                  uint16_t tray_id = 254; // Default to external tray
+
+                  if (id(ams_number).active_index().value() > 0) {
+                    ams_id = id(ams_number).active_index().value();
+                    tray_id = id(slot_number).active_index().value();
+                  }
+
+                  return bambulabs::generate_mqtt_payload(payload_data, ams_id, tray_id);
+
+sensor:
+  - platform: rotary_encoder
+    id: encoder_sensor
+    name: "Encoder Position"
+    resolution: 2
+    pin_a:
+      number: ${encoder_pin_a}
+      mode:
+        input: true
+        pullup: true
+    pin_b:
+      number: ${encoder_pin_b}
+      mode:
+        input: true
+        pullup: true
+    on_clockwise:
+      then:
+        - lambda: |-
+            if(id(ams_number).state == "0") {
+              id(ams_number).publish_state("1");
+            } else if (id(slot_number).state == "4") {
+              if (id(ams_number).state == id(ams_units).state) {
+                id(ams_number).publish_state("0");
+              } else {
+                auto cur_index = id(ams_number).active_index().value(); 
+                auto option = id(ams_number).at(cur_index + 1).value();
+                id(ams_number).publish_state(option.c_str());
+              }
+              id(slot_number).publish_state("1");
+            } else {
+              // Increment the slot directly using the current state value
+              int current_slot = std::stoi(id(slot_number).state);
+              int next_slot = current_slot + 1;
+              // Make sure it stays in valid range
+              if (next_slot > 4) next_slot = 4;
+              id(slot_number).publish_state(std::to_string(next_slot).c_str());
+              
+              // Debugging output
+              ESP_LOGD("Encoder", "Incrementing slot from %d to %d", current_slot, next_slot);
+            }
+            // Force state and UI update
+            if (id(slot_number).state == "3" || id(slot_number).state == "4") {
+              // This bypasses normal mechanisms to force the UI update
+              id(slot_number).state = id(slot_number).state;
+              id(slot_number).publish_state(id(slot_number).state);
+            }
+        - script.execute: update_leds
+    on_anticlockwise:
+      then:
+        - lambda: |-
+            if (id(ams_number).state == "0") {
+              // If at AMS 0, go to max AMS and max slot
+              id(ams_number).publish_state(id(ams_units).state.c_str());
+              id(slot_number).publish_state("4");
+            } else if (id(slot_number).state == "1") {
+              // If at slot 1, go to previous AMS and max slot
+              auto cur_ams = id(ams_number).state;
+              if (cur_ams == "1") {
+                // If at AMS 1, go to AMS 0
+                id(ams_number).publish_state("0");
+                id(slot_number).publish_state("1");
+              } else {
+                // Otherwise, go to previous AMS and max slot
+                int prev_ams = std::stoi(cur_ams) - 1;
+                id(ams_number).publish_state(std::to_string(prev_ams).c_str());
+                id(slot_number).publish_state("4");
+              }
+            } else {
+              // Just decrement the slot - but do it directly using the current state value
+              int current_slot = std::stoi(id(slot_number).state);
+              int prev_slot = current_slot - 1;
+              // Make sure it stays in valid range
+              if (prev_slot < 1) prev_slot = 1;
+              id(slot_number).publish_state(std::to_string(prev_slot).c_str());
+              
+              // Debugging output
+              ESP_LOGD("Encoder", "Decrementing slot from %d to %d", current_slot, prev_slot);
+            }
+        - script.execute: update_leds
+
+binary_sensor:
+  - platform: template
+    name: "NFC Tag Present"
+    id: nfc_tag_present0
+    state_topic:
+    icon: mdi:circle-double
+    web_server:
+      sorting_group_id: sorting_group_rfid
+
+spi:
+  # On esp32-s3 SPI2 a can support 6 devices, whereas only 3 on bus SPI3
+  - id: SPI2
+    clk_pin: ${spi2_clk_pin} # SCK
+    miso_pin: ${spi2_miso_pin} # MO/SDA/TX (MISO)
+    mosi_pin: ${spi2_mosi_pin} # M (MOSI)
+    interface: ${spi2_type}
+
+pn532_spi:
+  - id: rfid_reader_spi_0
+    cs_pin: ${rfid0_ss_pin} # NSS/SCL/RX
+    spi_id: ${rfid0_spi_interface}
+    data_rate: ${spi_data_rate}
+    update_interval: ${update_interval}
+    on_tag_removed:
+      then:
+        - binary_sensor.template.publish:
+            id: nfc_tag_present0
+            state: OFF
+        - lambda: |-
+            id(filament_raw_data0).publish_state("");
+            id(set_led_blue).execute(id(selected_slot));
+    on_tag:
+      then:
+        - binary_sensor.template.publish:
+            id: nfc_tag_present0
+            state: ON
+        - lambda: |-
+            bool is_valid_openspool = false;
+            std::string payload;
+
+            if (tag.has_ndef_message()) {
+              auto records = tag.get_ndef_message()->get_records();
+              bool found_json = false;
+
+              // Look for application/json record
+              for (const auto& record : records) {
+                if (record->get_type() == "application/json") {
+                  if (found_json) {
+                    // More than one JSON record found
+                    ESP_LOGW("NFC", "Multiple JSON records found, using first one");
+                    break;
+                  }
+
+                  payload = record->get_payload();
+                  ESP_LOGD("NFC", "Payload: %s", payload.c_str());
+                  id(filament_raw_data0).publish_state(payload);
+
+                  // Parse JSON and check for OpenSpool protocol
+                  auto parse_result = json::parse_json(payload, [&](JsonObject root) {
+                    is_valid_openspool = root["protocol"] == "openspool";
+                    return true;
+                  });
+
+                  if (!parse_result) {
+                    ESP_LOGE("NFC", "Failed to parse JSON payload");
+                  }
+
+                  found_json = true;
+                }
+              }
+
+              if (!found_json) {
+                ESP_LOGW("NFC", "No application/json record found");
+              }
+            } else {
+              ESP_LOGI("NFC", "Tag found without NDEF message");
+            }
+
+            // Update states
+            id(rfid_reader_spi_0_tag_parsed).publish_state(true);
+            id(rfid_reader_spi_0_tag_is_openspool).publish_state(is_valid_openspool);
+
+            // Set LED color
+            if (is_valid_openspool) {
+              id(set_led_green).execute(id(selected_slot));
+              //TODO: Generate and send MQTT message here
+              if (!payload.empty()) {
+                id(publish_filament_data_to_mqtt).execute(payload);
+              }
+            } else {
+              id(set_led_red).execute(id(selected_slot));
+            }
+
+text_sensor:
+  - platform: template
+    name: "NFC Raw Data"
+    id: filament_raw_data0
+    state_topic:
+    internal: false # Always show raw data 0
+    icon: mdi:nfc-variant
+    web_server:
+      sorting_group_id: sorting_group_rfid
+    filters:
+      - lambda: |-
+          auto pretty_json = [](const std::string &x) -> std::string {
+            if (x.empty()) {
+              ESP_LOGD("NFC", "Input string is empty");
+              return x;
+            }     
+            ESP_LOGD("NFC", "Input string: %s", x.c_str());
+            
+            StaticJsonDocument<1024> doc;  // Use StaticJsonDocument for memory efficiency
+            DeserializationError error = deserializeJson(doc, x);
+            if (error) {
+              ESP_LOGE("NFC", "JSON parsing failed: %s", error.c_str());
+              return "";
+            }
+            
+            if (!doc.is<JsonObject>()) {
+              ESP_LOGE("NFC", "Invalid JSON: Not an object");
+              return "";
+            }
+            
+            const char* required_fields[] = {"protocol", "color_hex", "type", "min_temp", "max_temp", "brand"};
+            for (const char* field : required_fields) {
+              if (!doc.containsKey(field)) {
+                ESP_LOGE("NFC", "Invalid JSON: Missing required field '%s'", field);
+                return "";
+              }
+            }
+            
+            std::string output;
+            serializeJsonPretty(doc, output);
+            
+            if (output.length() > 1024) {
+              ESP_LOGE("NFC", "Prettified JSON exceeds 1024 bytes");
+              return "";
+            }
+            
+            return output;
+          };
+          return pretty_json(x);
+
+  - platform: template
+    name: "NFC Preview"
+    id: nfc_preview
+    state_topic:
+    icon: mdi:nfc-search-variant
+    web_server:
+      sorting_group_id: sorting_group_rfid
+
+# Create virtual button that can be pressed in the gui
+button:
+  - platform: template
+    name: "Write NFC"
+    id: write_nfc
+    state_topic:
+    icon: mdi:nfc-tap
+    web_server:
+      sorting_group_id: sorting_group_filament_settings
+      sorting_weight: 210
+    on_press:
+      then:
+        - if:
+            condition:
+              and:
+                - lambda: |-
+                    if (id(filament_brand).state == "") {
+                      ESP_LOGE("main", "Filament Brand cannot be empty");
+                      return false;
+                    } else {
+                      return true;
+                    }
+                - lambda: |-
+                    if (id(filament_brand_code).state == "") {
+                      ESP_LOGE("main", "Filament Brand Code cannot be empty");
+                      return false;
+                    } else {
+                      return true;
+                    }
+                - lambda: |-
+                    if (id(filament_color_hex).state == "") {
+                      ESP_LOGE("main", "Filament Color Hex cannot be empty");
+                      return false;
+                    } else {
+                      return true;
+                    }
+                - lambda: |-
+                    if (id(filament_max_temp).state > 300) {
+                      ESP_LOGE("main", "Filament Max Temp must be less than 300");
+                      return false;
+                    } else {
+                      return true;
+                    }
+                - lambda: |-
+                    if (id(filament_min_temp).state < 150) {
+                      ESP_LOGE("main", "Filament Min Temp must be greater than 150");
+                      return false;
+                    } else {
+                      return true;
+                    }
+                - lambda: |-
+                    if (id(filament_min_temp).state > id(filament_max_temp).state) {
+                      ESP_LOGE("main", "Filament Min Temp must be less than Filament Max Temp");
+                      return false;
+                    } else {
+                      return true;
+                    }
+                - lambda: |-
+                    if (id(filament_type).state == "") {
+                      ESP_LOGE("main", "Filament Type cannot be empty");
+                      return false;
+                    } else {
+                      return true;
+                    }
+            then:
+              - lambda: |-
+                  auto message = new nfc::NdefMessage();
+                  // Application/Json NDEF record
+                  auto json_record = std::make_unique<nfc::NdefRecord>();
+                  json_record->set_tnf(nfc::TNF_MIME_MEDIA);
+                  json_record->set_type("application/json");
+
+                  DynamicJsonDocument doc(256);  // Adjust size as needed
+                  JsonObject root = doc.to<JsonObject>();
+                  root["version"] = "1.0";
+                  root["protocol"] = "openspool";
+                  if (id(filament_include_alpha).state == true){
+                    root["color_hex"] = id(filament_color_hexaa).state;
+                  }
+                  else{
+                    root["color_hex"] = id(filament_color_hex).state;
+                  } 
+                  root["type"] = id(filament_type).state;
+                  root["min_temp"] = id(filament_min_temp).state;
+                  root["max_temp"] = id(filament_max_temp).state;
+                  root["brand"] = id(filament_brand).state;
+
+                  std::string json_string;
+                  serializeJson(root, json_string);
+                  if (json_string.empty()) {
+                    ESP_LOGE("rfid", "Failed to serialize JSON");
+                    return;
+                  }
+                  ESP_LOGI("rfid", "JSON content to be written: %s", json_string.c_str());
+                  json_record->set_payload(json_string);
+                  message->add_record(std::move(json_record));
+
+                  std::vector<uint8_t> encoded_message = message->encode();
+                  size_t message_size = encoded_message.size();
+                  ESP_LOGI("rfid", "NDEF message size: %zu bytes", message_size);
+
+                  id(rfid_reader_spi_0).write_mode(message);
+                  ESP_LOGI("rfid", "Writing JSON NDEF message to tag");
+              - wait_until:
+                  not:
+                    pn532.is_writing:
+                      id: rfid_reader_spi_0
+              - logger.log:
+                  tag: "rfid"
+                  format: "Finished writing tag"
+                  level: INFO
+              - lambda: |-
+                  id(set_led_green).execute(id(selected_slot));
+            else:
+              - lambda: |-
+                  ESP_LOGI("rfid", "NFC Tag not present");

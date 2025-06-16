@@ -1,0 +1,90 @@
+select:
+  - platform: template
+    name: "Number of AMS units"
+    id: ams_units
+    optimistic: false
+    restore_value: true
+    icon: mdi:printer-3d-nozzle
+    options:
+      - "1"
+      - "2"
+      - "3"
+      - "4"
+    initial_option: "1"
+    set_action:
+      then:
+        - lambda: |-
+            if (id(bambu_model).state == "A1Mini" || id(bambu_model).state == "A1") {
+              id(ams_units).publish_state("1");
+            } else {
+              id(ams_units).publish_state(x);
+            }
+    on_value:
+      then:
+        - lambda: |-
+            ESP_LOGD("AMS", "AMS units set: %s", x.c_str());
+    web_server:
+      sorting_group_id: sorting_group_printer_settings
+      sorting_weight: 100
+
+  - platform: template
+    name: "AMS Number"
+    id: ams_number
+    optimistic: false
+    restore_value: true
+    icon: mdi:printer-3d-nozzle
+    options:
+      - "0"
+      - "1"
+      - "2"
+      - "3"
+      - "4"
+    initial_option: "1"
+    set_action:
+      then:
+        - lambda: |-
+            if (id(bambu_model).state == "A1Mini" || id(bambu_model).state == "A1") {
+              id(ams_number).publish_state("1");
+            } else {
+              if (x == "0") {
+                id(slot_number).publish_state("1");
+              }
+              id(ams_number).publish_state(x);
+            }
+    on_value:
+      then:
+        - lambda: |-
+            ESP_LOGD("AMS", "AMS selected: %s", x.c_str());
+    web_server:
+      sorting_group_id: sorting_group_ams
+
+  - platform: template
+    name: "Slot Number"
+    id: slot_number
+    optimistic: false
+    restore_value: true
+    icon: mdi:printer-3d-nozzle
+    options:
+      - "1"
+      - "2"
+      - "3"
+      - "4"
+    initial_option: "1"
+    set_action:
+      then:
+        - lambda: |-
+            if (id(ams_number).state == "0") {
+              // Only force to 1 if manually selecting through UI, not from encoder
+              if (x != id(slot_number).state) {
+                id(slot_number).publish_state("1");
+                ESP_LOGD("AMS", "Forcing slot to 1 because AMS is 0");
+              }
+            } else {
+              id(slot_number).publish_state(x);
+            }
+    on_value:
+      then:
+        - lambda: |-
+            ESP_LOGD("AMS", "Slot selected: %s", x.c_str());
+    web_server:
+      sorting_group_id: sorting_group_ams
