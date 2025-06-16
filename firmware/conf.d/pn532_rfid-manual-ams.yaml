@@ -55,6 +55,7 @@ sensor:
     id: encoder_sensor
     name: "Encoder Position"
     resolution: 2
+    restore_mode: ALWAYS_ZERO
     pin_a:
       number: ${encoder_pin_a}
       mode:
