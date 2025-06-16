@@ -3,23 +3,7 @@ substitutions:
   spi_data_rate: 200kHz
   update_interval: "750ms"
 
-globals:
-  - id: selected_slot
-    type: int
-    restore_value: yes
-    initial_value: "0"
-
 script:
-  - id: update_leds
-    then:
-      - lambda: |-
-          for (int i = 0; i < id(ams_units).state * 4; i++) {
-            if (i == id(selected_slot)) {
-              id(set_led_blue).execute(i);
-            } else {
-              id(set_led_off).execute(i);
-            }
-          }
   - id: publish_filament_data_to_mqtt
     parameters:
       payload_data: string
@@ -79,7 +63,7 @@ sensor:
             } else {
               id(slot_number).publish_state(id(slot_number).state + 1);
             }
-        - script.execute: update_leds
+        - script.execute: update_selected_slot
     on_anticlockwise:
       then:
         - lambda: |-
@@ -94,6 +78,7 @@ sensor:
             }
 
         - script.execute: update_leds
+        - script.execute: update_selected_slot
 
 binary_sensor:
   - platform: template

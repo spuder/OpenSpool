@@ -1,3 +1,20 @@
+globals:
+  - id: selected_slot
+    type: int
+    restore_value: yes
+    initial_value: "0"
+
+script:
+  - id: update_selected_slot
+    then:
+      - lambda: |-
+          if (id(ams_number).state == 0) {
+            id(selected_slot) = 0;
+          } else {
+            id(selected_slot) = (id(ams_number).state - 1) * 4 + id(slot_number).state;
+          }
+      - script.execute: update_leds
+
 number:
   - platform: template
     name: "Number of AMS units"
@@ -9,7 +26,6 @@ number:
     max_value: 4
     step: 1
     initial_value: 1
-    mode: box
     set_action:
       then:
         - lambda: |-
@@ -36,7 +52,6 @@ number:
     max_value: 4
     step: 1
     initial_value: 1
-    mode: box
     set_action:
       then:
         - lambda: |-
@@ -49,10 +64,15 @@ number:
                 id(ams_number).publish_state(x);
               }
             }
+        - script.execute: update_selected_slot
     on_value:
       then:
         - lambda: |-
             ESP_LOGD("AMS", "AMS selected: %d", (int)x);
+            // If AMS is 0, ensure slot is forced to 1
+            if (x == 0 && id(slot_number).state != 1) {
+                id(slot_number).publish_state(1);
+            }
     web_server:
       sorting_group_id: sorting_group_ams
 
@@ -75,9 +95,14 @@ number:
             } else {
               id(slot_number).publish_state(x);
             }
+        - script.execute: update_selected_slot
     on_value:
       then:
         - lambda: |-
             ESP_LOGD("AMS", "Slot selected: %d", (int)x);
+            // If AMS is 0, ensure slot is forced to 1
+            if (id(ams_number).state == 0 && x != 1) {
+                id(slot_number).publish_state(1);
+            }
     web_server:
       sorting_group_id: sorting_group_ams

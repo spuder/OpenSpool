@@ -65,7 +65,8 @@ esphome:
         #     id(my_ota).set_auth_password("New password");
   on_shutdown:
     then:
-      - script.execute: set_leds_off
+      - light.turn_off:
+          id: neopixel_light
 esp32:
   framework:
     type: esp-idf
