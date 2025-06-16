@@ -13,9 +13,7 @@ script:
   - id: update_leds
     then:
       - lambda: |-
-          auto ams_index = id(ams_number).active_index();
-          auto slot_index = id(slot_number).active_index();
-          for (int i = 0; i < ams_index.value() * slot_index.value(); i++) {
+          for (int i = 0; i < id(ams_units).state * 4; i++) {
             if (i == id(selected_slot)) {
               id(set_led_blue).execute(i);
             } else {
@@ -43,9 +41,9 @@ script:
                   uint16_t ams_id = 255;  // Default to external AMS
                   uint16_t tray_id = 254; // Default to external tray
 
-                  if (id(ams_number).active_index().value() > 0) {
-                    ams_id = id(ams_number).active_index().value();
-                    tray_id = id(slot_number).active_index().value();
+                  if (id(ams_number).state > 0) {
+                    ams_id = id(ams_number).state - 1;
+                    tray_id = id(slot_number).state - 1;
                   }
 
                   return bambulabs::generate_mqtt_payload(payload_data, ams_id, tray_id);
@@ -69,66 +67,32 @@ sensor:
     on_clockwise:
       then:
         - lambda: |-
-            if(id(ams_number).state == "0") {
-              id(ams_number).publish_state("1");
-            } else if (id(slot_number).state == "4") {
+            if(id(ams_number).state == 0) {
+              id(ams_number).publish_state(1);
+            } else if (id(slot_number).state == 4) {
               if (id(ams_number).state == id(ams_units).state) {
-                id(ams_number).publish_state("0");
+                id(ams_number).publish_state(0);
               } else {
-                auto cur_index = id(ams_number).active_index().value(); 
-                auto option = id(ams_number).at(cur_index + 1).value();
-                id(ams_number).publish_state(option.c_str());
+                id(ams_number).publish_state(id(ams_number).state + 1);
               }
-              id(slot_number).publish_state("1");
+              id(slot_number).publish_state(1);
             } else {
-              // Increment the slot directly using the current state value
-              int current_slot = std::stoi(id(slot_number).state);
-              int next_slot = current_slot + 1;
-              // Make sure it stays in valid range
-              if (next_slot > 4) next_slot = 4;
-              id(slot_number).publish_state(std::to_string(next_slot).c_str());
-              
-              // Debugging output
-              ESP_LOGD("Encoder", "Incrementing slot from %d to %d", current_slot, next_slot);
-            }
-            // Force state and UI update
-            if (id(slot_number).state == "3" || id(slot_number).state == "4") {
-              // This bypasses normal mechanisms to force the UI update
-              id(slot_number).state = id(slot_number).state;
-              id(slot_number).publish_state(id(slot_number).state);
+              id(slot_number).publish_state(id(slot_number).state + 1);
             }
         - script.execute: update_leds
     on_anticlockwise:
       then:
         - lambda: |-
-            if (id(ams_number).state == "0") {
-              // If at AMS 0, go to max AMS and max slot
-              id(ams_number).publish_state(id(ams_units).state.c_str());
-              id(slot_number).publish_state("4");
-            } else if (id(slot_number).state == "1") {
-              // If at slot 1, go to previous AMS and max slot
-              auto cur_ams = id(ams_number).state;
-              if (cur_ams == "1") {
-                // If at AMS 1, go to AMS 0
-                id(ams_number).publish_state("0");
-                id(slot_number).publish_state("1");
-              } else {
-                // Otherwise, go to previous AMS and max slot
-                int prev_ams = std::stoi(cur_ams) - 1;
-                id(ams_number).publish_state(std::to_string(prev_ams).c_str());
-                id(slot_number).publish_state("4");
-              }
+            if(id(ams_number).state == 0) {
+              id(ams_number).publish_state(id(ams_units).state);
+              id(slot_number).publish_state(4);
+            } else if (id(slot_number).state == 1) {
+              id(ams_number).publish_state(id(ams_number).state - 1);
+              id(slot_number).publish_state(4);
             } else {
-              // Just decrement the slot - but do it directly using the current state value
-              int current_slot = std::stoi(id(slot_number).state);
-              int prev_slot = current_slot - 1;
-              // Make sure it stays in valid range
-              if (prev_slot < 1) prev_slot = 1;
-              id(slot_number).publish_state(std::to_string(prev_slot).c_str());
-              
-              // Debugging output
-              ESP_LOGD("Encoder", "Decrementing slot from %d to %d", current_slot, prev_slot);
+              id(slot_number).publish_state(id(slot_number).state - 1);
             }
+
         - script.execute: update_leds
 
 binary_sensor:
