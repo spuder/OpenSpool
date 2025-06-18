@@ -1,6 +1,30 @@
 ---
 substitutions:
   led_count: "17" # Match the max_value from filament_slots
+
+number:
+  - platform: template
+    name: "LED Brightness"
+    id: led_brightness
+    icon: mdi:led-on
+    entity_category: config
+    min_value: 1
+    max_value: 100
+    step: 1
+    initial_value: 50
+    unit_of_measurement: "%"
+    optimistic: true
+    restore_value: true
+    on_value:
+      then:
+        - lambda: |-
+            auto call = id(neopixel_light).make_call();
+            call.set_brightness(x / 100.0);
+            call.set_color_brightness(x / 100.0);
+            call.perform();
+        - delay: 500ms
+        - script.execute: select_led
+
 light:
   - platform: esp32_rmt_led_strip
     name: External LEDs

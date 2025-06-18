@@ -23,7 +23,6 @@ esphome:
       - light.turn_on:
           id: neopixel_light
           effect: Breathing Blue
-          brightness: 100%
       - wait_until:
           condition:
             wifi.connected:
