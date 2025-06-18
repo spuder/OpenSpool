@@ -2,17 +2,15 @@ esp32:
   board: esp32-s3-devkitc-1
 
 substitutions:
-  hide_ams_sensors: "true"
-  led_pin: GPIO9
-  neopixel_pin: "48" #some boards have this on pin 38
   spi2_type: SPI2
+  rfid0_spi_interface: SPI2
+  neopixel_pin: GPIO21
+  encoder_pin_a: GPIO6
+  encoder_pin_b: GPIO7
+  led_pin: GPIO9
   spi2_clk_pin: GPIO10
   spi2_miso_pin: GPIO11
   spi2_mosi_pin: GPIO12
-  encoder_pin_a: GPIO6
-  encoder_pin_b: GPIO7
-
-  rfid0_spi_interface: SPI2
   rfid0_ss_pin: GPIO13
 
 packages:
