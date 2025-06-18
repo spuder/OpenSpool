@@ -21,7 +21,7 @@ number:
     id: ams_units
     optimistic: false
     restore_value: true
-    icon: mdi:printer-3d-nozzle
+    icon: mdi:train-car-container
     min_value: 0
     max_value: 4
     step: 1
@@ -56,7 +56,7 @@ number:
     id: ams_number
     optimistic: false
     restore_value: true
-    icon: mdi:printer-3d-nozzle
+    icon: mdi:train-car-container
     min_value: 0
     max_value: 4
     step: 1
@@ -85,7 +85,7 @@ number:
     id: slot_number
     optimistic: false
     restore_value: true
-    icon: mdi:printer-3d-nozzle
+    icon: mdi:record-circle-outline
     min_value: 1
     max_value: 4
     step: 1
