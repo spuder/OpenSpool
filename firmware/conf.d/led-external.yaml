@@ -3,7 +3,7 @@ substitutions:
   led_count: "17" # Match the max_value from filament_slots
 light:
   - platform: esp32_rmt_led_strip
-    name: LEDs
+    name: External LEDs
     id: neopixel_light
     pin: ${external_led_pin}
     num_leds: ${led_count}
