@@ -5,8 +5,9 @@ light:
   - platform: esp32_rmt_led_strip
     name: LEDs
     id: neopixel_light
-    pin: ${led_pin}
+    pin: ${external_led_pin}
     num_leds: ${led_count}
+    rmt_symbols: 48
     rgb_order: GRB
     chipset: WS2812
     default_transition_length: 0.4s

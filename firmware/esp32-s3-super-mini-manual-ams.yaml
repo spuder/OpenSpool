@@ -9,10 +9,10 @@ psram:
 substitutions:
   spi2_type: SPI2
   rfid0_spi_interface: SPI2
-  neopixel_pin: GPIO21
+  neopixel_pin: GPIO48
   encoder_pin_a: GPIO6
   encoder_pin_b: GPIO7
-  led_pin: GPIO9
+  external_led_pin: GPIO9
   spi2_clk_pin: GPIO10
   spi2_miso_pin: GPIO11
   spi2_mosi_pin: GPIO12
