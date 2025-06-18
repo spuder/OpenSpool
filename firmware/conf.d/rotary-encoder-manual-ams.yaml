@@ -70,3 +70,4 @@ sensor:
         - script.execute:
             id: navigate_slots
             direction: -1
+    entity_category: diagnostic
