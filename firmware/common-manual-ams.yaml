@@ -1,8 +1,10 @@
 ---
 preferences:
   flash_write_interval: 3sec
+
 substitutions:
   name: openspool
+
 esphome:
   name: ${name}
   name_add_mac_suffix: true
@@ -56,38 +58,17 @@ esphome:
                 format: "Missing Bambu Credentials, skipping mqtt connect"
             - mqtt.disable:
                 id: bambu_mqtt
-        # - script.execute: set_all_leds_white
-        # - lambda: |-
-        #     //TODO: this appears to have broken and no longer blinks blue
-        #     if (!wifi::global_wifi_component->is_connected() &&
-        #         wifi::global_wifi_component->wifi_soft_ap_ip().str() == "192.168.4.1") {
-        #       id(set_led_breathing_blue).execute();
-        #     }
-        # - lambda: |-
-        #     id(my_ota).set_auth_password("New password");
   on_shutdown:
     then:
       - light.turn_off:
           id: neopixel_light
+
 esp32:
   framework:
     type: esp-idf
-    #version: 5.3.1
-    #platform_version: 6.9.0 # https://github.com/platformio/platform-espressif32/releases/
     sdkconfig_options:
       CONFIG_MBEDTLS_HKDF_C: y # Needed for bambu KDF
       CONFIG_MBEDTLS_MD_C: y # Needed for bambu KDF
-    # version: recommended
-    # sdkconfig_options:
-    # MBEDTLS_CERTIFICATE_BUNDLE: y
-    # MBEDTLS_CERTIFICATE_BUNDLE_DEFAULT_FULL: y
-
-#TODO: uncomment when ready for bambu support
-# external_components:
-#   - source:
-#       type: local
-#       path: components
-#     components: [pn532, nfc]
 
 packages:
   version: !include conf.d/version.yaml
