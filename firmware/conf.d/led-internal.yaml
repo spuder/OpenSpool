@@ -8,6 +8,7 @@ light:
   chipset: WS2812
   rgb_order: GRB
   num_leds: 1
+  rmt_symbols: 48
   entity_category: diagnostic
   restore_mode: ALWAYS_OFF
   icon: mdi:led-strip
