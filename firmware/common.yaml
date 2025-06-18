@@ -1,4 +1,6 @@
 ---
+preferences:
+  flash_write_interval: 3sec
 substitutions:
   name: openspool
 esphome:
