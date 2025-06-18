@@ -7,7 +7,7 @@ light:
     id: neopixel_light
     pin: ${external_led_pin}
     num_leds: ${led_count}
-    rmt_symbols: 48
+    rmt_symbols: 144
     rgb_order: GRB
     chipset: WS2812
     default_transition_length: 0.4s
