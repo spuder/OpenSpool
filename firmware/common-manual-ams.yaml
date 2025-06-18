@@ -1,4 +1,6 @@
 ---
+preferences:
+  flash_write_interval: 3sec
 substitutions:
   name: openspool
 esphome:
@@ -7,7 +9,7 @@ esphome:
   project:
     name: spuder.openspool
     version: ${version}
-  min_version: 2024.11.0
+  min_version: 2025.6.0
   platformio_options:
     build_unflags: -std=gnu++11
     build_flags:
@@ -70,8 +72,8 @@ esphome:
 esp32:
   framework:
     type: esp-idf
-    version: 5.3.1
-    platform_version: 6.9.0 # https://github.com/platformio/platform-espressif32/releases/
+    #version: 5.3.1
+    #platform_version: 6.9.0 # https://github.com/platformio/platform-espressif32/releases/
     sdkconfig_options:
       CONFIG_MBEDTLS_HKDF_C: y # Needed for bambu KDF
       CONFIG_MBEDTLS_MD_C: y # Needed for bambu KDF

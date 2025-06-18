@@ -5,7 +5,6 @@ light:
   - platform: esp32_rmt_led_strip
     name: LEDs
     id: neopixel_light
-    state_topic:
     pin: ${led_pin}
     num_leds: ${led_count}
     rgb_order: GRB
