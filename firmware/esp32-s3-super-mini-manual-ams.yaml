@@ -19,6 +19,7 @@ packages:
   improv-serial: !include conf.d/improv-serial.yaml
   bambu_ams: !include conf.d/bambu_ams.yaml
   openspool-manual-ams: !include openspool-manual-ams.yaml
+  encoder: !include conf.d/rotary-encoder-manual-ams.yaml # Comment out if you don't use the rotary encoder
   led-internal: !include conf.d/led-internal.yaml
   extra: !include conf.d/extra.yaml
   button: !include conf.d/button.yaml
