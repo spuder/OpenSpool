@@ -39,28 +39,15 @@ light:
             for (int i = 0; i < it.size(); ++i) {
               it[i] = color;
             }
-          #   - strobe:
-          #       name: "Data Upload"
-          #       colors:
-          #         - state: TRUE
-          #           brightness: 100%
-          #           duration: 50ms
-          #           red: 0%
-          #           green: 100%
-          #           blue: 0%
-          #         - state: FALSE
-          #           duration: 50ms
 script:
-  - id: update_leds
+  - id: select_led
     then:
       - lambda: |-
-          // Clear all LEDs first
           for (int i = 0; i < 17; i++) {
             id(set_led_off).execute(i);
           }
-          ESP_LOGD("LED", "LED index: %d", (int)id(selected_slot));
-          //id(set_leds_off).execute();
           id(set_led_blue).execute(id(selected_slot));
+          ESP_LOGD("LED", "LED index: %d", (int)id(selected_slot));
   - id: set_led_red
     parameters:
       led_number: int8_t

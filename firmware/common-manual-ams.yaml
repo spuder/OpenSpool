@@ -37,7 +37,7 @@ esphome:
       - light.turn_off:
           id: neopixel_light
       - delay: 500ms
-      - script.execute: update_leds
+      - script.execute: select_led
       - if:
           condition:
             lambda: |-

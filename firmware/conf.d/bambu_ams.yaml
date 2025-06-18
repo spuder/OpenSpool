@@ -13,7 +13,7 @@ script:
           } else {
             id(selected_slot) = (id(ams_number).state - 1) * 4 + id(slot_number).state;
           }
-      - script.execute: update_leds
+      - script.execute: select_led
 
 number:
   - platform: template
