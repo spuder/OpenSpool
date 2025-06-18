@@ -54,12 +54,15 @@ select:
     sorting_group_id: sorting_group_filament_settings
     sorting_weight: 40
   options:
-  - Basic
+  - Basic  
+  - Impact
+  - Marble
   - Matte
   - Metal
-  - Impact
-  - G
-  - W
+  - Silk
+  - Wood
+  #- Support G -> Create own filament type? Theoretically not needed at all, because only available from Bambu
+  #- Support W -> Create own filament type? Theoretically not needed at all, because only available from Bambu
   # TODO: add the rest of the options
   on_value:
     then:
