@@ -1,0 +1,87 @@
+---
+preferences:
+  flash_write_interval: 3sec
+
+substitutions:
+  name: openspool
+
+esphome:
+  name: ${name}
+  name_add_mac_suffix: true
+  project:
+    name: spuder.openspool
+    version: ${version}
+  min_version: 2025.6.0
+  platformio_options:
+    build_unflags: -std=gnu++11
+    build_flags:
+      - -std=gnu++14
+      - -DMBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\"
+  on_boot:
+    then:
+      #TODO: breahting blue studders a little bit
+      - light.turn_on:
+          id: neopixel_light
+          effect: Breathing Blue
+      - wait_until:
+          condition:
+            wifi.connected:
+      - delay: 100ms
+      - light.turn_on:
+          id: neopixel_light
+          effect: none
+      - delay: 100ms
+      - light.turn_on:
+          id: neopixel_light
+          effect: Rainbow
+      - delay: 1s
+      - light.turn_off:
+          id: neopixel_light
+      - delay: 500ms
+      - script.execute: select_led
+      - if:
+          condition:
+            lambda: |-
+              return !id(bambu_lan_access_code).state.empty() &&
+                    !id(bambu_ip_address).state.empty() &&
+                    !id(bambu_serial_number).state.empty();
+          then:
+            - logger.log:
+                level: info
+                format: "Connecting to Bambu printer"
+            - mqtt.enable:
+                id: bambu_mqtt
+          else:
+            - logger.log:
+                level: info
+                format: "Missing Bambu Credentials, skipping mqtt connect"
+            - mqtt.disable:
+                id: bambu_mqtt
+  on_shutdown:
+    then:
+      - light.turn_off:
+          id: neopixel_light
+
+esp32:
+  framework:
+    type: esp-idf
+    sdkconfig_options:
+      CONFIG_MBEDTLS_HKDF_C: y # Needed for bambu KDF
+      CONFIG_MBEDTLS_MD_C: y # Needed for bambu KDF
+
+packages:
+  version: !include conf.d/version.yaml
+  uptime: !include conf.d/uptime.yaml
+  wifi: !include conf.d/wifi.yaml
+  web_server: !include conf.d/web_server.yaml
+  debug: !include conf.d/debug.yaml
+  # time: !include conf.d/time.yaml
+  mqtt_bambu_lan: !include conf.d/mqtt_bambu_lan.yaml
+  filament: !include conf.d/filament.yaml
+  bambu_printer: !include conf.d/bambu_printer.yaml
+  automation: !include conf.d/automation.yaml
+  led-external: !include conf.d/led-external.yaml
+  ota: !include conf.d/ota.yaml
+  #update: !include conf.d/update.yaml
+  api: !include conf.d/api.yaml
+  logger: !include conf.d/logger.yaml
