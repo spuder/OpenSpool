@@ -152,7 +152,7 @@ If you are unable to find a Wemos D1 Mini `s3`, you can still buy an `s2`, as it
 # Wiring Diagram
 
 
-<img src="./images/OpenSpoolMiniWiringDiagram2.png" width="500">
+<img src="./images/OpenSpoolMiniWiringDiagram.png" width="500">
 
 Be sure to put the PN532 into `SPI` mode (not `i2c` or `UART`)
 
