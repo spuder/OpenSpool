@@ -112,9 +112,7 @@ All other Bambu Printers and X1C printers running firmware older than `1.08.05.x
 
 ## 🔧 Hardware
 
-OpenSpool requires an ESP32-S3 and PN532 NFC Reader (SPI Mode).
-
-The OpenSpool schematics will always be free. If you don't want to source the parts yourself, you can 
+The OpenSpool schematics will always be free. If you don't want to source the parts yourself, you can
 [buy a kit on tindie.com](https://www.tindie.com/products/36746/)
 
 <a href="https://www.tindie.com/stores/spuder/?ref=offsite_badges&utm_source=sellers_spuder&utm_medium=badges&utm_campaign=badge_small"><img src="https://d2ss6ovg47m0r5.cloudfront.net/badges/tindie-smalls.png" alt="I sell on Tindie" width="200" height="55"></a>
@@ -123,43 +121,52 @@ The OpenSpool schematics will always be free. If you don't want to source the pa
 ![](./images/tindie/IMG_6125.png)
 ![](./images/tindie/IMG_6120.png)
 
+### Bill of Materials
 
+| Image | Hardware | Link 1 | Link 2 |
+| - | - | - | - |
+| <img src="./images/PCB_v3.1.png" alt="" height="200"> | OpenSpool Mini PCB v3.1 * | [Gerber Files](./hardware/openspool-mini/v3.1) | |
+| <img src="./images/OpenSpoolMini.png" alt="" height="200"> | OpenSpool Mini Enclosure (3D Printed) | [MakerWorld](https://makerworld.com/en/models/944499-openspool-mini#profileId-910780) | |
+| <img src="./images/wemos-d1minis3.png" alt="" height="200"> | Wemos D1 Mini s3 |  | [AliExpress](https://www.aliexpress.us/item/3256805262904443.html?gatewayAdapt=glo2usa) |
+| <img src="./images/pn532-small.png" alt="" height="200"> | PN532 (Small)| [Amazon](https://amzn.to/4eoBz8s) | [AliExpress](https://www.aliexpress.us/item/3256805787598774.html) |
+| <img src="./images/NFC.png" alt="" height="200"> | NTAG 215/216 (13.56Mhz NFC Tags >500 bytes) | [Amazon](https://amzn.to/4epJzpO) | |
+| <img src="./images/LED1.png" alt="" height="200"> | WS2812B LED | [Amazon](https://amzn.to/40FFOt5) | |
+| <img src="./images/Headers1.png" alt="" height="200"> | 2.54mm Straight Headers | [Amazon](https://amzn.to/4en6138) | |
+| <img src="./images/Headers2.jpg" alt="" height="200"> | 2.54mm Right-Angle Headers | [Amazon](https://a.co/d/8wWGSP4)  | |
+| <img src="./images/jumper1.png" alt="" height="200"> | Female-Female jumper wire | [Amazon](https://amzn.to/3AMwRDM) | |
+| <img src="./images/resistor.jpg" alt="" height="200"> | 1206 10k SMD Resistor * | [Amazon](https://a.co/d/if5dfrw)  | |
+| <img src="./images/mosfet.jpg" alt="" height="200"> | BSS138 MOSFET * | [Amazon](https://a.co/d/3Gm1ZOv) | |
 
-| Image                                                                         | Hardware                                    | Link 1                            | Link 2                                                                                  |
-| ----------------------------------------------------------------------------- | ------------------------------------------- | --------------------------------- | --------------------------------------------------------------------------------------- |
-| <img src="./images/wemos-d1minis3.png" alt="D1 Mini s3" height="200">         | Wemos D1 Mini s3                            |                                   | [AliExpress](https://www.aliexpress.us/item/3256805262904443.html?gatewayAdapt=glo2usa) |
-| <img src="./images/pn532-small.png" alt="PN532" height="200">                 | PN532 (Small)                               | [Amazon](https://amzn.to/4eoBz8s) | [AliExpress](https://www.aliexpress.us/item/3256805787598774.html)                      |
-| <img src="./images/NFC.png" alt="NTAG 215/216" height="200">                  | NTAG 215/216 (13.56Mhz NFC Tags >500 bytes) | [Amazon](https://amzn.to/4epJzpO) |                                                                                         |
-| <img src="./images/LED1.png" alt="WS2812B LED" height="200">                  | WS2812B LED                                 | [Amazon](https://amzn.to/40FFOt5) |                                                                                         |
-| <img src="./images/Headers1.png" alt="2.54mm headers" height="200">           | 2.54mm Headers                              | [Amazon](https://amzn.to/4en6138) |                                                                                         |
-| <img src="./images/LLC1.png" alt="Logic Level Converter" height="200">        | 3.3v - 5v Logic Level Converter             | [Amazon](https://amzn.to/3UMfMkp) |                                                                                         |
-| <img src="./images/jumper1.png" alt="Female-Female Jumper Wire" height="200"> | female-female jumper wire                   | [Amazon](https://amzn.to/3AMwRDM) |                                                                                         |
+If you are unable to find a Wemos D1 Mini `s3`, you can still buy an `s2`, as it is pin compatable. However, be advised the `s2` has less memory and may experience occasional disconnects from the printer.
 
-If you are unable to find a Wemos D1 Mini `s3`, you can still buy an `s2`, as it is pin compatable. However, be advised the `s2` has less memory and may experience occasional disconnects from the printer
-
-| Image                                                               | Hardware                            | Link 1                            | Link 2                                                             |
+| Image  | Hardware  | Link 1  | Link 2     |
 | ------------------------------------------------------------------- | ----------------------------------- | --------------------------------- | ------------------------------------------------------------------ |
 | <img src="./images/wemos-d1mini.png" alt="D1 Mini s3" height="200"> | Wemos D1 Mini S2 (Beware of Fakes!) | [Amazon](https://amzn.to/4fqq9m7) | [AliExpress](https://www.aliexpress.us/item/3256802958877264.html) |
 
+---
 
-| Tag      | Bytes     | Supported |
-| -------- | --------- | --------- |
-| NTAG 213 | 144 bytes | ❌         |
-| NTAG 215 | 504 bytes | ✅         |
-| NTAG 216 | 888 bytes | ✅         |
+It is recommend to assemble OpenSpool using the custom PCB. You can send the Gerber files included in this repository to a PCB fabricator of your choice, such as [OSH Park](https://oshpark.com/).
 
-
-# Wiring Diagram
-
-
-<img src="./images/OpenSpoolMiniWiringDiagram.png" width="500">
+You will also need to 3D print the enclosure. The print files can be found on [MakerWorld](https://makerworld.com/en/models/944499-openspool-mini#profileId-910780).
 
 Be sure to put the PN532 into `SPI` mode (not `i2c` or `UART`)
 
 <img src="./images/PN532-4.jpg" width="300">
 
+#### Without Custom PCB
 
+OpenSpool can be assembled without fabricating the custom PCB. In place of the MOSFET and resistor, you will need the following components:
 
+| Image | Hardware | Link 1 | Link 2 |
+| - | - | - | - |
+| <img src="./images/LLC1.png" alt="" height="200"> | 3.3v - 5v Logic Level Converter | [Amazon](https://amzn.to/3UMfMkp) | |
+| <img src="./images/MiniBreadboard.jpg" alt="" height="200"> | Mini Breadboard | [Amazon](https://a.co/d/cF1jjVI) | |
+
+You can use any breadboard or splicing tool to connect the wires, however the linked mini breadboard is recommended as it is small enough to fit inside the enclosure.
+
+Below is the wiring diagram:
+
+<img src="./images/OpenSpoolMiniWiringDiagram.png" width="500">
 
 ## 🤖 Firmware
 
