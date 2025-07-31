@@ -112,8 +112,7 @@ All other Bambu Printers and X1C printers running firmware older than `1.08.05.x
 
 ## 🔧 Hardware
 
-The OpenSpool schematics will always be free. If you don't want to source the parts yourself, you can
-[buy a kit on tindie.com](https://www.tindie.com/products/36746/)
+The OpenSpool schematics will always be free. If you don't want to source the parts yourself, you can [buy a kit on tindie.com](https://www.tindie.com/products/36746/).
 
 <a href="https://www.tindie.com/stores/spuder/?ref=offsite_badges&utm_source=sellers_spuder&utm_medium=badges&utm_campaign=badge_small"><img src="https://d2ss6ovg47m0r5.cloudfront.net/badges/tindie-smalls.png" alt="I sell on Tindie" width="200" height="55"></a>
 
@@ -141,17 +140,11 @@ If you are unable to find a Wemos D1 Mini `s3`, you can still buy an `s2`, as it
 
 | Image  | Hardware  | Link 1  | Link 2     |
 | ------------------------------------------------------------------- | ----------------------------------- | --------------------------------- | ------------------------------------------------------------------ |
-| <img src="./images/wemos-d1mini.png" alt="D1 Mini s3" height="200"> | Wemos D1 Mini S2 (Beware of Fakes!) | [Amazon](https://amzn.to/4fqq9m7) | [AliExpress](https://www.aliexpress.us/item/3256802958877264.html) |
+| <img src="./images/wemos-d1mini.png" alt="" height="200"> | Wemos D1 Mini S2 (Beware of Fakes!) | [Amazon](https://amzn.to/4fqq9m7) | [AliExpress](https://www.aliexpress.us/item/3256802958877264.html) |
 
 ---
 
-It is recommend to assemble OpenSpool using the custom PCB. You can send the Gerber files included in this repository to a PCB fabricator of your choice, such as [OSH Park](https://oshpark.com/).
-
-You will also need to 3D print the enclosure. The print files can be found on [MakerWorld](https://makerworld.com/en/models/944499-openspool-mini#profileId-910780).
-
-Be sure to put the PN532 into `SPI` mode (not `i2c` or `UART`)
-
-<img src="./images/PN532-4.jpg" width="300">
+It is recommend to assemble OpenSpool using the custom PCB. You can send the Gerber files included in this repository to a PCB fabricator, such as [OSH Park](https://oshpark.com/).
 
 #### Without Custom PCB
 
@@ -164,7 +157,29 @@ OpenSpool can be assembled without fabricating the custom PCB. In place of the M
 
 You can use any breadboard or splicing tool to connect the wires, however the linked mini breadboard is recommended as it is small enough to fit inside the enclosure.
 
-Below is the wiring diagram:
+## 🛠️ Assembly
+
+Once you have all of the parts, you can begin assembly.
+
+### With Custom PCB
+
+1. Solder the following components onto the PCB:
+    1. Two 10k resistors
+    2. One BSS138 MOSFET
+    3. Four sets of 8 straight headers, into the two pairs of columns on the top of the PCB
+    4. One set of 8 right-angle headers into the row of vias just below the OpenSpool logo on the BACK side of the PCB
+    5. Three right-angle headers in the top-left corner of the PCB
+2. Solder eight right-angle headers onto the PN532
+3. Solder three straight headers onto the LED. Make sure to solder them onto the side with the "Din" pin
+4. Place the Wemos D1 onto the headers and solder it on. The top of the Wemos D1 should face up, with the USB-C port facing the bottom of the PCB
+5. Use jumper wires to connect both the PN532 and the LED to their respective headers
+6. Flip the toggle switches on the PN532 to enable SPI mode (see image below)
+
+<img src="./images/PN532-4.jpg" width="300">
+
+### Without Custom PCB
+
+If you are not using the custom PCB, you will need to connect the wires to each pin manually. Below is the wiring diagram:
 
 <img src="./images/OpenSpoolMiniWiringDiagram.png" width="500">
 
