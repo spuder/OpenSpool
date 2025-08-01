@@ -169,7 +169,7 @@ Once you have all of the parts, you can begin assembly.
     3. Four sets of 8 straight headers, into the two pairs of columns on the top of the PCB
     4. One set of 8 right-angle headers into the row of vias just below the OpenSpool logo on the BACK side of the PCB
     5. Three right-angle headers in the top-left corner of the PCB
-2. Solder eight right-angle headers onto the PN532
+2. Solder eight right-angle headers onto the top side of the PN532
 3. Solder three straight headers onto the LED. Make sure to solder them onto the side with the "Din" pin
 4. Place the Wemos D1 onto the headers and solder it on. The top of the Wemos D1 should face up, with the USB-C port facing the bottom of the PCB
 5. Use jumper wires to connect both the PN532 and the LED to their respective headers
