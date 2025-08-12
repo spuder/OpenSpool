@@ -22,8 +22,8 @@ substitutions:
   rfid3_spi_interface: SPI2
   rfid3_ss_pin: GPIO07
 
-  # rfid4_spi_interface: SPI2
-  # rfid4_ss_pin: GPIO05
+  rfid4_spi_interface: SPI2
+  rfid4_ss_pin: GPIO15
 
   # rfid5_spi_interface: SPI2
   # rfid5_ss_pin: GPIO04
