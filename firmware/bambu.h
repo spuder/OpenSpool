@@ -95,8 +95,8 @@ namespace bambulabs
     // uint8_t ams_id, uint8_t ams_tray
     inline std::string generate_mqtt_payload(std::string openspool_tag_json, uint16_t ams_id, uint16_t ams_tray)
     {
-        StaticJsonDocument<1024> doc_in;
-        StaticJsonDocument<512> doc_out;
+        JsonDocument doc_in;
+        JsonDocument doc_out;
 
         DeserializationError error = deserializeJson(doc_in, openspool_tag_json);
         if (error)
@@ -106,7 +106,7 @@ namespace bambulabs
         }
 
         // Check if 'version' key exists and its value is 1.0
-        if (!doc_in.containsKey("version") || doc_in["version"].as<std::string>() != "1.0")
+        if (doc_in["version"].isNull() || doc_in["version"].as<std::string>() != "1.0")
         {
             ESP_LOGE("bambu", "Invalid or missing version. Expected version '1.0'");
             return {}; // skip publishing
@@ -116,27 +116,30 @@ namespace bambulabs
         const char *required_fields[] = {"color_hex", "min_temp", "max_temp", "brand", "type"};
         for (const char *field : required_fields)
         {
-            if (!doc_in.containsKey(field))
+            if (doc_in[field].isNull())
             {
                 ESP_LOGE("bambu", "Missing required field: %s", field);
                 return {}; // skip publishing
             }
         }
 
-        if (doc_in["color_hex"].as<std::string>().length() != 6 && doc_in["color_hex"].as<std::string>().length() != 8) {
+        if (doc_in["color_hex"].as<std::string>().length() != 6 && doc_in["color_hex"].as<std::string>().length() != 8)
+        {
             ESP_LOGE("bambu", "Invalid color_hex length (expected 6 or 8 characters)");
             return {};
         }
 
-        JsonObject print = doc_out.createNestedObject("print");
+        JsonObject print = doc_out["print"].to<JsonObject>();
         print["sequence_id"] = "0";
         print["command"] = "ams_filament_setting";
         print["ams_id"] = ams_id;
         print["tray_id"] = ams_tray;
-        if (doc_in["color_hex"].as<std::string>().length() == 6) {
+        if (doc_in["color_hex"].as<std::string>().length() == 6)
+        {
             print["tray_color"] = doc_in["color_hex"].as<std::string>() + "FF";
         }
-        else{
+        else
+        {
             print["tray_color"] = doc_in["color_hex"].as<std::string>();
         }
         print["nozzle_temp_min"] = uint16_t(doc_in["min_temp"]); // if not string or int, will fall back to 0
