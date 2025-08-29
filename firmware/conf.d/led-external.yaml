@@ -10,7 +10,6 @@ light:
   num_leds: ${led_count}
   rgb_order: GRB
   chipset: WS2812
-  rmt_channel: 0
   default_transition_length: 0.4s
   restore_mode: RESTORE_DEFAULT_ON
   entity_category: diagnostic

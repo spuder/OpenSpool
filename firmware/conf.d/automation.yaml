@@ -7,7 +7,7 @@ script:
       state: !lambda |-
         id(filament_color_hexaa).publish_state(id(filament_color_hex).state + id(filament_alpha).state);
         auto pretty_json = [=]() -> std::string {
-          StaticJsonDocument<256> doc;
+          JsonDocument doc;
           JsonObject root = doc.to<JsonObject>();
 
           root["protocol"] = "openspool";
@@ -96,7 +96,7 @@ script:
           topic: !lambda 'return "device/" + id(bambu_serial_number).state + "/request";'
           payload: !lambda |-
             auto data = json::build_json([=](JsonObject root) {
-              auto print = root.createNestedObject("print");
+              auto print = root["print"].to<JsonObject>();
               print["sequence_id"] = "0";
               print["command"] = "ams_filament_setting";
               print["ams_id"] = 255; //TODO: support multiple AMS
@@ -141,6 +141,8 @@ script:
         } else if (id(filament_brand).state == "PolyLite") {
           id(filament_brand_code).publish_state("GFL00");
           id(filament_sub_brand).publish_state("PolyLite PLA");
+        } else if (id(filament_brand).state == "Sunlu") {
+          id(filament_brand_code).publish_state("GFSNL03"); 
         } else if (id(filament_brand).state == "Bambu") {
           // Check for Bambu PLA variants
           if (id(filament_variant).state == "Basic") {
@@ -170,6 +172,8 @@ script:
           // TODO: find overture PETG brand code
           id(filament_brand_code).publish_state("GFG99"); // Using generic for now
           id(filament_sub_brand).publish_state("PETG");
+        } else if (id(filament_brand).state == "Sunlu") {
+          id(filament_brand_code).publish_state("GFSNL08");  
         } else { // Generic
           id(filament_brand_code).publish_state("GFG99");
           id(filament_sub_brand).publish_state("PETG");

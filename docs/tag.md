@@ -3,6 +3,8 @@ title: Tag Info
 layout: default
 custom_js: true
 permalink: /tag_info
+nav_exclude: true
+
 ---
 
 <div class="spool-container">

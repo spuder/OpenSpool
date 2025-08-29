@@ -8,9 +8,9 @@ substitutions:
   spi2_type: SPI2 #SPI2,SPI3,any,hardware #TODO: should this be hardware? 
   spi2_clk_pin: GPIO38
   spi2_miso_pin: GPIO44
-  spi2_mosi_pin: GPIO36
+  spi2_mosi_pin: GPIO36 #TODO: is this conflicting with PSRAM? 
   rfid0_spi_interface: SPI2
-  rfid0_ss_pin: GPIO34
+  rfid0_ss_pin: GPIO34 #TODO: is this conflicting with PSRAM?
   neopixel_pin: '47'
 
 packages: 

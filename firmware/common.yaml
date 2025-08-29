@@ -1,4 +1,6 @@
 ---
+preferences:
+  flash_write_interval: 3sec
 substitutions:
   name: openspool
 esphome:
@@ -7,93 +9,94 @@ esphome:
   project:
     name: spuder.openspool
     version: ${version}
-  min_version: 2024.11.0
+  min_version: 2025.8.1
   platformio_options:
     build_unflags: -std=gnu++11
     build_flags:
-      - -std=gnu++14
-      - -DMBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\"
+    - -std=gnu++14
+    - -DMBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\"
   on_boot:
     then:
-      #TODO: breahting blue studders a little bit
-      - light.turn_on:
-          id: neopixel_light
-          effect: Breathing Blue
-          brightness: 100%
-      - wait_until:
-          condition:
-            wifi.connected:
-      - delay: 100ms
-      - light.turn_on:
-          id: neopixel_light
-          effect: none
-      - delay: 100ms
-      - light.turn_on:
-          id: neopixel_light
-          effect: Rainbow
-      - delay: 4s
-      - light.turn_on:
-          id: neopixel_light
-          effect: none
-          brightness: 50%
-      # - delay: 100ms
-      # - light.addressable_set:
-      #     id: neopixel_light
-      #     color_brightness: 50%
-      #     range_from: 0
-      #     range_to: ${led_count}
-      #     red: 50%
-      #     green: 50%
-      #     blue: 50%
-      - if:
-          condition:
-            lambda: |-
-              return !id(bambu_lan_access_code).state.empty() &&
-                    !id(bambu_ip_address).state.empty() &&
-                    !id(bambu_serial_number).state.empty();
-          then:
-            - logger.log: 
-                level: info
-                format: "Connecting to Bambu printer"
-            - mqtt.enable: 
-                id: bambu_mqtt
-          else:
-            - logger.log: 
-                level: info
-                format: "Missing Bambu Credentials, skipping mqtt connect"
-            - mqtt.disable:
-                id: bambu_mqtt
-        # - script.execute: set_all_leds_white
-        # - lambda: |-
-        #     //TODO: this appears to have broken and no longer blinks blue
-        #     if (!wifi::global_wifi_component->is_connected() && 
-        #         wifi::global_wifi_component->wifi_soft_ap_ip().str() == "192.168.4.1") {
-        #       id(set_led_breathing_blue).execute();
-        #     }
-        # - lambda: |-
-        #     id(my_ota).set_auth_password("New password");
+    #TODO: breahting blue studders a little bit
+    - light.turn_on:
+        id: neopixel_light
+        effect: Breathing Blue
+        brightness: 100%
+    - wait_until:
+        condition:
+          wifi.connected:
+    - delay: 100ms
+    - light.turn_on:
+        id: neopixel_light
+        effect: none
+    - delay: 100ms
+    - light.turn_on:
+        id: neopixel_light
+        effect: Rainbow
+    - delay: 4s
+    - light.turn_on:
+        id: neopixel_light
+        effect: none
+        brightness: 50%
+    # - delay: 100ms
+    # - light.addressable_set:
+    #     id: neopixel_light
+    #     color_brightness: 50%
+    #     range_from: 0
+    #     range_to: ${led_count}
+    #     red: 50%
+    #     green: 50%
+    #     blue: 50%
+    - if:
+        condition:
+          lambda: |-
+            return !id(bambu_lan_access_code).state.empty() &&
+                  !id(bambu_ip_address).state.empty() &&
+                  !id(bambu_serial_number).state.empty();
+        then:
+        - logger.log:
+            level: info
+            format: "Connecting to Bambu printer"
+        - mqtt.enable:
+            id: bambu_mqtt
+        else:
+        - logger.log:
+            level: info
+            format: "Missing Bambu Credentials, skipping mqtt connect"
+        - mqtt.disable:
+            id: bambu_mqtt
+      # - script.execute: set_all_leds_white
+      # - lambda: |-
+      #     //TODO: this appears to have broken and no longer blinks blue
+      #     if (!wifi::global_wifi_component->is_connected() && 
+      #         wifi::global_wifi_component->wifi_soft_ap_ip().str() == "192.168.4.1") {
+      #       id(set_led_breathing_blue).execute();
+      #     }
+      # - lambda: |-
+      #     id(my_ota).set_auth_password("New password");
   on_shutdown:
     then:
-      - script.execute: set_led_off
+    - script.execute: set_led_off
 esp32:
   framework:
     type: esp-idf
-    version: 5.3.1
-    platform_version: 6.9.0 # https://github.com/platformio/platform-espressif32/releases/
-    sdkconfig_options: 
+    # Let esphome handle the versions
+    #version: 5.3.2
+    #platform_version: 53.03.13 # https://github.com/pioarduino/platform-espressif32/releases
+    sdkconfig_options:
       CONFIG_MBEDTLS_HKDF_C: y # Needed for bambu KDF
-      CONFIG_MBEDTLS_MD_C: y   # Needed for bambu KDF
+      CONFIG_MBEDTLS_MD_C: y # Needed for bambu KDF
     # version: recommended
     # sdkconfig_options:
     # MBEDTLS_CERTIFICATE_BUNDLE: y
     # MBEDTLS_CERTIFICATE_BUNDLE_DEFAULT_FULL: y
 
-#TODO: uncomment when ready for bambu support
-# external_components:
-#   - source: 
-#       type: local
-#       path: components
-#     components: [pn532, nfc]
+    #TODO: uncomment when ready for bambu support
+    # external_components:
+    #   - source: 
+    #       type: local
+    #       path: components
+    #     components: [pn532, nfc]
 
 packages:
   version: !include conf.d/version.yaml

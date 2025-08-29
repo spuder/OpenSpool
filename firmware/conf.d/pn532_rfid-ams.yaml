@@ -182,8 +182,7 @@ text_sensor:
           return x;
         }     
         ESP_LOGD("NFC", "Input string: %s", x.c_str());
-        
-        StaticJsonDocument<1024> doc;  // Use StaticJsonDocument for memory efficiency
+        JsonDocument doc;
         DeserializationError error = deserializeJson(doc, x);
         if (error) {
           ESP_LOGE("NFC", "JSON parsing failed: %s", error.c_str());
@@ -197,7 +196,7 @@ text_sensor:
         
         const char* required_fields[] = {"protocol", "color_hex", "type", "min_temp", "max_temp", "brand"};
         for (const char* field : required_fields) {
-          if (!doc.containsKey(field)) {
+          if (!doc[field].is<const char*>() && !doc[field].is<int>() && !doc[field].is<float>()) {
             ESP_LOGE("NFC", "Invalid JSON: Missing required field '%s'", field);
             return "";
           }
@@ -231,8 +230,7 @@ text_sensor:
           return x;
         }     
         ESP_LOGD("NFC", "Input string: %s", x.c_str());
-        
-        StaticJsonDocument<1024> doc;  // Use StaticJsonDocument for memory efficiency
+        JsonDocument doc;
         DeserializationError error = deserializeJson(doc, x);
         if (error) {
           ESP_LOGE("NFC", "JSON parsing failed: %s", error.c_str());
@@ -246,7 +244,7 @@ text_sensor:
         
         const char* required_fields[] = {"protocol", "color_hex", "type", "min_temp", "max_temp", "brand"};
         for (const char* field : required_fields) {
-          if (!doc.containsKey(field)) {
+          if (!doc[field].is<const char*>() && !doc[field].is<int>() && !doc[field].is<float>()) {
             ESP_LOGE("NFC", "Invalid JSON: Missing required field '%s'", field);
             return "";
           }

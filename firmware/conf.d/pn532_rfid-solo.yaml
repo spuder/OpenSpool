@@ -130,8 +130,8 @@ text_sensor:
           return x;
         }     
         ESP_LOGD("NFC", "Input string: %s", x.c_str());
-        
-        StaticJsonDocument<1024> doc;  // Use StaticJsonDocument for memory efficiency
+
+        JsonDocument doc;
         DeserializationError error = deserializeJson(doc, x);
         if (error) {
           ESP_LOGE("NFC", "JSON parsing failed: %s", error.c_str());
@@ -145,7 +145,7 @@ text_sensor:
         
         const char* required_fields[] = {"protocol", "color_hex", "type", "min_temp", "max_temp", "brand"};
         for (const char* field : required_fields) {
-          if (!doc.containsKey(field)) {
+          if (!doc[field].is<const char*>() && !doc[field].is<int>() && !doc[field].is<float>()) {
             ESP_LOGE("NFC", "Invalid JSON: Missing required field '%s'", field);
             return "";
           }
@@ -265,7 +265,7 @@ button:
             json_record->set_tnf(nfc::TNF_MIME_MEDIA);
             json_record->set_type("application/json");
 
-            DynamicJsonDocument doc(256);  // Adjust size as needed
+            JsonDocument doc;
             JsonObject root = doc.to<JsonObject>();
             root["version"] = "1.0";
             root["protocol"] = "openspool";
@@ -312,6 +312,8 @@ button:
             tag: "rfid"
             format: "Finished writing tag"
             level: INFO
+        - lambda: |-
+            id(set_led_green).execute(0);
         else:
         - lambda: |-
             ESP_LOGI("rfid", "NFC Tag not present");
