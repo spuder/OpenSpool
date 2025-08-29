@@ -1,7 +1,10 @@
  
 # Usage
 
-`python3 -m venv .`
+```
+python3 -m venv .
+source bin/activate
+```
 
 ## Harmonized Shipment Number
 
