@@ -39,6 +39,7 @@ text:
         - logger.log:
             level: info
             format: "Connecting to Bambu printer"
+        - delay: 2s
         - mqtt.enable:
             id: bambu_mqtt
         else:
@@ -74,6 +75,7 @@ text:
         - logger.log:
             level: info
             format: "Connecting to Bambu printer"
+        - delay: 2s
         - mqtt.enable:
             id: bambu_mqtt
         else:
@@ -106,10 +108,13 @@ text:
         - logger.log:
             level: info
             format: "Connecting to Bambu printer"
+        - delay: 2s
         - mqtt.enable:
             id: bambu_mqtt
         else:
-        - logger.log: "Missing Bambu Credentials, skipping mqtt connect"
+        - logger.log:
+            level: info
+            format: "Missing Bambu Credentials, skipping mqtt connect"
         - mqtt.disable:
             id: bambu_mqtt
 
