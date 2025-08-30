@@ -19,7 +19,7 @@ packages:
   #improv-bluetooth: !include conf.d/improv-bluetooth.yaml
   extra: !include conf.d/extra.yaml
   button: !include conf.d/button.yaml
-  daugherboard: !include conf.d/daugherboard.yaml
+  daugherboard: !include conf.d/daughterboard.yaml
 
 dashboard_import:
   package_import_url: github://spuder/openspool/firmware/lolin_s3_mini.yaml@main
