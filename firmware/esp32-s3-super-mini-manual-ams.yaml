@@ -1,0 +1,32 @@
+esp32:
+  board: esp32-s3-devkitc-1
+  flash_size: 4MB
+  cpu_frequency: 80MHz # Lowest possible frequency to reduce power consumption
+
+psram:
+  mode: quad
+  speed: 80MHz
+
+substitutions:
+  spi2_type: SPI2
+  rfid0_spi_interface: SPI2
+  neopixel_pin: GPIO48
+  encoder_pin_a: GPIO6
+  encoder_pin_b: GPIO7
+  external_led_pin: GPIO9
+  spi2_clk_pin: GPIO10
+  spi2_miso_pin: GPIO11
+  spi2_mosi_pin: GPIO12
+  rfid0_ss_pin: GPIO13
+
+packages:
+  improv-serial: !include conf.d/improv-serial.yaml
+  bambu_ams: !include conf.d/bambu_ams.yaml
+  openspool-manual-ams: !include openspool-manual-ams.yaml
+  encoder: !include conf.d/rotary-encoder-manual-ams.yaml # Comment out if you don't use the rotary encoder
+  led-internal: !include conf.d/led-internal.yaml
+  extra: !include conf.d/extra.yaml
+
+dashboard_import:
+  package_import_url: github://spuder/openspool/firmware/esp32-s3-super-mini-manual-ams.yaml@main
+  import_full_config: false
