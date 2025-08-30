@@ -57,6 +57,7 @@ mqtt:
   - logger.log:
       level: info
       format: "Disconnected from printer!"
+  wait_for_connection: false
   #TODO: enable status led on s2, set neopixel blue on s3
 
   # text_sensor:
