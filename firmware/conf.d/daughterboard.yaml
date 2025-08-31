@@ -14,23 +14,13 @@ select:
   restore_value: false
   set_action:
     then:
-    # Update LED state whenever slot selection changes
-    # - light.turn_on:
-    #     id: neopixel_light
-    #     effect: none
-    #TODO: this code seems to not do anything
-    - delay: 100ms
     - light.addressable_set:
         id: neopixel_light
         range_from: 0
-        # range_to: !lambda "return ${led_count} - 1;"
-        range_to: 4
+        range_to: !lambda "return ${led_count} - 1;"
         red: 0%
         green: 0%
         blue: 0%
-        # color_brightness: 0%
-    - delay: 100ms
-    # Set the specific LED based on slot selection
     - if:
         condition:
           lambda: 'return x == "1";'
@@ -45,6 +35,7 @@ select:
             red: 100%
             green: 100%
             blue: 100%
+            white: 100%
             color_brightness: 90%
     - if:
         condition:
@@ -60,6 +51,7 @@ select:
             red: 100%
             green: 100%
             blue: 100%
+            white: 100%
             color_brightness: 50%
     - if:
         condition:
@@ -75,6 +67,7 @@ select:
             red: 100%
             green: 100%
             blue: 100%
+            white: 100%
             color_brightness: 90%
     - if:
         condition:
@@ -90,6 +83,7 @@ select:
             red: 100%
             green: 100%
             blue: 100%
+            white: 100%
             color_brightness: 90%
     - if:
         condition:
@@ -105,6 +99,7 @@ select:
             red: 100%
             green: 100%
             blue: 100%
+            white: 100%
             color_brightness: 90%
   state_topic: null
   web_server:
