@@ -1,187 +1,240 @@
-globals:
-  - id: active_slot
-    type: int
-    initial_value: '254'  # 254 represents "External"
-
 # Define the select component
 select:
-  - platform: template
-    name: "Active Slot"
-    id: active_slot_select
-    options:
-      - "External"
-      - "1"
-      - "2"
-      - "3"
-      - "4"
-    initial_option: "External"
-    optimistic: true
-    set_action:
-      then:
-        - lambda: |-
-            if (x == "External") id(active_slot) = 254;
-            else if (x == "1") id(active_slot) = 0;
-            else if (x == "2") id(active_slot) = 1;
-            else if (x == "3") id(active_slot) = 2;
-            else if (x == "4") id(active_slot) = 3;
-        - script.execute: select_slot
-    state_topic: null
-    web_server:
-      sorting_group_id: sorting_group_filament_settings
-      sorting_weight: 190
-
-script:
-  - id: select_slot
+- platform: template
+  name: "AMS Active Slot"
+  id: active_slot_select
+  options:
+  - "External"
+  - "1"
+  - "2"
+  - "3"
+  - "4"
+  initial_option: "External"
+  optimistic: true
+  restore_value: false
+  set_action:
     then:
-      - switch.turn_off: slot_1_switch
-      - switch.turn_off: slot_2_switch
-      - switch.turn_off: slot_3_switch
-      - switch.turn_off: slot_4_switch
-      - lambda: |-
-          switch (id(active_slot)) {
-            case 0: 
-              id(slot_1_switch).turn_on(); 
-              id(set_led_white).execute(0);
-              id(set_led_off).execute(1);
-              id(set_led_off).execute(2);
-              id(set_led_off).execute(3);
-              break;
-            case 1: 
-              id(slot_2_switch).turn_on(); 
-              id(set_led_white).execute(1);
-              id(set_led_off).execute(0);
-              id(set_led_off).execute(2);
-              id(set_led_off).execute(3);
-              break;
-            case 2: 
-              id(slot_3_switch).turn_on(); 
-              id(set_led_white).execute(2);
-              id(set_led_off).execute(0);
-              id(set_led_off).execute(1);
-              id(set_led_off).execute(3);
-              break;
-            case 3: 
-              id(slot_4_switch).turn_on(); 
-              id(set_led_white).execute(3);
-              id(set_led_off).execute(0);
-              id(set_led_off).execute(1);
-              id(set_led_off).execute(2);
-              break;
-            // No action needed for 254 (External) as all switches are already off
-          }
+    # Update LED state whenever slot selection changes
+    # - light.turn_on:
+    #     id: neopixel_light
+    #     effect: none
+    #TODO: this code seems to not do anything
+    - delay: 100ms
+    - light.addressable_set:
+        id: neopixel_light
+        range_from: 0
+        # range_to: !lambda "return ${led_count} - 1;"
+        range_to: 4
+        red: 0%
+        green: 0%
+        blue: 0%
+        # color_brightness: 0%
+    - delay: 100ms
+    # Set the specific LED based on slot selection
+    - if:
+        condition:
+          lambda: 'return x == "1";'
+        then:
+        - logger.log:
+            level: verbose
+            format: "Slot 1 selected"
+        - light.addressable_set:
+            id: neopixel_light
+            range_from: 1
+            range_to: 1
+            red: 100%
+            green: 100%
+            blue: 100%
+            color_brightness: 90%
+    - if:
+        condition:
+          lambda: 'return x == "2";'
+        then:
+        - logger.log:
+            level: verbose
+            format: "Slot 2 selected"
+        - light.addressable_set:
+            id: neopixel_light
+            range_from: 2
+            range_to: 2
+            red: 100%
+            green: 100%
+            blue: 100%
+            color_brightness: 50%
+    - if:
+        condition:
+          lambda: 'return x == "3";'
+        then:
+        - logger.log:
+            level: verbose
+            format: "Slot 3 selected"
+        - light.addressable_set:
+            id: neopixel_light
+            range_from: 3
+            range_to: 3
+            red: 100%
+            green: 100%
+            blue: 100%
+            color_brightness: 90%
+    - if:
+        condition:
+          lambda: 'return x == "4";'
+        then:
+        - logger.log:
+            level: verbose
+            format: "Slot 4 selected"
+        - light.addressable_set:
+            id: neopixel_light
+            range_from: 4
+            range_to: 4
+            red: 100%
+            green: 100%
+            blue: 100%
+            color_brightness: 90%
+    - if:
+        condition:
+          lambda: 'return x == "External";'
+        then:
+        - logger.log:
+            level: verbose
+            format: "External slot selected"
+        - light.addressable_set:
+            id: neopixel_light
+            range_from: 0
+            range_to: 0
+            red: 100%
+            green: 100%
+            blue: 100%
+            color_brightness: 90%
+  state_topic: null
+  web_server:
+    sorting_group_id: sorting_group_filament_settings
+    sorting_weight: 190
 
+# Template switches that automatically reflect active_slot state
 switch:
-  - platform: template
-    name: "Slot 1 Switch"
-    id: slot_1_switch
-    internal: true
-    optimistic: true
-    state_topic: null
-  - platform: template
-    name: "Slot 2 Switch"
-    id: slot_2_switch
-    internal: true
-    optimistic: true
-    state_topic: null
-  - platform: template
-    name: "Slot 3 Switch"
-    id: slot_3_switch
-    internal: true
-    optimistic: true
-    state_topic: null
-  - platform: template
-    name: "Slot 4 Switch"
-    id: slot_4_switch
-    internal: true
-    optimistic: true
-    state_topic: null
+- platform: template
+  name: "Slot 1 Switch"
+  id: slot_1_switch
+  internal: true
+  optimistic: true
+  state_topic: null
+  lambda: 'return id(active_slot_select).state == "1";'
+- platform: template
+  name: "Slot 2 Switch"
+  id: slot_2_switch
+  internal: true
+  optimistic: true
+  state_topic: null
+  lambda: 'return id(active_slot_select).state == "2";'
+- platform: template
+  name: "Slot 3 Switch"
+  id: slot_3_switch
+  internal: true
+  optimistic: true
+  state_topic: null
+  lambda: 'return id(active_slot_select).state == "3";'
+- platform: template
+  name: "Slot 4 Switch"
+  id: slot_4_switch
+  internal: true
+  optimistic: true
+  state_topic: null
+  lambda: 'return id(active_slot_select).state == "4";'
 
 binary_sensor:
-  - platform: gpio
-    pin:
-      number: GPIO6
-      mode: INPUT_PULLUP
-      inverted: true
-    name: "Slot 1 Button"
-    internal: true
-    filters:
-      - delayed_on: 20ms
-      - delayed_off: 20ms
-    on_press:
-      then:
-        - lambda: |-
-            if (id(active_slot) == 0) {
-              id(active_slot) = 254;
-              id(active_slot_select).publish_state("External");
-            } else {
-              id(active_slot) = 0;
-              id(active_slot_select).publish_state("1");
-            }
-        - script.execute: select_slot
+- platform: gpio
+  pin:
+    number: ${daughterboard_slot_1_button_pin}
+    mode: INPUT_PULLUP
+    inverted: true
+  name: "Slot 1 Button"
+  internal: true
+  filters:
+  - delayed_on: 20ms
+  - delayed_off: 20ms
+  on_press:
+    then:
+    - if:
+        condition:
+          lambda: 'return id(active_slot_select).state == "1";'
+        then:
+        - select.set:
+            id: active_slot_select
+            option: "External"
+        else:
+        - select.set:
+            id: active_slot_select
+            option: "1"
 
-  - platform: gpio
-    pin:
-      number: GPIO7
-      mode: INPUT_PULLUP
-      inverted: true
-    name: "Slot 2 Button"
-    internal: true
-    filters:
-      - delayed_on: 20ms
-      - delayed_off: 20ms
-    on_press:
-      then:
-        - lambda: |-
-            if (id(active_slot) == 1) {
-              id(active_slot) = 254;
-              id(active_slot_select).publish_state("External");
-            } else {
-              id(active_slot) = 1;
-              id(active_slot_select).publish_state("2");
-            }
-        - script.execute: select_slot
+- platform: gpio
+  pin:
+    number: ${daughterboard_slot_2_button_pin}
+    mode: INPUT_PULLUP
+    inverted: true
+  name: "Slot 2 Button"
+  internal: true
+  filters:
+  - delayed_on: 20ms
+  - delayed_off: 20ms
+  on_press:
+    then:
+    - if:
+        condition:
+          lambda: 'return id(active_slot_select).state == "2";'
+        then:
+        - select.set:
+            id: active_slot_select
+            option: "External"
+        else:
+        - select.set:
+            id: active_slot_select
+            option: "2"
 
-  - platform: gpio
-    pin:
-      number: GPIO8
-      mode: INPUT_PULLUP
-      inverted: true
-    name: "Slot 3 Button"
-    internal: true
-    filters:
-      - delayed_on: 20ms
-      - delayed_off: 20ms
-    on_press:
-      then:
-        - lambda: |-
-            if (id(active_slot) == 2) {
-              id(active_slot) = 254;
-              id(active_slot_select).publish_state("External");
-            } else {
-              id(active_slot) = 2;
-              id(active_slot_select).publish_state("3");
-            }
-        - script.execute: select_slot
+- platform: gpio
+  pin:
+    number: ${daughterboard_slot_3_button_pin}
+    mode: INPUT_PULLUP
+    inverted: true
+  name: "Slot 3 Button"
+  internal: true
+  filters:
+  - delayed_on: 20ms
+  - delayed_off: 20ms
+  on_press:
+    then:
+    - if:
+        condition:
+          lambda: 'return id(active_slot_select).state == "3";'
+        then:
+        - select.set:
+            id: active_slot_select
+            option: "External"
+        else:
+        - select.set:
+            id: active_slot_select
+            option: "3"
 
-
-  - platform: gpio
-    pin:
-      number: GPIO9
-      mode: INPUT_PULLUP
-      inverted: true
-    name: "Slot 4 Button"
-    internal: true
-    filters:
-      - delayed_on: 20ms
-      - delayed_off: 20ms
-    on_press:
-      then:
-        - lambda: |-
-            if (id(active_slot) == 3) {
-              id(active_slot) = 254;
-              id(active_slot_select).publish_state("External");
-            } else {
-              id(active_slot) = 3;
-              id(active_slot_select).publish_state("4");
-            }
-        - script.execute: select_slot
+- platform: gpio
+  pin:
+    number: ${daughterboard_slot_4_button_pin}
+    mode: INPUT_PULLUP
+    inverted: true
+  name: "Slot 4 Button"
+  internal: true
+  filters:
+  - delayed_on: 20ms
+  - delayed_off: 20ms
+  on_press:
+    then:
+    - if:
+        condition:
+          lambda: 'return id(active_slot_select).state == "4";'
+        then:
+        - select.set:
+            id: active_slot_select
+            option: "External"
+        else:
+        - select.set:
+            id: active_slot_select
+            option: "4"

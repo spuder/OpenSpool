@@ -20,9 +20,9 @@ binary_sensor:
     - script.execute: start_timer
   on_release:
     then:
-    - script.execute:
-        id: set_led_white
-        led_number: -1
+    - select.set:
+        id: active_slot_select
+        option: "External"
     - script.stop: timer_script
     - if:
         condition:

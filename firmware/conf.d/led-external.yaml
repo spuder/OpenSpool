@@ -1,6 +1,6 @@
 ---
 substitutions:
-  led_count: '9'
+  led_count: '5'
 light:
 - platform: esp32_rmt_led_strip
   name: LEDs
@@ -11,7 +11,7 @@ light:
   rgb_order: GRB
   chipset: WS2812
   default_transition_length: 0.4s
-  restore_mode: RESTORE_DEFAULT_ON
+  restore_mode: RESTORE_DEFAULT_OFF
   entity_category: diagnostic
   icon: mdi:led-strip
   effects:

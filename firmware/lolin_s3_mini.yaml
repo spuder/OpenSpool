@@ -13,13 +13,19 @@ substitutions:
   rfid0_ss_pin: GPIO34 #TODO: is this conflicting with PSRAM?
   neopixel_pin: '47'
 
-packages: 
+  # Daughterboard pin substitutions
+  daughterboard_slot_1_button_pin: GPIO6
+  daughterboard_slot_2_button_pin: GPIO7
+  daughterboard_slot_3_button_pin: GPIO8
+  daughterboard_slot_4_button_pin: GPIO9
+
+packages:
   openspool-mini: !include openspool-mini.yaml
   #led-internal: !include conf.d/led-internal.yaml
   #improv-bluetooth: !include conf.d/improv-bluetooth.yaml
   extra: !include conf.d/extra.yaml
   button: !include conf.d/button.yaml
-  daugherboard: !include conf.d/daughterboard.yaml
+  daughterboard: !include conf.d/daughterboard.yaml
 
 dashboard_import:
   package_import_url: github://spuder/openspool/firmware/lolin_s3_mini.yaml@main

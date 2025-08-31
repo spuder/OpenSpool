@@ -30,9 +30,9 @@ pn532_spi:
   update_interval: ${update_interval}
   on_tag_removed:
     then:
-    - script.execute:
-        id: set_led_white
-        led_number: 0
+    # - script.execute:
+    #     id: set_led_white
+    #     led_number: 0 #TODO: make dynamic for daughterboard
     - binary_sensor.template.publish:
         id: nfc_tag_present0
         state: OFF
@@ -111,7 +111,28 @@ pn532_spi:
             topic: !lambda 'return "device/" + id(bambu_serial_number).state + "/request";'
             # 255 = external ams, TODO: A1,P1,X1 might use different values for AMS
             # 254 = external tray, first filament slot is tray 0
-            payload: !lambda "return bambulabs::generate_mqtt_payload( id(filament_raw_data0).state, 255, id(active_slot) );"
+            payload: !lambda |-
+              int ams_id = 255; // Default to external AMS
+              int tray_id = 254; // Default to external tray
+              std::string slot_state = id(active_slot_select).state;
+              ESP_LOGI("MQTT", "Active slot state: %s", slot_state.c_str());
+              if (slot_state == "1") {
+                ams_id = 0;
+                tray_id = 0;
+              } else if (slot_state == "2") {
+                ams_id = 0;
+                tray_id = 1;
+              } else if (slot_state == "3") {
+                ams_id = 0;
+                tray_id = 2;
+              } else if (slot_state == "4") {
+                ams_id = 0;
+                tray_id = 3;
+              } // For "External", keep ams_id=255, tray_id=254
+              ESP_LOGI("MQTT", "Calculated ams_id: %d, tray_id: %d", ams_id, tray_id);
+              std::string payload = bambulabs::generate_mqtt_payload( id(filament_raw_data0).state, ams_id, tray_id );
+              ESP_LOGI("MQTT", "Generated MQTT payload: %s", payload.c_str());
+              return payload;
 
 text_sensor:
 - platform: template
