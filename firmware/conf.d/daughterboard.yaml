@@ -1,3 +1,29 @@
+# Scripts for LED control
+script:
+- id: clear_all_slot_leds
+  then:
+  - light.addressable_set:
+      id: neopixel_light
+      range_from: 0
+      range_to: !lambda "return ${led_count} - 1;"
+      red: 0%
+      green: 0%
+      blue: 0%
+
+- id: set_slot_led
+  parameters:
+    slot_number: int8_t
+  then:
+  - light.addressable_set:
+      id: neopixel_light
+      range_from: !lambda "return slot_number;"
+      range_to: !lambda "return slot_number;"
+      red: 100%
+      green: 100%
+      blue: 100%
+      white: 100%
+      color_brightness: 90%
+
 # Define the select component
 select:
 - platform: template
@@ -14,93 +40,42 @@ select:
   restore_value: false
   set_action:
     then:
-    - light.addressable_set:
-        id: neopixel_light
-        range_from: 0
-        range_to: !lambda "return ${led_count} - 1;"
-        red: 0%
-        green: 0%
-        blue: 0%
+    - script.execute: clear_all_slot_leds
     - if:
         condition:
           lambda: 'return x == "1";'
         then:
-        - logger.log:
-            level: verbose
-            format: "Slot 1 selected"
-        - light.addressable_set:
-            id: neopixel_light
-            range_from: 1
-            range_to: 1
-            red: 100%
-            green: 100%
-            blue: 100%
-            white: 100%
-            color_brightness: 90%
+        - script.execute:
+            id: set_slot_led
+            slot_number: 1
     - if:
         condition:
           lambda: 'return x == "2";'
         then:
-        - logger.log:
-            level: verbose
-            format: "Slot 2 selected"
-        - light.addressable_set:
-            id: neopixel_light
-            range_from: 2
-            range_to: 2
-            red: 100%
-            green: 100%
-            blue: 100%
-            white: 100%
-            color_brightness: 50%
+        - script.execute:
+            id: set_slot_led
+            slot_number: 2
     - if:
         condition:
           lambda: 'return x == "3";'
         then:
-        - logger.log:
-            level: verbose
-            format: "Slot 3 selected"
-        - light.addressable_set:
-            id: neopixel_light
-            range_from: 3
-            range_to: 3
-            red: 100%
-            green: 100%
-            blue: 100%
-            white: 100%
-            color_brightness: 90%
+        - script.execute:
+            id: set_slot_led
+            slot_number: 3
     - if:
         condition:
           lambda: 'return x == "4";'
         then:
-        - logger.log:
-            level: verbose
-            format: "Slot 4 selected"
-        - light.addressable_set:
-            id: neopixel_light
-            range_from: 4
-            range_to: 4
-            red: 100%
-            green: 100%
-            blue: 100%
-            white: 100%
-            color_brightness: 90%
+        - script.execute:
+            id: set_slot_led
+            slot_number: 4
     - if:
         condition:
           lambda: 'return x == "External";'
         then:
-        - logger.log:
-            level: verbose
-            format: "External slot selected"
-        - light.addressable_set:
-            id: neopixel_light
-            range_from: 0
-            range_to: 0
-            red: 100%
-            green: 100%
-            blue: 100%
-            white: 100%
-            color_brightness: 90%
+        - script.execute:
+            id: set_slot_led
+            slot_number: 0
   state_topic: null
   web_server:
     sorting_group_id: sorting_group_filament_settings
