@@ -43,6 +43,8 @@ Almost as seamlessly as if you were using Bambu filament with an AMS.
 | OpenTag3D | 🚧 In progress | 🚧 In progress | NTAG 213/215/216  |
 | Creality  | 🗓️ Planned     | 🗓️ Planned     | MiFare Classic 1k |
 | PrusaRFID | ❓             | ❓             | ❓                 |
+| Elegoo    | 🔍 Researching | 🔍 Researching | ❓ | 
+| Anycubic    | 🔍 Researching | 🔍 Researching | ❓ | 
 
 ### 🧬 OpenTag3D Protocol
 
