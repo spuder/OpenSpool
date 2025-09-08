@@ -1,14 +1,14 @@
 ---
 light:
-- platform: esp32_rmt_led_strip
-  name: "Internal LED"
-  id: internal_led
-  state_topic:
-  pin: ${neopixel_pin}
-  chipset: WS2812
-  rgb_order: GRB
-  num_leds: 1
-  rmt_symbols: 48
-  entity_category: diagnostic
-  restore_mode: ALWAYS_OFF
-  icon: mdi:led-strip
+  - platform: esp32_rmt_led_strip
+    name: "Internal LED"
+    id: internal_led
+    state_topic:
+    pin: ${neopixel_pin}
+    chipset: WS2812
+    rgb_order: GRB
+    num_leds: 1
+    rmt_symbols: 48
+    entity_category: diagnostic
+    restore_mode: ALWAYS_OFF
+    icon: mdi:led-strip

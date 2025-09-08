@@ -1,0 +1,105 @@
+globals:
+  - id: selected_slot
+    type: int
+    restore_value: true
+    initial_value: "0"
+
+script:
+  - id: update_selected_slot
+    then:
+      - lambda: |-
+          if (id(ams_number).state == 0) {
+            id(selected_slot) = 0;
+          } else {
+            id(selected_slot) = (id(ams_number).state - 1) * 4 + id(slot_number).state;
+          }
+      - script.execute: select_led
+
+number:
+  - platform: template
+    name: "Number of AMS units"
+    id: ams_units
+    optimistic: false
+    restore_value: true
+    icon: mdi:train-car-container
+    min_value: 0
+    max_value: 4
+    step: 1
+    initial_value: 1
+    set_action:
+      then:
+        - lambda: |-
+            if (id(bambu_model).state == "A1Mini" || id(bambu_model).state == "A1") {
+              ESP_LOGD("AMS Units", "A1Mini or A1 detected, setting AMS to 1");
+              id(ams_units).publish_state(1);
+            } else {
+              ESP_LOGD("AMS Units", "AMS units: %d", (int)id(ams_units).state);
+              id(ams_units).publish_state(x);
+            }
+            ESP_LOGD("AMS", "Number of AMS units set: %d", (int)x);
+
+            if (x < id(ams_number).state) {
+              ESP_LOGD("AMS Units", "AMS is higher than current units size, forcing AMS to %d", (int)x);
+              id(ams_number).publish_state(x);
+            }
+            if (x == 0) {
+              ESP_LOGD("AMS Units", "AMS units is 0, forcing slot to 1");
+              id(slot_number).publish_state(1);
+            }
+        - script.execute: update_selected_slot
+    web_server:
+      sorting_group_id: sorting_group_printer_settings
+      sorting_weight: 100
+
+  - platform: template
+    name: "AMS Number"
+    id: ams_number
+    optimistic: false
+    restore_value: true
+    icon: mdi:train-car-container
+    min_value: 0
+    max_value: 4
+    step: 1
+    initial_value: 1
+    set_action:
+      then:
+        - lambda: |-
+            if (x > id(ams_units).state) {
+              ESP_LOGD("ams_number", "AMS number too high, setting to %d", (int)id(ams_units).state);
+              id(ams_number).publish_state(id(ams_units).state);
+            } else {
+              id(ams_number).publish_state(x);
+            }
+            ESP_LOGD("AMS", "AMS selected: %d", (int)x);
+
+            if (x == 0 && id(slot_number).state != 1) {
+              ESP_LOGD("AMS", "AMS is 0, forcing slot to 1");
+              id(slot_number).publish_state(1);
+            }
+        - script.execute: update_selected_slot
+    web_server:
+      sorting_group_id: sorting_group_ams
+
+  - platform: template
+    name: "Slot Number"
+    id: slot_number
+    optimistic: false
+    restore_value: true
+    icon: mdi:record-circle-outline
+    min_value: 1
+    max_value: 4
+    step: 1
+    initial_value: 1
+    set_action:
+      then:
+        - lambda: |-
+            if (id(ams_number).state == 0) {
+              ESP_LOGD("slot_number", "AMS is 0, forcing slot to 1");
+              id(slot_number).publish_state(1);
+            } else {
+              id(slot_number).publish_state(x);
+            }
+            ESP_LOGD("AMS", "Slot selected: %d", (int)x);
+        - script.execute: update_selected_slot
+    web_server:
+      sorting_group_id: sorting_group_ams

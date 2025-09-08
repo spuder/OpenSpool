@@ -17,6 +17,7 @@ clean:
 	esphome clean lolin_s2_mini.yaml
 	esphome clean lolin_s3_mini.yaml
 	esphome clean esp32-s3-devkitc-1.yaml
+	esphome clean esp32_s3_super_mini.yaml
 	rm -rf .esphome/idedata/*
 	rm -rf ~/.platformio/penv
 # build-esp32s2-mini:
@@ -72,3 +73,6 @@ lolin_s3_mini:
 devkit:
 	esphome \
 		run esp32-s3-devkitc-1.yaml --device $(USB_ADDRESS)
+s3_super_mini_manual_ams:
+	esphome \
+		run esp32-s3-super-mini-manual-ams.yaml --device $(USB_ADDRESS)

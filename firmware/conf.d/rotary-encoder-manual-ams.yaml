@@ -1,0 +1,73 @@
+script:
+  - id: navigate_slots
+    parameters:
+      direction: int # 1 for clockwise, -1 for anticlockwise
+    then:
+      - lambda: |-
+          // Calculate total slots (AMS 0 + all AMS units with 4 slots each)
+          int total_slots = 1 + id(ams_units).state * 4;
+          int current_slot;
+
+          // Get current absolute slot position
+          if (id(ams_number).state == 0) {
+              current_slot = 0;
+          } else {
+              current_slot = (id(ams_number).state - 1) * 4 + id(slot_number).state;
+          }
+
+          // Move to next/previous slot based on direction
+          if (direction > 0) {
+              current_slot = (current_slot + 1) % total_slots;
+          } else {
+              current_slot = (current_slot + total_slots - 1) % total_slots;
+          }
+
+          // Convert back to AMS and slot
+          auto slot_call = id(slot_number).make_call();
+          auto ams_call = id(ams_number).make_call();
+          if (current_slot == 0) {
+              slot_call.set_value(1);
+              ams_call.set_value(0);
+              slot_call.perform();
+              ams_call.perform();
+          } else {
+              int ams = (current_slot - 1) / 4 + 1;
+              int slot = (current_slot - 1) % 4 + 1;
+              if (id(ams_number).state != ams) {
+                  ams_call.set_value(ams);
+                  ams_call.perform();
+              }
+              if (id(slot_number).state != slot) {
+                  slot_call.set_value(slot);
+                  slot_call.perform();
+              }
+          }
+      - script.execute: update_selected_slot
+
+sensor:
+  - platform: rotary_encoder
+    id: encoder_sensor
+    name: "Encoder Position"
+    resolution: 2
+    restore_mode: ALWAYS_ZERO
+    pin_a:
+      number: ${encoder_pin_a}
+      mode:
+        input: true
+        pullup: true
+    pin_b:
+      number: ${encoder_pin_b}
+      mode:
+        input: true
+        pullup: true
+    on_clockwise:
+      then:
+        - script.execute:
+            id: navigate_slots
+            direction: 1
+    on_anticlockwise:
+      then:
+        - script.execute:
+            id: navigate_slots
+            direction: -1
+    entity_category: diagnostic
