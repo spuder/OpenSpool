@@ -1,0 +1,25 @@
+esp32:
+  board: lolin_s3_mini
+  variant: esp32s3 #TOOD: add support upstream for lolin_s3_mini
+
+substitutions:
+  hide_ams_sensors: 'true'
+  led_pin: GPIO1 #blue to logic converter/led
+  spi2_type: SPI2
+  spi2_clk_pin: GPIO13 # blue (pn532- sck)
+  spi2_miso_pin: GPIO12 # green (pn532- MISO)
+  spi2_mosi_pin: GPIO11 # yellow (pn532- MOSI)
+  rfid0_spi_interface: SPI2
+  rfid0_ss_pin: GPIO10 # orange (pn532- SS)
+  neopixel_pin: '21'
+
+packages:
+  openspool-mini: !include openspool-mini.yaml
+  #led-internal: !include conf.d/led-internal.yaml
+  #improv-bluetooth: !include conf.d/improv-bluetooth.yaml
+  extra: !include conf.d/extra.yaml
+  button: !include conf.d/button.yaml
+
+dashboard_import:
+  package_import_url: github://spuder/openspool/firmware/esp32-s3-zero.yaml@main
+  import_full_config: false
