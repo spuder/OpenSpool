@@ -17,7 +17,7 @@ binary_sensor:
     sorting_group_id: sorting_group_rfid
 spi:
 # On esp32-s3 SPI2 a can support 6 devices, whereas only 3 on bus SPI3
-- id: SPI2
+- id: ${spi2_type}
   clk_pin: ${spi2_clk_pin} # SCK
   miso_pin: ${spi2_miso_pin} # MO/SDA/TX (MISO)
   mosi_pin: ${spi2_mosi_pin} # M (MOSI)
