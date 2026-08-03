@@ -1,0 +1,4 @@
+packages:
+  base: !include common-manual-ams.yaml
+  psram: !include conf.d/psram-esp32s3.yaml
+  pn_532_rfid-manual-ams: !include conf.d/pn532_rfid-manual-ams.yaml
