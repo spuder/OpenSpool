@@ -293,5 +293,5 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script> -->
-<script type="module" src="https://unpkg.com/esp-web-tools@8.0.6/dist/web/install-button.js"></script>
+<script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js"></script>
 <script src="{{ '/assets/js/tag-handler.js' | relative_url }}"></script>
