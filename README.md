@@ -40,7 +40,7 @@ Almost as seamlessly as if you were using Bambu filament with an AMS.
 | OpenSpool | ✅             | ✅             | NTAG 215/216      |
 | TigerTag | 🚧 In progress | 🚧 In progress | NTAG 213 | 
 | Bambu     | 🚧 In progress | ❌             | MiFare Classic 1k |
-| OpenTag3D | 🚧 In progress | 🚧 In progress | NTAG 213/215/216  |
+| OpenTag3D | ✅ (v1 + v2) | 🗓️ Planned | NTAG 215/216  |
 | Creality  | 🗓️ Planned     | 🗓️ Planned     | MiFare Classic 1k |
 | PrusaRFID | ❓             | ❓             | ❓                 |
 | Elegoo    | 🔍 Researching | 🔍 Researching | ❓ | 
@@ -48,7 +48,7 @@ Almost as seamlessly as if you were using Bambu filament with an AMS.
 
 ### 🧬 OpenTag3D Protocol
 
-Many 3d printer filament companies are uniting around an open standard called `OpenTag3D`. It planned to be finalized in early-mid 2025. OpenSpool will support OpenTag formatted tags as soon as it is finalized. See [here](https://opentag3d.info) for more information.
+Many 3D printer filament companies are uniting around an open standard called `OpenTag3D`. OpenSpool supports reading both v1 and v2 OpenTag3D tags. See [here](https://opentag3d.info) for more information.
 
 ### 🧬 OpenSpool Protocol
 
