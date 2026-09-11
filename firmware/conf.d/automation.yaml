@@ -12,7 +12,7 @@ script:
 
           root["protocol"] = "openspool";
           root["version"] = "1.0";
-          root["brand"] = id(filament_brand).state.c_str();
+          root["brand"] = id(filament_brand).current_option();
           if (id(filament_include_alpha).state == true){
             root["color_hex"] = id(filament_color_hexaa).state.c_str();   
           }
@@ -21,7 +21,7 @@ script:
           } 
           root["min_temp"] = id(filament_min_temp).state;
           root["max_temp"] = id(filament_max_temp).state;
-          root["type"] = id(filament_type).state.c_str();
+          root["type"] = id(filament_type).current_option();
 
           std::string output;
           serializeJsonPretty(doc, output);
@@ -34,7 +34,7 @@ script:
       condition:
         and:
         - lambda: |-
-            if (id(filament_brand).state == "" || id(filament_brand).state == "Unknown") {
+            if (id(filament_brand).current_option() == "" || id(filament_brand).current_option() == "Unknown") {
               ESP_LOGE("main", "Filament Brand cannot be empty");
               return false;
             } else {
@@ -69,14 +69,14 @@ script:
               return true;
             }
         - lambda: |-
-            if (id(filament_type).state == "") {
+            if (id(filament_type).current_option() == "") {
               ESP_LOGE("main", "Filament Type cannot be empty");
               return false;
             } else {
               return true;
             }
         - lambda: |-
-            if (id(filament_type).state == "") {
+            if (id(filament_type).current_option() == "") {
               ESP_LOGE("main", "Filament Type cannot be empty");
               return false;
             } else {
@@ -110,10 +110,10 @@ script:
               } 
               print["nozzle_temp_min"] = uint16_t(id(filament_min_temp).state);
               print["nozzle_temp_max"] = uint16_t(id(filament_max_temp).state);
-              print["tray_type"] = id(filament_type).state.c_str();
+              print["tray_type"] = id(filament_type).current_option();
               print["setting_id"] = "";
               print["tray_info_idx"] = id(filament_brand_code).state.c_str();
-              print["tray_type"] = id(filament_type).state.c_str();
+              print["tray_type"] = id(filament_type).current_option();
               //print["tray_sub_brands"] = "TPU"; //TODO: support sub brands
 
             });
@@ -124,8 +124,8 @@ script:
   - lambda: |-
       id(filament_sub_brand).publish_state("");
       // TPU
-      if (id(filament_type).state == "TPU") {
-        if (id(filament_brand).state == "Bambu") {
+      if (id(filament_type).current_option() == "TPU") {
+        if (id(filament_brand).current_option() == "Bambu") {
           id(filament_brand_code).publish_state("GFU01");
           id(filament_sub_brand).publish_state("TPU 95A");
         } else { // Generic
@@ -134,27 +134,27 @@ script:
         }
       }
       // PLA
-      else if (id(filament_type).state == "PLA") {
-        if (id(filament_brand).state == "PolyTerra") {
+      else if (id(filament_type).current_option() == "PLA") {
+        if (id(filament_brand).current_option() == "PolyTerra") {
           id(filament_brand_code).publish_state("GFL01");
           id(filament_sub_brand).publish_state("PolyTerra PLA");
-        } else if (id(filament_brand).state == "PolyLite") {
+        } else if (id(filament_brand).current_option() == "PolyLite") {
           id(filament_brand_code).publish_state("GFL00");
           id(filament_sub_brand).publish_state("PolyLite PLA");
-        } else if (id(filament_brand).state == "Sunlu") {
+        } else if (id(filament_brand).current_option() == "Sunlu") {
           id(filament_brand_code).publish_state("GFSNL03"); 
-        } else if (id(filament_brand).state == "Bambu") {
+        } else if (id(filament_brand).current_option() == "Bambu") {
           // Check for Bambu PLA variants
-          if (id(filament_variant).state == "Basic") {
+          if (id(filament_variant).current_option() == "Basic") {
             id(filament_brand_code).publish_state("GFA00");
             id(filament_sub_brand).publish_state("PLA Basic");
-          } else if (id(filament_variant).state == "Matte") {
+          } else if (id(filament_variant).current_option() == "Matte") {
             id(filament_brand_code).publish_state("GFA01");
             id(filament_sub_brand).publish_state("PLA Matte");
-          } else if (id(filament_variant).state == "Metal") {
+          } else if (id(filament_variant).current_option() == "Metal") {
             id(filament_brand_code).publish_state("GFA02");
             id(filament_sub_brand).publish_state("PLA Metal");
-          } else if (id(filament_variant).state == "Impact") {
+          } else if (id(filament_variant).current_option() == "Impact") {
             id(filament_brand_code).publish_state("GFA03");
             id(filament_sub_brand).publish_state("PLA Impact");
           } else { // Default to Basic if no variant specified
@@ -167,12 +167,12 @@ script:
         }
       }
       // PETG
-      else if (id(filament_type).state == "PETG") {
-        if (id(filament_brand).state == "Overture") {
+      else if (id(filament_type).current_option() == "PETG") {
+        if (id(filament_brand).current_option() == "Overture") {
           // TODO: find overture PETG brand code
           id(filament_brand_code).publish_state("GFG99"); // Using generic for now
           id(filament_sub_brand).publish_state("PETG");
-        } else if (id(filament_brand).state == "Sunlu") {
+        } else if (id(filament_brand).current_option() == "Sunlu") {
           id(filament_brand_code).publish_state("GFSNL08");  
         } else { // Generic
           id(filament_brand_code).publish_state("GFG99");
@@ -180,8 +180,8 @@ script:
         }
       }
       // PET-CF
-      else if (id(filament_type).state == "PET-CF") {
-        if (id(filament_brand).state == "Bambu") {
+      else if (id(filament_type).current_option() == "PET-CF") {
+        if (id(filament_brand).current_option() == "Bambu") {
           id(filament_brand_code).publish_state("GFT00");
           id(filament_sub_brand).publish_state("PET-CF");
         } else { // Generic - Note: Using PETG generic as there's no specific PET-CF generic code
@@ -190,14 +190,14 @@ script:
         }
       }
       // ASA
-      else if (id(filament_type).state == "ASA") {
+      else if (id(filament_type).current_option() == "ASA") {
         // Generic
         id(filament_brand_code).publish_state("GFB98");
         id(filament_sub_brand).publish_state("ASA");
       }
       // ABS
-      else if (id(filament_type).state == "ABS") {
-        if (id(filament_brand).state == "Bambu") {
+      else if (id(filament_type).current_option() == "ABS") {
+        if (id(filament_brand).current_option() == "Bambu") {
           id(filament_brand_code).publish_state("GFB00");
           id(filament_sub_brand).publish_state("ABS");
         } else { // Generic
@@ -206,8 +206,8 @@ script:
         }
       }
       // PC
-      else if (id(filament_type).state == "PC") {
-        if (id(filament_brand).state == "Bambu") {
+      else if (id(filament_type).current_option() == "PC") {
+        if (id(filament_brand).current_option() == "Bambu") {
           id(filament_brand_code).publish_state("GFC00");
           id(filament_sub_brand).publish_state("PC");
         } else { // Generic
@@ -216,14 +216,14 @@ script:
         }
       }
       // PA
-      else if (id(filament_type).state == "PA") {
+      else if (id(filament_type).current_option() == "PA") {
         // Generic
         id(filament_brand_code).publish_state("GFN99");
         id(filament_sub_brand).publish_state("PA");
       }
       // PA-CF
-      else if (id(filament_type).state == "PA-CF") {
-        if (id(filament_brand).state == "Bambu") {
+      else if (id(filament_type).current_option() == "PA-CF") {
+        if (id(filament_brand).current_option() == "Bambu") {
           id(filament_brand_code).publish_state("GFN03");
           id(filament_sub_brand).publish_state("PA-CF");
         } else { // Generic
@@ -232,23 +232,23 @@ script:
         }
       }
       // PLA-CF
-      else if (id(filament_type).state == "PLA-CF") {
+      else if (id(filament_type).current_option() == "PLA-CF") {
         // Generic
         id(filament_brand_code).publish_state("GFL98");
         id(filament_sub_brand).publish_state("PLA-CF");
       }
       // PVA
-      else if (id(filament_type).state == "PVA") {
+      else if (id(filament_type).current_option() == "PVA") {
         // Generic
         id(filament_brand_code).publish_state("GFS99");
         id(filament_sub_brand).publish_state("PVA");
       }
       // Support Materials
-      else if (id(filament_type).state == "Support") {
-        if (id(filament_variant).state == "G") {
+      else if (id(filament_type).current_option() == "Support") {
+        if (id(filament_variant).current_option() == "G") {
           id(filament_brand_code).publish_state("GFS01");
           id(filament_sub_brand).publish_state("Support G");
-        } else if (id(filament_variant).state == "W") {
+        } else if (id(filament_variant).current_option() == "W") {
           id(filament_brand_code).publish_state("GFS00");
           id(filament_sub_brand).publish_state("Support W");
         } else { // Default to Support W if no variant specified
@@ -257,7 +257,7 @@ script:
         }
       }
       else {
-        ESP_LOGE("main", "Unknown filament type: %s", id(filament_type).state.c_str());
+        ESP_LOGE("main", "Unknown filament type: %s", id(filament_type).current_option().c_str());
       }
 - id: generate_filament_temperatures
   then:
@@ -265,7 +265,7 @@ script:
       condition:
         and:
         - lambda: |-
-            if (id(filament_type).state == "") {
+            if (id(filament_type).current_option() == "") {
               ESP_LOGD("main", "skipping generate_filament_temperatures because filament_type is emptry");
               return false;
             } else {
@@ -274,90 +274,90 @@ script:
       then:
       - lambda: |-
           //TODO: add filament_variant temperatures
-          if (id(filament_type).state == "TPU") {
-            if (id(filament_brand).state == "Generic") {
+          if (id(filament_type).current_option() == "TPU") {
+            if (id(filament_brand).current_option() == "Generic") {
               id(filament_min_temp).publish_state(200);
               id(filament_max_temp).publish_state(250);
             } else {
-              ESP_LOGW("main", "Unknown temperatures for TPU: %s", id(filament_brand).state.c_str());
+              ESP_LOGW("main", "Unknown temperatures for TPU: %s", id(filament_brand).current_option().c_str());
               id(filament_min_temp).publish_state(200);
               id(filament_max_temp).publish_state(250);
             }
           }
-          else if (id(filament_type).state == "PLA") {
-            if (id(filament_brand).state == "Generic") {
+          else if (id(filament_type).current_option() == "PLA") {
+            if (id(filament_brand).current_option() == "Generic") {
               id(filament_min_temp).publish_state(190);
               id(filament_max_temp).publish_state(240);
             } else {
-              ESP_LOGW("main", "Unknown temperatures for PLA: %s", id(filament_brand).state.c_str());
+              ESP_LOGW("main", "Unknown temperatures for PLA: %s", id(filament_brand).current_option().c_str());
               id(filament_min_temp).publish_state(190);
               id(filament_max_temp).publish_state(240);
             }
           }
-          else if (id(filament_type).state == "PETG") {
-            if (id(filament_brand).state == "Generic") {
+          else if (id(filament_type).current_option() == "PETG") {
+            if (id(filament_brand).current_option() == "Generic") {
               id(filament_min_temp).publish_state(220);
               id(filament_max_temp).publish_state(270);
             } else {
-              ESP_LOGW("main", "Unknown temperatures for PETG: %s", id(filament_brand).state.c_str());
+              ESP_LOGW("main", "Unknown temperatures for PETG: %s", id(filament_brand).current_option().c_str());
               id(filament_min_temp).publish_state(220);
               id(filament_max_temp).publish_state(270);
             }
           }
-          else if (id(filament_type).state == "ASA") {
-            if (id(filament_brand).state == "Generic") {
+          else if (id(filament_type).current_option() == "ASA") {
+            if (id(filament_brand).current_option() == "Generic") {
               //TODO: find temps for ASA
             } else {
-              ESP_LOGW("main", "Unknown temperatures for ASA: %s", id(filament_brand).state.c_str());
+              ESP_LOGW("main", "Unknown temperatures for ASA: %s", id(filament_brand).current_option().c_str());
             }
           }
-          else if (id(filament_type).state == "ABS") {
-            if (id(filament_brand).state == "Generic") {
+          else if (id(filament_type).current_option() == "ABS") {
+            if (id(filament_brand).current_option() == "Generic") {
               id(filament_min_temp).publish_state(240);
               id(filament_max_temp).publish_state(280);
             } else {
-              ESP_LOGW("main", "Unknown temperatures for ABS: %s", id(filament_brand).state.c_str());
+              ESP_LOGW("main", "Unknown temperatures for ABS: %s", id(filament_brand).current_option().c_str());
             }
           }
-          else if (id(filament_type).state == "PVA") {
-            if (id(filament_brand).state == "Generic") {
+          else if (id(filament_type).current_option() == "PVA") {
+            if (id(filament_brand).current_option() == "Generic") {
               id(filament_min_temp).publish_state(190);
               id(filament_max_temp).publish_state(240);
             } else {
-              ESP_LOGW("main", "Unknown temperatures for PVA: %s", id(filament_brand).state.c_str());
+              ESP_LOGW("main", "Unknown temperatures for PVA: %s", id(filament_brand).current_option().c_str());
               id(filament_min_temp).publish_state(190);
               id(filament_max_temp).publish_state(240);
             }
           }
-          else if (id(filament_type).state == "PA-CF") {
-            if (id(filament_brand).state == "Generic") {
+          else if (id(filament_type).current_option() == "PA-CF") {
+            if (id(filament_brand).current_option() == "Generic") {
               id(filament_min_temp).publish_state(190);
               id(filament_max_temp).publish_state(240);
             } else {
-              ESP_LOGW("main", "Unknown temperatures for PA-CF: %s", id(filament_brand).state.c_str());
+              ESP_LOGW("main", "Unknown temperatures for PA-CF: %s", id(filament_brand).current_option().c_str());
               id(filament_min_temp).publish_state(190);
               id(filament_max_temp).publish_state(240);
             }
           }
-          else if (id(filament_type).state == "PC") {
-            if (id(filament_brand).state == "Generic") {
+          else if (id(filament_type).current_option() == "PC") {
+            if (id(filament_brand).current_option() == "Generic") {
               //TODO: find temps for PC
             } else {
-              ESP_LOGW("main", "Unknown temperatures for PC: %s", id(filament_brand).state.c_str());
+              ESP_LOGW("main", "Unknown temperatures for PC: %s", id(filament_brand).current_option().c_str());
             }
           }
-          else if (id(filament_type).state == "PA") {
-            if (id(filament_brand).state == "Generic") {
+          else if (id(filament_type).current_option() == "PA") {
+            if (id(filament_brand).current_option() == "Generic") {
               id(filament_min_temp).publish_state(190);
               id(filament_max_temp).publish_state(240);
             } else {
-              ESP_LOGW("main", "Unknown temperatures for PA: %s", id(filament_brand).state.c_str());
+              ESP_LOGW("main", "Unknown temperatures for PA: %s", id(filament_brand).current_option().c_str());
               id(filament_min_temp).publish_state(190);
               id(filament_max_temp).publish_state(240);
             }
           }
           else {
-            ESP_LOGW("main", "Unknown filament type: %s", id(filament_type).state.c_str());
+            ESP_LOGW("main", "Unknown filament type: %s", id(filament_type).current_option().c_str());
           }
 
 esphome:

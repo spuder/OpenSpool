@@ -25,7 +25,15 @@ light:
       lambda: |-
         static float b = 0;
         b = (sin(millis() / 500.0) + 1.0) / 2.0 * 0.6 + 0.4;
-        auto color = esphome::light::ESPColor(0, 0, uint8_t(255 * b));
+        auto color = Color(0, 0, uint8_t(255 * b));
+        it.all() = color;
+  - addressable_lambda:
+      name: Breathing Green
+      update_interval: 10ms
+      lambda: |-
+        static float g = 0;
+        g = (sin(millis() / 500.0) + 1.0) / 2.0 * 0.6 + 0.4;
+        auto color = Color(0, uint8_t(255 * g), 0);
         it.all() = color;
   - addressable_lambda:
       name: Apple Breathing
@@ -36,7 +44,7 @@ light:
         float t = millis() / 2000.0;
         float brightness_float = (exp(sin(t * PI)) - 0.368) * 42.546;
         uint8_t brightness = uint8_t(brightness_float);
-        auto color = esphome::light::ESPColor(brightness, 0, 0);
+        auto color = Color(brightness, 0, 0);
         for (int i = 0; i < it.size(); ++i) {
           it[i] = color;
         }

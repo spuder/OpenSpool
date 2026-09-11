@@ -130,7 +130,7 @@ select:
     - text_sensor.template.publish:
         id: filament_color_hex
         state: !lambda |-
-          ESP_LOGD("main", "Color %s", id(filament_color).state.c_str());
+          ESP_LOGD("main", "Color %s", id(filament_color).current_option().c_str());
           if ( x == "white") {
             return "FFFFFF";
           } else if ( x == "yellow") {

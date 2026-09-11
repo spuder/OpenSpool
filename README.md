@@ -194,10 +194,11 @@ Alternatively the firmware can be installed with `make` commands as shown below.
 ### OSX/Linux
 
 ```
-brew install esphome
-
 git clone https://github.com/spuder/OpenSpool
 cd OpenSpool/firmware
+python -m venv .virtualenv
+source .virtualenv/bin/activate
+pip install -r requirements.txt
 ```
 
 Press and hold the D0 button while pressing the reset button on the Wemos D1 Mini.  

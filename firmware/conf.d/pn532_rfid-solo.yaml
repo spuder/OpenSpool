@@ -192,7 +192,7 @@ button:
           #       return true;
           #     }
           - lambda: |-
-              if (id(filament_brand).state == "") {
+              if (id(filament_brand).current_option() == "") {
                 ESP_LOGE("main", "Filament Brand cannot be empty");
                 return false;
               } else {
@@ -227,7 +227,7 @@ button:
                 return true;
               }
           - lambda: |-
-              if (id(filament_type).state == "") {
+              if (id(filament_type).current_option() == "") {
                 ESP_LOGE("main", "Filament Type cannot be empty");
                 return false;
               } else {
@@ -274,10 +274,10 @@ button:
             else{
               root["color_hex"] = id(filament_color_hex).state;
             } 
-            root["type"] = id(filament_type).state;
+            root["type"] = id(filament_type).current_option();
             root["min_temp"] = id(filament_min_temp).state;
             root["max_temp"] = id(filament_max_temp).state;
-            root["brand"] = id(filament_brand).state;
+            root["brand"] = id(filament_brand).current_option();
 
             std::string json_string;
             serializeJson(root, json_string);
