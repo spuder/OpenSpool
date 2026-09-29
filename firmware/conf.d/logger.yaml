@@ -1,3 +1,4 @@
+---
 logger:
   level: VERBOSE
   logs:

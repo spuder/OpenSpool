@@ -47,8 +47,8 @@ psram:
 # I (30) boot.esp32s2: SPI Flash Size : 4MB
 
 sensor:
-- platform: debug
-  psram:
-    name: "Free PSRAM"
-    id: free_psram
-    state_topic:
+  - platform: debug
+    psram:
+      name: "Free PSRAM"
+      id: free_psram
+      state_topic:

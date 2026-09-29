@@ -1,10 +1,9 @@
 ---
 repos:
-  # yamllint has trouble with scalars like '- lambda: |- '
-  # - repo: https://github.com/google/yamlfmt
-  #   rev: v0.10.0
-  #   hooks:
-  #     - id: yamlfmt
+  - repo: https://github.com/google/yamlfmt
+    rev: v0.21.0
+    hooks:
+      - id: yamlfmt
   - repo: local
     hooks:
       - id: esphome-openspool-mini

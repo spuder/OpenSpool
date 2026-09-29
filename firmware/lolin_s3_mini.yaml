@@ -1,3 +1,4 @@
+---
 esp32:
   board: lolin_s3_mini
   variant: esp32s3 #TOOD: add support upstream for lolin_s3_mini
@@ -13,7 +14,7 @@ substitutions:
   rfid0_ss_pin: GPIO34 #TODO: is this conflicting with PSRAM?
   neopixel_pin: '47'
 
-packages: 
+packages:
   openspool-mini: !include openspool-mini.yaml
   #led-internal: !include conf.d/led-internal.yaml
   #improv-bluetooth: !include conf.d/improv-bluetooth.yaml

@@ -1,3 +1,4 @@
+---
 esp32:
   board: lolin_s2_mini
 
@@ -18,8 +19,8 @@ substitutions:
 # D1 Mini S2 Boards will reboot when doing tasks like writing to PN532 unless wifi power is reduced
 wifi:
   output_power: 10 # https://github.com/esphome/issues/issues/3988#issuecomment-1449954758
-  
-packages: 
+
+packages:
   openspool-mini: !include openspool-mini.yaml
   #improv-serial: !include conf.d/improv-serial.yaml
   #extra: !include conf.d/extra.yaml

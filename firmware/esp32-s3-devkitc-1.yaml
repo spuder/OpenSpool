@@ -1,3 +1,4 @@
+---
 esp32:
   board: esp32-s3-devkitc-1
 
@@ -42,7 +43,7 @@ substitutions:
   # rfid8_spi_interface: SPI3
   # rfid8_ss_pin: GPI14 # TODO: Verify this is compatible
 
-packages: 
+packages:
   openspool-ams: !include openspool-ams.yaml
   improv-serial: !include conf.d/improv-serial.yaml
   #improv-bluetooth: !include conf.d/improv-bluetooth.yaml

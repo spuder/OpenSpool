@@ -19,12 +19,12 @@ wifi:
   #     update_interval: 60s
   #     icon: mdi:wifi-strength-outline
 text_sensor:
-- platform: wifi_info
-  mac_address:
-    name: Mac Address
-    id: mac_address
-    state_topic:
-    icon: mdi:network
+  - platform: wifi_info
+    mac_address:
+      name: Mac Address
+      id: mac_address
+      state_topic:
+      icon: mdi:network
 # - platform: wifi_info
 #   ip_address:
 #     name: IP Address

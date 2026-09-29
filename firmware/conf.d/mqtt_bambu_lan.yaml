@@ -21,9 +21,9 @@ mqtt:
   will_message:
     topic: # Dont post update to MQTT
     payload:
-      # Dont post update to MQTT
-      # keepalive: 15s
-      # idf_send_async: true
+    # Dont post update to MQTT
+    # keepalive: 15s
+    # idf_send_async: true
   skip_cert_cn_check: true
   certificate_authority: |
     -----BEGIN CERTIFICATE-----
@@ -50,13 +50,13 @@ mqtt:
   clean_session: true
   enable_on_boot: false
   on_connect:
-  - logger.log:
-      level: info
-      format: "Connected to printer over MQTT!"
+    - logger.log:
+        level: info
+        format: "Connected to printer over MQTT!"
   on_disconnect:
-  - logger.log:
-      level: info
-      format: "Disconnected from printer!"
+    - logger.log:
+        level: info
+        format: "Disconnected from printer!"
   wait_for_connection: false
   #TODO: enable status led on s2, set neopixel blue on s3
 
@@ -97,20 +97,20 @@ mqtt:
   # #     #   then:
   # #     #     - lambda: |-
 binary_sensor:
-# Note platform.status won't turn on if 'api' is enabled (yet disconnected)
-# api is required for dashboard_import, which is required for made-for-esphome program
-# api isn't actually used
-# - platform: status
-- platform: template
-  name: "MQTT Connection"
-  id: mqtt_connected
-  state_topic: # Don't post update to MQTT
-  icon: mdi:lan-connect
-  web_server:
-    sorting_group_id: sorting_group_printer_settings
-  device_class: connectivity #TODO: use this class
-  lambda: |-
-    return id(bambu_mqtt)->is_connected();
+  # Note platform.status won't turn on if 'api' is enabled (yet disconnected)
+  # api is required for dashboard_import, which is required for made-for-esphome program
+  # api isn't actually used
+  # - platform: status
+  - platform: template
+    name: "MQTT Connection"
+    id: mqtt_connected
+    state_topic: # Don't post update to MQTT
+    icon: mdi:lan-connect
+    web_server:
+      sorting_group_id: sorting_group_printer_settings
+    device_class: connectivity #TODO: use this class
+    lambda: |-
+      return id(bambu_mqtt)->is_connected();
 
 # sensor:
 #   - platform: mqtt_subscribe

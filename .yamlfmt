@@ -6,3 +6,11 @@ formatter:
   scan_folded_as_literal: true
   disallow_anchors: false
   retain_line_breaks: true
+
+# XXX yamlfmt can't handle !lambda strings
+exclude:
+  - firmware/conf.d/automation.yaml
+  - firmware/conf.d/extra.yaml
+  - firmware/conf.d/filament.yaml
+  - firmware/conf.d/pn532_rfid-ams.yaml
+  - firmware/conf.d/pn532_rfid-solo.yaml

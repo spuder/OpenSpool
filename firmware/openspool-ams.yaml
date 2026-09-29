@@ -1,3 +1,4 @@
+---
 
 packages:
   base: !include common.yaml
