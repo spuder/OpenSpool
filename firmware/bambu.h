@@ -2,12 +2,46 @@
 
 #pragma once
 
+#include <cctype>
+#include <cstddef>
 #include <unordered_map>
 #include <string>
 
 namespace bambulabs
 {
-    const std::unordered_map<std::string, std::string> filament_mappings = {
+    // Case-insensitive string matching so tags written as "pla" or "bambu" still resolve
+    inline bool iequals(const std::string &a, const std::string &b)
+    {
+        if (a.size() != b.size())
+            return false;
+        for (size_t i = 0; i < a.size(); i++)
+        {
+            if (std::tolower(static_cast<unsigned char>(a[i])) != std::tolower(static_cast<unsigned char>(b[i])))
+                return false;
+        }
+        return true;
+    }
+
+    struct CaseInsensitiveHash
+    {
+        size_t operator()(const std::string &s) const
+        {
+            std::string lower(s);
+            for (char &c : lower)
+                c = std::tolower(static_cast<unsigned char>(c));
+            return std::hash<std::string>{}(lower);
+        }
+    };
+
+    struct CaseInsensitiveEqual
+    {
+        bool operator()(const std::string &a, const std::string &b) const { return iequals(a, b); }
+    };
+
+    template <typename V>
+    using CaseInsensitiveMap = std::unordered_map<std::string, V, CaseInsensitiveHash, CaseInsensitiveEqual>;
+
+    const CaseInsensitiveMap<std::string> filament_mappings = {
         {"TPU for AMS", "GFU02"},
         {"TPU High Speed", "GFU00"},
         {"TPU", "GFU99"},
@@ -39,7 +73,7 @@ namespace bambulabs
         {"Support", "GFS00"}};
 
     // Special cases for brand-specific codes
-    const std::unordered_map<std::string, std::unordered_map<std::string, std::string>> brand_specific_codes = {
+    const CaseInsensitiveMap<CaseInsensitiveMap<std::string>> brand_specific_codes = {
         {"PLA", {{"Bambu", "GFA00"}, {"PolyTerra", "GFL01"}, {"PolyLite", "GFL00"}, {"Sunlu", "GFSNL03"}}},
         {"PLA Aero", {{"Bambu", "GFG01"}}},
         {"TPU", {{"Bambu", "GFU01"}}},
@@ -51,6 +85,18 @@ namespace bambulabs
         {"PETG HF", {{"Bambu", "GFG02"}}},
         {"PETG Translucent", {{"Bambu", "GFG01"}}},
         {"PETG", {{"Bambu", "GFG00"}, {"PolyLite", "GFG60"}, {"Sunlu", "GFSNL08"}}}};
+
+    // Returns the standard spelling of a known filament type (e.g. "pla" -> "PLA"), or the input unchanged if unknown
+    inline std::string canonical_type(const std::string &type)
+    {
+        auto it = filament_mappings.find(type);
+        if (it != filament_mappings.end())
+            return it->first;
+        auto brand_it = brand_specific_codes.find(type);
+        if (brand_it != brand_specific_codes.end())
+            return brand_it->first;
+        return type;
+    }
 
     // Function with two parameters
     inline std::string get_bambu_code(const std::string &type, const std::string &brand = "")
@@ -79,13 +125,13 @@ namespace bambulabs
     // Function with three parameters (for Bambu PLA subtypes)
     inline std::string get_bambu_code(const std::string &type, const std::string &brand, const std::string &subtype)
     {
-        if (type == "PLA" && brand == "Bambu")
+        if (iequals(type, "PLA") && iequals(brand, "Bambu"))
         {
-            if (subtype == "Matte")
+            if (iequals(subtype, "Matte"))
                 return "GFA01";
-            if (subtype == "Metal")
+            if (iequals(subtype, "Metal"))
                 return "GFA02";
-            if (subtype == "Impact")
+            if (iequals(subtype, "Impact"))
                 return "GFA03";
             return "GFA00"; // Default to Basic for unknown subtypes
         }
@@ -144,9 +190,10 @@ namespace bambulabs
         }
         print["nozzle_temp_min"] = uint16_t(doc_in["min_temp"]); // if not string or int, will fall back to 0
         print["nozzle_temp_max"] = uint16_t(doc_in["max_temp"]); // if not string or int, will fall back to 0
-        print["tray_type"] = doc_in["type"];
+        std::string type = canonical_type(doc_in["type"].as<std::string>());
+        print["tray_type"] = type;
         print["setting_id"] = "";
-        print["tray_info_idx"] = get_bambu_code(doc_in["type"], doc_in["brand"]);
+        print["tray_info_idx"] = get_bambu_code(type, doc_in["brand"].as<std::string>());
         // print["tray_sub_brands"] = doc_in["sub_brand"]; //TODO: support sub brands if needed
 
         std::string result;
