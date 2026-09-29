@@ -7,6 +7,7 @@ formatter:
   disallow_anchors: false
   retain_line_breaks: true
 
+# XXX yamlfmt can't handle !lambda strings
 exclude:
   - firmware/conf.d/automation.yaml
   - firmware/conf.d/extra.yaml
