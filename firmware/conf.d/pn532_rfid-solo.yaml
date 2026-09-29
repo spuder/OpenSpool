@@ -122,7 +122,39 @@ text_sensor:
     web_server:
       sorting_group_id: sorting_group_rfid
     filters:
-      - lambda: "auto pretty_json = [](const std::string &x) -> std::string {\n  if (x.empty()) {\n    ESP_LOGD(\"NFC\", \"Input string is empty\");\n    return x;\n  }     \n  ESP_LOGD(\"NFC\", \"Input string: %s\", x.c_str());\n          #magic___^_^___line\n  JsonDocument doc;\n  DeserializationError error = deserializeJson(doc, x);\n  if (error) {\n    ESP_LOGE(\"NFC\", \"JSON parsing failed: %s\", error.c_str());\n    return \"\";\n  }\n          #magic___^_^___line\n  if (!doc.is<JsonObject>()) {\n    ESP_LOGE(\"NFC\", \"Invalid JSON: Not an object\");\n    return \"\";\n  }\n          #magic___^_^___line\n  const char* required_fields[] = {\"protocol\", \"color_hex\", \"type\", \"min_temp\", \"max_temp\", \"brand\"};\n  for (const char* field : required_fields) {\n    if (!doc[field].is<const char*>() && !doc[field].is<int>() && !doc[field].is<float>()) {\n      ESP_LOGE(\"NFC\", \"Invalid JSON: Missing required field '%s'\", field);\n      return \"\";\n    }\n  }\n          #magic___^_^___line\n  std::string output;\n  serializeJsonPretty(doc, output);\n          #magic___^_^___line\n  if (output.length() > 1024) {\n    ESP_LOGE(\"NFC\", \"Prettified JSON exceeds 1024 bytes\");\n    return \"\";\n  }\n          #magic___^_^___line\n  return output;\n};\nreturn pretty_json(x);\n          #magic___^_^___line"
+      - lambda: |-
+          auto pretty_json = [](const std::string &x) -> std::string {
+            if (x.empty()) {
+              ESP_LOGD("NFC", "Input string is empty");
+              return x;
+            }     
+            ESP_LOGD("NFC", "Input string: %s", x.c_str());
+            JsonDocument doc;
+            DeserializationError error = deserializeJson(doc, x);
+            if (error) {
+              ESP_LOGE("NFC", "JSON parsing failed: %s", error.c_str());
+              return "";
+            }
+            if (!doc.is<JsonObject>()) {
+              ESP_LOGE("NFC", "Invalid JSON: Not an object");
+              return "";
+            }
+            const char* required_fields[] = {"protocol", "color_hex", "type", "min_temp", "max_temp", "brand"};
+            for (const char* field : required_fields) {
+              if (!doc[field].is<const char*>() && !doc[field].is<int>() && !doc[field].is<float>()) {
+                ESP_LOGE("NFC", "Invalid JSON: Missing required field '%s'", field);
+                return "";
+              }
+            }
+            std::string output;
+            serializeJsonPretty(doc, output);
+            if (output.length() > 1024) {
+              ESP_LOGE("NFC", "Prettified JSON exceeds 1024 bytes");
+              return "";
+            }
+            return output;
+          };
+          return pretty_json(x);
   - platform: template
     name: "NFC Preview"
     id: nfc_preview
@@ -195,7 +227,67 @@ button:
                       return true;
                     }
             then:
-              - lambda: "auto message = new nfc::NdefMessage();\n    #magic___^_^___line\n//TODO: uncomment once esphome suppports messages nless than 255 bytes\n// URI NDEF record\n// esphome fails if this is more than 255 bytes\n//auto uri_record = std::make_unique<nfc::NdefRecordUri>();\n//std::string url = \"https://openspool.io/tag?\";\n//url.append(\"protocol=\").append(\"openspool\");\n//url.append(\"&version=\").append(\"1.0\");\n//url.append(\"&color_hex=\").append(id(filament_color_hex).state);\n//url.append(\"&type=\").append(id(filament_type).state);\n//url.append(\"&min_temp=\").append(std::to_string(static_cast<uint16_t>(id(filament_min_temp).state)));\n//url.append(\"&max_temp=\").append(std::to_string(static_cast<uint16_t>(id(filament_max_temp).state)));\n//url.append(\"&brand=\").append(id(filament_brand).state);\n    #magic___^_^___line\n// Warn if the url is more than 255 bytes\n// While NFC allows messages longer than 255, you have to set the tnf_byte which esphome doesn't allow yet\n//if (url.length() > 255) {\n//  ESP_LOGE(\"NFC\", \"URL longer than 255 bytes: %s\", url.c_str());\n//  return;\n//}\n//ESP_LOGD(\"NFC\", \"Adding NDEF Record URI: %s\", url.c_str());\n//message->add_uri_record(url);\n    #magic___^_^___line\n// Application/Json NDEF record\nauto json_record = std::make_unique<nfc::NdefRecord>();\njson_record->set_tnf(nfc::TNF_MIME_MEDIA);\njson_record->set_type(\"application/json\");\n    #magic___^_^___line\nJsonDocument doc;\nJsonObject root = doc.to<JsonObject>();\nroot[\"version\"] = \"1.0\";\nroot[\"protocol\"] = \"openspool\";\nif (id(filament_include_alpha).state == true){\n  root[\"color_hex\"] = id(filament_color_hexaa).state;\n}\nelse{\n  root[\"color_hex\"] = id(filament_color_hex).state;\n} \nroot[\"type\"] = id(filament_type).state;\nroot[\"min_temp\"] = id(filament_min_temp).state;\nroot[\"max_temp\"] = id(filament_max_temp).state;\nroot[\"brand\"] = id(filament_brand).state;\n    #magic___^_^___line\nstd::string json_string;\nserializeJson(root, json_string);\nif (json_string.empty()) {\n  ESP_LOGE(\"rfid\", \"Failed to serialize JSON\");\n  return;\n}\nESP_LOGI(\"rfid\", \"JSON content to be written: %s\", json_string.c_str());\njson_record->set_payload(json_string);\nmessage->add_record(std::move(json_record));\n    #magic___^_^___line\nstd::vector<uint8_t> encoded_message = message->encode();\nsize_t message_size = encoded_message.size();\nESP_LOGI(\"rfid\", \"NDEF message size: %zu bytes\", message_size);\n    #magic___^_^___line\n// TODO: make dynamic for NTAG215 (544) or NTAG216 (888)\n// TODO: 544 bytes is actuall 496 usable according to logs\n//const size_t MAX_MESSAGE_SIZE = 496;\n//if (message_size > MAX_MESSAGE_SIZE) {\n//    ESP_LOGE(\"rfid\", \"Error: NDEF message size (%zu bytes) exceeds maximum allowed size (%zu bytes)\", message_size, MAX_MESSAGE_SIZE);\n    //return;  // Exit the function or throw an exception, depending on your error handling strategy\n//}\n    #magic___^_^___line\nid(rfid_reader_spi_0).write_mode(message);\nESP_LOGI(\"rfid\", \"Writing JSON NDEF message to tag\");"
+              - lambda: |-
+                  auto message = new nfc::NdefMessage();
+                  //TODO: uncomment once esphome suppports messages nless than 255 bytes
+                  // URI NDEF record
+                  // esphome fails if this is more than 255 bytes
+                  //auto uri_record = std::make_unique<nfc::NdefRecordUri>();
+                  //std::string url = "https://openspool.io/tag?";
+                  //url.append("protocol=").append("openspool");
+                  //url.append("&version=").append("1.0");
+                  //url.append("&color_hex=").append(id(filament_color_hex).state);
+                  //url.append("&type=").append(id(filament_type).state);
+                  //url.append("&min_temp=").append(std::to_string(static_cast<uint16_t>(id(filament_min_temp).state)));
+                  //url.append("&max_temp=").append(std::to_string(static_cast<uint16_t>(id(filament_max_temp).state)));
+                  //url.append("&brand=").append(id(filament_brand).state);
+                  // Warn if the url is more than 255 bytes
+                  // While NFC allows messages longer than 255, you have to set the tnf_byte which esphome doesn't allow yet
+                  //if (url.length() > 255) {
+                  //  ESP_LOGE("NFC", "URL longer than 255 bytes: %s", url.c_str());
+                  //  return;
+                  //}
+                  //ESP_LOGD("NFC", "Adding NDEF Record URI: %s", url.c_str());
+                  //message->add_uri_record(url);
+                  // Application/Json NDEF record
+                  auto json_record = std::make_unique<nfc::NdefRecord>();
+                  json_record->set_tnf(nfc::TNF_MIME_MEDIA);
+                  json_record->set_type("application/json");
+                  JsonDocument doc;
+                  JsonObject root = doc.to<JsonObject>();
+                  root["version"] = "1.0";
+                  root["protocol"] = "openspool";
+                  if (id(filament_include_alpha).state == true){
+                    root["color_hex"] = id(filament_color_hexaa).state;
+                  }
+                  else{
+                    root["color_hex"] = id(filament_color_hex).state;
+                  } 
+                  root["type"] = id(filament_type).state;
+                  root["min_temp"] = id(filament_min_temp).state;
+                  root["max_temp"] = id(filament_max_temp).state;
+                  root["brand"] = id(filament_brand).state;
+                  std::string json_string;
+                  serializeJson(root, json_string);
+                  if (json_string.empty()) {
+                    ESP_LOGE("rfid", "Failed to serialize JSON");
+                    return;
+                  }
+                  ESP_LOGI("rfid", "JSON content to be written: %s", json_string.c_str());
+                  json_record->set_payload(json_string);
+                  message->add_record(std::move(json_record));
+                  std::vector<uint8_t> encoded_message = message->encode();
+                  size_t message_size = encoded_message.size();
+                  ESP_LOGI("rfid", "NDEF message size: %zu bytes", message_size);
+                  // TODO: make dynamic for NTAG215 (544) or NTAG216 (888)
+                  // TODO: 544 bytes is actuall 496 usable according to logs
+                  //const size_t MAX_MESSAGE_SIZE = 496;
+                  //if (message_size > MAX_MESSAGE_SIZE) {
+                  //    ESP_LOGE("rfid", "Error: NDEF message size (%zu bytes) exceeds maximum allowed size (%zu bytes)", message_size, MAX_MESSAGE_SIZE);
+                      //return;  // Exit the function or throw an exception, depending on your error handling strategy
+                  //}
+                  id(rfid_reader_spi_0).write_mode(message);
+                  ESP_LOGI("rfid", "Writing JSON NDEF message to tag");
               - wait_until:
                   not:
                     pn532.is_writing:

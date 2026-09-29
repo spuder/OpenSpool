@@ -35,7 +35,31 @@ button:
         # TODO: binary sensor that shows reader write_mode? 
         # TODO: blink lights when light mode changes
         - logger.log: "Writing tag" #TODO: change log namespace
-        - lambda: "// This causes esp32 to lockup, stackoverflow perhaps? \n// Leaving this code here as an example of what not to do\n#magic___^_^___line\n// std::string url = id(openspool_url).state;\n// nfc::NdefMessage message;\n// message.add_uri_record(url);\n//id(rfid_reader_spi_0).write_mode(&message);\n#magic___^_^___line\n// This also causes it to lockup\n#magic___^_^___line\n// std::string url = id(openspool_url).state;\n// auto message = std::make_unique<nfc::NdefMessage>();\n// message->add_uri_record(url);\n// id(rfid_reader_spi_0).write_mode(message.get());\n#magic___^_^___line\n// deleting the message also causes a lockup\n#magic___^_^___line\n// std::string url = id(openspool_url).state;\n// auto message = new nfc::NdefMessage();\n// message->add_uri_record(url);\n// id(rfid_reader_spi_0).write_mode(message);\n// delete message; \n#magic___^_^___line\n// even though it seems wrong to use 'new' without a 'delete'\n// this is the only code that doesn't crash. \nstd::string url = id(openspool_url).state;\nESP_LOGD(\"NFC\", \"Writing URL: %s\", url.c_str());\nauto message = new nfc::NdefMessage();\nmessage->add_uri_record(url);\nid(rfid_reader_spi_0).write_mode(message);"
+        - lambda: |-
+            // This causes esp32 to lockup, stackoverflow perhaps? 
+            // Leaving this code here as an example of what not to do
+            // std::string url = id(openspool_url).state;
+            // nfc::NdefMessage message;
+            // message.add_uri_record(url);
+            //id(rfid_reader_spi_0).write_mode(&message);
+            // This also causes it to lockup
+            // std::string url = id(openspool_url).state;
+            // auto message = std::make_unique<nfc::NdefMessage>();
+            // message->add_uri_record(url);
+            // id(rfid_reader_spi_0).write_mode(message.get());
+            // deleting the message also causes a lockup
+            // std::string url = id(openspool_url).state;
+            // auto message = new nfc::NdefMessage();
+            // message->add_uri_record(url);
+            // id(rfid_reader_spi_0).write_mode(message);
+            // delete message; 
+            // even though it seems wrong to use 'new' without a 'delete'
+            // this is the only code that doesn't crash. 
+            std::string url = id(openspool_url).state;
+            ESP_LOGD("NFC", "Writing URL: %s", url.c_str());
+            auto message = new nfc::NdefMessage();
+            message->add_uri_record(url);
+            id(rfid_reader_spi_0).write_mode(message);
         - wait_until:
             not:
               pn532.is_writing:

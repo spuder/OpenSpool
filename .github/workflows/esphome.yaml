@@ -138,7 +138,8 @@ jobs:
           path: downloaded-artifacts
 
       - name: list artifacts
-        run: "ls -ial \n    #magic___^_^___line\n"
+        run: |
+          ls -ial
       - name: Purge local firmware
         run: |
           rm -f docs/firmware/*.json || true

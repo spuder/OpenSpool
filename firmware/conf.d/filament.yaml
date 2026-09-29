@@ -196,7 +196,11 @@ switch:
       sorting_weight: 70
     turn_on_action:
       then:
-        - lambda: "id(filament_include_alpha).publish_state(true);\nchar hexStr[3];\nsprintf(hexStr, \"%02X\", (int)id(filament_alpha_int).state);     \nid(filament_alpha).publish_state(hexStr);"
+        - lambda: |-
+            id(filament_include_alpha).publish_state(true);
+            char hexStr[3];
+            sprintf(hexStr, "%02X", (int)id(filament_alpha_int).state);     
+            id(filament_alpha).publish_state(hexStr);
         - script.execute: preview_rfid_data
     turn_off_action:
       then:
@@ -267,7 +271,11 @@ number:
       sorting_weight: 90
     set_action:
       then:
-        - lambda: "id(filament_alpha_int).publish_state(int(round(x)));\nchar hexStr[3];\nsprintf(hexStr, \"%02X\", (int)id(filament_alpha_int).state);     \nid(filament_alpha).publish_state(hexStr);"
+        - lambda: |-
+            id(filament_alpha_int).publish_state(int(round(x)));
+            char hexStr[3];
+            sprintf(hexStr, "%02X", (int)id(filament_alpha_int).state);     
+            id(filament_alpha).publish_state(hexStr);
     on_value:
       then:
         - script.execute: preview_rfid_data

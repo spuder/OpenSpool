@@ -4,7 +4,28 @@ script:
     then:
       - text_sensor.template.publish:
           id: nfc_preview
-          state: !lambda "id(filament_color_hexaa).publish_state(id(filament_color_hex).state + id(filament_alpha).state);\nauto pretty_json = [=]() -> std::string {\n  JsonDocument doc;\n  JsonObject root = doc.to<JsonObject>();\n  #magic___^_^___line\n  root[\"protocol\"] = \"openspool\";\n  root[\"version\"] = \"1.0\";\n  root[\"brand\"] = id(filament_brand).state.c_str();\n  if (id(filament_include_alpha).state == true){\n    root[\"color_hex\"] = id(filament_color_hexaa).state.c_str();   \n  }\n  else{\n    root[\"color_hex\"] = id(filament_color_hex).state.c_str();\n  } \n  root[\"min_temp\"] = id(filament_min_temp).state;\n  root[\"max_temp\"] = id(filament_max_temp).state;\n  root[\"type\"] = id(filament_type).state.c_str();\n    #magic___^_^___line\n  std::string output;\n  serializeJsonPretty(doc, output);\n  return output;\n};\nreturn pretty_json();"
+          state: !lambda |-
+            id(filament_color_hexaa).publish_state(id(filament_color_hex).state + id(filament_alpha).state);
+            auto pretty_json = [=]() -> std::string {
+              JsonDocument doc;
+              JsonObject root = doc.to<JsonObject>();
+              root["protocol"] = "openspool";
+              root["version"] = "1.0";
+              root["brand"] = id(filament_brand).state.c_str();
+              if (id(filament_include_alpha).state == true){
+                root["color_hex"] = id(filament_color_hexaa).state.c_str();   
+              }
+              else{
+                root["color_hex"] = id(filament_color_hex).state.c_str();
+              } 
+              root["min_temp"] = id(filament_min_temp).state;
+              root["max_temp"] = id(filament_max_temp).state;
+              root["type"] = id(filament_type).state.c_str();
+              std::string output;
+              serializeJsonPretty(doc, output);
+              return output;
+            };
+            return pretty_json();
   - id: publish_filament_setting
     then:
       - if:
@@ -71,10 +92,170 @@ script:
             - mqtt.publish:
                 # topic: device/${bambu_serial_number}/request
                 topic: !lambda 'return "device/" + id(bambu_serial_number).state + "/request";'
-                payload: !lambda "auto data = json::build_json([=](JsonObject root) {\n  auto print = root[\"print\"].to<JsonObject>();\n  print[\"sequence_id\"] = \"0\";\n  print[\"command\"] = \"ams_filament_setting\";\n  print[\"ams_id\"] = 255; //TODO: support multiple AMS\n  print[\"tray_id\"] = 254; //TODO: support multiple trays\n  if (id(filament_include_alpha).state == true){\n    print[\"tray_color\"] = id(filament_color_hexaa).state;\n  }\n  else{\n    std::string color = id(filament_color_hex).state + \"FF\";\n    print[\"tray_color\"] = color;\n  } \n  print[\"nozzle_temp_min\"] = uint16_t(id(filament_min_temp).state);\n  print[\"nozzle_temp_max\"] = uint16_t(id(filament_max_temp).state);\n  print[\"tray_type\"] = id(filament_type).state.c_str();\n  print[\"setting_id\"] = \"\";\n  print[\"tray_info_idx\"] = id(filament_brand_code).state.c_str();\n  print[\"tray_type\"] = id(filament_type).state.c_str();\n  //print[\"tray_sub_brands\"] = \"TPU\"; //TODO: support sub brands\n    #magic___^_^___line\n});\nESP_LOGI(\"main\", \"Publishing %s\", data.c_str());\nreturn data;"
+                payload: !lambda |-
+                  auto data = json::build_json([=](JsonObject root) {
+                    auto print = root["print"].to<JsonObject>();
+                    print["sequence_id"] = "0";
+                    print["command"] = "ams_filament_setting";
+                    print["ams_id"] = 255; //TODO: support multiple AMS
+                    print["tray_id"] = 254; //TODO: support multiple trays
+                    if (id(filament_include_alpha).state == true){
+                      print["tray_color"] = id(filament_color_hexaa).state;
+                    }
+                    else{
+                      std::string color = id(filament_color_hex).state + "FF";
+                      print["tray_color"] = color;
+                    } 
+                    print["nozzle_temp_min"] = uint16_t(id(filament_min_temp).state);
+                    print["nozzle_temp_max"] = uint16_t(id(filament_max_temp).state);
+                    print["tray_type"] = id(filament_type).state.c_str();
+                    print["setting_id"] = "";
+                    print["tray_info_idx"] = id(filament_brand_code).state.c_str();
+                    print["tray_type"] = id(filament_type).state.c_str();
+                    //print["tray_sub_brands"] = "TPU"; //TODO: support sub brands
+                  });
+                  ESP_LOGI("main", "Publishing %s", data.c_str());
+                  return data;
   - id: generate_filament_brand_code # TODO: Replace with filament_mappings()
     then:
-      - lambda: "id(filament_sub_brand).publish_state(\"\");\n// TPU\nif (id(filament_type).state == \"TPU\") {\n  if (id(filament_brand).state == \"Bambu\") {\n    id(filament_brand_code).publish_state(\"GFU01\");\n    id(filament_sub_brand).publish_state(\"TPU 95A\");\n  } else { // Generic\n    id(filament_brand_code).publish_state(\"GFU99\");\n    id(filament_sub_brand).publish_state(\"TPU\");\n  }\n}\n// PLA\nelse if (id(filament_type).state == \"PLA\") {\n  if (id(filament_brand).state == \"PolyTerra\") {\n    id(filament_brand_code).publish_state(\"GFL01\");\n    id(filament_sub_brand).publish_state(\"PolyTerra PLA\");\n  } else if (id(filament_brand).state == \"PolyLite\") {\n    id(filament_brand_code).publish_state(\"GFL00\");\n    id(filament_sub_brand).publish_state(\"PolyLite PLA\");\n  } else if (id(filament_brand).state == \"Sunlu\") {\n    id(filament_brand_code).publish_state(\"GFSNL03\"); \n  } else if (id(filament_brand).state == \"Bambu\") {\n    // Check for Bambu PLA variants\n    if (id(filament_variant).state == \"Basic\") {\n      id(filament_brand_code).publish_state(\"GFA00\");\n      id(filament_sub_brand).publish_state(\"PLA Basic\");\n    } else if (id(filament_variant).state == \"Matte\") {\n      id(filament_brand_code).publish_state(\"GFA01\");\n      id(filament_sub_brand).publish_state(\"PLA Matte\");\n    } else if (id(filament_variant).state == \"Metal\") {\n      id(filament_brand_code).publish_state(\"GFA02\");\n      id(filament_sub_brand).publish_state(\"PLA Metal\");\n    } else if (id(filament_variant).state == \"Impact\") {\n      id(filament_brand_code).publish_state(\"GFA03\");\n      id(filament_sub_brand).publish_state(\"PLA Impact\");\n    } else { // Default to Basic if no variant specified\n      id(filament_brand_code).publish_state(\"GFA00\");\n      id(filament_sub_brand).publish_state(\"PLA Basic\");\n    }\n  } else { // Generic\n    id(filament_brand_code).publish_state(\"GFL99\");\n    id(filament_sub_brand).publish_state(\"PLA\");\n  }\n}\n// PETG\nelse if (id(filament_type).state == \"PETG\") {\n  if (id(filament_brand).state == \"Overture\") {\n    // TODO: find overture PETG brand code\n    id(filament_brand_code).publish_state(\"GFG99\"); // Using generic for now\n    id(filament_sub_brand).publish_state(\"PETG\");\n  } else if (id(filament_brand).state == \"Sunlu\") {\n    id(filament_brand_code).publish_state(\"GFSNL08\");  \n  } else { // Generic\n    id(filament_brand_code).publish_state(\"GFG99\");\n    id(filament_sub_brand).publish_state(\"PETG\");\n  }\n}\n// PET-CF\nelse if (id(filament_type).state == \"PET-CF\") {\n  if (id(filament_brand).state == \"Bambu\") {\n    id(filament_brand_code).publish_state(\"GFT00\");\n    id(filament_sub_brand).publish_state(\"PET-CF\");\n  } else { // Generic - Note: Using PETG generic as there's no specific PET-CF generic code\n    id(filament_brand_code).publish_state(\"GFG99\");\n    id(filament_sub_brand).publish_state(\"PET-CF\");\n  }\n}\n// ASA\nelse if (id(filament_type).state == \"ASA\") {\n  // Generic\n  id(filament_brand_code).publish_state(\"GFB98\");\n  id(filament_sub_brand).publish_state(\"ASA\");\n}\n// ABS\nelse if (id(filament_type).state == \"ABS\") {\n  if (id(filament_brand).state == \"Bambu\") {\n    id(filament_brand_code).publish_state(\"GFB00\");\n    id(filament_sub_brand).publish_state(\"ABS\");\n  } else { // Generic\n    id(filament_brand_code).publish_state(\"GFB99\");\n    id(filament_sub_brand).publish_state(\"ABS\");\n  }\n}\n// PC\nelse if (id(filament_type).state == \"PC\") {\n  if (id(filament_brand).state == \"Bambu\") {\n    id(filament_brand_code).publish_state(\"GFC00\");\n    id(filament_sub_brand).publish_state(\"PC\");\n  } else { // Generic\n    id(filament_brand_code).publish_state(\"GFC99\");\n    id(filament_sub_brand).publish_state(\"PC\");\n  }\n}\n// PA\nelse if (id(filament_type).state == \"PA\") {\n  // Generic\n  id(filament_brand_code).publish_state(\"GFN99\");\n  id(filament_sub_brand).publish_state(\"PA\");\n}\n// PA-CF\nelse if (id(filament_type).state == \"PA-CF\") {\n  if (id(filament_brand).state == \"Bambu\") {\n    id(filament_brand_code).publish_state(\"GFN03\");\n    id(filament_sub_brand).publish_state(\"PA-CF\");\n  } else { // Generic\n    id(filament_brand_code).publish_state(\"GFN98\");\n    id(filament_sub_brand).publish_state(\"PA-CF\");\n  }\n}\n// PLA-CF\nelse if (id(filament_type).state == \"PLA-CF\") {\n  // Generic\n  id(filament_brand_code).publish_state(\"GFL98\");\n  id(filament_sub_brand).publish_state(\"PLA-CF\");\n}\n// PVA\nelse if (id(filament_type).state == \"PVA\") {\n  // Generic\n  id(filament_brand_code).publish_state(\"GFS99\");\n  id(filament_sub_brand).publish_state(\"PVA\");\n}\n// Support Materials\nelse if (id(filament_type).state == \"Support\") {\n  if (id(filament_variant).state == \"G\") {\n    id(filament_brand_code).publish_state(\"GFS01\");\n    id(filament_sub_brand).publish_state(\"Support G\");\n  } else if (id(filament_variant).state == \"W\") {\n    id(filament_brand_code).publish_state(\"GFS00\");\n    id(filament_sub_brand).publish_state(\"Support W\");\n  } else { // Default to Support W if no variant specified\n    id(filament_brand_code).publish_state(\"GFS00\");\n    id(filament_sub_brand).publish_state(\"Support W\");\n  }\n}\nelse {\n  ESP_LOGE(\"main\", \"Unknown filament type: %s\", id(filament_type).state.c_str());\n}"
+      - lambda: |-
+          id(filament_sub_brand).publish_state("");
+          // TPU
+          if (id(filament_type).state == "TPU") {
+            if (id(filament_brand).state == "Bambu") {
+              id(filament_brand_code).publish_state("GFU01");
+              id(filament_sub_brand).publish_state("TPU 95A");
+            } else { // Generic
+              id(filament_brand_code).publish_state("GFU99");
+              id(filament_sub_brand).publish_state("TPU");
+            }
+          }
+          // PLA
+          else if (id(filament_type).state == "PLA") {
+            if (id(filament_brand).state == "PolyTerra") {
+              id(filament_brand_code).publish_state("GFL01");
+              id(filament_sub_brand).publish_state("PolyTerra PLA");
+            } else if (id(filament_brand).state == "PolyLite") {
+              id(filament_brand_code).publish_state("GFL00");
+              id(filament_sub_brand).publish_state("PolyLite PLA");
+            } else if (id(filament_brand).state == "Sunlu") {
+              id(filament_brand_code).publish_state("GFSNL03"); 
+            } else if (id(filament_brand).state == "Bambu") {
+              // Check for Bambu PLA variants
+              if (id(filament_variant).state == "Basic") {
+                id(filament_brand_code).publish_state("GFA00");
+                id(filament_sub_brand).publish_state("PLA Basic");
+              } else if (id(filament_variant).state == "Matte") {
+                id(filament_brand_code).publish_state("GFA01");
+                id(filament_sub_brand).publish_state("PLA Matte");
+              } else if (id(filament_variant).state == "Metal") {
+                id(filament_brand_code).publish_state("GFA02");
+                id(filament_sub_brand).publish_state("PLA Metal");
+              } else if (id(filament_variant).state == "Impact") {
+                id(filament_brand_code).publish_state("GFA03");
+                id(filament_sub_brand).publish_state("PLA Impact");
+              } else { // Default to Basic if no variant specified
+                id(filament_brand_code).publish_state("GFA00");
+                id(filament_sub_brand).publish_state("PLA Basic");
+              }
+            } else { // Generic
+              id(filament_brand_code).publish_state("GFL99");
+              id(filament_sub_brand).publish_state("PLA");
+            }
+          }
+          // PETG
+          else if (id(filament_type).state == "PETG") {
+            if (id(filament_brand).state == "Overture") {
+              // TODO: find overture PETG brand code
+              id(filament_brand_code).publish_state("GFG99"); // Using generic for now
+              id(filament_sub_brand).publish_state("PETG");
+            } else if (id(filament_brand).state == "Sunlu") {
+              id(filament_brand_code).publish_state("GFSNL08");  
+            } else { // Generic
+              id(filament_brand_code).publish_state("GFG99");
+              id(filament_sub_brand).publish_state("PETG");
+            }
+          }
+          // PET-CF
+          else if (id(filament_type).state == "PET-CF") {
+            if (id(filament_brand).state == "Bambu") {
+              id(filament_brand_code).publish_state("GFT00");
+              id(filament_sub_brand).publish_state("PET-CF");
+            } else { // Generic - Note: Using PETG generic as there's no specific PET-CF generic code
+              id(filament_brand_code).publish_state("GFG99");
+              id(filament_sub_brand).publish_state("PET-CF");
+            }
+          }
+          // ASA
+          else if (id(filament_type).state == "ASA") {
+            // Generic
+            id(filament_brand_code).publish_state("GFB98");
+            id(filament_sub_brand).publish_state("ASA");
+          }
+          // ABS
+          else if (id(filament_type).state == "ABS") {
+            if (id(filament_brand).state == "Bambu") {
+              id(filament_brand_code).publish_state("GFB00");
+              id(filament_sub_brand).publish_state("ABS");
+            } else { // Generic
+              id(filament_brand_code).publish_state("GFB99");
+              id(filament_sub_brand).publish_state("ABS");
+            }
+          }
+          // PC
+          else if (id(filament_type).state == "PC") {
+            if (id(filament_brand).state == "Bambu") {
+              id(filament_brand_code).publish_state("GFC00");
+              id(filament_sub_brand).publish_state("PC");
+            } else { // Generic
+              id(filament_brand_code).publish_state("GFC99");
+              id(filament_sub_brand).publish_state("PC");
+            }
+          }
+          // PA
+          else if (id(filament_type).state == "PA") {
+            // Generic
+            id(filament_brand_code).publish_state("GFN99");
+            id(filament_sub_brand).publish_state("PA");
+          }
+          // PA-CF
+          else if (id(filament_type).state == "PA-CF") {
+            if (id(filament_brand).state == "Bambu") {
+              id(filament_brand_code).publish_state("GFN03");
+              id(filament_sub_brand).publish_state("PA-CF");
+            } else { // Generic
+              id(filament_brand_code).publish_state("GFN98");
+              id(filament_sub_brand).publish_state("PA-CF");
+            }
+          }
+          // PLA-CF
+          else if (id(filament_type).state == "PLA-CF") {
+            // Generic
+            id(filament_brand_code).publish_state("GFL98");
+            id(filament_sub_brand).publish_state("PLA-CF");
+          }
+          // PVA
+          else if (id(filament_type).state == "PVA") {
+            // Generic
+            id(filament_brand_code).publish_state("GFS99");
+            id(filament_sub_brand).publish_state("PVA");
+          }
+          // Support Materials
+          else if (id(filament_type).state == "Support") {
+            if (id(filament_variant).state == "G") {
+              id(filament_brand_code).publish_state("GFS01");
+              id(filament_sub_brand).publish_state("Support G");
+            } else if (id(filament_variant).state == "W") {
+              id(filament_brand_code).publish_state("GFS00");
+              id(filament_sub_brand).publish_state("Support W");
+            } else { // Default to Support W if no variant specified
+              id(filament_brand_code).publish_state("GFS00");
+              id(filament_sub_brand).publish_state("Support W");
+            }
+          }
+          else {
+            ESP_LOGE("main", "Unknown filament type: %s", id(filament_type).state.c_str());
+          }
   - id: generate_filament_temperatures
     then:
       - if:
